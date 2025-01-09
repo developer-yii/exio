@@ -1,0 +1,72 @@
+.invalid-feedback {
+    color: #dc3545 !important;
+    padding-left: 20px !important;
+    font-size: 12px !important;
+}
+
+.invalid-feedback:hover {
+    font-weight: unset !important;
+    color: #dc3545 !important;
+    padding-left: 20px !important;
+    font-size: 12px !important;
+}
+
+.is-invalid {
+    border: 1px solid #dc3545 !important;
+}
+
+select.is-invalid+.select2-container {
+    border: 1px solid #dc3545 !important;
+    border-radius: 0.25rem;
+}
+
+.error {
+    color: #dc3545 !important;
+}
+
+.site_table thead {
+    background-color: #f1f3fa;
+}
+
+.site_table .badge {
+    font-size: 14px;
+}
+
+.mr-1 {
+    margin-right: 1.0rem !important;
+}
+
+.mr-2 {
+    margin-right: 1.0rem !important;
+}
+
+.mr-3 {
+    margin-right: 1.5rem !important;
+}
+
+.bootstrap-tagsinput {
+    width: 100%;
+    padding: 0.45rem 0.9rem;
+    line-height: 1.5;
+}
+
+.bootstrap-tagsinput .tag {
+    text-transform: uppercase;
+    background-color: #727cf5;
+    border-radius: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.bootstrap-tagsinput .tag [data-role="remove"] {
+    border-left: solid 1px;
+    padding-left: 3px;
+}
+
+.hide {
+    display: none;
+}
+
+.show {
+    display: block;
+}
