@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Faq extends Model
+class Builder extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -18,16 +18,17 @@ class Faq extends Model
         0 => 'Inactive',
     ];
 
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = ['created_at', 'updated_at'];
 
-    protected $table = 'faqs';
+    protected $table = 'builders';
 
-    protected $fillable = [
-        'question',
-        'answer',
-        'order_index',
-        'status',
-        'created_by',
-        'updated_by',
-    ];
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
 }

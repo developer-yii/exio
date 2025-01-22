@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Config;
+use App\Models\Setting;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +22,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        try {
+            $connection = DB::connection()->getPdo();
+            if ($connection) {
+                $settings = Setting::all()->pluck('setting_value', 'setting_key')->toArray();
+                Config::set(['settings' => $settings]);
+            }
+        } catch (\Exception $e) { }
     }
 }

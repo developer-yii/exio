@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\AuthController;
 use App\Http\Controllers\Backend\ForgotPasswordController;
@@ -8,6 +9,11 @@ use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\FaqController;
 use App\Http\Controllers\Backend\TermsConditionController;
 use App\Http\Controllers\Backend\PrivacyPolicyController;
+use App\Http\Controllers\Backend\SettingController;
+use App\Http\Controllers\Backend\CityController;
+use App\Http\Controllers\Backend\LocationController;
+use App\Http\Controllers\Backend\CommonController;
+use App\Http\Controllers\Backend\BuilderController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/', function () {
@@ -32,37 +38,72 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         Route::group(['prefix' => 'profile'], function () {
-            Route::get('/', [UserController::class,'profile'])->name('profile');
-            Route::post('/profileupdate', [UserController::class,'profileupdate'])->name('profile.profileupdate');
-            Route::post('/updatepassword', [UserController::class,'updatepassword'])->name('profile.updatepassword');
+            Route::get('/', [UserController::class, 'profile'])->name('profile');
+            Route::post('/profileupdate', [UserController::class, 'profileupdate'])->name('profile.profileupdate');
+            Route::post('/updatepassword', [UserController::class, 'updatepassword'])->name('profile.updatepassword');
         });
 
         Route::group(['prefix' => 'users'], function () {
-            Route::get('/', [UserController::class,'index'])->name('user');
-            Route::get('/get', [UserController::class,'get'])->name('user.list');
-            Route::get('/detail', [UserController::class,'detail'])->name('user.detail');
-            Route::post('/addupdate', [UserController::class,'addupdate'])->name('user.addupdate');
-            Route::post('/delete', [UserController::class,'delete'])->name('user.delete');
+            Route::get('/', [UserController::class, 'index'])->name('user');
+            Route::get('/get', [UserController::class, 'get'])->name('user.list');
+            Route::get('/detail', [UserController::class, 'detail'])->name('user.detail');
+            Route::post('/addupdate', [UserController::class, 'addupdate'])->name('user.addupdate');
+            Route::post('/delete', [UserController::class, 'delete'])->name('user.delete');
         });
 
         Route::group(['prefix' => 'faqs'], function () {
-            Route::get('/', [FaqController::class,'index'])->name('faq');
-            Route::get('/get', [FaqController::class,'get'])->name('faq.list');
-            Route::get('/detail', [FaqController::class,'detail'])->name('faq.detail');
-            Route::post('/addupdate', [FaqController::class,'addupdate'])->name('faq.addupdate');
-            Route::post('/delete', [FaqController::class,'delete'])->name('faq.delete');
+            Route::get('/', [FaqController::class, 'index'])->name('faq');
+            Route::get('/get', [FaqController::class, 'get'])->name('faq.list');
+            Route::get('/detail', [FaqController::class, 'detail'])->name('faq.detail');
+            Route::post('/addupdate', [FaqController::class, 'addupdate'])->name('faq.addupdate');
+            Route::post('/delete', [FaqController::class, 'delete'])->name('faq.delete');
+            Route::get('/getall', [FaqController::class, 'getall'])->name('faq.getall');
+            Route::post('/saveorder', [FaqController::class, 'saveorder'])->name('faq.saveorder');
         });
 
         Route::group(['prefix' => 'terms-conditions'], function () {
-            Route::get('/', [TermsConditionController::class,'index'])->name('terms_condition');
-            Route::post('/addupdate', [TermsConditionController::class,'addupdate'])->name('terms_condition.addupdate');
+            Route::get('/', [TermsConditionController::class, 'index'])->name('terms_condition');
+            Route::post('/addupdate', [TermsConditionController::class, 'addupdate'])->name('terms_condition.addupdate');
         });
 
         Route::group(['prefix' => 'privacy-policies'], function () {
-            Route::get('/', [PrivacyPolicyController::class,'index'])->name('privacy_policie');
-            Route::post('/addupdate', [PrivacyPolicyController::class,'addupdate'])->name('privacy_policie.addupdate');
+            Route::get('/', [PrivacyPolicyController::class, 'index'])->name('privacy_policie');
+            Route::post('/addupdate', [PrivacyPolicyController::class, 'addupdate'])->name('privacy_policie.addupdate');
+        });
+
+        Route::group(['prefix' => 'settings'], function () {
+            Route::get('/', [SettingController::class, 'index'])->name('setting');
+            Route::get('/get', [SettingController::class, 'get'])->name('setting.list');
+            Route::get('/detail', [SettingController::class, 'detail'])->name('setting.detail');
+            Route::post('/addupdate', [SettingController::class, 'addupdate'])->name('setting.addupdate');
+        });
+
+        Route::group(['prefix' => 'cities'], function () {
+            Route::get('/', [CityController::class, 'index'])->name('city');
+            Route::get('/get', [CityController::class, 'get'])->name('city.list');
+            Route::get('/detail', [CityController::class, 'detail'])->name('city.detail');
+            Route::post('/delete', [CityController::class, 'delete'])->name('city.delete');
+            Route::post('/addupdate', [CityController::class, 'addupdate'])->name('city.addupdate');
+        });
+
+        Route::group(['prefix' => 'locations'], function () {
+            Route::get('/', [LocationController::class, 'index'])->name('location');
+            Route::get('/get', [LocationController::class, 'get'])->name('location.list');
+            Route::get('/detail', [LocationController::class, 'detail'])->name('location.detail');
+            Route::post('/delete', [LocationController::class, 'delete'])->name('location.delete');
+            Route::post('/addupdate', [LocationController::class, 'addupdate'])->name('location.addupdate');
+        });
+
+        Route::group(['prefix' => 'common'], function () {
+            Route::get('/cities', [CommonController::class, 'getAllCities'])->name('common.cities.all');
+        });
+
+        Route::group(['prefix' => 'builders'], function () {
+            Route::get('/', [BuilderController::class, 'index'])->name('builder');
+            Route::get('/get', [BuilderController::class, 'get'])->name('builder.list');
+            Route::get('/detail', [BuilderController::class, 'detail'])->name('builder.detail');
+            Route::post('/delete', [BuilderController::class, 'delete'])->name('builder.delete');
+            Route::post('/addupdate', [BuilderController::class, 'addupdate'])->name('builder.addupdate');
         });
     });
-
 });
-

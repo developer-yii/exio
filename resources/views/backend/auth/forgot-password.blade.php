@@ -1,5 +1,7 @@
 @extends('backend.layouts.login')
 
+@section('title', 'Forgot Password')
+
 @section('content')
     <div class="row justify-content-center">
         <div class="col-xxl-4 col-lg-5">
@@ -14,7 +16,7 @@
                 <div class="card-body p-4">
 
                     <div class="text-center w-75 m-auto">
-                        <h4 class="text-dark-50 text-center pb-0 fw-bold">Reset Password</h4>
+                        <h4 class="text-dark-50 text-center pb-0 fw-bold">Forgot Password</h4>
                         <p class="text-muted mb-4">Enter your email and we'll send you a link to get back into your account.
                         </p>
                     </div>

@@ -17,19 +17,15 @@ $(document).ready(function () {
         $(formId + ' .add_required').show();
         $(formId)[0].reset();
         $('#id').val(0);
-        $(modalId + ' .order_index').val(1);
+
+        $(formId).find('.city_id').val("");
+        reloadSelect2();
     });
 
     $(formId).on('keyup change', 'input, textarea, select', function (event) {
         if ($.trim($(this).val()) && $(this).val().length > 0) {
             $(this).removeClass('is-invalid');
             $(this).closest('.form-group').find('.error').html('');
-        }
-    });
-
-    $('body').on('keypress', "input[name='password'], input[name='confirm_password']", function (event) {
-        if (event.which === 32) {
-            return false;
         }
     });
 
@@ -104,10 +100,11 @@ $(document).ready(function () {
                     $(modalId).modal('show');
 
                     $(formId).find('#id').val(id);
-                    $(formId).find('.question').val(result.data.question);
-                    $(formId).find('.answer').val(result.data.answer);
-                    $(formId).find('.order_index').val(result.data.order_index);
+                    $(formId).find('.location_name').val(result.data.location_name);
                     $(formId).find('.status').val(result.data.status);
+
+                    $(formId).find('.city_id').val(result.data.city_id);
+                    reloadSelect2();
                 } else {
                     if (result.message) {
                         showToastMessage("error", result.message);
@@ -130,12 +127,12 @@ $(document).ready(function () {
             success: function (result) {
                 if (result.status) {
                     $(viewModalId).modal('show');
-                    $(viewModalId).find('.question').html(result.data.question);
-                    $(viewModalId).find('.answer').html(result.data.answer);
-                    $(viewModalId).find('.order_index').html(result.data.order_index);
+                    $(viewModalId).find('.city_name').html(result.data.city_name);
+                    $(viewModalId).find('.location_name').html(result.data.location_name);
                     $(viewModalId).find('.status').html(result.data.status_text);
                     $(viewModalId).find('.created_at').html(result.data.created_at_view);
                     $(viewModalId).find('.updated_at').html(result.data.updated_at_view);
+                    $(viewModalId).find('.updated_by_view').html(result.data.updated_by_view);
                 } else {
                     if (result.message) {
                         showToastMessage("error", result.message);
@@ -191,13 +188,14 @@ $(document).ready(function () {
         processing: true,
         serverSide: true,
         scrollX: true,
-        order: [[4, 'DESC']],
+        order: [[2, 'DESC']],
         ajax: {
             type: 'GET',
             url: apiUrl,
             data: function (d) {
                 d.filter_date = $('#filter_date').val(),
-                    d.filter_status = $('#filter_status').val()
+                d.filter_status = $('#filter_status').val(),
+                d.filter_city_id = $('#filter_city_id').val()
             },
         },
         language: { paginate: { previous: "<i class='mdi mdi-chevron-left'>", next: "<i class='mdi mdi-chevron-right'>" } },
@@ -206,27 +204,19 @@ $(document).ready(function () {
         },
         columns: [
             {
-                name: 'question',
-                data: 'question',
+                name: 'city_name',
+                data: 'city_name',
                 sortable: true,
                 render: function (_, _, full) {
-                    return full['question'];
+                    return full['city_name'];
                 },
             },
             {
-                name: 'answer',
-                data: 'answer',
+                name: 'location_name',
+                data: 'location_name',
                 sortable: true,
                 render: function (_, _, full) {
-                    return full['answer'];
-                },
-            },
-            {
-                name: 'order_index',
-                data: 'order_index',
-                sortable: true,
-                render: function (_, _, full) {
-                    return full['order_index'];
+                    return full['location_name'];
                 },
             },
             {
@@ -242,11 +232,11 @@ $(document).ready(function () {
                 },
             },
             {
-                name: 'created_at',
-                data: 'created_at',
+                name: 'updated_at',
+                data: 'updated_at',
                 sortable: true,
                 render: function (_, _, full) {
-                    return full['created_at'];
+                    return full['updated_at'];
                 },
             },
             {
@@ -267,71 +257,46 @@ $(document).ready(function () {
         ],
     });
 
-    $('body').on("keyup change", "#table_search, #filter_date, #filter_status", function (e) {
+    $('body').on("keyup change", "#table_search, #filter_date, #filter_status, #filter_city_id", function (e) {
         listTable.draw();
     });
 
-    $('body').on('click', '#manageOrderIndex', function (event) {
+    loadCity();
+
+    function reloadSelect2() {
+        if ($('.city_id').length) {
+            $('.city_id').select2({
+                dropdownParent: $('#addModal'),
+                placeholder: 'Select city'
+            });
+        }
+
+        if ($('.filter_city_id').length) {
+            $('.filter_city_id').select2({
+                placeholder: 'Filter by City',
+                allowClear: true
+            });
+        }
+    }
+
+    function loadCity() {
+        $('.city_id').find('option').not(':first').remove();
+        $('.filter_city_id').find('option').not(':first').remove();
         $.ajax({
-            url: getAll,
+            url: getAllCitiesUrl,
             type: 'GET',
             dataType: 'json',
-            success: function (result) {
-                $('#handle-question-order').html('');
-                if (result) {
-                    $.each(result, function (key, question) {
-                        $('#handle-question-order').append('<div class="card mb-0 mt-2">' +
-                            '<div class="card-body p-2">' +
-                            '<div class="d-flex align-items-start">' +
-                            '<div class="w-100 overflow-hidden">' +
-                            '<input type="hidden" value="' + question.id + '" name="question_ids[]">' +
-                            '<h5 class="mb-1 mt-1">' + question.question + '</h5>' +
-                            '</div>' +
-                            '<span class="dragula-handle"></span>' +
-                            '</div>' +
-                            '</div>' +
-                            '</div>');
+            success: function (response) {
+                if (response.status && response.data) {
+                    var options = '';
+                    $.each(response.data, function (rowId, rowName) {
+                        options += '<option value="' + rowId + '">' + rowName + '</option>';
                     });
+                    $('.city_id').append(options);
+                    $('.filter_city_id').append(options);
                 }
-                $('#orderIndexModal').modal('show');
+                reloadSelect2();
             }
         });
-    });
-
-    $('#order-update-form').submit(function (event) {
-        event.preventDefault();
-        var $this = $(this);
-        var formData = new FormData(this);
-        $.ajax({
-            url: orderSaveUrl,
-            type: 'POST',
-            data: formData,
-            dataType: 'json',
-            cache: false,
-            contentType: false,
-            processData: false,
-            beforeSend: function () {
-                $($this).find('button[type="submit"]').prop('disabled', true);
-                $($this).find('button[type="submit"]').html('Saving...');
-            },
-            success: function (result) {
-                $($this).find('button[type="submit"]').prop('disabled', false);
-                $($this).find('button[type="submit"]').html('Save');
-
-                if (result.status == true) {
-                    $(tableId).DataTable().ajax.reload();
-                    setTimeout(function () {
-                        $('#orderIndexModal').modal('hide');
-                        showToastMessage("success", result.message);
-                    }, 100);
-                } else {
-                    showToastMessage("error", result.message);
-                }
-            },
-            error: function (error) {
-                alert('Something went wrong!', 'error');
-                location.reload();
-            }
-        });
-    });
+    }
 });

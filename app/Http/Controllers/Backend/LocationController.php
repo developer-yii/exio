@@ -8,9 +8,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
-use App\Models\Faq;
+use App\Models\Location;
+use Illuminate\Validation\Rule;
 
-class FaqController extends Controller
+class LocationController extends Controller
 {
     public function __construct()
     {
@@ -19,43 +20,48 @@ class FaqController extends Controller
 
     public function index()
     {
-        $status = Faq::$status;
-        return view('backend.faq.index', compact('status'));
+        $status = Location::$status;
+        return view('backend.location.index', compact('status'));
     }
 
     public function get(Request $request)
     {
-        $statusLabels = Faq::$status;
+        $statusLabels = Location::$status;
 
-        $sqlQuery = Faq::query();
+        $sqlQuery = Location::select('locations.*', 'cities.city_name')
+            ->leftJoin('cities', 'locations.city_id', '=', 'cities.id')
+            ->groupBy('locations.id');
 
         return DataTables::eloquent($sqlQuery)
-            ->editColumn('answer', function ($row) {
-                return ($row->answer) ? \Illuminate\Support\Str::limit($row->answer, 20) : "";
-            })
-            ->editColumn('created_at', function ($row) {
-                return $row->created_at->format('d.m.Y');
-            })
             ->addColumn('status_text', function ($row) use ($statusLabels) {
                 return $statusLabels[$row->status] ?? "";
+            })
+            ->editColumn('updated_by', function ($row) {
+                return (isset($row->updatedBy->id)) ? $row->updatedBy->first_name . " " . $row->updatedBy->last_name : "";
+            })
+            ->editColumn('updated_at', function ($row) {
+                return $row->updated_at->format('d.m.Y');
             })
             ->filter(function ($query) use ($request) {
                 if ($filterDate = $request->get('filter_date')) {
                     if (strtotime($filterDate)) {
                         $formattedDate = date('Y-m-d', strtotime($filterDate));
-                        $query->whereDate('faqs.created_at', $formattedDate);
+                        $query->whereDate('locations.updated_at', $formattedDate);
                     }
                 }
 
                 if (($filterStatus = $request->get('filter_status')) !== null) {
-                    $query->where('faqs.status', $filterStatus);
+                    $query->where('locations.status', $filterStatus);
+                }
+
+                if (($filterCity = $request->get('filter_city_id')) !== null) {
+                    $query->where('locations.city_id', $filterCity);
                 }
 
                 if ($searchValue = $request->get('search')['value'] ?? null) {
                     $query->where(function ($subQuery) use ($searchValue) {
-                        $subQuery->orWhere('faqs.question', 'LIKE', "%$searchValue%")
-                            ->orWhere('faqs.answer', 'LIKE', "%$searchValue%")
-                            ->orWhere('faqs.order_index', 'LIKE', "%$searchValue%");
+                        $subQuery->orWhere('locations.location_name', 'LIKE', "%$searchValue%")
+                            ->orWhere('cities.city_name', 'LIKE', "%$searchValue%");
                     });
                 }
             })
@@ -70,28 +76,36 @@ class FaqController extends Controller
         }
 
         $isUpdate = (!empty($request->id) && $request->id) ? true : false;
+        $cityId = (!empty($request->city_id) && $request->city_id) ? $request->city_id : 0;
 
         $rules = [
-            'question' => 'required|string|max:255',
-            'answer' => 'required|string',
-            'order_index' => 'bail|required|integer|min:1',
+            'location_name' => [
+                'required',
+                'string',
+                'max:100',
+                Rule::unique('locations', 'location_name')->ignore($request->id)->whereNull('deleted_at')->where('city_id', $cityId)
+            ],
+            'city_id' => 'required',
         ];
 
-        $validator = Validator::make($request->all(), $rules);
+        $messages = array(
+            'city_id.required' => "The city field is required.",
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
 
         if ($validator->fails()) {
             return response()->json(['status' => false, 'errors' => $validator->errors()]);
         }
 
-        $model = $isUpdate ? Faq::find($request->id) : new Faq;
+        $model = $isUpdate ? Location::find($request->id) : new Location;
 
         if ($isUpdate && !$model) {
-            return response()->json(['status' => false, 'message' => 'Faq not found']);
+            return response()->json(['status' => false, 'message' => 'Location not found']);
         }
 
-        $model->question = $request->question;
-        $model->answer = $request->answer;
-        $model->order_index = (int)$request->order_index;
+        $model->city_id  = $request->city_id;
+        $model->location_name = ucwords(strtolower(trim($request->location_name)));
         $model->status = $request->boolean('status', false);
         $model->updated_by = auth()->id();
         if (!$isUpdate) {
@@ -108,13 +122,17 @@ class FaqController extends Controller
 
     public function detail(Request $request)
     {
-        $status = Faq::$status;
-
-        $model = Faq::find($request->id);
+        $status = Location::$status;
+        $model = Location::find($request->id);
         if (isset($model->id)) {
             $model->status_text =  (isset($status[$model->status])) ? $status[$model->status] : "";
             $model->created_at_view =  ($model->created_at) ? date('d.m.Y g:i A', strtotime($model->created_at)) : "";
             $model->updated_at_view =  ($model->updated_at) ? date('d.m.Y g:i A', strtotime($model->updated_at)) : "";
+            $model->updated_by_view = (isset($model->updatedBy->id)) ? $model->updatedBy->first_name . " " . $model->updatedBy->last_name : "";
+            $model->city_name = (isset($model->city->id)) ? $model->city->city_name : "";
+            if ($model->updatedBy) {
+                unset($model->updatedBy);
+            }
 
             $result = ['status' => true, 'message' => '', 'data' => $model];
         } else {
@@ -125,63 +143,12 @@ class FaqController extends Controller
 
     public function delete(Request $request)
     {
-        $model = Faq::where('id', $request->id)->first();
+        $model = Location::where('id', $request->id)->first();
         if ($model && $model->delete()) {
             $result = ['status' => true, 'message' => 'Record deleted successfully'];
         } else {
             $result = ['status' => false, 'message' => 'Something went wrong'];
         }
         return response()->json($result);
-    }
-
-    public function getAll()
-    {
-        $data = Faq::select('question', 'id')->orderBy('order_index')->get();
-        return $data;
-    }
-
-    public function saveorder(Request $request)
-    {
-        if (!$request->ajax()) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Invalid request type. Expected AJAX.'
-            ], 400);
-        }
-
-        $validator = Validator::make($request->all(), [
-            'question_ids' => 'required|array',
-            'question_ids.*' => 'integer'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Validation failed.',
-                'errors' => $validator->errors()
-            ]);
-        }
-
-        try {
-            foreach ($request->question_ids as $index => $questionId) {
-                $faq = Faq::find($questionId);
-                if ($faq) {
-                    $faq->order_index = $index + 1;
-                    $faq->save();
-                }
-            }
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Question order updated successfully.',
-                'data' => []
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'An error occurred while updating the order.',
-                'error' => $e->getMessage()
-            ]);
-        }
     }
 }

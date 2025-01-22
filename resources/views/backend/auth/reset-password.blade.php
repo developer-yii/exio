@@ -1,5 +1,7 @@
 @extends('backend.layouts.login')
 
+@section('title', 'Reset Password')
+
 @section('content')
     <div class="row justify-content-center">
         <div class="col-xxl-4 col-lg-5">

@@ -1,5 +1,7 @@
 @extends('backend.layouts.login')
 
+@section('title', 'Sign In')
+
 @section('content')
     <div class="row justify-content-center">
         <div class="col-xxl-4 col-lg-5">
@@ -35,8 +37,7 @@
 
                         <div class="mb-3">
                             @if (Route::has('admin.password.forgot'))
-                                <a href="{{ route('admin.password.forgot') }}" class="text-muted float-end">Forgot your
-                                    password?</a>
+                                <a href="{{ route('admin.password.forgot') }}" tabindex="50" class="text-muted float-end">Forgot your password?</a>
                             @endif
                             <label for="password" class="form-label">Password</label>
                             <div class="input-group input-group-merge @error('password') is-invalid @enderror">

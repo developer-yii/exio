@@ -3,12 +3,23 @@
 
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', config('app.name'))</title>
+    <title>@yield('title') - {{ config('app.name', 'Web') }}</title>
+    <base href="/{{Request::segment(1)}}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+
+    <meta name="google-site-verification" content="">
 
     <meta charset="utf-8">
     <meta name="robots" content="noindex, nofollow">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="name" content="">
+    <meta name="keywords" content="">
     <meta name="description" content="">
     <meta name="author" content="">
 

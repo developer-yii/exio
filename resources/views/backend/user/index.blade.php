@@ -49,6 +49,7 @@
                                 <th>First name</th>
                                 <th>Last name</th>
                                 <th>Email</th>
+                                <th>Mobile</th>
                                 <th>Status</th>
                                 <th>Created at</th>
                                 <th>Actions</th>
@@ -86,6 +87,13 @@
                                     <label for="last_name" class="form-label">Last Name<span
                                             class="text-danger add_edit_required">*</span></label>
                                     <input type="text" name="last_name" class="form-control last_name" value="">
+                                    <span class="error"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="mobile" class="form-label">Mobile</label>
+                                    <input type="text" name="mobile" class="form-control mobile" value="">
                                     <span class="error"></span>
                                 </div>
                             </div>
@@ -176,12 +184,20 @@
                                         <td><span class="email"></span></td>
                                     </tr>
                                     <tr>
+                                        <th width="30%">Mobile</th>
+                                        <td><span class="mobile"></span></td>
+                                    </tr>
+                                    <tr>
                                         <th width="30%">Role</th>
                                         <td><span class="role_type"></span></td>
                                     </tr>
                                     <tr>
                                         <th width="30%">Status</th>
                                         <td><span class="status"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%">Email Verified at</th>
+                                        <td><span class="email_verified_at"></span></td>
                                     </tr>
                                     <tr>
                                         <th width="30%">Created at</th>

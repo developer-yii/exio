@@ -7,7 +7,6 @@ $(document).ready(function () {
         addFormBtnId = '#add-new-btn',
         addOrUpdateBtnId = '#addorUpdateBtn',
         editFormBtnId = '.edit-record',
-        deleteBtnId = '.delete-record',
         viewBtnId = '.view-record';
 
     $(addFormBtnId).click(function (event) {
@@ -23,12 +22,6 @@ $(document).ready(function () {
         if ($.trim($(this).val()) && $(this).val().length > 0) {
             $(this).removeClass('is-invalid');
             $(this).closest('.form-group').find('.error').html('');
-        }
-    });
-
-    $('body').on('keypress', "input[name='mobile'], input[name='password'], input[name='confirm_password']", function (event) {
-        if (event.which === 32) {
-            return false;
         }
     });
 
@@ -103,10 +96,9 @@ $(document).ready(function () {
                     $(modalId).modal('show');
 
                     $(formId).find('#id').val(id);
-                    $(formId).find('.first_name').val(result.data.first_name);
-                    $(formId).find('.last_name').val(result.data.last_name);
-                    $(formId).find('.email').val(result.data.email);
-                    $(formId).find('.mobile').val(result.data.mobile);
+                    $(formId).find('.setting_label').val(result.data.setting_label);
+                    $(formId).find('.description').val(result.data.description);
+                    $(formId).find('.setting_value').val(result.data.setting_value);
                     $(formId).find('.status').val(result.data.status);
                 } else {
                     if (result.message) {
@@ -119,73 +111,6 @@ $(document).ready(function () {
                 location.reload();
             }
         });
-    });
-
-    $('body').on('click', viewBtnId, function (event) {
-        var id = $(this).attr('data-id');
-        $.ajax({
-            url: detailUrl + '?id=' + id,
-            type: 'GET',
-            dataType: 'json',
-            success: function (result) {
-                if (result.status) {
-                    $(viewModalId).modal('show');
-                    $(viewModalId).find('.first_name').html(result.data.first_name);
-                    $(viewModalId).find('.last_name').html(result.data.last_name);
-                    $(viewModalId).find('.email').html(result.data.email);
-                    $(viewModalId).find('.mobile').html(result.data.mobile);
-                    $(viewModalId).find('.status').html(result.data.status_text);
-                    $(viewModalId).find('.role_type').html(result.data.role_type_text);
-                    $(viewModalId).find('.email_verified_at').html(result.data.email_verified_at_view);
-                    $(viewModalId).find('.created_at').html(result.data.created_at_view);
-                    $(viewModalId).find('.updated_at').html(result.data.updated_at_view);
-                } else {
-                    if (result.message) {
-                        showToastMessage("error", result.message);
-                    }
-                }
-            },
-            error: function (error) {
-                alert('Something went wrong!');
-                location.reload();
-            }
-        });
-    });
-
-    $('body').on('click', deleteBtnId, function (event) {
-        event.preventDefault();
-        var id = $(this).attr('data-id');
-        swal({
-            title: "Are you sure want to delete?",
-            text: "You will not be able to recover this data!",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Yes, delete it!",
-            closeOnConfirm: false
-        },
-            function () {
-                $.ajax({
-                    url: deleteUrl + '?id=' + id,
-                    type: 'POST',
-                    dataType: 'json',
-                    success: function (result) {
-                        swal.close();
-                        if (result.status) {
-                            showToastMessage("success", result.message);
-                            $(tableId).DataTable().ajax.reload();
-                        }
-                        else {
-                            showToastMessage("error", result.message);
-                        }
-                    },
-                    error: function (error) {
-                        swal.close();
-                        console.log('Error:', error);
-                    }
-                });
-            }
-        );
     });
 
     let listTable = $(tableId).DataTable({
@@ -209,47 +134,27 @@ $(document).ready(function () {
         },
         columns: [
             {
-                name: 'first_name',
-                data: 'first_name',
+                name: 'setting_label',
+                data: 'setting_label',
                 sortable: true,
                 render: function (_, _, full) {
-                    return full['first_name'];
+                    return full['setting_label'];
                 },
             },
             {
-                name: 'last_name',
-                data: 'last_name',
+                name: 'setting_value',
+                data: 'setting_value',
                 sortable: true,
                 render: function (_, _, full) {
-                    return full['last_name'];
+                    return full['setting_value'];
                 },
             },
             {
-                name: 'email',
-                data: 'email',
+                name: 'description',
+                data: 'description',
                 sortable: true,
                 render: function (_, _, full) {
-                    return full['email'];
-                },
-            },
-            {
-                name: 'mobile',
-                data: 'mobile',
-                sortable: true,
-                render: function (_, _, full) {
-                    return full['mobile'];
-                },
-            },
-            {
-                name: 'status',
-                data: 'status_text',
-                sortable: true,
-                render: function (_, _, full) {
-                    if (full['status'] == 1) {
-                        return '<span class="badge badge-success-lighten">' + full['status_text'] + '</span>';
-                    } else {
-                        return '<span class="badge badge-danger-lighten">' + full['status_text'] + '</span>';
-                    }
+                    return full['description'];
                 },
             },
             {
@@ -261,6 +166,14 @@ $(document).ready(function () {
                 },
             },
             {
+                name: 'updated_by',
+                data: 'updated_by',
+                sortable: true,
+                render: function (_, _, full) {
+                    return full['updated_by'];
+                },
+            },
+            {
                 sortable: false,
                 render: function (_, _, full) {
                     var contactId = full['id'];
@@ -268,7 +181,6 @@ $(document).ready(function () {
                         actions = "";
                         actions += ' <a href="javascript:void(0)" data-id="' + contactId + '" class="btn-sm btn-warning view-record"><i class="uil-eye"></i></a>';
                         actions += ' <a href="javascript:void(0)" data-id="' + contactId + '" class="btn-sm btn-info edit-record"><i class="uil-edit-alt"></i></a>';
-                        actions += ' <a href="javascript:void(0)" data-id="' + contactId + '" class="btn-sm btn-danger delete-record"><i class="uil-trash-alt"></i></a>';
                         return actions;
                     }
 

@@ -11,7 +11,7 @@ class PrivacyPolicy extends Model
 
     protected $dates = ['created_at', 'updated_at'];
 
-    protected $table= 'privacy_policies';
+    protected $table = 'privacy_policies';
 
     protected $fillable = [
         'title',

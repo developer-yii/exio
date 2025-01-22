@@ -55,6 +55,14 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12">
+                                    <div class="form-group mb-3">
+                                        <label for="mobile" class="form-label">Mobile</label>
+                                        <input type="text" name="mobile" class="form-control mobile"
+                                            value="{{ $loginUser->mobile }}">
+                                        <span class="error"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
                                     <button type="submit" class="btn btn-success float-end"
                                         id="addorUpdateBtn">Save</button>
                                 </div>

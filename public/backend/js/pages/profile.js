@@ -119,7 +119,7 @@ $(document).ready(function () {
         });
     });
 
-    $('body').on('keypress', "input[name='old_password'], input[name='new_password'], input[name='confirm_password']", function (event) {
+    $('body').on('keypress', "input[name='mobile'], input[name='current_password'], input[name='new_password'], input[name='confirm_password']", function (event) {
         if (event.which === 32) {
             return false;
         }

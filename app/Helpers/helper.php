@@ -69,3 +69,16 @@ if (!function_exists('isSuperAdmin')) {
         return (auth()->check() && auth()->user()->role_type) ? true : false;
     }
 }
+if (! function_exists('getSettingFromDb')) {
+    function getSettingFromDb($key, $default = null) {
+        $setting = \App\Models\Setting::where('setting_key', $key)->first();
+        return $setting ? $setting->setting_value : $default;
+    }
+}
+if (!function_exists('getSetting')) {
+    function getSetting($option_key, $default = '')
+    {
+        $settings = config('settings');
+        return $settings[$option_key] ?? $default;
+    }
+}

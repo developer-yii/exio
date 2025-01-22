@@ -70,3 +70,12 @@ select.is-invalid+.select2-container {
 .show {
     display: block;
 }
+
+.select2-container--default .select2-selection--single .select2-selection__clear {
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-right: 0 !important;
+    z-index: 55;
+}

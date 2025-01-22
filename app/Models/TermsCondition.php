@@ -11,7 +11,7 @@ class TermsCondition extends Model
 
     protected $dates = ['created_at', 'updated_at'];
 
-    protected $table= 'terms_conditions';
+    protected $table = 'terms_conditions';
 
     protected $fillable = [
         'title',

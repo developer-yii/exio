@@ -41,13 +41,13 @@
             </li>
 
             <li class="side-nav-item {{ isActiveRouteMain(['faqs']) }}">
-                <a data-bs-toggle="collapse" href="#sidebarMaps" aria-expanded="false" aria-controls="sidebarMaps"
+                <a data-bs-toggle="collapse" href="#faqs_menu" aria-expanded="false" aria-controls="faqs_menu"
                     class="side-nav-link collapsed">
                     <i class="uil-copy-alt"></i>
                     <span> CMS Pages </span>
                     <span class="menu-arrow"></span>
                 </a>
-                <div class="collapse" id="sidebarMaps" style="">
+                <div class="collapse" id="faqs_menu" style="">
                     <ul class="side-nav-second-level">
                         <li>
                             <a class="{{ isActiveRoute(['faq']) }}" href="{{ route('admin.faq') }}">FAQs</a>
@@ -62,13 +62,27 @@
                 </div>
             </li>
 
-            <li class="side-nav-item {{ isActiveRouteMain(['setting']) }}">
-                <a href="#" class="side-nav-link {{ isActiveRoute(['setting']) }}">
+            <li class="side-nav-item {{ isActiveRouteMain(['setting', 'city', 'location']) }}">
+                <a data-bs-toggle="collapse" href="#setting_menu" aria-expanded="false" aria-controls="setting_menu"
+                    class="side-nav-link collapsed">
                     <i class="mdi mdi-cog"></i>
-                    <span> App Settings </span>
+                    <span> Settings </span>
+                    <span class="menu-arrow"></span>
                 </a>
+                <div class="collapse" id="setting_menu" style="">
+                    <ul class="side-nav-second-level">
+                        <li>
+                            <a class="{{ isActiveRoute(['setting']) }}" href="{{ route('admin.setting') }}">General Settings</a>
+                        </li>
+                        <li>
+                            <a class="{{ isActiveRoute(['city']) }}" href="{{ route('admin.city') }}">Cities</a>
+                        </li>
+                        <li>
+                            <a class="{{ isActiveRoute(['location']) }}" href="{{ route('admin.location') }}">Locations</a>
+                        </li>
+                    </ul>
+                </div>
             </li>
-
         </ul>
 
         <!-- End Sidebar -->

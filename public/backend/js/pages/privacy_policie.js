@@ -95,9 +95,6 @@ $(document).ready(function () {
                     setTimeout(function () {
                         showToastMessage("success", result.message);
                     }, 100);
-
-                    pageReload();
-
                 } else if (result.status == false && result.message) {
                     showToastMessage("error", result.message);
                 } else {
@@ -114,7 +111,7 @@ $(document).ready(function () {
             },
             error: function (error) {
                 alert('Something went wrong!');
-                //location.reload();
+                location.reload();
             }
         });
     });

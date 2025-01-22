@@ -57,6 +57,7 @@ class UserController extends Controller
                     $query->where(function ($subQuery) use ($searchValue) {
                         $subQuery->orWhere('users.first_name', 'LIKE', "%$searchValue%")
                             ->orWhere('users.last_name', 'LIKE', "%$searchValue%")
+                            ->orWhere('users.mobile', 'LIKE', "%$searchValue%")
                             ->orWhere('users.email', 'LIKE', "%$searchValue%");
                     });
                 }
@@ -80,6 +81,7 @@ class UserController extends Controller
                 'max:100',
                 Rule::unique('users', 'email')->ignore($request->id)->whereNull('deleted_at')
             ],
+            'mobile' => 'nullable|bail|string|regex:/^([0-9\s\-\+\(\)]*)$/|min:9|max:13',
             'first_name' => 'required|string|max:100',
             'last_name' => 'required|string|max:100',
             'password' => $isUpdate ? 'nullable|same:confirm_password|min:8' : 'required|same:confirm_password|min:8',
@@ -100,6 +102,7 @@ class UserController extends Controller
         $model->first_name = $request->first_name;
         $model->last_name = $request->last_name;
         $model->email = $request->email;
+        $model->mobile =  $request->filled('mobile') ? str_replace(' ', '', trim($request->mobile)) : null;
         $model->status = $request->boolean('status', false);
         $model->role_type = User::USER;
 
@@ -130,6 +133,7 @@ class UserController extends Controller
             $model->role_type_text =  (isset($role[$model->role_type])) ? $role[$model->role_type] : "";
             $model->created_at_view =  ($model->created_at) ? date('d.m.Y g:i A', strtotime($model->created_at)) : "";
             $model->updated_at_view =  ($model->updated_at) ? date('d.m.Y g:i A', strtotime($model->updated_at)) : "";
+            $model->email_verified_at_view =  ($model->email_verified_at) ? date('d.m.Y g:i A', strtotime($model->email_verified_at)) : "";
 
             $result = ['status' => true, 'message' => '', 'data' => $model];
         } else {
@@ -166,6 +170,7 @@ class UserController extends Controller
         $rules = [
             'first_name' => 'required|string|max:100',
             'last_name' => 'required|string|max:100',
+            'mobile' => 'nullable|bail|string|regex:/^([0-9\s\-\+\(\)]*)$/|min:9|max:13',
             'email' => [
                 'required',
                 'string',
@@ -190,6 +195,7 @@ class UserController extends Controller
         $model->first_name = $request->first_name;
         $model->last_name = $request->last_name;
         $model->email = $request->email;
+        $model->mobile =  $request->filled('mobile') ? str_replace(' ', '', trim($request->mobile)) : null;
 
         if ($model->save()) {
             return response()->json(['status' => true, 'message' => 'Profile successfully updated']);
