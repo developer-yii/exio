@@ -4,16 +4,14 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 
+use App\Models\Amenity;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\Facades\DataTables;
 
-use App\Models\Builder;
-use App\Models\City;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rule;
-
-class BuilderController extends Controller
+class AmenityController extends Controller
 {
     public function __construct()
     {
@@ -22,28 +20,24 @@ class BuilderController extends Controller
 
     public function index()
     {
-        $status = Builder::$status;
-        $cities = City::pluck('city_name', 'id');
-        return view('backend.builder.index', compact('status', 'cities'));
+        $status = Amenity::$status;
+        $amenityType = Amenity::$amenityType;
+        return view('backend.amenity.index', compact('status', 'amenityType'));
     }
 
     public function get(Request $request)
     {
-        $statusLabels = Builder::$status;
+        $statusLabels = Amenity::$status;
+        $amenityTypeLabels = Amenity::$amenityType;
 
-        $sqlQuery = Builder::select('builders.*')
-            ->leftJoin('cities', 'builders.city_id', '=', 'cities.id')
-            ->with('city:id,city_name');
+        $sqlQuery = Amenity::select('amenities.*');
 
         return DataTables::eloquent($sqlQuery)
-            ->editColumn('builder_logo', function ($row) {
-                return ($row->builder_logo) ? '<img src="' . asset('storage/builder/logo/' . $row->builder_logo) . '" alt="Builder Logo" style="width: 50px; height: 50px;">' : "";
+            ->editColumn('amenity_icon', function ($row) {
+                return ($row->amenity_icon) ? '<img src="' . asset('storage/amenity/icon/' . $row->amenity_icon) . '" alt="Amenity Icon" style="width: 50px; height: 50px;">' : "";
             })
-            ->addColumn('city_name', function ($row) {
-                return $row->city->city_name ?? "";
-            })
-            ->editColumn('builder_about', function ($row) {
-                return ($row->builder_about) ? \Illuminate\Support\Str::limit($row->builder_about, 20) : "";
+            ->addColumn('amenity_type', function ($row) use ($amenityTypeLabels) {
+                return $amenityTypeLabels[$row->amenity_type] ?? "";
             })
             ->addColumn('status_text', function ($row) use ($statusLabels) {
                 return $statusLabels[$row->status] ?? "";
@@ -61,22 +55,22 @@ class BuilderController extends Controller
                 if ($filterDate = $request->get('filter_date')) {
                     if (strtotime($filterDate)) {
                         $formattedDate = date('Y-m-d', strtotime($filterDate));
-                        $query->whereDate('builders.updated_at', $formattedDate);
+                        $query->whereDate('amenities.updated_at', $formattedDate);
                     }
                 }
 
                 if (($filterStatus = $request->get('filter_status')) !== null) {
-                    $query->where('builders.status', $filterStatus);
+                    $query->where('amenities.status', $filterStatus);
                 }
 
-                if (($filterCity = $request->get('filter_city_id')) !== null) {
-                    $query->where('builders.city_id', $filterCity);
+                if (($filterAmenityType = $request->get('filter_amenity_type')) !== null) {
+                    $query->where('amenities.amenity_type', $filterAmenityType);
                 }
 
                 if ($searchValue = $request->get('search')['value'] ?? null) {
                     $query->where(function ($subQuery) use ($searchValue) {
-                        $subQuery->orWhere('builders.builder_name', 'LIKE', "%$searchValue%")
-                            ->orWhere('city_name', 'LIKE', "%$searchValue%");
+                        $subQuery->orWhere('amenities.amenity_name', 'LIKE', "%$searchValue%")
+                            ->orWhere('amenities.amenity_type', 'LIKE', "%$searchValue%");
                     });
                 }
             })
@@ -91,22 +85,21 @@ class BuilderController extends Controller
         }
 
         $isUpdate = (!empty($request->id) && $request->id) ? true : false;
-        $cityId = (!empty($request->city_id) && $request->city_id) ? $request->city_id : 0;
 
         $rules = [
-            'builder_name' => [
+            'amenity_name' => [
                 'required',
                 'string',
                 'max:100',
-                Rule::unique('builders', 'builder_name')->ignore($request->id)->whereNull('deleted_at')->where('city_id', $cityId)
+                Rule::unique('amenities', 'amenity_name')->ignore($request->id)->whereNull('deleted_at')
             ],
-            'builder_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
-            'city_id' => 'required',
+            'amenity_icon' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
+            'amenity_type' => 'required',
         ];
 
         $messages = array(
-            'city_id.required' => "The city field is required.",
-            'builder_about.regex' => "The builder about field is invalid.",
+            'amenity_name.required' => "The amenity name field is required.",
+            'amenity_type.required' => "The amenity type field is required.",
         );
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -115,25 +108,24 @@ class BuilderController extends Controller
             return response()->json(['status' => false, 'errors' => $validator->errors()]);
         }
 
-        $model = $isUpdate ? Builder::find($request->id) : new Builder;
+        $model = $isUpdate ? Amenity::find($request->id) : new Amenity;
 
         if ($isUpdate && !$model) {
             return response()->json(['status' => false, 'message' => 'Builder not found']);
         }
 
-        $model->city_id  = $request->city_id;
-        $model->builder_name = ucwords(strtolower(trim($request->builder_name)));
-        $model->builder_about = $request->builder_about;
-        if ($request->hasFile('builder_logo')) {
-            if ($model->builder_logo) {
-                if (Storage::exists('public/builder/logo/' . $model->builder_logo)) {
-                    Storage::delete('public/builder/logo/' . $model->builder_logo);
+        $model->amenity_name = ucwords(strtolower(trim($request->amenity_name)));
+        $model->amenity_type = $request->amenity_type;
+        if ($request->hasFile('amenity_icon')) {
+            if ($model->amenity_icon) {
+                if (Storage::exists('public/amenity/icon/' . $model->amenity_icon)) {
+                    Storage::delete('public/amenity/icon/' . $model->amenity_icon);
                 }
             }
-            $file = $request->file('builder_logo');
+            $file = $request->file('amenity_icon');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('public/builder/logo', $filename);
-            $model->builder_logo = $filename;
+            $file->storeAs('public/amenity/icon', $filename);
+            $model->amenity_icon = $filename;
         }
         $model->status = $request->boolean('status', false);
         $model->updated_by = auth()->id();
@@ -151,15 +143,16 @@ class BuilderController extends Controller
 
     public function detail(Request $request)
     {
-        $status = Builder::$status;
-        $model = Builder::find($request->id);
+        $status = Amenity::$status;
+        $amenityType = Amenity::$amenityType;
+        $model = Amenity::find($request->id);
         if (isset($model->id)) {
-            $model->builder_logo_url = asset('storage/builder/logo/' . $model->builder_logo);
+            $model->amenity_icon_url = asset('storage/amenity/icon/' . $model->amenity_icon);
             $model->status_text =  (isset($status[$model->status])) ? $status[$model->status] : "";
             $model->created_at_view =  ($model->created_at) ? date('d-m-Y g:i A', strtotime($model->created_at)) : "";
             $model->updated_at_view =  ($model->updated_at) ? date('d-m-Y g:i A', strtotime($model->updated_at)) : "";
             $model->updated_by_view = (isset($model->updatedBy->id)) ? $model->updatedBy->first_name . " " . $model->updatedBy->last_name : "";
-            $model->city_name = (isset($model->city->id)) ? $model->city->city_name : "";
+            $model->amenity_type_name = (isset($amenityType[$model->amenity_type])) ? $amenityType[$model->amenity_type] : "";
             if ($model->updatedBy) {
                 unset($model->updatedBy);
             }
@@ -173,7 +166,7 @@ class BuilderController extends Controller
 
     public function delete(Request $request)
     {
-        $model = Builder::where('id', $request->id)->first();
+        $model = Amenity::where('id', $request->id)->first();
         if ($model && $model->delete()) {
             $result = ['status' => true, 'message' => 'Record deleted successfully'];
         } else {

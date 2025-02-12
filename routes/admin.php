@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\ConfirmablePasswordController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\FaqController;
+use App\Http\Controllers\Backend\AmenityController;
 use App\Http\Controllers\Backend\TermsConditionController;
 use App\Http\Controllers\Backend\PrivacyPolicyController;
 use App\Http\Controllers\Backend\SettingController;
@@ -104,6 +105,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/detail', [BuilderController::class, 'detail'])->name('builder.detail');
             Route::post('/delete', [BuilderController::class, 'delete'])->name('builder.delete');
             Route::post('/addupdate', [BuilderController::class, 'addupdate'])->name('builder.addupdate');
+        });
+
+        Route::group(['prefix' => 'amenities'], function () {
+            Route::get('/', [AmenityController::class, 'index'])->name('amenity');
+            Route::get('/get', [AmenityController::class, 'get'])->name('amenity.list');
+            Route::get('/detail', [AmenityController::class, 'detail'])->name('amenity.detail');
+            Route::post('/delete', [AmenityController::class, 'delete'])->name('amenity.delete');
+            Route::post('/addupdate', [AmenityController::class, 'addupdate'])->name('amenity.addupdate');
         });
     });
 });

@@ -1,18 +1,28 @@
 @extends('backend.layouts.app')
 
-@section('title', 'Builders')
+@section('title', 'Amenities')
 
 @section('content')
 
     @php
-        $label_main = 'Builders';
-        $label = 'Builder';
+        $label_main = 'Amenities';
+        $label = 'Amenity';
     @endphp
 
     <!-- start page title -->
     <div class="row mt-3 mb-3">
-        <div class="col-md-6 col-lg-6 col-xl-6">
+        <div class="col-md-4 col-lg-4 col-xl-4">
             <h4 class="page-title">{{ $label_main }}</h4>
+        </div>
+        <div class="col-md-2 col-lg-2 col-xl-2">
+            <select class="form-select filter_amenity_type" id="filter_amenity_type" name="filter_amenity_type">
+                <option value="">Filter by Amenity Type</option>
+                @if (isset($amenityType) && count($amenityType) > 0)
+                    @foreach ($amenityType as $amenity_type_id => $amenity_type_name)
+                        <option value="{{ $amenity_type_id }}">{{ $amenity_type_name }}</option>
+                    @endforeach
+                @endif
+            </select>
         </div>
         <div class="col-md-2 col-lg-2 col-xl-2">
             <select class="form-select filter_status" id="filter_status" name="filter_status">
@@ -46,10 +56,9 @@
                     <table id="dataTableMain" class="table site_table w-100 nowrap">
                         <thead>
                             <tr>
-                                <th>Builder Logo</th>
-                                <th>Builder Name</th>
-                                <th>Builder About</th>
-                                <th>City</th>
+                                <th>Amenity Icon</th>
+                                <th>Amenity Name</th>
+                                <th>Amenity Type</th>
                                 <th>Status</th>
                                 <th>Created at</th>
                                 <th>Action</th>
@@ -76,40 +85,31 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label for="builder_name" class="form-label">Builder Name<span
+                                    <label for="amenity_name" class="form-label">Amenity Name<span
                                             class="text-danger add_edit_required">*</span></label>
-                                    <input type="text" id="builder_name" name="builder_name"
-                                        class="form-control builder_name" value="" />
+                                    <input type="text" id="amenity_name" name="amenity_name"
+                                        class="form-control amenity_name" value="" />
                                     <span class="error"></span>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label for="builder_logo" class="form-label">Builder Logo </label>
-                                    <input type="file" id="builder_logo" name="builder_logo"
-                                        class="form-control builder_logo" value="" />
-                                    <span class="error"></span>
-                                </div>
-                            </div>
-
-                            <div class="col-md-12">
-                                <div class="form-group mb-3">
-                                    <label for="builder_about" class="form-label">Builder About </label>
-                                    <div id="builder_about" name="builder_about" class="builder_about"
-                                        style="height: 100px;"></div>
+                                    <label for="amenity_icon" class="form-label">Amenity Icon </label>
+                                    <input type="file" id="amenity_icon" name="amenity_icon"
+                                        class="form-control amenity_icon" value="" />
                                     <span class="error"></span>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label for="city_id" class="form-label">City </label>
-                                    <select id="city_id" class="form-control city_id" name="city_id">
-                                        <option value="">Select City</option>
-                                        @if (isset($cities) && count($cities) > 0)
-                                            @foreach ($cities as $city_id => $city_name)
-                                                <option value="{{ $city_id }}">{{ $city_name }}</option>
+                                    <label for="amenity_type" class="form-label">Amenity Type </label>
+                                    <select id="amenity_type" class="form-control amenity_type" name="amenity_type">
+                                        <option value="">Select Amenity Type</option>
+                                        @if (isset($amenityType) && count($amenityType) > 0)
+                                            @foreach ($amenityType as $amenity_type_id => $amenity_type_name)
+                                                <option value="{{ $amenity_type_id }}">{{ $amenity_type_name }}</option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -156,20 +156,16 @@
                             <table class="table table-centered mb-0" id="information">
                                 <tbody>
                                     <tr>
-                                        <th width="30%">Builder Name</th>
-                                        <td><span class="builder_name"></span></td>
-                                    </tr>
-                                    <tr>    
-                                        <th width="30%">Builder Logo</th>
-                                        <td><span class="builder_logo"></span></td>
+                                        <th width="30%">Amenity Name</th>
+                                        <td><span class="amenity_name"></span></td>
                                     </tr>
                                     <tr>
-                                        <th width="30%">Builder About</th>
-                                        <td><span class="builder_about"></span></td>
+                                        <th width="30%">Amenity Icon</th>
+                                        <td><span class="amenity_icon"></span></td>
                                     </tr>
                                     <tr>
-                                        <th width="30%">City</th>
-                                        <td><span class="city_name"></span></td>
+                                        <th width="30%">Amenity Type</th>
+                                        <td><span class="amenity_type"></span></td>
                                     </tr>
                                     <tr>
                                         <th width="30%">Status</th>
@@ -200,13 +196,13 @@
 
 @section('js')
     <script>
-        var apiUrl = "{{ route('admin.builder.list') }}";
-        var detailUrl = "{{ route('admin.builder.detail') }}";
-        var deleteUrl = "{{ route('admin.builder.delete') }}";
-        var addUpdateUrl = "{{ route('admin.builder.addupdate') }}";
+        var apiUrl = "{{ route('admin.amenity.list') }}";
+        var detailUrl = "{{ route('admin.amenity.detail') }}";
+        var deleteUrl = "{{ route('admin.amenity.delete') }}";
+        var addUpdateUrl = "{{ route('admin.amenity.addupdate') }}";
     </script>
 @endsection
 
 @section('pagejs')
-    <script src="{{ addPageJsLink('builder.js') }}"></script>
+    <script src="{{ addPageJsLink('amenity.js') }}"></script>
 @endsection

@@ -1,64 +1,4 @@
 $(document).ready(function () {
-    let quill = "";
-    if ($("#builder_about").length > 0) {
-        quill = new Quill("#builder_about", {
-            theme: "snow",
-            modules: {
-                imageResize: {
-                    displaySize: true,
-                },
-                toolbar: [
-                    [{ font: [] }, { size: [] }],
-                    ["bold", "italic", "underline", "strike"],
-                    [{ color: [] }, { background: [] }],
-                    [{ script: "super" }, { script: "sub" }],
-                    [
-                        { header: [!1, 1, 2, 3, 4, 5, 6] },
-                        "blockquote",
-                        "code-block",
-                    ],
-                    [
-                        { list: "ordered" },
-                        { list: "bullet" },
-                        { indent: "-1" },
-                        { indent: "+1" },
-                    ],
-                    ["direction", { align: [] }],
-                    ["link", "image"],
-                    ["clean"],
-                ],
-            },
-        });
-
-        quill.getModule("toolbar").addHandler("image", () => {
-            const input = document.createElement("input");
-            input.setAttribute("type", "file");
-            input.setAttribute("accept", "image/*");
-            input.click();
-
-            input.onchange = () => {
-                const file = input.files[0];
-                // Validate file
-                if (!file.type.match(/^image\/(jpeg|png|gif)$/)) {
-                    alert("Invalid file type. Please select an image file.");
-                    return;
-                }
-                if (file.size > 2 * 1024 * 1024) {
-                    // 2MB limit
-                    alert("File is too large. Maximum size is 2MB.");
-                    return;
-                }
-                const reader = new FileReader();
-                reader.onload = () => {
-                    const base64Image = reader.result;
-                    const range = quill.getSelection();
-                    quill.insertEmbed(range.index, "image", base64Image);
-                };
-                reader.readAsDataURL(file);
-            };
-        });
-    }
-
     let tableId = "#dataTableMain",
         formId = "#add-form",
         modalId = "#addModal",
@@ -92,10 +32,6 @@ $(document).ready(function () {
 
         $(formId).find(".error").html("");
         $(formId).find(".is-invalid").removeClass("is-invalid");
-
-        if (quill) {
-            formData.append("builder_about", quill.root.innerHTML);
-        }
 
         $.ajax({
             url: addUpdateUrl,
@@ -145,7 +81,7 @@ $(document).ready(function () {
             },
             error: function (error) {
                 alert("Something went wrong!");
-                location.reload();
+                // location.reload();
             },
         });
     });
@@ -168,16 +104,11 @@ $(document).ready(function () {
 
                     $(formId).find("#id").val(id);
                     $(formId)
-                        .find(".builder_name")
-                        .val(result.data.builder_name);
+                        .find(".amenity_name")
+                        .val(result.data.amenity_name);
                     $(formId)
-                        .find(".builder_about")
-                        .val(result.data.builder_about || "");
-                    if (quill) {
-                        console.log(result.data.builder_about);
-                        quill.root.innerHTML = result.data.builder_about || ""; // Safely set Quill content
-                    }
-                    $(formId).find(".city_id").val(result.data.city_id);
+                        .find(".amenity_type")
+                        .val(result.data.amenity_type || "");
                     $(formId).find(".status").val(result.data.status);
                 } else {
                     if (result.message) {
@@ -202,22 +133,18 @@ $(document).ready(function () {
                 if (result.status) {
                     $(viewModalId).modal("show");
                     $(viewModalId)
-                        .find(".builder_name")
-                        .html(result.data.builder_name);
-
+                        .find(".amenity_name")
+                        .html(result.data.amenity_name);
                     $(viewModalId)
-                        .find(".builder_about")
-                        .html(result.data.builder_about);
-                    $(viewModalId)
-                        .find(".builder_logo")
+                        .find(".amenity_icon")
                         .html(
                             '<img src="' +
-                                result.data.builder_logo_url +
-                                '" alt="Builder Logo" style="width: 100px; height: 100px;">'
+                                result.data.amenity_icon_url +
+                                '" alt="Amenity Icon" style="width: 100px; height: 100px;">'
                         );
                     $(viewModalId)
-                        .find(".city_name")
-                        .html(result.data.city_name);
+                        .find(".amenity_type")
+                        .html(result.data.amenity_type);
                     $(viewModalId)
                         .find(".status_text")
                         .html(result.data.status_text);
@@ -291,7 +218,8 @@ $(document).ready(function () {
             url: apiUrl,
             data: function (d) {
                 (d.filter_date = $("#filter_date").val()),
-                    (d.filter_status = $("#filter_status").val());
+                    (d.filter_status = $("#filter_status").val()),
+                    (d.filter_amenity_type = $("#filter_amenity_type").val());
             },
         },
         language: {
@@ -307,35 +235,27 @@ $(document).ready(function () {
         },
         columns: [
             {
-                name: "builder_logo",
-                data: "builder_logo",
+                name: "amenity_icon",
+                data: "amenity_icon",
                 sortable: true,
                 render: function (_, _, full) {
-                    return full["builder_logo"];
+                    return full["amenity_icon"];
                 },
             },
             {
-                name: "builder_name",
-                data: "builder_name",
+                name: "amenity_name",
+                data: "amenity_name",
                 sortable: true,
                 render: function (_, _, full) {
-                    return full["builder_name"];
+                    return full["amenity_name"];
                 },
             },
             {
-                name: "builder_about",
-                data: "builder_about",
+                name: "amenity_type",
+                data: "amenity_type",
                 sortable: true,
                 render: function (_, _, full) {
-                    return full["builder_about"];
-                },
-            },
-            {
-                name: "city_name",
-                data: "city_name",
-                sortable: true,
-                render: function (_, _, full) {
-                    return full["city_name"];
+                    return full["amenity_type"];
                 },
             },
             {
@@ -394,7 +314,7 @@ $(document).ready(function () {
 
     $("body").on(
         "keyup change",
-        "#table_search, #filter_date, #filter_status",
+        "#table_search, #filter_date, #filter_status, #filter_amenity_type",
         function (e) {
             listTable.draw();
         }

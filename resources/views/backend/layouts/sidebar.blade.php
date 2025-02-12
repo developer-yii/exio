@@ -42,8 +42,15 @@
 
             <li class="side-nav-item {{ isActiveRouteMain('builder') }}">
                 <a href="{{ route('admin.builder') }}" class="side-nav-link {{ isActiveRoute(['builders']) }}">
-                    <i class="uil-users-alt"></i>
+                    <i class="uil-constructor"></i>
                     <span> Builders </span>
+                </a>
+            </li>
+
+            <li class="side-nav-item {{ isActiveRouteMain('amenity') }}">
+                <a href="{{ route('admin.amenity') }}" class="side-nav-link {{ isActiveRoute(['amenity']) }}">
+                    <i class="uil-cog"></i>
+                    <span> Amenities </span>
                 </a>
             </li>
 
