@@ -36,4 +36,9 @@ class City extends Model
     {
         return $this->hasMany(Location::class, 'city_id');
     }
+
+    public function builders()
+    {
+        return $this->hasMany(Builder::class, 'city_id');
+    }
 }

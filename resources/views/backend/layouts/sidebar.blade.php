@@ -40,6 +40,13 @@
                 </a>
             </li>
 
+            <li class="side-nav-item {{ isActiveRouteMain('builder') }}">
+                <a href="{{ route('admin.builder') }}" class="side-nav-link {{ isActiveRoute(['builders']) }}">
+                    <i class="uil-users-alt"></i>
+                    <span> Builders </span>
+                </a>
+            </li>
+
             <li class="side-nav-item {{ isActiveRouteMain(['faqs']) }}">
                 <a data-bs-toggle="collapse" href="#faqs_menu" aria-expanded="false" aria-controls="faqs_menu"
                     class="side-nav-link collapsed">
@@ -53,10 +60,12 @@
                             <a class="{{ isActiveRoute(['faq']) }}" href="{{ route('admin.faq') }}">FAQs</a>
                         </li>
                         <li>
-                            <a class="{{ isActiveRoute(['terms_condition']) }}" href="{{ route('admin.terms_condition') }}">Terms and Conditions</a>
+                            <a class="{{ isActiveRoute(['terms_condition']) }}"
+                                href="{{ route('admin.terms_condition') }}">Terms and Conditions</a>
                         </li>
                         <li>
-                            <a class="{{ isActiveRoute(['privacy_policie']) }}" href="{{ route('admin.privacy_policie') }}">Privacy Policys</a>
+                            <a class="{{ isActiveRoute(['privacy_policie']) }}"
+                                href="{{ route('admin.privacy_policie') }}">Privacy Policys</a>
                         </li>
                     </ul>
                 </div>
@@ -72,13 +81,15 @@
                 <div class="collapse" id="setting_menu" style="">
                     <ul class="side-nav-second-level">
                         <li>
-                            <a class="{{ isActiveRoute(['setting']) }}" href="{{ route('admin.setting') }}">General Settings</a>
+                            <a class="{{ isActiveRoute(['setting']) }}" href="{{ route('admin.setting') }}">General
+                                Settings</a>
                         </li>
                         <li>
                             <a class="{{ isActiveRoute(['city']) }}" href="{{ route('admin.city') }}">Cities</a>
                         </li>
                         <li>
-                            <a class="{{ isActiveRoute(['location']) }}" href="{{ route('admin.location') }}">Locations</a>
+                            <a class="{{ isActiveRoute(['location']) }}"
+                                href="{{ route('admin.location') }}">Locations</a>
                         </li>
                     </ul>
                 </div>
