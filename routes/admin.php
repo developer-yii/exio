@@ -15,6 +15,7 @@ use App\Http\Controllers\Backend\CityController;
 use App\Http\Controllers\Backend\LocationController;
 use App\Http\Controllers\Backend\CommonController;
 use App\Http\Controllers\Backend\BuilderController;
+use App\Http\Controllers\Backend\LocalityController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/', function () {
@@ -113,6 +114,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/detail', [AmenityController::class, 'detail'])->name('amenity.detail');
             Route::post('/delete', [AmenityController::class, 'delete'])->name('amenity.delete');
             Route::post('/addupdate', [AmenityController::class, 'addupdate'])->name('amenity.addupdate');
+        });
+
+        Route::group(['prefix' => 'localities'], function () {
+            Route::get('/', [LocalityController::class, 'index'])->name('locality');
+            Route::get('/get', [LocalityController::class, 'get'])->name('locality.list');
+            Route::get('/detail', [LocalityController::class, 'detail'])->name('locality.detail');
+            Route::post('/delete', [LocalityController::class, 'delete'])->name('locality.delete');
+            Route::post('/addupdate', [LocalityController::class, 'addupdate'])->name('locality.addupdate');
         });
     });
 });
