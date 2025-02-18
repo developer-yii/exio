@@ -16,6 +16,7 @@ use App\Http\Controllers\Backend\LocationController;
 use App\Http\Controllers\Backend\CommonController;
 use App\Http\Controllers\Backend\BuilderController;
 use App\Http\Controllers\Backend\LocalityController;
+use App\Http\Controllers\Backend\ProjectController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/', function () {
@@ -122,6 +123,18 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/detail', [LocalityController::class, 'detail'])->name('locality.detail');
             Route::post('/delete', [LocalityController::class, 'delete'])->name('locality.delete');
             Route::post('/addupdate', [LocalityController::class, 'addupdate'])->name('locality.addupdate');
+        });
+
+        Route::group(['prefix' => 'projects'], function () {
+            Route::get('/', [ProjectController::class, 'index'])->name('project');
+            Route::get('/get', [ProjectController::class, 'get'])->name('project.list');
+            Route::get('/detail', [ProjectController::class, 'detail'])->name('project.detail');
+            Route::post('/delete', [ProjectController::class, 'delete'])->name('project.delete');
+            Route::post('/addupdate', [ProjectController::class, 'addupdate'])->name('project.addupdate');
+            Route::get('/add', [ProjectController::class, 'add'])->name('project.add');
+            Route::get('/edit/{id}', [ProjectController::class, 'edit'])->name('project.edit');
+            Route::get('/get-property-sub-types', [ProjectController::class, 'getPropertySubTypes'])->name('project.get-property-sub-types');
+            Route::get('/{id}', [ProjectController::class, 'view'])->name('project.view');
         });
     });
 });

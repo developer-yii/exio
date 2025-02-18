@@ -36,4 +36,9 @@ class Builder extends Model
     {
         return $this->belongsTo(City::class, 'city_id');
     }
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class, 'builder_id', 'id');
+    }
 }

@@ -47,6 +47,13 @@
                 </a>
             </li>
 
+            <li class="side-nav-item {{ isActiveRouteMain('project') }}">
+                <a href="{{ route('admin.project') }}" class="side-nav-link {{ isActiveRoute(['project']) }}">
+                    <i class="uil-building"></i>
+                    <span> Projects </span>
+                </a>
+            </li>
+
             <li class="side-nav-item {{ isActiveRouteMain('amenity') }}">
                 <a href="{{ route('admin.amenity') }}" class="side-nav-link {{ isActiveRoute(['amenity']) }}">
                     <i class="uil-cog"></i>
