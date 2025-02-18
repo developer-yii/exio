@@ -22,6 +22,7 @@
             <div class="card">
                 <div class="card-body">
                     <form action="{{ route('admin.project.addupdate') }}" method="POST" id="add-form">
+                        <input type="hidden" name="id" value="{{ isset($model->id) ? $model->id : '' }}">
                         <div class="row">
                             <!-- General Details Section -->
                             <div class="col-md-12 mb-4">
@@ -47,7 +48,11 @@
                             <div class="col-md-12">
                                 <div class="form-group mb-3">
                                     <label for="project_about" class="form-label">Project About</label>
-                                    <div id="project_about" style="height: 100px;"></div>
+                                    <div id="project_about" style="height: 100px;">
+                                        @if (isset($model->id) && !empty($model->project_about))
+                                            {!! $model->project_about !!}
+                                        @endif
+                                    </div>
                                     <span class="error"></span>
                                 </div>
                             </div>
@@ -77,7 +82,7 @@
                                         <option value="">Select Area</option>
                                         @foreach ($area as $key => $value)
                                             <option value="{{ $key }}"
-                                                @if (isset($model->area_id) && $model->area_id == $key) selected @endif>
+                                                @if (isset($model->location_id) && $model->location_id == $key) selected @endif>
                                                 {{ $value }}
                                             </option>
                                         @endforeach
@@ -272,7 +277,7 @@
                                         @if (isset($projectStatus))
                                             @foreach ($projectStatus as $key => $value)
                                                 <option value="{{ $key }}"
-                                                    @if (isset($model->project_status) && $model->project_status == $key) selected @endif>
+                                                    @if (isset($model->status) && $model->status == $key) selected @endif>
                                                     {{ $value }}
                                                 </option>
                                             @endforeach
@@ -287,7 +292,8 @@
                                 <div class="form-group mb-3">
                                     <label class="form-label">Add More of Project Detail Fields</label>
                                     <div id="project_detail_fields">
-                                        <div class="row mb-2 project-detail-row">
+                                        {{-- <div class="row mb-2 project-detail-row">
+                                            <input type="hidden" name="project_detail[0][id]" value="">
                                             <div class="col-md-6">
                                                 <input type="text" name="project_detail[0][name]"
                                                     class="form-control project_detail_0_name" placeholder="Enter Name">
@@ -303,7 +309,7 @@
                                                     <i class="uil uil-plus"></i>
                                                 </button>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
@@ -324,7 +330,8 @@
                                 <div class="form-group mb-3">
                                     <label class="form-label">Add More of Master Plan Fields</label>
                                     <div id="master_plan_fields">
-                                        <div class="row mb-2 master-plan-row">
+                                        {{-- <div class="row mb-2 master-plan-row">
+                                            <input type="hidden" name="master_plan[0][id]" value="">
                                             <div class="col-md-5">
                                                 <input type="text" name="master_plan[0][name]"
                                                     class="form-control master_plan_0_name" placeholder="Enter Title">
@@ -345,17 +352,17 @@
                                                     <i class="uil uil-plus"></i>
                                                 </button>
                                             </div>
-                                        </div>
+                                            </input>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-12 text-end">
-                                <button type="submit" class="btn btn-success" id="addorUpdateBtn">Save</button>
+                            <div class="row">
+                                <div class="col-12 text-end">
+                                    <button type="submit" class="btn btn-success" id="addorUpdateBtn">Save</button>
+                                </div>
                             </div>
-                        </div>
                     </form>
                 </div>
             </div>
@@ -368,6 +375,16 @@
     <script>
         var addUpdateUrl = "{{ route('admin.project.addupdate') }}";
         var getPropertySubTypesUrl = "{{ route('admin.project.get-property-sub-types') }}";
+        var projectUrl = "{{ route('admin.project') }}";
+        @if (isset($existingProjectDetails))
+            var existingProjectDetails = {!! json_encode($existingProjectDetails) !!};
+        @endif
+        @if (isset($existingMasterPlans))
+            var existingMasterPlans = {!! json_encode($existingMasterPlans) !!};
+        @endif
+        @if (isset($model->property_sub_types))
+            var selectedPropertySubTypes = {!! json_encode($model->property_sub_types) !!};
+        @endif
     </script>
 @endsection
 

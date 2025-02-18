@@ -94,13 +94,10 @@ $(document).ready(function () {
                 $($this).find('button[type="submit"]').html("Save");
 
                 if (result.status == true) {
-                    $this[0].reset();
-                    $(tableId).DataTable().ajax.reload();
+                    showToastMessage("success", result.message);
                     setTimeout(function () {
-                        $(modalId).modal("hide");
-                        showToastMessage("success", result.message);
-                    }, 100);
-                    $("#id").val(0);
+                        window.location.href = projectUrl;
+                    }, 1000);
                 } else if (result.status == false && result.message) {
                     showToastMessage("error", result.message);
                 } else {
@@ -166,7 +163,11 @@ $(document).ready(function () {
                         html +=
                             "<option value='" +
                             index +
-                            "'>" +
+                            "' " +
+                            (selectedPropertySubTypes.includes(index)
+                                ? "selected"
+                                : "") +
+                            ">" +
                             propertySubType +
                             "</option>";
                     });

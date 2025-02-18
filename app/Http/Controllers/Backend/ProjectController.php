@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Builder;
 use App\Models\City;
 use App\Models\Location;
+use App\Models\MasterPlanAddMore;
 use App\Models\Project;
+use App\Models\ProjectdetailAddMore;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -101,7 +103,7 @@ class ProjectController extends Controller
                 'required',
                 'string',
                 'max:100',
-                Rule::unique('projects', 'project_name')->ignore($request->id)->whereNull('deleted_at')->where('city_id', $cityId)
+                Rule::unique('projects', 'project_name')->ignore($request->id)->whereNull('deleted_at')->where('builder_id', $request->builder_id)
             ],
             'city_id' => 'required',
             'area_id' => 'required',
@@ -125,8 +127,8 @@ class ProjectController extends Controller
             'project_detail.*.value' => 'required|string|max:100',
             'master_plan' => 'required|array',
             'master_plan.*.name' => 'required|string|max:100',
-            'master_plan.*.2d_image' => 'required|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'master_plan.*.3d_image' => 'required|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'master_plan.*.2d_image' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'master_plan.*.3d_image' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
 
         $messages = [
@@ -168,17 +170,6 @@ class ProjectController extends Controller
         $model->total_floors = $request->total_floors;
         $model->total_tower = $request->total_tower;
         $model->age_of_construction = $request->age_of_construction;
-        // if ($request->hasFile('project_logo')) {
-        //     if ($model->project_logo) {
-        //         if (Storage::exists('public/project/logo/' . $model->project_logo)) {
-        //             Storage::delete('public/project/logo/' . $model->project_logo);
-        //         }
-        //     }
-        //     $file = $request->file('project_logo');
-        //     $filename = time() . '_' . $file->getClientOriginalName();
-        //     $file->storeAs('public/project/logo', $filename);
-        //     $model->project_logo = $filename;
-        // }
         $model->status = $request->boolean('project_status', false);
         $model->updated_by = auth()->id();
         if (!$isUpdate) {
@@ -186,6 +177,72 @@ class ProjectController extends Controller
         }
 
         if ($model->save()) {
+            $existingIds = ProjectdetailAddMore::where('project_id', $model->id)
+                ->pluck('id')
+                ->toArray();
+
+            $updatedIds = [];
+
+            foreach ($request->project_detail as $projectDetail) {
+                $projectDetailAddMore = $projectDetail['id'] ? ProjectdetailAddMore::find($projectDetail['id']) : new ProjectdetailAddMore;
+                $projectDetailAddMore->project_id = $model->id;
+                $projectDetailAddMore->name = $projectDetail['name'];
+                $projectDetailAddMore->value = $projectDetail['value'];
+                $projectDetailAddMore->save();
+
+                if ($projectDetail['id']) {
+                    $updatedIds[] = $projectDetail['id'];
+                }
+            }
+
+            $idsToDelete = array_diff($existingIds, $updatedIds);
+            if (!empty($idsToDelete)) {
+                ProjectdetailAddMore::whereIn('id', $idsToDelete)->delete();
+            }
+
+            //save master plan add more
+            $existingMasterPlanIds = MasterPlanAddMore::where('project_id', $model->id)
+                ->pluck('id')
+                ->toArray();
+
+            $updatedMasterPlanIds = [];
+
+            foreach ($request->master_plan as $index => $masterPlan) {
+                $masterPlanAddMore = $masterPlan['id'] ? MasterPlanAddMore::find($masterPlan['id']) : new MasterPlanAddMore;
+                $masterPlanAddMore->project_id = $model->id;
+                $masterPlanAddMore->name = $masterPlan['name'];
+                if ($request->hasFile('master_plan.' . $index . '.2d_image')) {
+                    if ($masterPlanAddMore['2d_image'] && Storage::exists('public/master_plan/2d_image/' . $masterPlanAddMore['2d_image'])) {
+                        Storage::delete('public/master_plan/2d_image/' . $masterPlanAddMore['2d_image']);
+                    }
+
+                    $file = $request->file('master_plan.' . $index . '.2d_image');
+                    $filename = time() . '_' . $file->getClientOriginalName();
+                    $file->storeAs('public/master_plan/2d_image', $filename);
+                    $masterPlanAddMore['2d_image'] = $filename;
+                }
+                if ($request->hasFile('master_plan.' . $index . '.3d_image')) {
+                    if ($masterPlanAddMore['3d_image'] && Storage::exists('public/master_plan/3d_image/' . $masterPlanAddMore['3d_image'])) {
+                        Storage::delete('public/master_plan/3d_image/' . $masterPlanAddMore['3d_image']);
+                    }
+
+                    $file = $request->file('master_plan.' . $index . '.3d_image');
+                    $filename = time() . '_' . $file->getClientOriginalName();
+                    $file->storeAs('public/master_plan/3d_image', $filename);
+                    $masterPlanAddMore['3d_image'] = $filename;
+                }
+                $masterPlanAddMore->save();
+
+                if ($masterPlan['id']) {
+                    $updatedMasterPlanIds[] = $masterPlan['id'];
+                }
+            }
+
+            $idsToDelete = array_diff($existingMasterPlanIds, $updatedMasterPlanIds);
+            if (!empty($idsToDelete)) {
+                MasterPlanAddMore::whereIn('id', $idsToDelete)->delete();
+            }
+
             $message = $isUpdate ? 'Data updated successfully' : 'Data added successfully';
             return response()->json(['status' => true, 'message' => $message]);
         }
@@ -225,9 +282,9 @@ class ProjectController extends Controller
         return response()->json($result);
     }
 
-    public function edit($id, Request $request)
+    public function edit($id)
     {
-        $model = Project::find($id);
+        $model = Project::with(['projectDetails', 'masterPlans'])->find($id);
 
         $builder = Builder::pluck('builder_name', 'id');
         $city = City::pluck('city_name', 'id');
@@ -238,7 +295,21 @@ class ProjectController extends Controller
         $projectStatus = Project::$status;
         $ageOfConstruction = Project::$ageOfConstruction;
 
-        return view('backend.project.addupdate', compact('model', 'builder', 'city', 'area', 'propertyTypes', 'priceUnit', 'projectStatus', 'ageOfConstruction'));
+        $existingProjectDetails = $model->projectDetails;
+        $existingMasterPlans = $model->masterPlans;
+
+        return view('backend.project.addupdate', compact(
+            'model',
+            'builder',
+            'city',
+            'area',
+            'propertyTypes',
+            'priceUnit',
+            'projectStatus',
+            'ageOfConstruction',
+            'existingProjectDetails',
+            'existingMasterPlans'
+        ));
     }
 
     public function add(Request $request)

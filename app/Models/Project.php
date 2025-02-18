@@ -67,4 +67,14 @@ class Project extends Model
     {
         return $this->belongsTo(Location::class, 'location_id', 'id');
     }
+
+    public function projectDetails()
+    {
+        return $this->hasMany(ProjectdetailAddMore::class, 'project_id');
+    }
+
+    public function masterPlans()
+    {
+        return $this->hasMany(MasterPlanAddMore::class, 'project_id');
+    }
 }
