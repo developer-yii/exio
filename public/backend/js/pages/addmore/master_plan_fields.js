@@ -4,10 +4,10 @@ $(document).ready(function () {
     function previewImage(input, previewElement) {
         if (input.files && input.files[0]) {
             const reader = new FileReader();
-            reader.onload = function(e) {
-                previewElement.attr('src', e.target.result);
+            reader.onload = function (e) {
+                previewElement.attr("src", e.target.result);
                 previewElement.parent().show();
-            }
+            };
             reader.readAsDataURL(input.files[0]);
         }
     }
@@ -38,8 +38,16 @@ $(document).ready(function () {
                                 <input type="file" name="master_plan[${masterPlanIndex}][2d_image]"
                                     class="form-control master_plan_${masterPlanIndex}_2d_image"
                                     accept="image/*">
-                                <div class="mt-2 image-preview" style="display: ${data && data['2d_image'] ? 'block' : 'none'}">
-                                    <img src="${data ? '/storage/master_plan/2d_image/' + data['2d_image'] : ''}"
+                                <div class="mt-2 image-preview" style="display: ${
+                                    data && data["2d_image"] ? "block" : "none"
+                                }">
+                                    <img src="${
+                                        data
+                                            ? assetUrl +
+                                              "storage/master_plan/2d_image/" +
+                                              data["2d_image"]
+                                            : ""
+                                    }"
                                          class="img-fluid" style="max-height: 150px" alt="2D Preview">
                                 </div>
                                 <span class="error"></span>
@@ -51,8 +59,16 @@ $(document).ready(function () {
                                 <input type="file" name="master_plan[${masterPlanIndex}][3d_image]"
                                     class="form-control master_plan_${masterPlanIndex}_3d_image"
                                     accept="image/*">
-                                <div class="mt-2 image-preview" style="display: ${data && data['3d_image'] ? 'block' : 'none'}">
-                                    <img src="${data ? '/storage/master_plan/3d_image/' + data['3d_image'] : ''}"
+                                <div class="mt-2 image-preview" style="display: ${
+                                    data && data["3d_image"] ? "block" : "none"
+                                }">
+                                    <img src="${
+                                        data
+                                            ? assetUrl +
+                                              "storage/master_plan/3d_image/" +
+                                              data["3d_image"]
+                                            : ""
+                                    }"
                                          class="img-fluid" style="max-height: 150px" alt="3D Preview">
                                 </div>
                                 <span class="error"></span>
@@ -73,19 +89,22 @@ $(document).ready(function () {
         $(".add-more-master-plan").closest(".col-md-6").before(newRow);
 
         // Add event listeners for image preview
-        $(`.master_plan_${masterPlanIndex}_2d_image`).on('change', function() {
-            previewImage(this, $(this).siblings('.image-preview').find('img'));
+        $(`.master_plan_${masterPlanIndex}_2d_image`).on("change", function () {
+            previewImage(this, $(this).siblings(".image-preview").find("img"));
         });
 
-        $(`.master_plan_${masterPlanIndex}_3d_image`).on('change', function() {
-            previewImage(this, $(this).siblings('.image-preview').find('img'));
+        $(`.master_plan_${masterPlanIndex}_3d_image`).on("change", function () {
+            previewImage(this, $(this).siblings(".image-preview").find("img"));
         });
 
         masterPlanIndex++;
     }
 
     // Initialize existing master plans if any
-    if (typeof existingMasterPlans !== "undefined" && existingMasterPlans.length > 0) {
+    if (
+        typeof existingMasterPlans !== "undefined" &&
+        existingMasterPlans.length > 0
+    ) {
         existingMasterPlans.forEach(function (masterPlan) {
             addNewRow(masterPlan);
         });
