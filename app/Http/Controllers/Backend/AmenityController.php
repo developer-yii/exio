@@ -46,7 +46,7 @@ class AmenityController extends Controller
                 return $row->created_at->format('d-m-Y');
             })
             ->editColumn('updated_by', function ($row) {
-                return (isset($row->updatedBy->id)) ? $row->updatedBy->first_name . " " . $row->updatedBy->last_name : "";
+                return (isset($row->updatedBy->id)) ? $row->updatedBy->name : "";
             })
             ->editColumn('updated_at', function ($row) {
                 return $row->updated_at->format('d-m-Y');
@@ -151,7 +151,7 @@ class AmenityController extends Controller
             $model->status_text =  (isset($status[$model->status])) ? $status[$model->status] : "";
             $model->created_at_view =  ($model->created_at) ? date('d-m-Y g:i A', strtotime($model->created_at)) : "";
             $model->updated_at_view =  ($model->updated_at) ? date('d-m-Y g:i A', strtotime($model->updated_at)) : "";
-            $model->updated_by_view = (isset($model->updatedBy->id)) ? $model->updatedBy->first_name . " " . $model->updatedBy->last_name : "";
+            $model->updated_by_view = (isset($model->updatedBy->id)) ? $model->updatedBy->name : "";
             $model->amenity_type_name = (isset($amenityType[$model->amenity_type])) ? $amenityType[$model->amenity_type] : "";
             if ($model->updatedBy) {
                 unset($model->updatedBy);

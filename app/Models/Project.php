@@ -77,4 +77,9 @@ class Project extends Model
     {
         return $this->hasMany(MasterPlanAddMore::class, 'project_id');
     }
+
+    public function floorPlans()
+    {
+        return $this->hasMany(FloorPlanAddMore::class, 'project_id');
+    }
 }

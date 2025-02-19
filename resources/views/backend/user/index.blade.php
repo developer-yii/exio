@@ -46,8 +46,7 @@
                     <table id="dataTableMain" class="table site_table w-100 nowrap">
                         <thead>
                             <tr>
-                                <th>First name</th>
-                                <th>Last name</th>
+                                <th>Name</th>
                                 <th>Email</th>
                                 <th>Mobile</th>
                                 <th>Status</th>
@@ -76,17 +75,9 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label for="first_name" class="form-label">First Name<span
+                                    <label for="name" class="form-label">Name<span
                                             class="text-danger add_edit_required">*</span></label>
-                                    <input type="text" name="first_name" class="form-control first_name" value="">
-                                    <span class="error"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label for="last_name" class="form-label">Last Name<span
-                                            class="text-danger add_edit_required">*</span></label>
-                                    <input type="text" name="last_name" class="form-control last_name" value="">
+                                    <input type="text" name="name" class="form-control name" value="">
                                     <span class="error"></span>
                                 </div>
                             </div>
@@ -172,12 +163,8 @@
                             <table class="table table-centered mb-0" id="information">
                                 <tbody>
                                     <tr>
-                                        <th width="30%">First Name</th>
-                                        <td><span class="first_name"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <th width="30%">Last Name</th>
-                                        <td><span class="last_name"></span></td>
+                                        <th width="30%">Name</th>
+                                        <td><span class="name"></span></td>
                                     </tr>
                                     <tr>
                                         <th width="30%">Email</th>

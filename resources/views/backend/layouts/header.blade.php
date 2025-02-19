@@ -11,15 +11,14 @@
                     <img src="{{ asset('backend/images/user.png') }}" alt="user-image" class="rounded-circle">
                 </span>
                 <span>
-                    <span
-                        class="account-user-name">{{ $loginUser->last_name }}</span>
+                    <span class="account-user-name">{{ $loginUser->last_name }}</span>
                     <span class="account-position">Admin</span>
                 </span>
             </a>
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated topbar-dropdown-menu profile-dropdown">
                 <!-- item-->
                 <div class=" dropdown-header noti-title">
-                    <h6 class="text-overflow m-0">Welcome, {{ $loginUser->first_name." ".$loginUser->last_name }}!</h6>
+                    <h6 class="text-overflow m-0">Welcome, {{ $loginUser->name }}!</h6>
                 </div>
 
                 <!-- item-->
