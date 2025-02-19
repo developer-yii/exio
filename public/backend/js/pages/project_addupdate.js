@@ -164,7 +164,9 @@ $(document).ready(function () {
                             "<option value='" +
                             index +
                             "' " +
-                            (selectedPropertySubTypes.includes(index)
+                            (typeof selectedPropertySubTypes !== "undefined" &&
+                            Array.isArray(selectedPropertySubTypes) &&
+                            selectedPropertySubTypes.includes(index)
                                 ? "selected"
                                 : "") +
                             ">" +
