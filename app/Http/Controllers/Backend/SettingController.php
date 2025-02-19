@@ -33,7 +33,7 @@ class SettingController extends Controller
                 return ($row->description) ? \Illuminate\Support\Str::limit($row->description, 20) : "";
             })
             ->editColumn('updated_by', function ($row) {
-                return (isset($row->updatedBy->id)) ? $row->updatedBy->first_name . " " . $row->updatedBy->last_name : "";
+                return (isset($row->updatedBy->id)) ? $row->updatedBy->name : "";
             })
             ->editColumn('created_at', function ($row) {
                 return $row->created_at->format('d.m.Y');
@@ -93,7 +93,7 @@ class SettingController extends Controller
         }
 
         $isDefault = (isset($model->id) && $model->is_default == 1) ? true : false;
-        if(!$isDefault){
+        if (!$isDefault) {
             $model->setting_key = Str::slug(strtolower($request->setting_label));
             $model->setting_label = $request->setting_label;
         }
@@ -118,7 +118,7 @@ class SettingController extends Controller
         if (isset($model->id)) {
             $model->created_at_view =  ($model->created_at) ? date('d.m.Y g:i A', strtotime($model->created_at)) : "";
             $model->updated_at_view =  ($model->updated_at) ? date('d.m.Y g:i A', strtotime($model->updated_at)) : "";
-            $model->updated_by_view = (isset($model->updatedBy->id)) ? $model->updatedBy->first_name . " " . $model->updatedBy->last_name : "";
+            $model->updated_by_view = (isset($model->updatedBy->id)) ? $model->updatedBy->name : "";
             if ($model->updatedBy) {
                 unset($model->updatedBy);
             }

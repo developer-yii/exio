@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders;
 
 use App\Models\User;
@@ -11,8 +12,7 @@ class AdminSeeder extends Seeder
     public function run()
     {
         User::create([
-            'first_name' => 'Admin',
-            'last_name' => 'admin',
+            'name' => 'Admin',
             'email' => 'admin@gmail.com',
             'email_verified_at' => Carbon::now(),
             'password' => Hash::make('12345678'),

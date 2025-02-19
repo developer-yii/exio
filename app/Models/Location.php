@@ -18,6 +18,8 @@ class Location extends Model
         0 => 'Inactive',
     ];
 
+
+
     protected $dates = ['created_at', 'updated_at'];
 
     protected $table = 'locations';
@@ -35,5 +37,10 @@ class Location extends Model
     public function city()
     {
         return $this->belongsTo(City::class, 'city_id');
+    }
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class, 'location_id');
     }
 }

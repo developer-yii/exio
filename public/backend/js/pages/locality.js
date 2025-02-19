@@ -25,16 +25,6 @@ $(document).ready(function () {
         }
     });
 
-    $("body").on(
-        "keypress",
-        "input[name='mobile'], input[name='password'], input[name='confirm_password']",
-        function (event) {
-            if (event.which === 32) {
-                return false;
-            }
-        }
-    );
-
     $(formId).submit(function (event) {
         event.preventDefault();
         var $this = $(this);
@@ -47,7 +37,6 @@ $(document).ready(function () {
             url: addUpdateUrl,
             type: "POST",
             data: formData,
-            dataType: "json",
             cache: false,
             contentType: false,
             processData: false,
@@ -58,6 +47,8 @@ $(document).ready(function () {
             success: function (result) {
                 $($this).find('button[type="submit"]').prop("disabled", false);
                 $($this).find('button[type="submit"]').html("Save");
+
+                console.log(result);
 
                 if (result.status == true) {
                     $this[0].reset();
@@ -112,9 +103,9 @@ $(document).ready(function () {
                     $(modalId).modal("show");
 
                     $(formId).find("#id").val(id);
-                    $(formId).find(".name").val(result.data.name);
-                    $(formId).find(".email").val(result.data.email);
-                    $(formId).find(".mobile").val(result.data.mobile);
+                    $(formId)
+                        .find(".locality_name")
+                        .val(result.data.locality_name);
                     $(formId).find(".status").val(result.data.status);
                 } else {
                     if (result.message) {
@@ -138,24 +129,29 @@ $(document).ready(function () {
             success: function (result) {
                 if (result.status) {
                     $(viewModalId).modal("show");
-                    $(viewModalId).find(".name").html(result.data.name);
-                    $(viewModalId).find(".email").html(result.data.email);
-                    $(viewModalId).find(".mobile").html(result.data.mobile);
                     $(viewModalId)
-                        .find(".status")
+                        .find(".locality_name")
+                        .html(result.data.locality_name);
+
+                    $(viewModalId)
+                        .find(".locality_image")
+                        .html(
+                            '<img src="' +
+                                result.data.locality_image_url +
+                                '" alt="Builder Logo" style="width: 100px; height: 100px;">'
+                        );
+                    $(viewModalId)
+                        .find(".status_text")
                         .html(result.data.status_text);
-                    $(viewModalId)
-                        .find(".role_type")
-                        .html(result.data.role_type_text);
-                    $(viewModalId)
-                        .find(".email_verified_at")
-                        .html(result.data.email_verified_at_view);
                     $(viewModalId)
                         .find(".created_at")
                         .html(result.data.created_at_view);
                     $(viewModalId)
                         .find(".updated_at")
                         .html(result.data.updated_at_view);
+                    $(viewModalId)
+                        .find(".updated_by_view")
+                        .html(result.data.updated_by_view);
                 } else {
                     if (result.message) {
                         showToastMessage("error", result.message);
@@ -233,32 +229,23 @@ $(document).ready(function () {
         },
         columns: [
             {
-                name: "name",
-                data: "name",
+                name: "locality_image",
+                data: "locality_image",
                 sortable: true,
                 render: function (_, _, full) {
-                    return full["name"];
+                    return full["locality_image"];
                 },
             },
             {
-                name: "email",
-                data: "email",
+                name: "locality_name",
+                data: "locality_name",
                 sortable: true,
                 render: function (_, _, full) {
-                    return full["email"];
-                },
-            },
-            {
-                name: "mobile",
-                data: "mobile",
-                sortable: true,
-                render: function (_, _, full) {
-                    return full["mobile"];
+                    return full["locality_name"];
                 },
             },
             {
                 name: "status",
-                data: "status_text",
                 sortable: true,
                 render: function (_, _, full) {
                     if (full["status"] == 1) {

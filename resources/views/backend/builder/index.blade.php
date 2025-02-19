@@ -1,12 +1,12 @@
 @extends('backend.layouts.app')
 
-@section('title', 'Users')
+@section('title', 'Builders')
 
 @section('content')
 
     @php
-        $label_main = 'Users';
-        $label = 'User';
+        $label_main = 'Builders';
+        $label = 'Builder';
     @endphp
 
     <!-- start page title -->
@@ -46,12 +46,13 @@
                     <table id="dataTableMain" class="table site_table w-100 nowrap">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Mobile</th>
+                                <th>Builder Logo</th>
+                                <th>Builder Name</th>
+                                <th>Builder About</th>
+                                <th>City</th>
                                 <th>Status</th>
                                 <th>Created at</th>
-                                <th>Actions</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                     </table>
@@ -61,10 +62,10 @@
     </div> <!-- end row-->
 
 
-    <div class="modal fade" id="addModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
-        aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal fade" id="addModal" tabindex="-1" data-bs-focus="false" data-bs-backdrop="static"
+        data-bs-keyboard="false" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog modal-lg">
-            <form action="#" method="POST" id="add-form">
+            <form action="#" method="POST" id="add-form" enctype="multipart/form-data">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title"><span>Add</span> {{ $label }}</h4>
@@ -75,60 +76,52 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label for="name" class="form-label">Name<span
+                                    <label for="builder_name" class="form-label">Builder Name<span
                                             class="text-danger add_edit_required">*</span></label>
-                                    <input type="text" name="name" class="form-control name" value="">
+                                    <input type="text" id="builder_name" name="builder_name"
+                                        class="form-control builder_name" value="" />
                                     <span class="error"></span>
                                 </div>
                             </div>
+
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label for="mobile" class="form-label">Mobile</label>
-                                    <input type="text" name="mobile" class="form-control mobile" value="">
+                                    <label for="builder_logo" class="form-label">Builder Logo </label>
+                                    <input type="file" id="builder_logo" name="builder_logo"
+                                        class="form-control builder_logo" value="" />
                                     <span class="error"></span>
                                 </div>
                             </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group mb-3">
+                                    <label for="builder_about" class="form-label">Builder About </label>
+                                    <div id="builder_about" name="builder_about" class="builder_about"
+                                        style="height: 100px;"></div>
+                                    <span class="error"></span>
+                                </div>
+                            </div>
+
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label for="email" class="form-label">Email<span
-                                            class="text-danger add_edit_required">*</span></label>
-                                    <input type="text" name="email" class="form-control email" value="">
+                                    <label for="city_id" class="form-label">City </label>
+                                    <select id="city_id" class="form-control city_id" name="city_id">
+                                        <option value="">Select City</option>
+                                        @if (isset($cities) && count($cities) > 0)
+                                            @foreach ($cities as $city_id => $city_name)
+                                                <option value="{{ $city_id }}">{{ $city_name }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
                                     <span class="error"></span>
                                 </div>
                             </div>
-                            <div class="col-md-6 password_input">
-                                <div class="form-group mb-3">
-                                    <label for="password" class="form-label">Password<span
-                                            class="text-danger add_required">*</span></label>
-                                    <div class="input-group input-group-merge">
-                                        <input type="password" name="password" class="form-control password"
-                                            value="">
-                                        <div class="input-group-text" data-password="false">
-                                            <span class="password-eye"></span>
-                                        </div>
-                                    </div>
-                                    <span class="error"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6 password_input">
-                                <div class="form-group mb-3">
-                                    <label for="confirm_password" class="form-label">Confirm Password<span
-                                            class="text-danger add_required">*</span></label>
-                                    <div class="input-group input-group-merge">
-                                        <input type="password" name="confirm_password"
-                                            class="form-control confirm_password" value="">
-                                        <div class="input-group-text" data-password="false">
-                                            <span class="password-eye"></span>
-                                        </div>
-                                    </div>
-                                    <span class="error"></span>
-                                </div>
-                            </div>
+
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
                                     <label for="status" class="form-label">Status<span
                                             class="text-danger add_edit_required">*</span></label>
-                                    <select class="form-control status" name="status">
+                                    <select id="status_id" class="form-control status" name="status">
                                         @if (isset($status) && count($status) > 0)
                                             @foreach ($status as $status_id => $status_name)
                                                 <option value="{{ $status_id }}">{{ $status_name }}</option>
@@ -154,7 +147,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">{{ $label }} <span>information</span></h4>
+                    <h4 class="modal-title">{{ $label }} <span>Information</span></h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -163,28 +156,24 @@
                             <table class="table table-centered mb-0" id="information">
                                 <tbody>
                                     <tr>
-                                        <th width="30%">Name</th>
-                                        <td><span class="name"></span></td>
+                                        <th width="30%">Builder Name</th>
+                                        <td><span class="builder_name"></span></td>
+                                    </tr>
+                                    <tr>    
+                                        <th width="30%">Builder Logo</th>
+                                        <td><span class="builder_logo"></span></td>
                                     </tr>
                                     <tr>
-                                        <th width="30%">Email</th>
-                                        <td><span class="email"></span></td>
+                                        <th width="30%">Builder About</th>
+                                        <td><span class="builder_about"></span></td>
                                     </tr>
                                     <tr>
-                                        <th width="30%">Mobile</th>
-                                        <td><span class="mobile"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <th width="30%">Role</th>
-                                        <td><span class="role_type"></span></td>
+                                        <th width="30%">City</th>
+                                        <td><span class="city_name"></span></td>
                                     </tr>
                                     <tr>
                                         <th width="30%">Status</th>
-                                        <td><span class="status"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <th width="30%">Email Verified at</th>
-                                        <td><span class="email_verified_at"></span></td>
+                                        <td><span class="status_text"></span></td>
                                     </tr>
                                     <tr>
                                         <th width="30%">Created at</th>
@@ -193,6 +182,10 @@
                                     <tr>
                                         <th width="30%">Updated at</th>
                                         <td><span class="updated_at"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%">Updated By</th>
+                                        <td><span class="updated_by_view"></span></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -207,13 +200,13 @@
 
 @section('js')
     <script>
-        var apiUrl = "{{ route('admin.user.list') }}";
-        var detailUrl = "{{ route('admin.user.detail') }}";
-        var deleteUrl = "{{ route('admin.user.delete') }}";
-        var addUpdateUrl = "{{ route('admin.user.addupdate') }}";
+        var apiUrl = "{{ route('admin.builder.list') }}";
+        var detailUrl = "{{ route('admin.builder.detail') }}";
+        var deleteUrl = "{{ route('admin.builder.delete') }}";
+        var addUpdateUrl = "{{ route('admin.builder.addupdate') }}";
     </script>
 @endsection
 
 @section('pagejs')
-    <script src="{{ addPageJsLink('user.js') }}"></script>
+    <script src="{{ addPageJsLink('builder.js') }}"></script>
 @endsection

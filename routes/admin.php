@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\ConfirmablePasswordController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\FaqController;
+use App\Http\Controllers\Backend\AmenityController;
 use App\Http\Controllers\Backend\TermsConditionController;
 use App\Http\Controllers\Backend\PrivacyPolicyController;
 use App\Http\Controllers\Backend\SettingController;
@@ -14,6 +15,8 @@ use App\Http\Controllers\Backend\CityController;
 use App\Http\Controllers\Backend\LocationController;
 use App\Http\Controllers\Backend\CommonController;
 use App\Http\Controllers\Backend\BuilderController;
+use App\Http\Controllers\Backend\LocalityController;
+use App\Http\Controllers\Backend\ProjectController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/', function () {
@@ -104,6 +107,34 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/detail', [BuilderController::class, 'detail'])->name('builder.detail');
             Route::post('/delete', [BuilderController::class, 'delete'])->name('builder.delete');
             Route::post('/addupdate', [BuilderController::class, 'addupdate'])->name('builder.addupdate');
+        });
+
+        Route::group(['prefix' => 'amenities'], function () {
+            Route::get('/', [AmenityController::class, 'index'])->name('amenity');
+            Route::get('/get', [AmenityController::class, 'get'])->name('amenity.list');
+            Route::get('/detail', [AmenityController::class, 'detail'])->name('amenity.detail');
+            Route::post('/delete', [AmenityController::class, 'delete'])->name('amenity.delete');
+            Route::post('/addupdate', [AmenityController::class, 'addupdate'])->name('amenity.addupdate');
+        });
+
+        Route::group(['prefix' => 'localities'], function () {
+            Route::get('/', [LocalityController::class, 'index'])->name('locality');
+            Route::get('/get', [LocalityController::class, 'get'])->name('locality.list');
+            Route::get('/detail', [LocalityController::class, 'detail'])->name('locality.detail');
+            Route::post('/delete', [LocalityController::class, 'delete'])->name('locality.delete');
+            Route::post('/addupdate', [LocalityController::class, 'addupdate'])->name('locality.addupdate');
+        });
+
+        Route::group(['prefix' => 'projects'], function () {
+            Route::get('/', [ProjectController::class, 'index'])->name('project');
+            Route::get('/get', [ProjectController::class, 'get'])->name('project.list');
+            Route::get('/detail', [ProjectController::class, 'detail'])->name('project.detail');
+            Route::post('/delete', [ProjectController::class, 'delete'])->name('project.delete');
+            Route::post('/addupdate', [ProjectController::class, 'addupdate'])->name('project.addupdate');
+            Route::get('/add', [ProjectController::class, 'add'])->name('project.add');
+            Route::get('/edit/{id}', [ProjectController::class, 'edit'])->name('project.edit');
+            Route::get('/get-property-sub-types', [ProjectController::class, 'getPropertySubTypes'])->name('project.get-property-sub-types');
+            Route::get('/{id}', [ProjectController::class, 'view'])->name('project.view');
         });
     });
 });

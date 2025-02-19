@@ -1,4 +1,64 @@
 $(document).ready(function () {
+    let quill = "";
+    if ($("#builder_about").length > 0) {
+        quill = new Quill("#builder_about", {
+            theme: "snow",
+            modules: {
+                imageResize: {
+                    displaySize: true,
+                },
+                toolbar: [
+                    [{ font: [] }, { size: [] }],
+                    ["bold", "italic", "underline", "strike"],
+                    [{ color: [] }, { background: [] }],
+                    [{ script: "super" }, { script: "sub" }],
+                    [
+                        { header: [!1, 1, 2, 3, 4, 5, 6] },
+                        "blockquote",
+                        "code-block",
+                    ],
+                    [
+                        { list: "ordered" },
+                        { list: "bullet" },
+                        { indent: "-1" },
+                        { indent: "+1" },
+                    ],
+                    ["direction", { align: [] }],
+                    ["link", "image"],
+                    ["clean"],
+                ],
+            },
+        });
+
+        quill.getModule("toolbar").addHandler("image", () => {
+            const input = document.createElement("input");
+            input.setAttribute("type", "file");
+            input.setAttribute("accept", "image/*");
+            input.click();
+
+            input.onchange = () => {
+                const file = input.files[0];
+                // Validate file
+                if (!file.type.match(/^image\/(jpeg|png|gif)$/)) {
+                    alert("Invalid file type. Please select an image file.");
+                    return;
+                }
+                if (file.size > 2 * 1024 * 1024) {
+                    // 2MB limit
+                    alert("File is too large. Maximum size is 2MB.");
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const base64Image = reader.result;
+                    const range = quill.getSelection();
+                    quill.insertEmbed(range.index, "image", base64Image);
+                };
+                reader.readAsDataURL(file);
+            };
+        });
+    }
+
     let tableId = "#dataTableMain",
         formId = "#add-form",
         modalId = "#addModal",
@@ -25,16 +85,6 @@ $(document).ready(function () {
         }
     });
 
-    $("body").on(
-        "keypress",
-        "input[name='mobile'], input[name='password'], input[name='confirm_password']",
-        function (event) {
-            if (event.which === 32) {
-                return false;
-            }
-        }
-    );
-
     $(formId).submit(function (event) {
         event.preventDefault();
         var $this = $(this);
@@ -43,11 +93,14 @@ $(document).ready(function () {
         $(formId).find(".error").html("");
         $(formId).find(".is-invalid").removeClass("is-invalid");
 
+        if (quill) {
+            formData.append("builder_about", quill.root.innerHTML);
+        }
+
         $.ajax({
             url: addUpdateUrl,
             type: "POST",
             data: formData,
-            dataType: "json",
             cache: false,
             contentType: false,
             processData: false,
@@ -58,6 +111,8 @@ $(document).ready(function () {
             success: function (result) {
                 $($this).find('button[type="submit"]').prop("disabled", false);
                 $($this).find('button[type="submit"]').html("Save");
+
+                console.log(result);
 
                 if (result.status == true) {
                     $this[0].reset();
@@ -112,9 +167,17 @@ $(document).ready(function () {
                     $(modalId).modal("show");
 
                     $(formId).find("#id").val(id);
-                    $(formId).find(".name").val(result.data.name);
-                    $(formId).find(".email").val(result.data.email);
-                    $(formId).find(".mobile").val(result.data.mobile);
+                    $(formId)
+                        .find(".builder_name")
+                        .val(result.data.builder_name);
+                    $(formId)
+                        .find(".builder_about")
+                        .val(result.data.builder_about || "");
+                    if (quill) {
+                        console.log(result.data.builder_about);
+                        quill.root.innerHTML = result.data.builder_about || ""; // Safely set Quill content
+                    }
+                    $(formId).find(".city_id").val(result.data.city_id);
                     $(formId).find(".status").val(result.data.status);
                 } else {
                     if (result.message) {
@@ -138,24 +201,35 @@ $(document).ready(function () {
             success: function (result) {
                 if (result.status) {
                     $(viewModalId).modal("show");
-                    $(viewModalId).find(".name").html(result.data.name);
-                    $(viewModalId).find(".email").html(result.data.email);
-                    $(viewModalId).find(".mobile").html(result.data.mobile);
                     $(viewModalId)
-                        .find(".status")
+                        .find(".builder_name")
+                        .html(result.data.builder_name);
+
+                    $(viewModalId)
+                        .find(".builder_about")
+                        .html(result.data.builder_about);
+                    $(viewModalId)
+                        .find(".builder_logo")
+                        .html(
+                            '<img src="' +
+                                result.data.builder_logo_url +
+                                '" alt="Builder Logo" style="width: 100px; height: 100px;">'
+                        );
+                    $(viewModalId)
+                        .find(".city_name")
+                        .html(result.data.city_name);
+                    $(viewModalId)
+                        .find(".status_text")
                         .html(result.data.status_text);
-                    $(viewModalId)
-                        .find(".role_type")
-                        .html(result.data.role_type_text);
-                    $(viewModalId)
-                        .find(".email_verified_at")
-                        .html(result.data.email_verified_at_view);
                     $(viewModalId)
                         .find(".created_at")
                         .html(result.data.created_at_view);
                     $(viewModalId)
                         .find(".updated_at")
                         .html(result.data.updated_at_view);
+                    $(viewModalId)
+                        .find(".updated_by_view")
+                        .html(result.data.updated_by_view);
                 } else {
                     if (result.message) {
                         showToastMessage("error", result.message);
@@ -233,32 +307,39 @@ $(document).ready(function () {
         },
         columns: [
             {
-                name: "name",
-                data: "name",
+                name: "builder_logo",
+                data: "builder_logo",
                 sortable: true,
                 render: function (_, _, full) {
-                    return full["name"];
+                    return full["builder_logo"];
                 },
             },
             {
-                name: "email",
-                data: "email",
+                name: "builder_name",
+                data: "builder_name",
                 sortable: true,
                 render: function (_, _, full) {
-                    return full["email"];
+                    return full["builder_name"];
                 },
             },
             {
-                name: "mobile",
-                data: "mobile",
+                name: "builder_about",
+                data: "builder_about",
                 sortable: true,
                 render: function (_, _, full) {
-                    return full["mobile"];
+                    return full["builder_about"];
+                },
+            },
+            {
+                name: "city_name",
+                data: "city_name",
+                sortable: true,
+                render: function (_, _, full) {
+                    return full["city_name"];
                 },
             },
             {
                 name: "status",
-                data: "status_text",
                 sortable: true,
                 render: function (_, _, full) {
                     if (full["status"] == 1) {
