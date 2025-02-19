@@ -9,6 +9,7 @@ use App\Models\Location;
 use App\Models\MasterPlanAddMore;
 use App\Models\Project;
 use App\Models\ProjectdetailAddMore;
+use App\Models\FloorPlanAddMore;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -129,6 +130,11 @@ class ProjectController extends Controller
             'master_plan.*.name' => 'required|string|max:100',
             'master_plan.*.2d_image' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'master_plan.*.3d_image' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'floor_plan' => 'required|array',
+            'floor_plan.*.carpet_area' => 'required|string|max:100',
+            'floor_plan.*.type' => 'required|string|max:100',
+            'floor_plan.*.2d_image' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'floor_plan.*.3d_image' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
 
         $messages = [
@@ -139,6 +145,10 @@ class ProjectController extends Controller
             'master_plan.*.2d_image.mimes' => 'The master plan 2D image must be a file of type: jpeg, png, jpg, gif, svg.',
             'master_plan.*.3d_image.required' => 'The master plan 3D image field is required.',
             'master_plan.*.3d_image.mimes' => 'The master plan 3D image must be a file of type: jpeg, png, jpg, gif, svg.',
+            'floor_plan.*.carpet_area.required' => 'The floor plan carpet area field is required.',
+            'floor_plan.*.type.required' => 'The floor plan type field is required.',
+            'floor_plan.*.2d_image.mimes' => 'The floor plan 2D image must be a file of type: jpeg, png, jpg, gif, svg.',
+            'floor_plan.*.3d_image.mimes' => 'The floor plan 3D image must be a file of type: jpeg, png, jpg, gif, svg.',
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -243,6 +253,53 @@ class ProjectController extends Controller
                 MasterPlanAddMore::whereIn('id', $idsToDelete)->delete();
             }
 
+            // Process floor plans
+            $existingFloorPlanIds = FloorPlanAddMore::where('project_id', $model->id)
+                ->pluck('id')
+                ->toArray();
+
+            $updatedFloorPlanIds = [];
+
+            foreach ($request->floor_plan as $index => $floorPlan) {
+                $floorPlanAddMore = $floorPlan['id'] ? FloorPlanAddMore::find($floorPlan['id']) : new FloorPlanAddMore;
+                $floorPlanAddMore->project_id = $model->id;
+                $floorPlanAddMore->carpet_area = $floorPlan['carpet_area'];
+                $floorPlanAddMore->type = $floorPlan['type'];
+
+                if ($request->hasFile('floor_plan.' . $index . '.2d_image')) {
+                    if ($floorPlanAddMore['2d_image'] && Storage::exists('public/floor_plan/2d_image/' . $floorPlanAddMore['2d_image'])) {
+                        Storage::delete('public/floor_plan/2d_image/' . $floorPlanAddMore['2d_image']);
+                    }
+
+                    $file = $request->file('floor_plan.' . $index . '.2d_image');
+                    $filename = time() . '_' . $file->getClientOriginalName();
+                    $file->storeAs('public/floor_plan/2d_image', $filename);
+                    $floorPlanAddMore['2d_image'] = $filename;
+                }
+
+                if ($request->hasFile('floor_plan.' . $index . '.3d_image')) {
+                    if ($floorPlanAddMore['3d_image'] && Storage::exists('public/floor_plan/3d_image/' . $floorPlanAddMore['3d_image'])) {
+                        Storage::delete('public/floor_plan/3d_image/' . $floorPlanAddMore['3d_image']);
+                    }
+
+                    $file = $request->file('floor_plan.' . $index . '.3d_image');
+                    $filename = time() . '_' . $file->getClientOriginalName();
+                    $file->storeAs('public/floor_plan/3d_image', $filename);
+                    $floorPlanAddMore['3d_image'] = $filename;
+                }
+
+                $floorPlanAddMore->save();
+
+                if ($floorPlan['id']) {
+                    $updatedFloorPlanIds[] = $floorPlan['id'];
+                }
+            }
+
+            $idsToDelete = array_diff($existingFloorPlanIds, $updatedFloorPlanIds);
+            if (!empty($idsToDelete)) {
+                FloorPlanAddMore::whereIn('id', $idsToDelete)->delete();
+            }
+
             $message = $isUpdate ? 'Data updated successfully' : 'Data added successfully';
             return response()->json(['status' => true, 'message' => $message]);
         }
@@ -297,6 +354,7 @@ class ProjectController extends Controller
 
         $existingProjectDetails = $model->projectDetails;
         $existingMasterPlans = $model->masterPlans;
+        $existingFloorPlans = $model->floorPlans;
 
         return view('backend.project.addupdate', compact(
             'model',
@@ -308,7 +366,8 @@ class ProjectController extends Controller
             'projectStatus',
             'ageOfConstruction',
             'existingProjectDetails',
-            'existingMasterPlans'
+            'existingMasterPlans',
+            'existingFloorPlans'
         ));
     }
 

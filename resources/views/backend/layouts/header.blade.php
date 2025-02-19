@@ -11,7 +11,7 @@
                     <img src="{{ asset('backend/images/user.png') }}" alt="user-image" class="rounded-circle">
                 </span>
                 <span>
-                    <span class="account-user-name">{{ $loginUser->last_name }}</span>
+                    <span class="account-user-name">{{ $loginUser->name }}</span>
                     <span class="account-position">Admin</span>
                 </span>
             </a>
