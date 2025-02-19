@@ -443,6 +443,7 @@
         @if (isset($model->property_sub_types))
             var selectedPropertySubTypes = {!! json_encode($model->property_sub_types) !!};
         @endif
+        var assetUrl = "{{ asset('') }}";
     </script>
 @endsection
 

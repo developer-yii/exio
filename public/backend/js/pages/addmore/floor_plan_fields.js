@@ -53,7 +53,8 @@ $(document).ready(function () {
                                 }">
                                     <img src="${
                                         data
-                                            ? "/storage/floor_plan/2d_image/" +
+                                            ? assetUrl +
+                                              "storage/floor_plan/2d_image/" +
                                               data["2d_image"]
                                             : ""
                                     }"
@@ -73,7 +74,8 @@ $(document).ready(function () {
                                 }">
                                     <img src="${
                                         data
-                                            ? "/storage/floor_plan/3d_image/" +
+                                            ? assetUrl +
+                                              "storage/floor_plan/3d_image/" +
                                               data["3d_image"]
                                             : ""
                                     }"
