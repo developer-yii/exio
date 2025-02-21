@@ -3,7 +3,7 @@ $(document).ready(function () {
 
     function addNewRow(data = null) {
         let newRow = `
-            <div class="col-md-6 mb-3 project-detail-item">
+            <div class="col-md-4 mb-3 project-detail-item">
                 <div class="card h-100">
                     <div class="card-body">
                         <div class="row">
@@ -43,7 +43,7 @@ $(document).ready(function () {
         `;
 
         // Insert before the add button
-        $(".add-more-project-detail").closest(".col-md-6").before(newRow);
+        $(".add-more-project-detail").closest(".col-md-4").before(newRow);
         projectDetailIndex++;
     }
 

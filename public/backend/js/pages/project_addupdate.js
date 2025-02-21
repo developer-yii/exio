@@ -160,18 +160,12 @@ $(document).ready(function () {
                     var html =
                         "<option value=''>Select Property Sub Type</option>";
                     $.each(propertySubTypes, function (index, propertySubType) {
-                        html +=
-                            "<option value='" +
-                            index +
-                            "' " +
-                            (typeof selectedPropertySubTypes !== "undefined" &&
-                            Array.isArray(selectedPropertySubTypes) &&
-                            selectedPropertySubTypes.includes(index)
-                                ? "selected"
-                                : "") +
-                            ">" +
-                            propertySubType +
-                            "</option>";
+                        let isSelected =
+                            typeof selectedPropertySubTypes !== "undefined" &&
+                            selectedPropertySubTypes.includes(index);
+                        let selected = isSelected ? "selected" : "";
+
+                        html += `<option value="${index}" ${selected}>${propertySubType}</option>`;
                     });
                     $("#property_sub_types").html(html);
                 }

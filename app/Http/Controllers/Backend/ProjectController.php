@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Amenity;
 use App\Models\Builder;
 use App\Models\City;
 use App\Models\Location;
@@ -10,6 +11,8 @@ use App\Models\MasterPlanAddMore;
 use App\Models\Project;
 use App\Models\ProjectdetailAddMore;
 use App\Models\FloorPlanAddMore;
+use App\Models\Locality;
+use App\Models\LocalityAddMore;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -135,6 +138,13 @@ class ProjectController extends Controller
             'floor_plan.*.type' => 'required|string|max:100',
             'floor_plan.*.2d_image' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'floor_plan.*.3d_image' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'locality' => 'required|array',
+            'locality.*.locality_id' => 'required',
+            'locality.*.distance' => 'required',
+            'locality.*.distance_unit' => 'required',
+            'locality.*.time_to_reach' => 'required',
+            'property_document' => 'nullable|mimes:pdf|max:10240',
+            'property_document_title' => 'nullable|required_with:property_document|string|max:255',
         ];
 
         $messages = [
@@ -149,6 +159,10 @@ class ProjectController extends Controller
             'floor_plan.*.type.required' => 'The floor plan type field is required.',
             'floor_plan.*.2d_image.mimes' => 'The floor plan 2D image must be a file of type: jpeg, png, jpg, gif, svg.',
             'floor_plan.*.3d_image.mimes' => 'The floor plan 3D image must be a file of type: jpeg, png, jpg, gif, svg.',
+            'locality.*.locality_id.required' => 'The locality field is required.',
+            'locality.*.distance.required' => 'The distance field is required.',
+            'locality.*.distance_unit.required' => 'The distance unit field is required.',
+            'locality.*.time_to_reach.required' => 'The time to reach field is required.',
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -182,6 +196,24 @@ class ProjectController extends Controller
         $model->age_of_construction = $request->age_of_construction;
         $model->status = $request->boolean('project_status', false);
         $model->updated_by = auth()->id();
+
+        //save amenities
+        $amenities = $request->amenities;
+        $amenities = implode(',', $amenities);
+        $model->amenities = $amenities;
+
+        if ($request->hasFile('property_document')) {
+            if (isset($model->property_document) && !empty($model->property_document) && Storage::exists('public/property_documents/' . $model->property_document)) {
+                Storage::delete('public/property_documents/' . $model->property_document);
+            }
+
+            $file = $request->file('property_document');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->storeAs('public/property_documents', $fileName);
+            $model->property_document = $fileName;
+            $model->property_document_title = $request->property_document_title;
+        }
+
         if (!$isUpdate) {
             $model->created_by = auth()->id();
         }
@@ -300,6 +332,37 @@ class ProjectController extends Controller
                 FloorPlanAddMore::whereIn('id', $idsToDelete)->delete();
             }
 
+            // Process localities
+            $existingLocalityIds = LocalityAddMore::where('project_id', $model->id)
+                ->pluck('id')
+                ->toArray();
+
+            $updatedLocalityIds = [];
+
+            if ($request->has('locality')) {
+                foreach ($request->locality as $locality) {
+                    $localityAddMore = !empty($locality['id'])
+                        ? LocalityAddMore::find($locality['id'])
+                        : new LocalityAddMore;
+
+                    $localityAddMore->project_id = $model->id;
+                    $localityAddMore->locality_id = $locality['locality_id'];
+                    $localityAddMore->distance = $locality['distance'];
+                    $localityAddMore->distance_unit = $locality['distance_unit'];
+                    $localityAddMore->time_to_reach = $locality['time_to_reach'];
+                    $localityAddMore->save();
+
+                    if (!empty($locality['id'])) {
+                        $updatedLocalityIds[] = $locality['id'];
+                    }
+                }
+            }
+
+            $idsToDelete = array_diff($existingLocalityIds, $updatedLocalityIds);
+            if (!empty($idsToDelete)) {
+                LocalityAddMore::whereIn('id', $idsToDelete)->delete();
+            }
+
             $message = $isUpdate ? 'Data updated successfully' : 'Data added successfully';
             return response()->json(['status' => true, 'message' => $message]);
         }
@@ -342,6 +405,8 @@ class ProjectController extends Controller
     public function edit($id)
     {
         $model = Project::with(['projectDetails', 'masterPlans'])->find($id);
+        $amenities = explode(',', $model->amenities);
+        $model->amenities = $amenities;
 
         $builder = Builder::pluck('builder_name', 'id');
         $city = City::pluck('city_name', 'id');
@@ -355,6 +420,9 @@ class ProjectController extends Controller
         $existingProjectDetails = $model->projectDetails;
         $existingMasterPlans = $model->masterPlans;
         $existingFloorPlans = $model->floorPlans;
+        $amenities = Amenity::where('status', 1)->pluck('amenity_name', 'id');
+        $locality = Locality::where('status', 1)->pluck('locality_name', 'id');
+        $existingLocalities = $model->localities;
 
         return view('backend.project.addupdate', compact(
             'model',
@@ -367,7 +435,10 @@ class ProjectController extends Controller
             'ageOfConstruction',
             'existingProjectDetails',
             'existingMasterPlans',
-            'existingFloorPlans'
+            'existingFloorPlans',
+            'amenities',
+            'locality',
+            'existingLocalities'
         ));
     }
 
@@ -383,8 +454,10 @@ class ProjectController extends Controller
         $priceUnit = Project::$priceUnit;
         $projectStatus = Project::$status;
         $ageOfConstruction = Project::$ageOfConstruction;
+        $amenities = Amenity::where('status', 1)->pluck('amenity_name', 'id');
+        $locality = Locality::where('status', 1)->pluck('locality_name', 'id');
 
-        return view('backend.project.addupdate', compact('model', 'builder', 'city', 'area', 'propertyTypes', 'priceUnit', 'projectStatus', 'ageOfConstruction'));
+        return view('backend.project.addupdate', compact('model', 'builder', 'city', 'area', 'propertyTypes', 'priceUnit', 'projectStatus', 'ageOfConstruction', 'amenities', 'locality'));
     }
 
     public function view($id)
