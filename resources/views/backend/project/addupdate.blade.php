@@ -76,6 +76,14 @@
             display: block;
             margin-bottom: 10px;
         }
+
+        #map-search {
+            width: 40%;
+            position: absolute;
+            right: 70px;
+            top: 11px;
+            z-index: 2;
+        }
     </style>
 @endsection
 
@@ -118,6 +126,17 @@
                                                 class="text-danger add_edit_required">*</span></label>
                                         <input type="text" name="project_name" class="form-control project_name"
                                             value="@if (isset($model->id)) {{ $model->project_name }} @endif">
+                                        <span class="error"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Project Slug -->
+                                <div class="col-md-12">
+                                    <div class="form-group mb-3">
+                                        <label for="slug" class="form-label d-block">Project Slug<span
+                                                class="text-danger add_edit_required">*</span></label>
+                                        <input type="text" name="slug" class="form-control slug"
+                                            placeholder="Enter Slug" value="{{ $model->slug ?? '' }}">
                                         <span class="error"></span>
                                     </div>
                                 </div>
@@ -367,6 +386,16 @@
                                     </div>
                                 </div>
 
+                                <!-- Project Video -->
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="video" class="form-label d-block">Project Video</label>
+                                        <input type="file" name="video" id="video" class="form-control"
+                                            accept="video/*">
+                                        <span class="error"></span>
+                                    </div>
+                                </div>
+
                                 <!-- Add More of Project Detail Fields -->
                                 <div class="col-md-12">
                                     <div class="card">
@@ -384,6 +413,32 @@
                                                                 <i class="uil uil-plus-circle text-muted"
                                                                     style="font-size: 24px;"></i>
                                                                 <span class="text-muted mt-2">Add Project Detail</span>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Add More of Project Images -->
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title">Project Images</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row" id="project_images">
+                                                <div class="col-md-4 mb-3">
+                                                    <a href="javascript:void(0);"
+                                                        class="add-more-project-image text-decoration-none">
+                                                        <div class="card border-dashed h-100">
+                                                            <div
+                                                                class="card-body text-center d-flex flex-column justify-content-center">
+                                                                <i class="uil uil-plus-circle text-muted"
+                                                                    style="font-size: 24px;"></i>
+                                                                <span class="text-muted mt-2">Add Project Images</span>
                                                             </div>
                                                         </div>
                                                     </a>
@@ -613,6 +668,170 @@
                     </div>
                 </div>
 
+                <!-- RERA Details -->
+                <div class="card border-1">
+                    <div class="card-header" id="headingReraDetails">
+                        <h5 class="m-0">
+                            <a class="custom-accordion-title collapsed d-block pt-2 pb-2" data-bs-toggle="collapse"
+                                href="#collapseReraDetails" aria-expanded="false" aria-controls="collapseReraDetails">
+                                RERA Details
+                            </a>
+                        </h5>
+                    </div>
+
+                    <div id="collapseReraDetails" class="collapse" aria-labelledby="headingReraDetails"
+                        data-bs-parent="#projectAccordion">
+                        <div class="card-body">
+                            <div class="row" id="rera_details_container">
+                                <div class="col-md-4 mb-3">
+                                    <a href="javascript:void(0);" class="add-more-rera-details text-decoration-none">
+                                        <div class="card border-dashed h-100">
+                                            <div class="card-body text-center d-flex flex-column justify-content-center">
+                                                <i class="uil uil-plus-circle text-muted" style="font-size: 24px;"></i>
+                                                <span class="text-muted mt-2">Add RERA Details</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Map View -->
+                <div class="card border-1">
+                    <div class="card-header" id="headingMapView">
+                        <h5 class="m-0">
+                            <a class="custom-accordion-title collapsed d-block pt-2 pb-2" data-bs-toggle="collapse"
+                                href="#collapseMapView" aria-expanded="false" aria-controls="collapseMapView">
+                                Map View
+                            </a>
+                        </h5>
+                    </div>
+
+                    <div id="collapseMapView" class="collapse" aria-labelledby="headingMapView"
+                        data-bs-parent="#projectAccordion">
+                        <div class="card-body">
+                            <!-- Map View Section -->
+                            <div class="row">
+                                <!-- Address TextArea -->
+                                <div class="col-md-12">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Address</label>
+                                        <textarea class="form-control address" name="address" placeholder="Enter Address" rows="3">{{ isset($model->address) ? $model->address : '' }}</textarea>
+                                        <span class="error"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">Map</label>
+
+                                        <div class="row">
+                                            <div class="col-8" style="position: relative;">
+                                                <input type="text" id="map-search" class="form-control"
+                                                    placeholder="Search by name...">
+                                                <div id="location-map" class="gmaps"></div>
+                                            </div>
+
+                                            <div class="col-4">
+                                                <div class="mb-2 form-group">
+                                                    <label for="latitude" class="form-label">Latitude</label>
+                                                    <input type="text" class="form-control latitude" id="latitude"
+                                                        value="{{ isset($model->latitude) ? $model->latitude : '' }}"
+                                                        name="latitude">
+                                                    <span class="error"></span>
+                                                </div>
+
+                                                <div class="mb-2 form-group">
+                                                    <label for="longitude" class="form-label">Longitude</label>
+                                                    <input type="text" class="form-control longitude" id="longitude"
+                                                        value="{{ isset($model->longitude) ? $model->longitude : '' }}"
+                                                        name="longitude">
+                                                    <span class="error"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Map View -->
+                <div class="card border-1">
+                    <div class="card-header" id="headingExioSuggest">
+                        <h5 class="m-0">
+                            <a class="custom-accordion-title collapsed d-block pt-2 pb-2" data-bs-toggle="collapse"
+                                href="#collapseExioSuggest" aria-expanded="false" aria-controls="collapseExioSuggest">
+                                Exio Suggest
+                            </a>
+                        </h5>
+                    </div>
+
+                    <div id="collapseExioSuggest" class="collapse" aria-labelledby="headingExioSuggest"
+                        data-bs-parent="#projectAccordion">
+                        <div class="card-body">
+                            <!-- Exio Suggest Section -->
+                            <div class="row">
+                                <!-- Exio Suggest Percentage -->
+                                <div class="col-md-4">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Exio Suggest Percentage</label>
+                                        <input type="text" class="form-control exio_suggest_percentage"
+                                            name="exio_suggest_percentage" data-plugin="range-slider"
+                                            value="{{ $model->exio_suggest_percentage ?? '' }}" />
+                                        <span class="error"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Amenities Percentage -->
+                                <div class="col-md-4">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Amenities Percentage</label>
+                                        <input type="number" class="form-control amenities_percentage"
+                                            name="amenities_percentage" data-plugin="range-slider"
+                                            value="{{ $model->amenities_percentage ?? '' }}" />
+                                        <span class="error"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Project Plan Percentage -->
+                                <div class="col-md-4">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Project Plan Percentage</label>
+                                        <input type="number" class="form-control project_plan_percentage"
+                                            name="project_plan_percentage" data-plugin="range-slider"
+                                            value="{{ $model->project_plan_percentage ?? '' }}" />
+                                        <span class="error"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Locality Percentage -->
+                                <div class="col-md-4">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Locality Percentage</label>
+                                        <input type="number" class="form-control locality_percentage"
+                                            name="locality_percentage" data-plugin="range-slider"
+                                            value="{{ $model->locality_percentage ?? '' }}" />
+                                        <span class="error"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Return Of Investment Percentage -->
+                                <div class="col-md-4">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Return Of Investment Percentage</label>
+                                        <input type="number" class="form-control return_of_investment_percentage"
+                                            name="return_of_investment_percentage" data-plugin="range-slider"
+                                            value="{{ $model->return_of_investment_percentage ?? '' }}" />
+                                        <span class="error"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="row my-4">
                     <div class="col-12 text-end">
@@ -648,14 +867,31 @@
         @if (isset($existingLocalities))
             var existingLocalities = {!! json_encode($existingLocalities) !!};
         @endif
+        @if (isset($existingReraDetails))
+            var existingReraDetails = {!! json_encode($existingReraDetails) !!};
+        @endif
+        @if (isset($existingProjectImages))
+            var existingProjectImages = {!! json_encode($existingProjectImages) !!};
+        @endif
+        console.log(existingProjectImages);
         var assetUrl = "{{ asset('') }}";
     </script>
 @endsection
 
 @section('pagejs')
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key={{ config('constants.google_maps_api_key') }}&libraries=places">
+    </script>
     <script src="{{ addPageJsLink('project_addupdate.js') }}"></script>
     <script src="{{ addPageJsLink('addmore/project-detail-row.js') }}"></script>
     <script src="{{ addPageJsLink('addmore/master_plan_fields.js') }}"></script>
     <script src="{{ addPageJsLink('addmore/floor_plan_fields.js') }}"></script>
     <script src="{{ addPageJsLink('addmore/locality_fields.js') }}"></script>
+    <script src="{{ addPageJsLink('map_view.js') }}"></script>
+    <script src="{{ addPageJsLink('addmore/rera_details_fields.js') }}"></script>\
+    <script src="{{ addPageJsLink('addmore/project_images.js') }}"></script>
+
+    <!-- Slider Plugin -->
+    <script src="{{ asset('backend/js/vendor/ion.rangeSlider.min.js') }}"></script>
+    <script src="{{ asset('backend/js/ui/component.range-slider.js') }}"></script>
 @endsection

@@ -12,6 +12,7 @@ use App\Models\Builder;
 use App\Models\City;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 
 class BuilderController extends Controller
 {
@@ -131,7 +132,7 @@ class BuilderController extends Controller
                 }
             }
             $file = $request->file('builder_logo');
-            $filename = time() . '_' . $file->getClientOriginalName();
+            $filename = time() . '_' . Str::random(20) . '.' . $file->getClientOriginalExtension();
             $file->storeAs('public/builder/logo', $filename);
             $model->builder_logo = $filename;
         }

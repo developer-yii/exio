@@ -96,6 +96,14 @@ $(document).ready(function () {
                 },
             },
             {
+                name: "slug",
+                data: "slug",
+                sortable: true,
+                render: function (_, _, full) {
+                    return full["slug"];
+                },
+            },
+            {
                 name: "project_about",
                 data: "project_about",
                 sortable: true,
@@ -153,6 +161,20 @@ $(document).ready(function () {
                 sortable: true,
                 render: function (_, _, full) {
                     return full["rera_number"];
+                },
+            },
+            {
+                name: "rera_progress",
+                sortable: true,
+                render: function (_, _, full) {
+                    return full["rera_progress"];
+                },
+            },
+            {
+                name: "actual_progress",
+                sortable: true,
+                render: function (_, _, full) {
+                    return full["actual_progress"];
                 },
             },
             {

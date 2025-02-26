@@ -13,11 +13,15 @@ use App\Models\ProjectdetailAddMore;
 use App\Models\FloorPlanAddMore;
 use App\Models\Locality;
 use App\Models\LocalityAddMore;
+use App\Models\ProjectImage;
+use App\Models\ReraDetailsAddMore;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\File;
 
 class ProjectController extends Controller
 {
@@ -57,6 +61,12 @@ class ProjectController extends Controller
             })
             ->editColumn('location_name', function ($row) {
                 return ($row->location->location_name) ? $row->location->location_name : "";
+            })
+            ->editColumn('rera_progress', function ($row) {
+                return "<a href='" . route('admin.rera_progress', ['project_id' => $row->id]) . "'>RERA Progress</a>";
+            })
+            ->editColumn('actual_progress', function ($row) {
+                return "<a href='" . route('admin.actual_progress', ['project_id' => $row->id]) . "'>Actual Progress</a>";
             })
             ->addColumn('status_text', function ($row) use ($statusLabels) {
                 return $statusLabels[$row->status] ?? "";
@@ -102,12 +112,23 @@ class ProjectController extends Controller
         $isUpdate = (!empty($request->id) && $request->id) ? true : false;
         $cityId = (!empty($request->city_id) && $request->city_id) ? $request->city_id : 0;
         $areaId = (!empty($request->area_id) && $request->area_id) ? $request->area_id : 0;
+
         $rules = [
             'project_name' => [
                 'required',
                 'string',
                 'max:100',
                 Rule::unique('projects', 'project_name')->ignore($request->id)->whereNull('deleted_at')->where('builder_id', $request->builder_id)
+            ],
+            'slug' => [
+                'nullable',
+                'string',
+                Rule::unique('projects', 'slug')->ignore($request->id)->whereNull('deleted_at')->where('builder_id', $request->builder_id)
+            ],
+            'video' => [
+                Rule::requiredIf(!$isUpdate),
+                'file',
+                File::types(['mp4', 'mov', 'ogg', 'qt', 'avi', 'flv', 'wmv', '3gp', 'webm'])->max(10240),
             ],
             'city_id' => 'required',
             'area_id' => 'required',
@@ -126,6 +147,11 @@ class ProjectController extends Controller
             'total_tower' => 'required',
             'age_of_construction' => 'required',
             'project_status' => 'required',
+            'exio_suggest_percentage' => 'required|numeric',
+            'amenities_percentage' => 'required|numeric',
+            'project_plan_percentage' => 'required|numeric',
+            'locality_percentage' => 'required|numeric',
+            'return_of_investment_percentage' => 'required|numeric',
             'project_detail' => 'required|array',
             'project_detail.*.name' => 'required|string|max:100',
             'project_detail.*.value' => 'required|string|max:100',
@@ -145,6 +171,12 @@ class ProjectController extends Controller
             'locality.*.time_to_reach' => 'required',
             'property_document' => 'nullable|mimes:pdf|max:10240',
             'property_document_title' => 'nullable|required_with:property_document|string|max:255',
+            'address' => 'required|string|max:255',
+            'rera_details' => 'required|array',
+            'rera_details.*.title' => 'required|string|max:255',
+            'rera_details.*.document' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:2048',
+            'project_images' => 'required|array',
+            'project_images.*.image' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
 
         $messages = [
@@ -163,6 +195,11 @@ class ProjectController extends Controller
             'locality.*.distance.required' => 'The distance field is required.',
             'locality.*.distance_unit.required' => 'The distance unit field is required.',
             'locality.*.time_to_reach.required' => 'The time to reach field is required.',
+            'address.required' => 'The address field is required.',
+            'rera_details.*.title.required' => 'The title field is required.',
+            'rera_details.*.document.mimes' => 'The document must be a file of type: pdf, doc, docx, xls, xlsx, ppt, pptx.',
+            'project_images.*.image.required' => 'The image field is required.',
+            'project_images.*.image.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif, svg.',
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -178,6 +215,11 @@ class ProjectController extends Controller
         }
 
         $model->project_name = ucwords(strtolower(trim($request->project_name)));
+        $slug = !empty($request->slug) ? $request->slug : Str::slug($request->project_name);
+        if (Project::where('slug', $slug)->where('id', '!=', $model->id)->exists()) {
+            $slug = $slug . '-' . Str::random(5);
+        }
+        $model->slug = $slug;
         $model->project_about = $request->project_about;
         $model->city_id  = $request->city_id;
         $model->location_id = $request->area_id;
@@ -195,6 +237,14 @@ class ProjectController extends Controller
         $model->total_tower = $request->total_tower;
         $model->age_of_construction = $request->age_of_construction;
         $model->status = $request->boolean('project_status', false);
+        $model->address = $request->address;
+        $model->latitude = $request->latitude;
+        $model->longitude = $request->longitude;
+        $model->exio_suggest_percentage = $request->exio_suggest_percentage;
+        $model->amenities_percentage = $request->amenities_percentage;
+        $model->project_plan_percentage = $request->project_plan_percentage;
+        $model->locality_percentage = $request->locality_percentage;
+        $model->return_of_investment_percentage = $request->return_of_investment_percentage;
         $model->updated_by = auth()->id();
 
         //save amenities
@@ -208,10 +258,21 @@ class ProjectController extends Controller
             }
 
             $file = $request->file('property_document');
-            $fileName = time() . '_' . $file->getClientOriginalName();
+            $fileName = time() . '_' . Str::random(20) . '.' . $file->getClientOriginalExtension();
             $file->storeAs('public/property_documents', $fileName);
             $model->property_document = $fileName;
             $model->property_document_title = $request->property_document_title;
+        }
+
+        if ($request->hasFile('video')) {
+            if (isset($model->video) && !empty($model->video) && Storage::exists('public/project/videos/' . $model->video)) {
+                Storage::delete('public/project/videos/' . $model->video);
+            }
+
+            $file = $request->file('video');
+            $fileName = time() . '_' . Str::random(20) . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/project/videos', $fileName);
+            $model->video = $fileName;
         }
 
         if (!$isUpdate) {
@@ -259,7 +320,7 @@ class ProjectController extends Controller
                     }
 
                     $file = $request->file('master_plan.' . $index . '.2d_image');
-                    $filename = time() . '_' . $file->getClientOriginalName();
+                    $filename = time() . '_' . Str::random(20) . '.' . $file->getClientOriginalExtension();
                     $file->storeAs('public/master_plan/2d_image', $filename);
                     $masterPlanAddMore['2d_image'] = $filename;
                 }
@@ -269,7 +330,7 @@ class ProjectController extends Controller
                     }
 
                     $file = $request->file('master_plan.' . $index . '.3d_image');
-                    $filename = time() . '_' . $file->getClientOriginalName();
+                    $filename = time() . '_' . Str::random(20) . '.' . $file->getClientOriginalExtension();
                     $file->storeAs('public/master_plan/3d_image', $filename);
                     $masterPlanAddMore['3d_image'] = $filename;
                 }
@@ -304,7 +365,7 @@ class ProjectController extends Controller
                     }
 
                     $file = $request->file('floor_plan.' . $index . '.2d_image');
-                    $filename = time() . '_' . $file->getClientOriginalName();
+                    $filename = time() . '_' . Str::random(20) . '.' . $file->getClientOriginalExtension();
                     $file->storeAs('public/floor_plan/2d_image', $filename);
                     $floorPlanAddMore['2d_image'] = $filename;
                 }
@@ -315,7 +376,7 @@ class ProjectController extends Controller
                     }
 
                     $file = $request->file('floor_plan.' . $index . '.3d_image');
-                    $filename = time() . '_' . $file->getClientOriginalName();
+                    $filename = time() . '_' . Str::random(20) . '.' . $file->getClientOriginalExtension();
                     $file->storeAs('public/floor_plan/3d_image', $filename);
                     $floorPlanAddMore['3d_image'] = $filename;
                 }
@@ -363,6 +424,82 @@ class ProjectController extends Controller
                 LocalityAddMore::whereIn('id', $idsToDelete)->delete();
             }
 
+            // Save RERA details
+            $existingReraDetailsIds = ReraDetailsAddMore::where('project_id', $model->id)
+                ->pluck('id')
+                ->toArray();
+
+            $updatedReraDetailsIds = [];
+
+            foreach ($request->rera_details as $index => $detail) {
+                $reraDetail = $detail['id'] ? ReraDetailsAddMore::find($detail['id']) : new ReraDetailsAddMore;
+                $reraDetail->project_id = $model->id;
+                $reraDetail->title = $detail['title'];
+
+                if ($request->hasFile('rera_details.' . $index . '.document')) {
+                    $file = $request->file('rera_details.' . $index . '.document');
+                    $fileName = time() . '_' . Str::random(20) . '.' . $file->getClientOriginalExtension();
+                    $file->storeAs('public/rera_documents', $fileName);
+                    $reraDetail->document = $fileName;
+                }
+
+                $reraDetail->save();
+
+                $updatedReraDetailsIds[] = $reraDetail->id;
+            }
+
+            $idsToDelete = array_diff($existingReraDetailsIds, $updatedReraDetailsIds);
+            if (!empty($idsToDelete)) {
+                ReraDetailsAddMore::whereIn('id', $idsToDelete)->delete();
+            }
+
+            // Save project images
+            $existingProjectImagesIds = ProjectImage::where('project_id', $model->id)
+                ->pluck('id')
+                ->toArray();
+
+            $updatedProjectImagesIds = [];
+
+            foreach ($request->project_images as $index => $images) {
+                if (!isset($images['id']) && !$request->hasFile('project_images.' . $index . '.image')) {
+                    continue;
+                }
+
+                $projectImages = $images['id'] ? ProjectImage::find($images['id']) : new ProjectImage;
+                $projectImages->project_id = $model->id;
+                $projectImages->is_cover = isset($images['is_cover']) && $images['is_cover'] == 'on' ? 1 : 0;
+
+                if ($request->hasFile('project_images.' . $index . '.image')) {
+                    if ($projectImages->image && Storage::exists('public/project_images/' . $projectImages->image)) {
+                        Storage::delete('public/project_images/' . $projectImages->image);
+                    }
+
+                    $file = $request->file('project_images.' . $index . '.image');
+                    $fileName = time() . '_' . Str::random(20) . '.' . $file->getClientOriginalExtension();
+                    $file->storeAs('public/project_images', $fileName);
+                    $projectImages->image = $fileName;
+                }
+
+                if (isset($images['is_cover']) && $images['is_cover'] == 'on') {
+                    if ($images['id']) {
+                        $model->cover_image = $projectImages->image;
+                    } else {
+                        $model->cover_image = $fileName ?? null;
+                    }
+                    $model->save();
+                }
+
+
+                $projectImages->save();
+
+                $updatedProjectImagesIds[] = $projectImages->id;
+            }
+
+            $idsToDelete = array_diff($existingProjectImagesIds, $updatedProjectImagesIds);
+            if (!empty($idsToDelete)) {
+                ProjectImage::whereIn('id', $idsToDelete)->delete();
+            }
+
             $message = $isUpdate ? 'Data updated successfully' : 'Data added successfully';
             return response()->json(['status' => true, 'message' => $message]);
         }
@@ -405,6 +542,10 @@ class ProjectController extends Controller
     public function edit($id)
     {
         $model = Project::with(['projectDetails', 'masterPlans'])->find($id);
+        if (!$model) {
+            return redirect()->route('admin.project')->with('error', 'Project not found.');
+        }
+
         $amenities = explode(',', $model->amenities);
         $model->amenities = $amenities;
 
@@ -423,6 +564,8 @@ class ProjectController extends Controller
         $amenities = Amenity::where('status', 1)->pluck('amenity_name', 'id');
         $locality = Locality::where('status', 1)->pluck('locality_name', 'id');
         $existingLocalities = $model->localities;
+        $existingReraDetails = $model->reraDetails;
+        $existingProjectImages = $model->projectImages;
 
         return view('backend.project.addupdate', compact(
             'model',
@@ -438,7 +581,9 @@ class ProjectController extends Controller
             'existingFloorPlans',
             'amenities',
             'locality',
-            'existingLocalities'
+            'existingLocalities',
+            'existingReraDetails',
+            'existingProjectImages'
         ));
     }
 
