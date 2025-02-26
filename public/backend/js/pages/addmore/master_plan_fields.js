@@ -14,7 +14,7 @@ $(document).ready(function () {
 
     function addNewRow(data = null) {
         let newRow = `
-            <div class="col-md-6 mb-3 master-plan-item">
+            <div class="col-md-4 mb-3 master-plan-item">
                 <div class="card h-100">
                     <div class="card-body">
                         <div class="row">
@@ -35,20 +35,28 @@ $(document).ready(function () {
                             <!-- 2D Image -->
                             <div class="form-group mb-3">
                                 <label class="form-label">2D Image</label>
-                                <input type="file" name="master_plan[${masterPlanIndex}][2d_image]"
-                                    class="form-control master_plan_${masterPlanIndex}_2d_image"
-                                    accept="image/*">
-                                <div class="mt-2 image-preview" style="display: ${
-                                    data && data["2d_image"] ? "block" : "none"
-                                }">
-                                    <img src="${
-                                        data
-                                            ? assetUrl +
-                                              "storage/master_plan/2d_image/" +
-                                              data["2d_image"]
-                                            : ""
-                                    }"
-                                         class="img-fluid" style="max-height: 150px" alt="2D Preview">
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        <input type="file" name="master_plan[${masterPlanIndex}][2d_image]"
+                                            class="form-control master_plan_${masterPlanIndex}_2d_image"
+                                            accept="image/*">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="image-preview" style="display: ${
+                                            data && data["2d_image"]
+                                                ? "block"
+                                                : "none"
+                                        }">
+                                            <img src="${
+                                                data
+                                                    ? assetUrl +
+                                                      "storage/master_plan/2d_image/" +
+                                                      data["2d_image"]
+                                                    : ""
+                                            }"
+                                                class="img-fluid hover-image" style="max-height: 38px; max-width: 100%;" alt="2D Preview">
+                                        </div>
+                                    </div>
                                 </div>
                                 <span class="error"></span>
                             </div>
@@ -56,20 +64,28 @@ $(document).ready(function () {
                             <!-- 3D Image -->
                             <div class="form-group mb-3">
                                 <label class="form-label">3D Image</label>
-                                <input type="file" name="master_plan[${masterPlanIndex}][3d_image]"
-                                    class="form-control master_plan_${masterPlanIndex}_3d_image"
-                                    accept="image/*">
-                                <div class="mt-2 image-preview" style="display: ${
-                                    data && data["3d_image"] ? "block" : "none"
-                                }">
-                                    <img src="${
-                                        data
-                                            ? assetUrl +
-                                              "storage/master_plan/3d_image/" +
-                                              data["3d_image"]
-                                            : ""
-                                    }"
-                                         class="img-fluid" style="max-height: 150px" alt="3D Preview">
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        <input type="file" name="master_plan[${masterPlanIndex}][3d_image]"
+                                            class="form-control master_plan_${masterPlanIndex}_3d_image"
+                                            accept="image/*">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="image-preview" style="display: ${
+                                            data && data["3d_image"]
+                                                ? "block"
+                                                : "none"
+                                        }">
+                                            <img src="${
+                                                data
+                                                    ? assetUrl +
+                                                      "storage/master_plan/3d_image/" +
+                                                      data["3d_image"]
+                                                    : ""
+                                            }"
+                                                class="img-fluid hover-image" style="max-height: 38px; max-width: 100%;" alt="3D Preview">
+                                        </div>
+                                    </div>
                                 </div>
                                 <span class="error"></span>
                             </div>
@@ -86,15 +102,23 @@ $(document).ready(function () {
         `;
 
         // Insert before the add button
-        $(".add-more-master-plan").closest(".col-md-6").before(newRow);
+        $(".add-more-master-plan").closest(".col-md-4").before(newRow);
 
         // Add event listeners for image preview
         $(`.master_plan_${masterPlanIndex}_2d_image`).on("change", function () {
-            previewImage(this, $(this).siblings(".image-preview").find("img"));
+            previewImage(
+                this,
+                $(this).closest(".form-group").find(".image-preview img")
+            );
+            $(this).closest(".form-group").find(".image-preview").show();
         });
 
         $(`.master_plan_${masterPlanIndex}_3d_image`).on("change", function () {
-            previewImage(this, $(this).siblings(".image-preview").find("img"));
+            previewImage(
+                this,
+                $(this).closest(".form-group").find(".image-preview img")
+            );
+            $(this).closest(".form-group").find(".image-preview").show();
         });
 
         masterPlanIndex++;
@@ -119,31 +143,5 @@ $(document).ready(function () {
 
     $(document).on("click", ".remove-master-plan", function () {
         $(this).closest(".master-plan-item").remove();
-        reindexMasterPlans();
     });
-
-    function reindexMasterPlans() {
-        $(".master-plan-item").each(function (index) {
-            $(this)
-                .find('input[type="hidden"]')
-                .attr("name", `master_plan[${index}][id]`);
-            $(this)
-                .find('input[type="text"]')
-                .attr("name", `master_plan[${index}][name]`)
-                .removeClass()
-                .addClass(`form-control master_plan_${index}_name`);
-            $(this)
-                .find('input[type="file"]')
-                .first()
-                .attr("name", `master_plan[${index}][2d_image]`)
-                .removeClass()
-                .addClass(`form-control master_plan_${index}_2d_image`);
-            $(this)
-                .find('input[type="file"]')
-                .last()
-                .attr("name", `master_plan[${index}][3d_image]`)
-                .removeClass()
-                .addClass(`form-control master_plan_${index}_3d_image`);
-        });
-    }
 });

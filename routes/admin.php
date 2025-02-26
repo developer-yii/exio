@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\ActualProgressController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\AuthController;
 use App\Http\Controllers\Backend\ForgotPasswordController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\Backend\CommonController;
 use App\Http\Controllers\Backend\BuilderController;
 use App\Http\Controllers\Backend\LocalityController;
 use App\Http\Controllers\Backend\ProjectController;
+use App\Http\Controllers\Backend\ReraProgressController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/', function () {
@@ -135,6 +137,23 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/edit/{id}', [ProjectController::class, 'edit'])->name('project.edit');
             Route::get('/get-property-sub-types', [ProjectController::class, 'getPropertySubTypes'])->name('project.get-property-sub-types');
             Route::get('/{id}', [ProjectController::class, 'view'])->name('project.view');
+        });
+
+        Route::group(['prefix' => 'rera-progress'], function () {
+            Route::get('/get', [ReraProgressController::class, 'get'])->name('rera_progress.list');
+            Route::get('/detail', [ReraProgressController::class, 'detail'])->name('rera_progress.detail');
+            Route::post('/delete', [ReraProgressController::class, 'delete'])->name('rera_progress.delete');
+            Route::post('/addupdate', [ReraProgressController::class, 'addupdate'])->name('rera_progress.addupdate');
+            Route::get('/{project_id}', [ReraProgressController::class, 'index'])->name('rera_progress');
+        });
+
+        Route::group(['prefix' => 'actual-progress'], function () {
+            Route::get('/get', [ActualProgressController::class, 'get'])->name('actual_progress.list');
+            Route::get('/detail', [ActualProgressController::class, 'detail'])->name('actual_progress.detail');
+            Route::post('/delete', [ActualProgressController::class, 'delete'])->name('actual_progress.delete');
+            Route::post('/addupdate', [ActualProgressController::class, 'addupdate'])->name('actual_progress.addupdate');
+            Route::get('/get-images', [ActualProgressController::class, 'getImages'])->name('actual_progress.get-images');
+            Route::get('/{project_id}', [ActualProgressController::class, 'index'])->name('actual_progress');
         });
     });
 });

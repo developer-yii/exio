@@ -82,4 +82,19 @@ class Project extends Model
     {
         return $this->hasMany(FloorPlanAddMore::class, 'project_id');
     }
+
+    public function localities()
+    {
+        return $this->hasMany(LocalityAddMore::class, 'project_id');
+    }
+
+    public function reraDetails()
+    {
+        return $this->hasMany(ReraDetailsAddMore::class, 'project_id');
+    }
+
+    public function projectImages()
+    {
+        return $this->hasMany(ProjectImage::class, 'project_id');
+    }
 }

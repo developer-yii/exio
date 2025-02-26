@@ -18,4 +18,5 @@ return [
             'plot' => 'Plot',
         ],
     ],
+    'google_maps_api_key' => env('GOOGLE_MAPS_API_KEY', 'AIzaSyCzW1Vua7cCoE8_36mnMpRbaya5TZ0Q13A'),
 ];

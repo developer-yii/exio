@@ -17,6 +17,73 @@
             height: auto;
             object-fit: contain;
         }
+
+        .hover-image:hover {
+            transform: scale(1.5);/ enlarge the image on hover /
+        }
+
+        /* Updated accordion styles */
+        .custom-accordion-title {
+            position: relative;
+            color: #6c757d;
+            transition: all 0.2s;
+            padding-right: 25px;
+        }
+
+        .custom-accordion-title::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            width: 10px;
+            height: 10px;
+            border-right: 2px solid #6c757d;
+            border-bottom: 2px solid #6c757d;
+            transform: translateY(-70%) rotate(45deg);
+            transition: transform 0.3s ease;
+        }
+
+        .custom-accordion-title:not(.collapsed)::after {
+            transform: translateY(-30%) rotate(-135deg);
+        }
+
+        /* Optional: Add hover effect */
+        .custom-accordion-title:hover {
+            color: #000;
+        }
+
+        .custom-accordion-title:hover::after {
+            border-color: #000;
+        }
+
+        .document-preview-container {
+            min-height: 200px;
+            border: 1px dashed #dee2e6;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        .pdf-preview,
+        .no-preview {
+            text-align: center;
+        }
+
+        .document-preview-container i {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        #map-search {
+            width: 40%;
+            position: absolute;
+            right: 70px;
+            top: 11px;
+            z-index: 2;
+        }
     </style>
 @endsection
 
@@ -38,7 +105,7 @@
         <input type="hidden" name="id" value="{{ isset($model->id) ? $model->id : '' }}">
         <div class="row">
             <div class="accordion" id="projectAccordion">
-                <div class="card mb-0 border-1 ">
+                <div class="card border-1 ">
                     <div class="card-header" id="headingGeneralDetails">
                         <h5 class="m-0">
                             <a class="custom-accordion-title d-block pt-2 pb-2" data-bs-toggle="collapse"
@@ -59,6 +126,17 @@
                                                 class="text-danger add_edit_required">*</span></label>
                                         <input type="text" name="project_name" class="form-control project_name"
                                             value="@if (isset($model->id)) {{ $model->project_name }} @endif">
+                                        <span class="error"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Project Slug -->
+                                <div class="col-md-12">
+                                    <div class="form-group mb-3">
+                                        <label for="slug" class="form-label d-block">Project Slug<span
+                                                class="text-danger add_edit_required">*</span></label>
+                                        <input type="text" name="slug" class="form-control slug"
+                                            placeholder="Enter Slug" value="{{ $model->slug ?? '' }}">
                                         <span class="error"></span>
                                     </div>
                                 </div>
@@ -308,6 +386,16 @@
                                     </div>
                                 </div>
 
+                                <!-- Project Video -->
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="video" class="form-label d-block">Project Video</label>
+                                        <input type="file" name="video" id="video" class="form-control"
+                                            accept="video/*">
+                                        <span class="error"></span>
+                                    </div>
+                                </div>
+
                                 <!-- Add More of Project Detail Fields -->
                                 <div class="col-md-12">
                                     <div class="card">
@@ -316,7 +404,7 @@
                                         </div>
                                         <div class="card-body">
                                             <div class="row" id="project_detail_fields">
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-md-4 mb-3">
                                                     <a href="javascript:void(0);"
                                                         class="add-more-project-detail text-decoration-none">
                                                         <div class="card border-dashed h-100">
@@ -333,11 +421,37 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- Add More of Project Images -->
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title">Project Images</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row" id="project_images">
+                                                <div class="col-md-4 mb-3">
+                                                    <a href="javascript:void(0);"
+                                                        class="add-more-project-image text-decoration-none">
+                                                        <div class="card border-dashed h-100">
+                                                            <div
+                                                                class="card-body text-center d-flex flex-column justify-content-center">
+                                                                <i class="uil uil-plus-circle text-muted"
+                                                                    style="font-size: 24px;"></i>
+                                                                <span class="text-muted mt-2">Add Project Images</span>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="card mb-0 border-1">
+                <div class="card border-1">
                     <div class="card-header" id="headingMasterPlan">
                         <h5 class="m-0">
                             <a class="custom-accordion-title collapsed d-block pt-2 pb-2" data-bs-toggle="collapse"
@@ -353,11 +467,14 @@
                             <!-- Master Plans Section -->
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title">Master Plans</h4>
+                                    <h4 class="card-title">Master Plan Details</h4>
                                 </div>
                                 <div class="card-body">
                                     <div class="row" id="master_plan_container">
-                                        <div class="col-md-6 mb-3">
+                                        <!-- Existing master plans will be dynamically added here -->
+
+                                        <!-- Add More Button -->
+                                        <div class="col-md-4 mb-3">
                                             <a href="javascript:void(0);"
                                                 class="add-more-master-plan text-decoration-none">
                                                 <div class="card border-dashed h-100">
@@ -376,7 +493,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card mb-0 border-1">
+                <div class="card border-1">
                     <div class="card-header" id="headingFloorPlan">
                         <h5 class="m-0">
                             <a class="custom-accordion-title collapsed d-block pt-2 pb-2" data-bs-toggle="collapse"
@@ -391,12 +508,9 @@
                         <div class="card-body">
                             <!-- Floor Plans Section -->
                             <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title">Floor Plans</h4>
-                                </div>
                                 <div class="card-body">
                                     <div class="row" id="floor-plans-container">
-                                        <div class="col-md-6 mb-3">
+                                        <div class="col-md-4 mb-3">
                                             <a href="javascript:void(0);"
                                                 class="add-more-floor-plan text-decoration-none">
                                                 <div class="card border-dashed h-100">
@@ -415,10 +529,314 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row my-4">
-                <div class="col-12 text-end">
-                    <button type="submit" class="btn btn-success" id="addorUpdateBtn">Save</button>
+                <div class="card border-1">
+                    <div class="card-header" id="headingAmenities">
+                        <h5 class="m-0">
+                            <a class="custom-accordion-title collapsed d-block pt-2 pb-2" data-bs-toggle="collapse"
+                                href="#collapseAmenities" aria-expanded="false" aria-controls="collapseAmenities">
+                                Amenities
+                            </a>
+                        </h5>
+                    </div>
+
+                    <div id="collapseAmenities" class="collapse" aria-labelledby="headingAmenities"
+                        data-bs-parent="#projectAccordion">
+                        <div class="card-body">
+                            <!-- Amenities Section -->
+                            <div class="row" id="amenities-container">
+                                <!-- Amenities Section Multiple Select of Amenities -->
+                                <div class="col-md-12">
+                                    <div class="form-group mb-3">
+                                        <select id="amenities" class="form-control amenities select2"
+                                            data-toggle="select2" name="amenities[]" data-placeholder="Select Amenities"
+                                            multiple>
+                                            @if (isset($amenities))
+                                                @foreach ($amenities as $key => $value)
+                                                    <option value="{{ $key }}"
+                                                        @if (isset($model->amenities) && in_array($key, $model->amenities)) selected @endif>
+                                                        {{ $value }}
+                                                    </option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                        <span class="error"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Property Documents -->
+                <div class="card border-1">
+                    <div class="card-header" id="headingPropertyDocuments">
+                        <h5 class="m-0">
+                            <a class="custom-accordion-title collapsed d-block pt-2 pb-2" data-bs-toggle="collapse"
+                                href="#collapsePropertyDocuments" aria-expanded="false"
+                                aria-controls="collapsePropertyDocuments">
+                                Property Documents
+                            </a>
+                        </h5>
+                    </div>
+
+                    <div id="collapsePropertyDocuments" class="collapse" aria-labelledby="headingPropertyDocuments"
+                        data-bs-parent="#projectAccordion">
+                        <div class="card-body">
+                            <!-- Property Documents Section -->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <!-- Document Title -->
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Document Title</label>
+                                        <input type="text" class="form-control property_document_title"
+                                            name="property_document_title" placeholder="Enter Document Title"
+                                            value="{{ isset($model->property_document_title) ? $model->property_document_title : '' }}">
+                                        <span class="error"></span>
+                                    </div>
+
+                                    <!-- Document File -->
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Upload Document</label>
+                                        <div class="row">
+                                            <div class="col-md-9">
+                                                <input type="file" class="form-control property_document"
+                                                    name="property_document" accept=".pdf" data-toggle="tooltip"
+                                                    data-placement="top" title="Upload document">
+                                                <div class="form-text">Allowed formats: PDF</div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                @if (isset($model->property_document) && !empty($model->property_document))
+                                                    <a href="{{ asset('storage/property_documents/' . $model->property_document) }}"
+                                                        class="btn btn-info w-100"
+                                                        download="{{ $model->property_document }}">
+                                                        <i class="uil uil-download-alt"></i> View
+                                                    </a>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <span class="error"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Preview Section -->
+                                <div class="col-md-6">
+                                    {{-- <div class="document-preview-container text-center">
+                                        @if (isset($model->property_document) && !empty($model->property_document))
+                                            <div class="pdf-preview">
+                                                <i class="uil uil-file-alt text-muted" style="font-size: 48px;"></i>
+                                                <p class="mt-2 mb-0">{{ $model->property_document }}</p>
+                                            </div>
+                                        @else
+                                            <div class="no-preview text-muted">
+                                                <i class="uil uil-file-upload-alt" style="font-size: 48px;"></i>
+                                                <p class="mt-2 mb-0">No document uploaded</p>
+                                            </div>
+                                        @endif
+                                    </div> --}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Locality Add More  -->
+                <div class="card border-1">
+                    <div class="card-header" id="headingLocality">
+                        <h5 class="m-0">
+                            <a class="custom-accordion-title collapsed d-block pt-2 pb-2" data-bs-toggle="collapse"
+                                href="#collapseLocality" aria-expanded="false" aria-controls="collapseLocality">
+                                Locality
+                            </a>
+                        </h5>
+                    </div>
+
+                    <div id="collapseLocality" class="collapse" aria-labelledby="headingLocality"
+                        data-bs-parent="#projectAccordion">
+                        <div class="card-body">
+                            <!-- Locality Section -->
+                            <div class="row" id="locality_container">
+                                <div class="col-md-4 mb-3">
+                                    <a href="javascript:void(0);" class="add-more-locality text-decoration-none">
+                                        <div class="card border-dashed h-100">
+                                            <div class="card-body text-center d-flex flex-column justify-content-center">
+                                                <i class="uil uil-plus-circle text-muted" style="font-size: 24px;"></i>
+                                                <span class="text-muted mt-2">Add Locality</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RERA Details -->
+                <div class="card border-1">
+                    <div class="card-header" id="headingReraDetails">
+                        <h5 class="m-0">
+                            <a class="custom-accordion-title collapsed d-block pt-2 pb-2" data-bs-toggle="collapse"
+                                href="#collapseReraDetails" aria-expanded="false" aria-controls="collapseReraDetails">
+                                RERA Details
+                            </a>
+                        </h5>
+                    </div>
+
+                    <div id="collapseReraDetails" class="collapse" aria-labelledby="headingReraDetails"
+                        data-bs-parent="#projectAccordion">
+                        <div class="card-body">
+                            <div class="row" id="rera_details_container">
+                                <div class="col-md-4 mb-3">
+                                    <a href="javascript:void(0);" class="add-more-rera-details text-decoration-none">
+                                        <div class="card border-dashed h-100">
+                                            <div class="card-body text-center d-flex flex-column justify-content-center">
+                                                <i class="uil uil-plus-circle text-muted" style="font-size: 24px;"></i>
+                                                <span class="text-muted mt-2">Add RERA Details</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Map View -->
+                <div class="card border-1">
+                    <div class="card-header" id="headingMapView">
+                        <h5 class="m-0">
+                            <a class="custom-accordion-title collapsed d-block pt-2 pb-2" data-bs-toggle="collapse"
+                                href="#collapseMapView" aria-expanded="false" aria-controls="collapseMapView">
+                                Map View
+                            </a>
+                        </h5>
+                    </div>
+
+                    <div id="collapseMapView" class="collapse" aria-labelledby="headingMapView"
+                        data-bs-parent="#projectAccordion">
+                        <div class="card-body">
+                            <!-- Map View Section -->
+                            <div class="row">
+                                <!-- Address TextArea -->
+                                <div class="col-md-12">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Address</label>
+                                        <textarea class="form-control address" name="address" placeholder="Enter Address" rows="3">{{ isset($model->address) ? $model->address : '' }}</textarea>
+                                        <span class="error"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">Map</label>
+
+                                        <div class="row">
+                                            <div class="col-8" style="position: relative;">
+                                                <input type="text" id="map-search" class="form-control"
+                                                    placeholder="Search by name...">
+                                                <div id="location-map" class="gmaps"></div>
+                                            </div>
+
+                                            <div class="col-4">
+                                                <div class="mb-2 form-group">
+                                                    <label for="latitude" class="form-label">Latitude</label>
+                                                    <input type="text" class="form-control latitude" id="latitude"
+                                                        value="{{ isset($model->latitude) ? $model->latitude : '' }}"
+                                                        name="latitude">
+                                                    <span class="error"></span>
+                                                </div>
+
+                                                <div class="mb-2 form-group">
+                                                    <label for="longitude" class="form-label">Longitude</label>
+                                                    <input type="text" class="form-control longitude" id="longitude"
+                                                        value="{{ isset($model->longitude) ? $model->longitude : '' }}"
+                                                        name="longitude">
+                                                    <span class="error"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Map View -->
+                <div class="card border-1">
+                    <div class="card-header" id="headingExioSuggest">
+                        <h5 class="m-0">
+                            <a class="custom-accordion-title collapsed d-block pt-2 pb-2" data-bs-toggle="collapse"
+                                href="#collapseExioSuggest" aria-expanded="false" aria-controls="collapseExioSuggest">
+                                Exio Suggest
+                            </a>
+                        </h5>
+                    </div>
+
+                    <div id="collapseExioSuggest" class="collapse" aria-labelledby="headingExioSuggest"
+                        data-bs-parent="#projectAccordion">
+                        <div class="card-body">
+                            <!-- Exio Suggest Section -->
+                            <div class="row">
+                                <!-- Exio Suggest Percentage -->
+                                <div class="col-md-4">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Exio Suggest Percentage</label>
+                                        <input type="text" class="form-control exio_suggest_percentage"
+                                            name="exio_suggest_percentage" data-plugin="range-slider"
+                                            value="{{ $model->exio_suggest_percentage ?? '' }}" />
+                                        <span class="error"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Amenities Percentage -->
+                                <div class="col-md-4">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Amenities Percentage</label>
+                                        <input type="number" class="form-control amenities_percentage"
+                                            name="amenities_percentage" data-plugin="range-slider"
+                                            value="{{ $model->amenities_percentage ?? '' }}" />
+                                        <span class="error"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Project Plan Percentage -->
+                                <div class="col-md-4">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Project Plan Percentage</label>
+                                        <input type="number" class="form-control project_plan_percentage"
+                                            name="project_plan_percentage" data-plugin="range-slider"
+                                            value="{{ $model->project_plan_percentage ?? '' }}" />
+                                        <span class="error"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Locality Percentage -->
+                                <div class="col-md-4">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Locality Percentage</label>
+                                        <input type="number" class="form-control locality_percentage"
+                                            name="locality_percentage" data-plugin="range-slider"
+                                            value="{{ $model->locality_percentage ?? '' }}" />
+                                        <span class="error"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Return Of Investment Percentage -->
+                                <div class="col-md-4">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Return Of Investment Percentage</label>
+                                        <input type="number" class="form-control return_of_investment_percentage"
+                                            name="return_of_investment_percentage" data-plugin="range-slider"
+                                            value="{{ $model->return_of_investment_percentage ?? '' }}" />
+                                        <span class="error"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row my-4">
+                    <div class="col-12 text-end">
+                        <button type="submit" class="btn btn-success" id="addorUpdateBtn">Save</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -443,13 +861,37 @@
         @if (isset($model->property_sub_types))
             var selectedPropertySubTypes = {!! json_encode($model->property_sub_types) !!};
         @endif
+        @if (isset($locality))
+            var locality = {!! json_encode($locality) !!};
+        @endif
+        @if (isset($existingLocalities))
+            var existingLocalities = {!! json_encode($existingLocalities) !!};
+        @endif
+        @if (isset($existingReraDetails))
+            var existingReraDetails = {!! json_encode($existingReraDetails) !!};
+        @endif
+        @if (isset($existingProjectImages))
+            var existingProjectImages = {!! json_encode($existingProjectImages) !!};
+        @endif
+        console.log(existingProjectImages);
         var assetUrl = "{{ asset('') }}";
     </script>
 @endsection
 
 @section('pagejs')
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key={{ config('constants.google_maps_api_key') }}&libraries=places">
+    </script>
     <script src="{{ addPageJsLink('project_addupdate.js') }}"></script>
     <script src="{{ addPageJsLink('addmore/project-detail-row.js') }}"></script>
     <script src="{{ addPageJsLink('addmore/master_plan_fields.js') }}"></script>
     <script src="{{ addPageJsLink('addmore/floor_plan_fields.js') }}"></script>
+    <script src="{{ addPageJsLink('addmore/locality_fields.js') }}"></script>
+    <script src="{{ addPageJsLink('map_view.js') }}"></script>
+    <script src="{{ addPageJsLink('addmore/rera_details_fields.js') }}"></script>\
+    <script src="{{ addPageJsLink('addmore/project_images.js') }}"></script>
+
+    <!-- Slider Plugin -->
+    <script src="{{ asset('backend/js/vendor/ion.rangeSlider.min.js') }}"></script>
+    <script src="{{ asset('backend/js/ui/component.range-slider.js') }}"></script>
 @endsection

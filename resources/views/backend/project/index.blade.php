@@ -48,6 +48,7 @@
                         <thead>
                             <tr>
                                 <th>Project Name</th>
+                                <th>Slug</th>
                                 <th>Project About</th>
                                 <th>Builder</th>
                                 <th>City</th>
@@ -56,6 +57,8 @@
                                 <th>Property Sub Type</th>
                                 <th>Possession By</th>
                                 <th>Rera Number</th>
+                                <th>Rera Progress</th>
+                                <th>Actual Progress</th>
                                 <th>Price From</th>
                                 <th>Price To</th>
                                 <th>Status</th>
