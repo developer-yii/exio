@@ -18,6 +18,7 @@ use App\Http\Controllers\Backend\CommonController;
 use App\Http\Controllers\Backend\BuilderController;
 use App\Http\Controllers\Backend\CmsPagesController;
 use App\Http\Controllers\Backend\LocalityController;
+use App\Http\Controllers\Backend\NewsController;
 use App\Http\Controllers\Backend\ProjectController;
 use App\Http\Controllers\Backend\ReraProgressController;
 
@@ -152,6 +153,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/addupdate', [ActualProgressController::class, 'addupdate'])->name('actual_progress.addupdate');
             Route::get('/get-images', [ActualProgressController::class, 'getImages'])->name('actual_progress.get-images');
             Route::get('/{project_id}', [ActualProgressController::class, 'index'])->name('actual_progress');
+        });
+
+        Route::group(['prefix' => 'news'], function () {
+            Route::get('/', [NewsController::class, 'index'])->name('news');
+            Route::get('/get', [NewsController::class, 'get'])->name('news.list');
+            Route::get('/add', [NewsController::class, 'add'])->name('news.add');
+            Route::get('/edit/{news_id}', [NewsController::class, 'edit'])->name('news.edit');
+            Route::post('/delete', [NewsController::class, 'delete'])->name('news.delete');
+            Route::post('/addupdate', [NewsController::class, 'addupdate'])->name('news.addupdate');
         });
     });
 });
