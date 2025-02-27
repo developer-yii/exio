@@ -52,7 +52,14 @@ class SettingsSeeder extends Seeder
         ];
 
         foreach ($settings as $setting) {
-            Setting::create($setting);
+            Setting::updateOrInsert(
+                ['setting_key' => $setting['setting_key']],
+                $setting
+            );
         }
+
+        // foreach ($settings as $setting) {
+        //     Setting::create($setting);
+        // }
     }
 }

@@ -81,12 +81,16 @@
                             <a class="{{ isActiveRoute(['faq']) }}" href="{{ route('admin.faq') }}">FAQs</a>
                         </li>
                         <li>
-                            <a class="{{ isActiveRoute(['terms_condition']) }}"
-                                href="{{ route('admin.terms_condition') }}">Terms and Conditions</a>
+                            <a class="{{ isActiveRoute(['page']) }}"
+                                href="{{ route('admin.page', ['terms-condition']) }}">Terms and Conditions</a>
                         </li>
                         <li>
-                            <a class="{{ isActiveRoute(['privacy_policie']) }}"
-                                href="{{ route('admin.privacy_policie') }}">Privacy Policys</a>
+                            <a class="{{ isActiveRoute(['page']) }}"
+                                href="{{ route('admin.page', ['privacy-policy']) }}">Privacy Policy</a>
+                        </li>
+                        <li>
+                            <a class="{{ isActiveRoute(['page']) }}"
+                                href="{{ route('admin.page', ['about-us']) }}">About Us</a>
                         </li>
                     </ul>
                 </div>

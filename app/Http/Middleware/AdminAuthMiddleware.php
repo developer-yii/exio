@@ -14,7 +14,7 @@ class AdminAuthMiddleware
         }
 
         if(Auth::user()->role_type != 1){
-            return redirect()->route("fron.home");
+            return redirect()->route("front.home");
         }
 
         return $next($request);
