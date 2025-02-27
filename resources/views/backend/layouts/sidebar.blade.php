@@ -78,6 +78,9 @@
                 <div class="collapse" id="faqs_menu" style="">
                     <ul class="side-nav-second-level">
                         <li>
+                            <a class="{{ isActiveRoute(['news']) }}" href="{{ route('admin.news') }}">News</a>
+                        </li>
+                        <li>
                             <a class="{{ isActiveRoute(['faq']) }}" href="{{ route('admin.faq') }}">FAQs</a>
                         </li>
                         <li>
