@@ -25,6 +25,12 @@ if (! function_exists('addPageJsLink')) {
         return asset('backend/js/pages') . "/" . $link . '?' . time();
     }
 }
+if (! function_exists('frontendPageJsLink')) {
+    function frontendPageJsLink($link)
+    {
+        return asset('frontend/assest/js/pages') . "/" . $link . '?' . time();
+    }
+}
 if (!function_exists('isActiveRouteMain')) {
     function isActiveRouteMain($routeNames = "")
     {

@@ -15,6 +15,7 @@ use App\Http\Controllers\Backend\CityController;
 use App\Http\Controllers\Backend\LocationController;
 use App\Http\Controllers\Backend\CommonController;
 use App\Http\Controllers\Backend\BuilderController;
+use App\Http\Controllers\Backend\CmsPagesController;
 use App\Http\Controllers\Backend\LocalityController;
 use App\Http\Controllers\Backend\ProjectController;
 
@@ -64,15 +65,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/saveorder', [FaqController::class, 'saveorder'])->name('faq.saveorder');
         });
 
-        Route::group(['prefix' => 'terms-conditions'], function () {
-            Route::get('/', [TermsConditionController::class, 'index'])->name('terms_condition');
-            Route::post('/addupdate', [TermsConditionController::class, 'addupdate'])->name('terms_condition.addupdate');
+        Route::group(['prefix' => 'cms-page'], function () {
+            Route::get('/{page_name}', [CmsPagesController::class, 'index'])->name('page');
+            Route::post('/update', [CmsPagesController::class, 'update'])->name('page.update');
+            Route::post('/upload-image', [CmsPagesController::class, 'imageUpload'])->name('page.image');
         });
 
-        Route::group(['prefix' => 'privacy-policies'], function () {
-            Route::get('/', [PrivacyPolicyController::class, 'index'])->name('privacy_policie');
-            Route::post('/addupdate', [PrivacyPolicyController::class, 'addupdate'])->name('privacy_policie.addupdate');
-        });
 
         Route::group(['prefix' => 'settings'], function () {
             Route::get('/', [SettingController::class, 'index'])->name('setting');

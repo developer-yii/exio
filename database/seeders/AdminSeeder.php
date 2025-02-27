@@ -11,13 +11,15 @@ class AdminSeeder extends Seeder
 {
     public function run()
     {
-        User::create([
-            'name' => 'Admin',
-            'email' => 'admin@gmail.com',
-            'email_verified_at' => Carbon::now(),
-            'password' => Hash::make('12345678'),
-            'role_type' => 1,
-            'status' => 1,
-        ]);
+        if(User::where('email', 'admin@gmail.com')->first() == null){
+            User::create([
+                'name' => 'Admin',
+                'email' => 'admin@gmail.com',
+                'email_verified_at' => Carbon::now(),
+                'password' => Hash::make('12345678'),
+                'role_type' => 1,
+                'status' => 1,
+            ]);
+        }
     }
 }

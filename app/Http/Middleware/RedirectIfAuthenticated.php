@@ -24,7 +24,7 @@ class RedirectIfAuthenticated
                 if(Auth::user()->role_type == 1){
                     return redirect()->route("admin.dashboard");
                 }
-                return redirect()->route("fron.home");
+                return redirect()->route("front.home");
             }
         }
 

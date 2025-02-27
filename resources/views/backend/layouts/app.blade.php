@@ -5,7 +5,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title') - {{ config('app.name', 'Web') }}</title>
     <base href="/{{Request::segment(1)}}">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
     <meta http-equiv="Pragma" content="no-cache"/>
@@ -48,6 +47,7 @@
     <link href="{{ asset('backend/css/bootstrap-tagsinput.css') }}" rel="stylesheet">
     <link href="{{ asset('backend/css/jquery.toast.min.css') }}" rel="stylesheet">
     <link href="{{ asset('backend/css/sweetalert.css') }}" rel="stylesheet">
+
     <link href="{{ asset('backend/css/custom.css') }}?{{ cacheclear() }}" rel="stylesheet">
 
     @yield('css')
@@ -129,7 +129,12 @@
 
     <script src="{{ asset('backend/js/pages/jquery.toast.min.js') }}"></script>
     <script src="{{ asset('backend/js/pages/sweetalert.min.js') }}"></script>
+
+
+    <script src="{{ asset('backend/ckeditor/ckeditor.js') }}"></script>
     <script src="{{ asset('backend/js/pages/custom.js') }}?{{ cacheclear() }}"></script>
+
+
 
     @if (Session::has('status'))
         <script type="text/javascript">
