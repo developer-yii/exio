@@ -236,6 +236,17 @@
                                     </div>
                                 </div>
 
+                                <!-- Custom Property Type -->
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="custom_property_type" class="form-label">Custom Property Type</label>
+                                        <input type="text" name="custom_property_type"
+                                            class="form-control custom_property_type"
+                                            value="{{ isset($model->custom_property_type) ? $model->custom_property_type : '' }}">
+                                        <span class="error"></span>
+                                    </div>
+                                </div>
+
                                 <!-- Possession By -->
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
@@ -258,57 +269,50 @@
 
                                 <!-- Price From -->
                                 <div class="col-md-6">
-                                    <div class="form-group mb-3">
+                                    <div class="form-group mb-3 row">
                                         <label for="price_from" class="form-label">Price From</label>
-                                        <input type="number" name="price_from" class="form-control price_from"
-                                            min="0"
-                                            value="{{ isset($model->price_from) ? $model->price_from : '' }}">
-                                        <span class="error"></span>
-                                    </div>
-                                </div>
-
-                                <!-- Price From Unit -->
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label for="price_from_unit" class="form-label">Price From Unit</label>
-                                        <select id="price_from_unit" class="form-control price_from_unit"
-                                            name="price_from_unit">
-                                            <option value="">Select Price From Unit</option>
-                                            @foreach ($priceUnit as $key => $value)
-                                                <option value="{{ $key }}"
-                                                    @if (isset($model->price_from_unit) && $model->price_from_unit == $key) selected @endif>
-                                                    {{ $value }}
-                                                </option>
-                                            @endforeach
-                                        </select>
+                                        <div class="col-md-10">
+                                            <input type="text" name="price_from" class="form-control price_from"
+                                                min="0"
+                                                value="{{ isset($model->price_from) ? $model->price_from : '' }}">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <select id="price_from_unit" class="form-control form-select price_from_unit"
+                                                name="price_from_unit">
+                                                <option value="">Select Price From Unit</option>
+                                                @foreach ($priceUnit as $key => $value)
+                                                    <option value="{{ $key }}"
+                                                        @if (isset($model->price_from_unit) && $model->price_from_unit == $key) selected @endif>
+                                                        {{ $value }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                         <span class="error"></span>
                                     </div>
                                 </div>
 
                                 <!-- Price To -->
                                 <div class="col-md-6">
-                                    <div class="form-group mb-3">
+                                    <div class="form-group mb-3 row">
                                         <label for="price_to" class="form-label">Price To</label>
-                                        <input type="number" name="price_to" class="form-control price_to"
-                                            min="0" value="{{ isset($model->price_to) ? $model->price_to : '' }}">
-                                        <span class="error"></span>
-                                    </div>
-                                </div>
-
-                                <!-- Price To Unit -->
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label for="price_to_unit" class="form-label">Price To Unit</label>
-                                        <select id="price_to_unit" class="form-control price_to_unit"
-                                            name="price_to_unit">
-                                            <option value="">Select Price To Unit</option>
-                                            @foreach ($priceUnit as $key => $value)
-                                                <option value="{{ $key }}"
-                                                    @if (isset($model->price_to_unit) && $model->price_to_unit == $key) selected @endif>
-                                                    {{ $value }}
-                                                </option>
-                                            @endforeach
-                                        </select>
+                                        <div class="col-md-10">
+                                            <input type="text" name="price_to" class="form-control price_to"
+                                                min="0"
+                                                value="{{ isset($model->price_to) ? $model->price_to : '' }}">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <select id="price_to_unit" class="form-control form-select price_to_unit"
+                                                name="price_to_unit">
+                                                <option value="">Select Price To Unit</option>
+                                                @foreach ($priceUnit as $key => $value)
+                                                    <option value="{{ $key }}"
+                                                        @if (isset($model->price_to_unit) && $model->price_to_unit == $key) selected @endif>
+                                                        {{ $value }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                         <span class="error"></span>
                                     </div>
                                 </div>
@@ -316,8 +320,8 @@
                                 <!-- Carpet Area -->
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
-                                        <label for="carpet_area" class="form-label">Carpet Area</label>
-                                        <input type="number" name="carpet_area" class="form-control carpet_area"
+                                        <label for="carpet_area" class="form-label">Carpet Area (sqft)</label>
+                                        <input type="text" name="carpet_area" class="form-control carpet_area"
                                             min="0"
                                             value="{{ isset($model->carpet_area) ? $model->carpet_area : '' }}">
                                         <span class="error"></span>
@@ -328,7 +332,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <label for="total_floors" class="form-label">Total Floors</label>
-                                        <input type="number" name="total_floors" class="form-control total_floors"
+                                        <input type="text" name="total_floors" class="form-control total_floors"
                                             min="0"
                                             value="{{ isset($model->total_floors) ? $model->total_floors : '' }}">
                                         <span class="error"></span>
@@ -339,7 +343,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <label for="total_tower" class="form-label">Total Tower</label>
-                                        <input type="number" name="total_tower" class="form-control total_tower"
+                                        <input type="text" name="total_tower" class="form-control total_tower"
                                             min="0"
                                             value="{{ isset($model->total_tower) ? $model->total_tower : '' }}">
                                         <span class="error"></span>
@@ -425,7 +429,7 @@
                                 <!-- Add More of Project Images -->
                                 <div class="col-md-12">
                                     <div class="card">
-                                        <div class="card-header">
+                                        <div class="card-header text-center">
                                             <h4 class="card-title">Project Images</h4>
                                         </div>
                                         <div class="card-body">
@@ -465,29 +469,19 @@
                         data-bs-parent="#projectAccordion">
                         <div class="card-body">
                             <!-- Master Plans Section -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title">Master Plan Details</h4>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row" id="master_plan_container">
-                                        <!-- Existing master plans will be dynamically added here -->
+                            <div class="row" id="master_plan_container">
+                                <!-- Existing master plans will be dynamically added here -->
 
-                                        <!-- Add More Button -->
-                                        <div class="col-md-4 mb-3">
-                                            <a href="javascript:void(0);"
-                                                class="add-more-master-plan text-decoration-none">
-                                                <div class="card border-dashed h-100">
-                                                    <div
-                                                        class="card-body text-center d-flex flex-column justify-content-center">
-                                                        <i class="uil uil-plus-circle text-muted"
-                                                            style="font-size: 24px;"></i>
-                                                        <span class="text-muted mt-2">Add Master Plan</span>
-                                                    </div>
-                                                </div>
-                                            </a>
+                                <!-- Add More Button -->
+                                <div class="col-md-4 mb-3">
+                                    <a href="javascript:void(0);" class="add-more-master-plan text-decoration-none">
+                                        <div class="card border-dashed h-100">
+                                            <div class="card-body text-center d-flex flex-column justify-content-center">
+                                                <i class="uil uil-plus-circle text-muted" style="font-size: 24px;"></i>
+                                                <span class="text-muted mt-2">Add Master Plan</span>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -507,23 +501,16 @@
                         data-bs-parent="#projectAccordion">
                         <div class="card-body">
                             <!-- Floor Plans Section -->
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row" id="floor-plans-container">
-                                        <div class="col-md-4 mb-3">
-                                            <a href="javascript:void(0);"
-                                                class="add-more-floor-plan text-decoration-none">
-                                                <div class="card border-dashed h-100">
-                                                    <div
-                                                        class="card-body text-center d-flex flex-column justify-content-center">
-                                                        <i class="uil uil-plus-circle text-muted"
-                                                            style="font-size: 24px;"></i>
-                                                        <span class="text-muted mt-2">Add Floor Plan</span>
-                                                    </div>
-                                                </div>
-                                            </a>
+                            <div class="row" id="floor-plans-container">
+                                <div class="col-md-4 mb-3">
+                                    <a href="javascript:void(0);" class="add-more-floor-plan text-decoration-none">
+                                        <div class="card border-dashed h-100">
+                                            <div class="card-body text-center d-flex flex-column justify-content-center">
+                                                <i class="uil uil-plus-circle text-muted" style="font-size: 24px;"></i>
+                                                <span class="text-muted mt-2">Add Floor Plan</span>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -777,7 +764,7 @@
                                 <!-- Exio Suggest Percentage -->
                                 <div class="col-md-4">
                                     <div class="form-group mb-3">
-                                        <label class="form-label">Exio Suggest Percentage</label>
+                                        <label class="form-label">Exio Suggest (%)</label>
                                         <input type="text" class="form-control exio_suggest_percentage"
                                             name="exio_suggest_percentage" data-plugin="range-slider"
                                             value="{{ $model->exio_suggest_percentage ?? '' }}" />
@@ -788,7 +775,7 @@
                                 <!-- Amenities Percentage -->
                                 <div class="col-md-4">
                                     <div class="form-group mb-3">
-                                        <label class="form-label">Amenities Percentage</label>
+                                        <label class="form-label">Amenities (%)</label>
                                         <input type="number" class="form-control amenities_percentage"
                                             name="amenities_percentage" data-plugin="range-slider"
                                             value="{{ $model->amenities_percentage ?? '' }}" />
@@ -799,7 +786,7 @@
                                 <!-- Project Plan Percentage -->
                                 <div class="col-md-4">
                                     <div class="form-group mb-3">
-                                        <label class="form-label">Project Plan Percentage</label>
+                                        <label class="form-label">Project Plan (%)</label>
                                         <input type="number" class="form-control project_plan_percentage"
                                             name="project_plan_percentage" data-plugin="range-slider"
                                             value="{{ $model->project_plan_percentage ?? '' }}" />
@@ -810,7 +797,7 @@
                                 <!-- Locality Percentage -->
                                 <div class="col-md-4">
                                     <div class="form-group mb-3">
-                                        <label class="form-label">Locality Percentage</label>
+                                        <label class="form-label">Locality (%)</label>
                                         <input type="number" class="form-control locality_percentage"
                                             name="locality_percentage" data-plugin="range-slider"
                                             value="{{ $model->locality_percentage ?? '' }}" />
@@ -821,7 +808,7 @@
                                 <!-- Return Of Investment Percentage -->
                                 <div class="col-md-4">
                                     <div class="form-group mb-3">
-                                        <label class="form-label">Return Of Investment Percentage</label>
+                                        <label class="form-label">Return Of Investment (%)</label>
                                         <input type="number" class="form-control return_of_investment_percentage"
                                             name="return_of_investment_percentage" data-plugin="range-slider"
                                             value="{{ $model->return_of_investment_percentage ?? '' }}" />

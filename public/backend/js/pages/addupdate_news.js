@@ -1,63 +1,79 @@
 $(document).ready(function () {
-    let quill = "";
-    if ($("#editor_content").length > 0) {
-        quill = new Quill("#editor_content", {
-            theme: "snow",
-            modules: {
-                imageResize: {
-                    displaySize: true,
-                },
-                toolbar: [
-                    [{ font: [] }, { size: [] }],
-                    ["bold", "italic", "underline", "strike"],
-                    [{ color: [] }, { background: [] }],
-                    [{ script: "super" }, { script: "sub" }],
-                    [
-                        { header: [!1, 1, 2, 3, 4, 5, 6] },
-                        "blockquote",
-                        "code-block",
-                    ],
-                    [
-                        { list: "ordered" },
-                        { list: "bullet" },
-                        { indent: "-1" },
-                        { indent: "+1" },
-                    ],
-                    ["direction", { align: [] }],
-                    ["link", "image"],
-                    ["clean"],
-                ],
-            },
-        });
+    // let quill = "";
+    // if ($("#editor_content").length > 0) {
+    //     quill = new Quill("#editor_content", {
+    //         theme: "snow",
+    //         modules: {
+    //             imageResize: {
+    //                 displaySize: true,
+    //             },
+    //             toolbar: [
+    //                 [{ font: [] }, { size: [] }],
+    //                 ["bold", "italic", "underline", "strike"],
+    //                 [{ color: [] }, { background: [] }],
+    //                 [{ script: "super" }, { script: "sub" }],
+    //                 [
+    //                     { header: [!1, 1, 2, 3, 4, 5, 6] },
+    //                     "blockquote",
+    //                     "code-block",
+    //                 ],
+    //                 [
+    //                     { list: "ordered" },
+    //                     { list: "bullet" },
+    //                     { indent: "-1" },
+    //                     { indent: "+1" },
+    //                 ],
+    //                 ["direction", { align: [] }],
+    //                 ["link", "image"],
+    //                 ["clean"],
+    //             ],
+    //         },
+    //     });
 
-        quill.getModule("toolbar").addHandler("image", () => {
-            const input = document.createElement("input");
-            input.setAttribute("type", "file");
-            input.setAttribute("accept", "image/*");
-            input.click();
+    //     quill.getModule("toolbar").addHandler("image", () => {
+    //         const input = document.createElement("input");
+    //         input.setAttribute("type", "file");
+    //         input.setAttribute("accept", "image/*");
+    //         input.click();
 
-            input.onchange = () => {
-                const file = input.files[0];
-                // Validate file
-                if (!file.type.match(/^image\/(jpeg|png|gif)$/)) {
-                    alert("Invalid file type. Please select an image file.");
-                    return;
-                }
-                if (file.size > 2 * 1024 * 1024) {
-                    // 2MB limit
-                    alert("File is too large. Maximum size is 2MB.");
-                    return;
-                }
-                const reader = new FileReader();
-                reader.onload = () => {
-                    const base64Image = reader.result;
-                    const range = quill.getSelection();
-                    quill.insertEmbed(range.index, "image", base64Image);
-                };
-                reader.readAsDataURL(file);
-            };
-        });
-    }
+    //         input.onchange = () => {
+    //             const file = input.files[0];
+    //             // Validate file
+    //             if (!file.type.match(/^image\/(jpeg|png|gif)$/)) {
+    //                 alert("Invalid file type. Please select an image file.");
+    //                 return;
+    //             }
+    //             if (file.size > 2 * 1024 * 1024) {
+    //                 // 2MB limit
+    //                 alert("File is too large. Maximum size is 2MB.");
+    //                 return;
+    //             }
+    //             const reader = new FileReader();
+    //             reader.onload = () => {
+    //                 const base64Image = reader.result;
+    //                 const range = quill.getSelection();
+    //                 quill.insertEmbed(range.index, "image", base64Image);
+    //             };
+    //             reader.readAsDataURL(file);
+    //         };
+    //     });
+    // }
+
+    CKEDITOR.replace("content", {
+        height: 600,
+        filebrowserUploadUrl:
+            uploadImageUrl +
+            "?_token=" +
+            document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute("content"),
+        filebrowserImageUploadUrl:
+            uploadImageUrl +
+            "?_token=" +
+            document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute("content"),
+    });
 
     let tableId = "#dataTableMain",
         formId = "#add-form";
@@ -73,9 +89,8 @@ $(document).ready(function () {
         event.preventDefault();
         var $this = $(this);
 
-        var content = quill.root.innerHTML;
-        if (content) {
-            $(formId).find("#content").val(content);
+        for (instance in CKEDITOR.instances) {
+            CKEDITOR.instances[instance].updateElement();
         }
 
         var formData = new FormData(this);

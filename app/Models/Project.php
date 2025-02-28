@@ -22,10 +22,11 @@ class Project extends Model
     public static $propertyType = [
         'residential' => 'Residential',
         'commercial' => 'Commercial',
+        'both' => 'Both',
     ];
 
     public static $priceUnit = [
-        'lacs' => 'M',
+        'lacs' => 'L',
         'crores' => 'Cr',
     ];
 
@@ -36,6 +37,10 @@ class Project extends Model
 
     public static function getPropertySubTypes($propertyType)
     {
+        if ($propertyType == 'both') {
+            $propertySubTypes = config('constants.property_sub_type');
+            return array_merge($propertySubTypes['residential'], $propertySubTypes['commercial']);
+        }
         return config('constants.property_sub_type')[$propertyType];
     }
 

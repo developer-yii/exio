@@ -22,7 +22,7 @@
                                 <i class="uil-users-alt widget-icon"></i>
                             </div>
                             <h5 class="text-muted fw-normal mt-0" title="Number of Customers">Users</h5>
-                            <h3 class="mt-3 mb-3">1500</h3>
+                            <h3 class="mt-3 mb-3">{{ $total_users }}</h3>
                         </div> <!-- end card-body-->
                     </div> <!-- end card-->
                 </div> <!-- end col-->
@@ -34,7 +34,46 @@
                                 <i class="uil-layer-group widget-icon"></i>
                             </div>
                             <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Property</h5>
-                            <h3 class="mt-3 mb-3">1 0199</h3>
+                            <h3 class="mt-3 mb-3">{{ $total_projects }}</h3>
+                        </div> <!-- end card-body-->
+                    </div> <!-- end card-->
+                </div> <!-- end col-->
+
+                <!-- builder -->
+                <div class="col-sm-3">
+                    <div class="card widget-flat">
+                        <div class="card-body">
+                            <div class="float-end">
+                                <i class="uil-building widget-icon"></i>
+                            </div>
+                            <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Builder</h5>
+                            <h3 class="mt-3 mb-3">{{ $total_builders }}</h3>
+                        </div> <!-- end card-body-->
+                    </div> <!-- end card-->
+                </div> <!-- end col-->
+
+                <!-- city -->
+                <div class="col-sm-3">
+                    <div class="card widget-flat">
+                        <div class="card-body">
+                            <div class="float-end">
+                                <i class="uil-map widget-icon"></i>
+                            </div>
+                            <h5 class="text-muted fw-normal mt-0" title="Number of Orders">City</h5>
+                            <h3 class="mt-3 mb-3">{{ $total_cities }}</h3>
+                        </div> <!-- end card-body-->
+                    </div> <!-- end card-->
+                </div> <!-- end col-->
+
+                <!-- location -->
+                <div class="col-sm-3">
+                    <div class="card widget-flat">
+                        <div class="card-body">
+                            <div class="float-end">
+                                <i class="uil-location-point widget-icon"></i>
+                            </div>
+                            <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Location</h5>
+                            <h3 class="mt-3 mb-3">{{ $total_locations }}</h3>
                         </div> <!-- end card-body-->
                     </div> <!-- end card-->
                 </div> <!-- end col-->

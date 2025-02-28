@@ -52,7 +52,7 @@
                     <select id="autocomplete" name="city" class="form-control" style="width: 100%;">
                         <option value="" class="d-none">Choose City</option>
                         @foreach ($cities as $city)
-                            <option value="{{$city->id}}">{{$city->city_name}}</option>
+                            <option value="{{ $city->id }}">{{ $city->city_name }}</option>
                         @endforeach
                     </select>
                     {{-- <input type="text" name="country" id="country" placeholder="Ahmedabad" /> --}}
@@ -87,7 +87,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="imageBox">
-                            <img src="{{$baseUrl}}assest/images/discuss.png" alt="discuss">
+                            <img src="{{ $baseUrl }}assest/images/discuss.png" alt="discuss">
                         </div>
                     </div>
                 </div>
@@ -104,198 +104,53 @@
             </div>
             <div class="bestPropertyBox">
                 <div class="row">
-                    <div class="col-xl-4 col-md-6">
-                        <div class="propertySec">
-                            <div class="imgBox">
-                                <img src="{{$baseUrl}}assest/images/property-img.png" alt="property-img">
-                            </div>
-                            <div class="propertyName">
-                                <h5>GANESH GLORY 11</h5>
-                            </div>
-                            <div class="locationProperty">
-                                <div class="homeBox comBox">
-                                    <img src="{{$baseUrl}}assest/images/Home.png" alt="Home">
-                                    <p>5 BHK Bungalows</p>
-                                </div>
-                                <div class="location comBox">
-                                    <img src="{{$baseUrl}}assest/images/Location.png" alt="Location">
-                                    <p>Location</p>
-                                </div>
-                            </div>
-                            <div class="suggestBox">
-                                <div class="leftBtn">
-                                    <a href="javascript:void(0)"><img src="{{$baseUrl}}assest/images/x-btn.png" alt="x-btn"></a>
-                                </div>
-                                <div class="rightBar">
-                                    <h5>60%</h5>
-                                    <div class="progress">
-                                        <div class="progress-bar w-75" role="progressbar" aria-valuenow="60"
-                                            aria-valuemin="0" aria-valuemax="100"></div>
+                    @if ($top_properties->count() > 0)
+                        @foreach ($top_properties as $property)
+                            <div class="col-xl-4 col-md-6">
+                                <div class="propertySec">
+                                    <div class="imgBox">
+                                        @if ($property->cover_image)
+                                            <img src="{{ asset('/storage/project_images/' . $property->cover_image) }}"
+                                                alt="property-img" loading="lazy">
+                                        @else
+                                            <img src="{{ $baseUrl }}assest/images/property-img.png" alt="property-img"
+                                                loading="lazy">
+                                        @endif
+                                    </div>
+                                    <div class="propertyName">
+                                        <h5>{{ $property->project_name }}</h5>
+                                    </div>
+                                    <div class="locationProperty">
+                                        <div class="homeBox comBox">
+                                            <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home">
+                                            <p>{{ $property->custom_property_type ?? '' }}</p>
+                                        </div>
+                                        <div class="location comBox">
+                                            <img src="{{ $baseUrl }}assest/images/Location.png" alt="Location">
+                                            <p>{{ $property->location->location_name . ', ' . $property->city->city_name }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="suggestBox">
+                                        <div class="leftBtn">
+                                            <a href="javascript:void(0)"><img
+                                                    src="{{ $baseUrl }}assest/images/x-btn.png" alt="x-btn"></a>
+                                        </div>
+                                        <div class="rightBar">
+                                            <h5>{{ $property->exio_suggest_percentage }}%</h5>
+                                            <div class="progress">
+                                                <div class="progress-bar"
+                                                    style="width: {{ $property->exio_suggest_percentage }}%"
+                                                    role="progressbar"
+                                                    aria-valuenow="{{ $property->exio_suggest_percentage }}"
+                                                    aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-md-6">
-                        <div class="propertySec">
-                            <div class="imgBox">
-                                <img src="{{$baseUrl}}assest/images/property-img.png" alt="property-img">
-                            </div>
-                            <div class="propertyName">
-                                <h5>GANESH GLORY 11</h5>
-                            </div>
-                            <div class="locationProperty">
-                                <div class="homeBox comBox">
-                                    <img src="{{$baseUrl}}assest/images/Home.png" alt="Home">
-                                    <p>5 BHK Bungalows</p>
-                                </div>
-                                <div class="location comBox">
-                                    <img src="{{$baseUrl}}assest/images/Location.png" alt="Location">
-                                    <p>Location</p>
-                                </div>
-                            </div>
-                            <div class="suggestBox">
-                                <div class="leftBtn">
-                                    <a href="javascript:void(0)"><img src="{{$baseUrl}}assest/images/x-btn.png" alt="x-btn"></a>
-                                </div>
-                                <div class="rightBar">
-                                    <h5>60%</h5>
-                                    <div class="progress">
-                                        <div class="progress-bar w-75" role="progressbar" aria-valuenow="60"
-                                            aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-md-6">
-                        <div class="propertySec">
-                            <div class="imgBox">
-                                <img src="{{$baseUrl}}assest/images/property-img.png" alt="property-img">
-                            </div>
-                            <div class="propertyName">
-                                <h5>GANESH GLORY 11</h5>
-                            </div>
-                            <div class="locationProperty">
-                                <div class="homeBox comBox">
-                                    <img src="{{$baseUrl}}assest/images/Home.png" alt="Home">
-                                    <p>5 BHK Bungalows</p>
-                                </div>
-                                <div class="location comBox">
-                                    <img src="{{$baseUrl}}assest/images/Location.png" alt="Location">
-                                    <p>Location</p>
-                                </div>
-                            </div>
-                            <div class="suggestBox">
-                                <div class="leftBtn">
-                                    <a href="javascript:void(0)"><img src="{{$baseUrl}}assest/images/x-btn.png" alt="x-btn"></a>
-                                </div>
-                                <div class="rightBar">
-                                    <h5>60%</h5>
-                                    <div class="progress">
-                                        <div class="progress-bar w-75" role="progressbar" aria-valuenow="60"
-                                            aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-md-6">
-                        <div class="propertySec">
-                            <div class="imgBox">
-                                <img src="{{$baseUrl}}assest/images/property-img.png" alt="property-img">
-                            </div>
-                            <div class="propertyName">
-                                <h5>GANESH GLORY 11</h5>
-                            </div>
-                            <div class="locationProperty">
-                                <div class="homeBox comBox">
-                                    <img src="{{$baseUrl}}assest/images/Home.png" alt="Home">
-                                    <p>5 BHK Bungalows</p>
-                                </div>
-                                <div class="location comBox">
-                                    <img src="{{$baseUrl}}assest/images/Location.png" alt="Location">
-                                    <p>Location</p>
-                                </div>
-                            </div>
-                            <div class="suggestBox">
-                                <div class="leftBtn">
-                                    <a href="javascript:void(0)"><img src="{{$baseUrl}}assest/images/x-btn.png" alt="x-btn"></a>
-                                </div>
-                                <div class="rightBar">
-                                    <h5>60%</h5>
-                                    <div class="progress">
-                                        <div class="progress-bar w-75" role="progressbar" aria-valuenow="60"
-                                            aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-md-6">
-                        <div class="propertySec">
-                            <div class="imgBox">
-                                <img src="{{$baseUrl}}assest/images/property-img.png" alt="property-img">
-                            </div>
-                            <div class="propertyName">
-                                <h5>GANESH GLORY 11</h5>
-                            </div>
-                            <div class="locationProperty">
-                                <div class="homeBox comBox">
-                                    <img src="{{$baseUrl}}assest/images/Home.png" alt="Home">
-                                    <p>5 BHK Bungalows</p>
-                                </div>
-                                <div class="location comBox">
-                                    <img src="{{$baseUrl}}assest/images/Location.png" alt="Location">
-                                    <p>Location</p>
-                                </div>
-                            </div>
-                            <div class="suggestBox">
-                                <div class="leftBtn">
-                                    <a href="javascript:void(0)"><img src="{{$baseUrl}}assest/images/x-btn.png" alt="x-btn"></a>
-                                </div>
-                                <div class="rightBar">
-                                    <h5>60%</h5>
-                                    <div class="progress">
-                                        <div class="progress-bar w-75" role="progressbar" aria-valuenow="60"
-                                            aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-md-6">
-                        <div class="propertySec">
-                            <div class="imgBox">
-                                <img src="{{$baseUrl}}assest/images/property-img.png" alt="property-img">
-                            </div>
-                            <div class="propertyName">
-                                <h5>GANESH GLORY 11</h5>
-                            </div>
-                            <div class="locationProperty">
-                                <div class="homeBox comBox">
-                                    <img src="{{$baseUrl}}assest/images/Home.png" alt="Home">
-                                    <p>5 BHK Bungalows</p>
-                                </div>
-                                <div class="location comBox">
-                                    <img src="{{$baseUrl}}assest/images/Location.png" alt="Location">
-                                    <p>Location</p>
-                                </div>
-                            </div>
-                            <div class="suggestBox">
-                                <div class="leftBtn">
-                                    <a href="javascript:void(0)"><img src="{{$baseUrl}}assest/images/x-btn.png" alt="x-btn"></a>
-                                </div>
-                                <div class="rightBar">
-                                    <h5>60%</h5>
-                                    <div class="progress">
-                                        <div class="progress-bar w-75" role="progressbar" aria-valuenow="60"
-                                            aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        @endforeach
+                    @endif
                 </div>
                 <div class="exploreMore">
                     <a class="btn btnExplore" href="javascript:void(0)">Explore More</a>
@@ -311,166 +166,52 @@
             </div>
             <div class="bestPropertyBox">
                 <div class="owl-carousel owl-theme">
-                    <div class="item">
-                        <div class="propertySec">
-                            <div class="imgBox">
-                                <img src="{{$baseUrl}}assest/images/property-img.png" alt="property-img">
-                            </div>
-                            <div class="propertyName">
-                                <h5>GANESH GLORY 11</h5>
-                            </div>
-                            <div class="locationProperty">
-                                <div class="homeBox comBox">
-                                    <img src="{{$baseUrl}}assest/images/Home.png" alt="Home">
-                                    <p>5 BHK Bungalows</p>
-                                </div>
-                                <div class="location comBox">
-                                    <img src="{{$baseUrl}}assest/images/Location.png" alt="Location">
-                                    <p>Location</p>
-                                </div>
-                            </div>
-                            <div class="suggestBox">
-                                <div class="leftBtn">
-                                    <a href="javascript:void(0)"><img src="{{$baseUrl}}assest/images/x-btn.png" alt="x-btn"></a>
-                                </div>
-                                <div class="rightBar">
-                                    <h5>60%</h5>
-                                    <div class="progress">
-                                        <div class="progress-bar w-75" role="progressbar" aria-valuenow="60"
-                                            aria-valuemin="0" aria-valuemax="100"></div>
+                    @if ($top_properties->count() > 0)
+                        @foreach ($top_properties as $property)
+                            <div class="item">
+                                <div class="propertySec">
+                                    <div class="imgBox">
+                                        @if ($property->cover_image)
+                                            <img src="{{ asset('/storage/project_images/' . $property->cover_image) }}"
+                                                alt="property-img" loading="lazy">
+                                        @else
+                                            <img src="{{ $baseUrl }}assest/images/property-img.png"
+                                                alt="property-img" loading="lazy">
+                                        @endif
+                                    </div>
+                                    <div class="propertyName">
+                                        <h5>{{ $property->project_name }}</h5>
+                                    </div>
+                                    <div class="locationProperty">
+                                        <div class="homeBox comBox">
+                                            <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home">
+                                            <p>{{ $property->custom_property_type ?? '' }}</p>
+                                        </div>
+                                        <div class="location comBox">
+                                            <img src="{{ $baseUrl }}assest/images/Location.png" alt="Location">
+                                            <p>{{ $property->location->location_name . ', ' . $property->city->city_name }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="suggestBox">
+                                        <div class="leftBtn">
+                                            <a href="javascript:void(0)"><img
+                                                    src="{{ $baseUrl }}assest/images/x-btn.png" alt="x-btn"></a>
+                                        </div>
+                                        <div class="rightBar">
+                                            <h5>{{ $property->exio_suggest_percentage }}%</h5>
+                                            <div class="progress">
+                                                <div class="progress-bar" role="progressbar"
+                                                    style="width: {{ $property->exio_suggest_percentage }}%"
+                                                    aria-valuenow="{{ $property->exio_suggest_percentage }}"
+                                                    aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="propertySec">
-                            <div class="imgBox">
-                                <img src="{{$baseUrl}}assest/images/property-img.png" alt="property-img">
-                            </div>
-                            <div class="propertyName">
-                                <h5>GANESH GLORY 11</h5>
-                            </div>
-                            <div class="locationProperty">
-                                <div class="homeBox comBox">
-                                    <img src="{{$baseUrl}}assest/images/Home.png" alt="Home">
-                                    <p>5 BHK Bungalows</p>
-                                </div>
-                                <div class="location comBox">
-                                    <img src="{{$baseUrl}}assest/images/Location.png" alt="Location">
-                                    <p>Location</p>
-                                </div>
-                            </div>
-                            <div class="suggestBox">
-                                <div class="leftBtn">
-                                    <a href="javascript:void(0)"><img src="{{$baseUrl}}assest/images/x-btn.png" alt="x-btn"></a>
-                                </div>
-                                <div class="rightBar">
-                                    <h5>60%</h5>
-                                    <div class="progress">
-                                        <div class="progress-bar w-75" role="progressbar" aria-valuenow="60"
-                                            aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="propertySec">
-                            <div class="imgBox">
-                                <img src="{{$baseUrl}}assest/images/property-img.png" alt="property-img">
-                            </div>
-                            <div class="propertyName">
-                                <h5>GANESH GLORY 11</h5>
-                            </div>
-                            <div class="locationProperty">
-                                <div class="homeBox comBox">
-                                    <img src="{{$baseUrl}}assest/images/Home.png" alt="Home">
-                                    <p>5 BHK Bungalows</p>
-                                </div>
-                                <div class="location comBox">
-                                    <img src="{{$baseUrl}}assest/images/Location.png" alt="Location">
-                                    <p>Location</p>
-                                </div>
-                            </div>
-                            <div class="suggestBox">
-                                <div class="leftBtn">
-                                    <a href="javascript:void(0)"><img src="{{$baseUrl}}assest/images/x-btn.png" alt="x-btn"></a>
-                                </div>
-                                <div class="rightBar">
-                                    <h5>60%</h5>
-                                    <div class="progress">
-                                        <div class="progress-bar w-75" role="progressbar" aria-valuenow="60"
-                                            aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="propertySec">
-                            <div class="imgBox">
-                                <img src="{{$baseUrl}}assest/images/property-img.png" alt="property-img">
-                            </div>
-                            <div class="propertyName">
-                                <h5>GANESH GLORY 11</h5>
-                            </div>
-                            <div class="locationProperty">
-                                <div class="homeBox comBox">
-                                    <img src="{{$baseUrl}}assest/images/Home.png" alt="Home">
-                                    <p>5 BHK Bungalows</p>
-                                </div>
-                                <div class="location comBox">
-                                    <img src="{{$baseUrl}}assest/images/Location.png" alt="Location">
-                                    <p>Location</p>
-                                </div>
-                            </div>
-                            <div class="suggestBox">
-                                <div class="leftBtn">
-                                    <a href="javascript:void(0)"><img src="{{$baseUrl}}assest/images/x-btn.png" alt="x-btn"></a>
-                                </div>
-                                <div class="rightBar">
-                                    <h5>60%</h5>
-                                    <div class="progress">
-                                        <div class="progress-bar w-75" role="progressbar" aria-valuenow="60"
-                                            aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="propertySec">
-                            <div class="imgBox">
-                                <img src="{{$baseUrl}}assest/images/property-img.png" alt="property-img">
-                            </div>
-                            <div class="propertyName">
-                                <h5>GANESH GLORY 11</h5>
-                            </div>
-                            <div class="locationProperty">
-                                <div class="homeBox comBox">
-                                    <img src="{{$baseUrl}}assest/images/Home.png" alt="Home">
-                                    <p>5 BHK Bungalows</p>
-                                </div>
-                                <div class="location comBox">
-                                    <img src="{{$baseUrl}}assest/images/Location.png" alt="Location">
-                                    <p>Location</p>
-                                </div>
-                            </div>
-                            <div class="suggestBox">
-                                <div class="leftBtn">
-                                    <a href="javascript:void(0)"><img src="{{$baseUrl}}assest/images/x-btn.png" alt="x-btn"></a>
-                                </div>
-                                <div class="rightBar">
-                                    <h5>60%</h5>
-                                    <div class="progress">
-                                        <div class="progress-bar w-75" role="progressbar" aria-valuenow="60"
-                                            aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        @endforeach
+                    @endif
                 </div>
                 <div class="exploreMore">
                     <a class="btn btnExplore" href="javascript:void(0)">Explore More</a>
@@ -491,7 +232,7 @@
                     <div class="col-xl-4 col-md-6">
                         <div class="idealBoxCom">
                             <div class="imgBox">
-                                <img src="{{$baseUrl}}assest/images/pana.png" alt="pana">
+                                <img src="{{ $baseUrl }}assest/images/pana.png" alt="pana">
                             </div>
                             <div class="textBox">
                                 <h5>Check Rating</h5>
@@ -504,7 +245,7 @@
                     <div class="col-xl-4 col-md-6">
                         <div class="idealBoxCom">
                             <div class="imgBox">
-                                <img src="{{$baseUrl}}assest/images/pana2.png" alt="pana2">
+                                <img src="{{ $baseUrl }}assest/images/pana2.png" alt="pana2">
                             </div>
                             <div class="textBox">
                                 <h5>Match with your Ratings</h5>
@@ -517,7 +258,7 @@
                     <div class="col-xl-4 col-md-6">
                         <div class="idealBoxCom">
                             <div class="imgBox">
-                                <img src="{{$baseUrl}}assest/images/pana3.png" alt="pana3">
+                                <img src="{{ $baseUrl }}assest/images/pana3.png" alt="pana3">
                             </div>
                             <div class="textBox">
                                 <h5>Trending Projects</h5>
@@ -540,7 +281,7 @@
                 <div class="row align-items-center">
                     <div class="col-lg-4 col-md-5">
                         <div class="aboutImg">
-                            <img src="{{$baseUrl}}assest/images/about-img.jpg" alt="about-img">
+                            <img src="{{ $baseUrl }}assest/images/about-img.jpg" alt="about-img">
                         </div>
                     </div>
                     <div class="col-lg-8 col-md-7">
@@ -588,81 +329,33 @@
             </div>
             <div class="latesNewsBox">
                 <div class="owl-carousel owl-theme">
-                    <div class="item">
-                        <div class="imgbox">
-                            <img src="{{$baseUrl}}assest/images/sliderimg.png" alt="sliderimg">
-                        </div>
-                        <div class="sliderText">
-                            <span class="date">August 30 2024</span>
-                            <h5>10 Quick Tips About Real Estate</h5>
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-                                been the industry's standard.</p>
-                            <ul>
-                                <li><i class="bi bi-person"></i> by <span>Administrator</span></li>
-                                <li><i class="bi bi-eye"></i> 38 Views</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="imgbox">
-                            <img src="{{$baseUrl}}assest/images/sliderimg.png" alt="sliderimg">
-                        </div>
-                        <div class="sliderText">
-                            <span class="date">August 30 2024</span>
-                            <h5>10 Quick Tips About Real Estate</h5>
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-                                been the industry's standard.</p>
-                            <ul>
-                                <li><i class="bi bi-person"></i> by <span>Administrator</span></li>
-                                <li><i class="bi bi-eye"></i> 38 Views</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="imgbox">
-                            <img src="{{$baseUrl}}assest/images/sliderimg.png" alt="sliderimg">
-                        </div>
-                        <div class="sliderText">
-                            <span class="date">August 30 2024</span>
-                            <h5>10 Quick Tips About Real Estate</h5>
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-                                been the industry's standard.</p>
-                            <ul>
-                                <li><i class="bi bi-person"></i> by <span>Administrator</span></li>
-                                <li><i class="bi bi-eye"></i> 38 Views</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="imgbox">
-                            <img src="{{$baseUrl}}assest/images/sliderimg.png" alt="sliderimg">
-                        </div>
-                        <div class="sliderText">
-                            <span class="date">August 30 2024</span>
-                            <h5>10 Quick Tips About Real Estate</h5>
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-                                been the industry's standard.</p>
-                            <ul>
-                                <li><i class="bi bi-person"></i> by <span>Administrator</span></li>
-                                <li><i class="bi bi-eye"></i> 38 Views</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="imgbox">
-                            <img src="{{$baseUrl}}assest/images/sliderimg.png" alt="sliderimg">
-                        </div>
-                        <div class="sliderText">
-                            <span class="date">August 30 2024</span>
-                            <h5>10 Quick Tips About Real Estate</h5>
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-                                been the industry's standard.</p>
-                            <ul>
-                                <li><i class="bi bi-person"></i> by <span>Administrator</span></li>
-                                <li><i class="bi bi-eye"></i> 38 Views</li>
-                            </ul>
-                        </div>
-                    </div>
+                    @if ($news->count() > 0)
+                        @foreach ($news as $item)
+                            <div class="item">
+                                <div class="imgbox">
+                                    @if ($item->image)
+                                        <img src="{{ asset('/storage/news/image/' . $item->image) }}" alt="sliderimg"
+                                            loading="lazy">
+                                    @else
+                                        <img src="{{ $baseUrl }}assest/images/sliderimg.png" alt="sliderimg"
+                                            loading="lazy">
+                                    @endif
+                                </div>
+                                <div class="sliderText">
+                                    <span
+                                        class="date">{{ $item->created_at ? $item->created_at->format('d F Y') : '' }}</span>
+                                    <h5>{{ $item->title ?? '' }}</h5>
+                                    <p>{{ Str::limit($item->description ?? '', 70, '...') }}</p>
+                                    <ul>
+                                        <li><i class="bi bi-person"></i> by <span>{{ $item->added_by ?? '' }}</span></li>
+                                        <li><i class="bi bi-eye"></i> {{ $item->views ?? 0 }} Views</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
+                        <div>No News Found</div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -678,18 +371,18 @@
             <div class="questionBox">
                 <div class="faqSection">
                     <div class="accordion" id="faqsExample">
-                        @foreach($faqs as $faq)
+                        @foreach ($faqs as $faq)
                             <div class="accordion-item">
-                                <h2 class="accordion-header" id="heading{{$faq->id}}">
+                                <h2 class="accordion-header" id="heading{{ $faq->id }}">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                        {{$faq->question}}
+                                        {{ $faq->question }}
                                     </button>
                                 </h2>
-                                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="heading{{$faq->id}}"
-                                    data-bs-parent="#faqsExample">
+                                <div id="collapseOne" class="accordion-collapse collapse"
+                                    aria-labelledby="heading{{ $faq->id }}" data-bs-parent="#faqsExample">
                                     <div class="accordion-body">
-                                        <p>{{$faq->answer}}</p>
+                                        <p>{{ $faq->answer }}</p>
                                     </div>
                                 </div>
                             </div>

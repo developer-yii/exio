@@ -66,15 +66,10 @@
                                     <label for="content" class="form-label">Content<span
                                             class="text-danger add_edit_required">*</span></label>
                                     <textarea name="content" class="form-control content hide" id="content">
-                                @if (isset($model->id))
-{{ $model->title }}
+                                    @if (isset($model->id))
+{!! $model->content !!}
 @endif
-                                </textarea>
-                                    <div id="editor_content" style="height: 500px;">
-                                        @if (isset($model->id))
-                                            {!! $model->content !!}
-                                        @endif
-                                    </div>
+                                    </textarea>
                                     <span class="error"></span>
                                 </div>
                             </div>
@@ -122,6 +117,7 @@
     <script>
         var addUpdateUrl = "{{ route('admin.news.addupdate') }}";
         var newsUrl = "{{ route('admin.news') }}";
+        var uploadImageUrl = "{{ route('admin.news.image') }}";
     </script>
 @endsection
 
