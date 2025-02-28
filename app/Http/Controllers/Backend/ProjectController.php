@@ -68,6 +68,9 @@ class ProjectController extends Controller
             ->editColumn('actual_progress', function ($row) {
                 return "<a href='" . route('admin.actual_progress', ['project_id' => $row->id]) . "'>Actual Progress</a>";
             })
+            ->editColumn('property_type', function ($row) {
+                return $row->property_type ? Project::$propertyType[$row->property_type] : '';
+            })
             ->addColumn('status_text', function ($row) use ($statusLabels) {
                 return $statusLabels[$row->status] ?? "";
             })
@@ -135,13 +138,12 @@ class ProjectController extends Controller
             'builder_id' => 'required',
             'property_type' => 'required',
             'property_sub_types' => 'required',
+            'custom_property_type' => 'required',
             'project_about' => 'required',
             'possession_by' => 'required',
             'rera_number' => 'required',
             'price_from' => 'required',
-            'price_from_unit' => 'required',
             'price_to' => 'required',
-            'price_to_unit' => 'required',
             'carpet_area' => 'required',
             'total_floors' => 'required',
             'total_tower' => 'required',
@@ -226,6 +228,7 @@ class ProjectController extends Controller
         $model->builder_id = $request->builder_id;
         $model->property_type = $request->property_type;
         $model->property_sub_types = $request->property_sub_types;
+        $model->custom_property_type = $request->custom_property_type;
         $model->possession_by = date('Y-m-d', strtotime($request->possession_by));
         $model->rera_number = $request->rera_number;
         $model->price_from = $request->price_from;

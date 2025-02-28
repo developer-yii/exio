@@ -162,6 +162,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/edit/{news_id}', [NewsController::class, 'edit'])->name('news.edit');
             Route::post('/delete', [NewsController::class, 'delete'])->name('news.delete');
             Route::post('/addupdate', [NewsController::class, 'addupdate'])->name('news.addupdate');
+            Route::post('/upload-image', [NewsController::class, 'imageUpload'])->name('news.image');
         });
     });
 });
