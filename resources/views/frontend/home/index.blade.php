@@ -4,6 +4,36 @@
 @extends('frontend.layouts.app')
 
 @section('title', 'Home Page')
+
+@section('css')
+    <style>
+        .ui-menu .ui-menu-item-wrapper:hover {
+            background-color: #EEF6FF;
+            color: var(--blue-color);
+            border: none;
+        }
+
+        .ui-menu .ui-menu-item-wrapper {
+            font-size: 15px;
+            font-weight: 400;
+            font-family: "Inter", serif;
+            width: 100%;
+            padding: 10px 8px;
+            border-radius: 5px;
+            border: none;
+            transition: 0.2s all;
+        }
+
+        .ui-widget.ui-widget-content {
+            background-color: var(--white-color);
+            padding: 15px 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 7px 25px #00000028;
+        }
+    </style>
+@endsection
+
 @section('content')
     <!-- Banner section -->
     <section class="heroBanner">
@@ -49,13 +79,14 @@
             <div class="bannerFilterBox">
                 <div class="cityFilter">
                     <p>Choose City</p>
-                    <select id="autocomplete" name="city" class="form-control" style="width: 100%;">
+                    {{-- <select id="autocomplete" name="city" class="form-control" style="width: 100%;">
                         <option value="" class="d-none">Choose City</option>
                         @foreach ($cities as $city)
                             <option value="{{ $city->id }}">{{ $city->city_name }}</option>
                         @endforeach
-                    </select>
-                    {{-- <input type="text" name="country" id="country" placeholder="Ahmedabad" /> --}}
+                    </select> --}}
+                    <input type="text" name="city" id="city" class="autocomplete form-control"
+                        placeholder="Ahmedabad" />
                 </div>
                 <div class="landMarkFilter">
                     <div class="searchBox">
@@ -78,7 +109,7 @@
                 <div class="row align-items-center">
                     <div class="col-md-6">
                         <div class="textBox">
-                            <h4>Let’s discuss about <br> Real Estate community</h4>
+                            <h4>Let's discuss about <br> Real Estate community</h4>
                             <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
                                 been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
                                 galley of type and scrambled it to make a type specimen book.</p>
@@ -464,5 +495,23 @@
     <!-- faq section -->
 @endsection
 @section('js')
+    <script>
+        $(document).ready(function() {
+            let cities = @json($cities);
+            let filteredCities = cities.map(city => ({
+                label: city.city_name,
+                value: city.id
+            }));
 
+            $('.autocomplete').autocomplete({
+                source: filteredCities,
+                minLength: 1,
+                select: function(event, ui) {
+                    event.preventDefault();
+                    $(this).val(ui.item.label);
+                    $('#city').val(ui.item.label);
+                }
+            });
+        });
+    </script>
 @endsection

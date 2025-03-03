@@ -76,7 +76,8 @@ if (!function_exists('isSuperAdmin')) {
     }
 }
 if (! function_exists('getSettingFromDb')) {
-    function getSettingFromDb($key, $default = null) {
+    function getSettingFromDb($key, $default = null)
+    {
         $setting = \App\Models\Setting::where('setting_key', $key)->first();
         return $setting ? $setting->setting_value : $default;
     }
@@ -86,5 +87,29 @@ if (!function_exists('getSetting')) {
     {
         $settings = config('settings');
         return $settings[$option_key] ?? $default;
+    }
+}
+
+if (!function_exists('formatChar')) {
+    function formatChar($value, $length = 35)
+    {
+        // Return empty string if value is null or empty
+        if (empty($value)) {
+            return '';
+        }
+
+        // Convert to string if not already
+        $value = (string) $value;
+
+        // Get string length
+        $strLength = mb_strlen($value);
+
+        // Return original string if shorter than max length
+        if ($strLength <= $length) {
+            return $value;
+        }
+
+        // Trim string and add ellipsis
+        return mb_substr($value, 0, $length) . '...';
     }
 }

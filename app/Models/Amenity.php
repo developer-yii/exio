@@ -31,4 +31,9 @@ class Amenity extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
+
+    public function scopeIsActive($query)
+    {
+        return $query->where('status', 1);
+    }
 }

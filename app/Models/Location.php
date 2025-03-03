@@ -43,4 +43,9 @@ class Location extends Model
     {
         return $this->hasMany(Project::class, 'location_id');
     }
+
+    public function scopeIsActive($query)
+    {
+        return $query->where('status', self::ACTIVE);
+    }
 }

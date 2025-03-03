@@ -1,7 +1,7 @@
 @php
     $baseUrl = asset('frontend') . '/';
 @endphp
-<footer>
+<footer class="{{ $footer_display }}">
   <div class="footer-part">
     <div class="container">
       <div class="footer-box">
