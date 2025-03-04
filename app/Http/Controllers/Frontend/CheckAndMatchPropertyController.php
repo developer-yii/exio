@@ -60,10 +60,9 @@ class CheckAndMatchPropertyController extends Controller
 
     public function checkAndMatchPropertyResult(Request $request)
     {
-        $filters = $request->only(['property_type', 'sqft', 'location', 'amenities', 'budget']);
-        $location = $filters['location'] ? array_filter(explode(',', $filters['location'])) : [];
+        $filters = $request->only(['property_type', 'sqft', 'city', 'location', 'amenities', 'budget']);
 
-        $displayValues = $this->buildDisplayValues($filters, $location);
+        $displayValues = $this->buildDisplayValues($filters);
 
         $projects = Project::query();
 
@@ -86,11 +85,11 @@ class CheckAndMatchPropertyController extends Controller
             });
         }
 
-        if (!empty($location)) {
-            $projects->when(isset($location[1]), function ($query) use ($location) {
-                $query->where('city_id', $location[1]);
-            })->when(isset($location[0]), function ($query) use ($location) {
-                $query->where('location_id', $location[0]);
+        if (!empty($filters['city']) || !empty($filters['location'])) {
+            $projects->when(isset($filters['city']), function ($query) use ($filters) {
+                $query->where('city_id', $filters['city']);
+            })->when(isset($filters['location']), function ($query) use ($filters) {
+                $query->where('location_id', $filters['location']);
             });
         }
 
@@ -121,14 +120,14 @@ class CheckAndMatchPropertyController extends Controller
         ));
     }
 
-    private function buildDisplayValues(array $filters, array $location): array
+    private function buildDisplayValues(array $filters): array
     {
         return [
             'displayProperty' => Project::$propertyType[$filters['property_type'] ?? ''] ?? '',
             'displaySqft' => isset($filters['sqft']) ? collect(explode(',', $filters['sqft']))
                 ->map(fn($size) => "< {$size} Sq ft")
                 ->implode(', ') : '',
-            'displayLocation' => $this->formatLocation($location),
+            'displayLocation' => $this->formatLocation($filters),
             'displayAmenities' => isset($filters['amenities']) ?
                 Amenity::whereIn('id', explode(',', $filters['amenities']))
                 ->pluck('amenity_name')
@@ -137,14 +136,14 @@ class CheckAndMatchPropertyController extends Controller
         ];
     }
 
-    private function formatLocation(array $location): string
+    private function formatLocation(array $filters): string
     {
-        if (count($location) < 1) {
+        if (empty($filters['city']) && empty($filters['location'])) {
             return '';
         }
 
-        $area = isset($location[0]) ? Location::find($location[0]) : null;
-        $city = isset($location[1]) ? City::find($location[1]) : null;
+        $area = isset($filters['location']) ? Location::find($filters['location']) : null;
+        $city = isset($filters['city']) ? City::find($filters['city']) : null;
 
         if (!$area && !$city) {
             return '';

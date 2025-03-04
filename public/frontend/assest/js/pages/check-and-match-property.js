@@ -137,8 +137,10 @@ $(document).ready(function () {
             checkAndMatchPropertyResultUrl +
             `?property_type=${encodeURIComponent(
                 propertyType
-            )}&sqft=${sqftString}&location=${encodeURIComponent(
-                city + "," + location
+            )}&sqft=${sqftString}&city=${encodeURIComponent(
+                city
+            )}&location=${encodeURIComponent(
+                location
             )}&amenities=${encodeURIComponent(
                 amenitiesString
             )}&budget=${encodeURIComponent(budgetString)}`;
