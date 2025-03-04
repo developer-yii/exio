@@ -60,126 +60,160 @@ class CheckAndMatchPropertyController extends Controller
 
     public function checkAndMatchPropertyResult(Request $request)
     {
-        // Validate and sanitize input data
-        $propertyType = $request->input('property_type');
-        $sqft = $request->input('sqft');
-        $location = $request->input('location') ? array_filter(explode(',', $request->location)) : [];
-        $amenities = $request->input('amenities');
-        $budget = $request->input('budget');
+        $filters = $request->only(['property_type', 'sqft', 'location', 'amenities', 'budget']);
+        $location = $filters['location'] ? array_filter(explode(',', $filters['location'])) : [];
 
-        // Format display values with null coalescing operator
-        $displayProperty = Project::$propertyType[$propertyType] ?? '';
-
-        $displaySqft = $sqft ? collect(explode(',', $sqft))
-            ->map(fn($size) => "< {$size} Sq ft")
-            ->implode(', ') : '';
-
-        $displayLocation = '';
-        if (count($location) === 2) {
-            $area = Location::find($location[0]);
-            $city = City::find($location[1]);
-            if ($area && $city) {
-                $displayLocation = "{$area->location_name}, {$city->city_name}";
-            }
-        }
-
-        $displayAmenities = $amenities ? Amenity::whereIn('id', explode(',', $amenities))
-            ->pluck('amenity_name')
-            ->implode(', ') : '';
-
-        $displayBudget = $budget ? '₹' . str_replace(',', ', ₹', $budget) : '';
-
-        $allReqDataString = http_build_query($request->only('property_type', 'sqft', 'location', 'amenities', 'budget'));
+        $displayValues = $this->buildDisplayValues($filters, $location);
 
         $projects = Project::query();
 
-        if ($request->has('property_type')) {
-            $projects->where('property_type', $request->property_type)
-                ->orWhere('property_type', 'both');
+        if (isset($filters['property_type'])) {
+            $projects->where(function ($query) use ($filters) {
+                $query->where('property_type', $filters['property_type'])
+                    ->orWhere('property_type', 'both');
+            });
         }
 
-        // if ($request->has('sqft')) {
-        //     $projects->where('sqft', $request->sqft);
-        // }
-
-        if ($request->has('location')) {
-            if (isset($location[1])) {
-                $projects->where('city_id', $location[1]);
-            }
-            if (isset($location[0])) {
-                $projects->where('location_id', $location[0]);
-            }
-        }
-
-        // if ($request->has('amenities')) {
-        //     $selectedAmenityIds = explode(',', $request->amenities);
-
-        //     $projects->where(function ($query) use ($selectedAmenityIds) {
-        //         $query->where(function ($q) use ($selectedAmenityIds) {
-        //             foreach ($selectedAmenityIds as $amenityId) {
-        //                 // Convert stored amenities string to array and check if it contains the amenity ID
-        //                 $q->whereRaw('FIND_IN_SET(?, amenities)', [$amenityId]);
-        //             }
-        //         });
-        //     });
-        // }
-
-        if ($request->has('budget')) {
-            $budgetRange = explode('-', $request->budget);
-
-            // Handle special case for "2CR+"
-            if (count($budgetRange) === 1) {
-                // For "2CR+" case, only check minimum price
-                $minPrice = (float) str_replace(['CR', 'L'], '', $budgetRange[0]);
-                $minPriceInLacs = str_contains($budgetRange[0], 'CR') ? $minPrice * 100 : $minPrice;
-
-                $projects->where(function ($query) use ($minPriceInLacs) {
-                    $query->where(function ($q) use ($minPriceInLacs) {
-                        $q->where('price_from_unit', 'lacs')
-                            ->where('price_from', '>=', $minPriceInLacs);
-                    })->orWhere(function ($q) use ($minPriceInLacs) {
-                        $q->where('price_from_unit', 'crores')
-                            ->where('price_from', '>=', $minPriceInLacs / 100);
+        if (isset($filters['sqft'])) {
+            $projects->where(function ($query) use ($filters) {
+                $query->whereHas('floorPlans', function ($q) use ($filters) {
+                    $q->where(function ($subQ) use ($filters) {
+                        foreach (explode(',', $filters['sqft']) as $sqft) {
+                            $subQ->orWhere('carpet_area', '<=', (int)$sqft);
+                        }
                     });
                 });
-            } else {
-                // Normal range case (e.g. "25L-50L" or "75L-1CR")
-                $minPrice = (float) str_replace(['CR', 'L'], '', $budgetRange[0]);
-                $maxPrice = (float) str_replace(['CR', 'L'], '', $budgetRange[1]);
+            });
+        }
 
-                // Convert everything to lacs for comparison
-                $minPriceInLacs = str_contains($budgetRange[0], 'CR') ? $minPrice * 100 : $minPrice;
-                $maxPriceInLacs = str_contains($budgetRange[1], 'CR') ? $maxPrice * 100 : $maxPrice;
+        if (!empty($location)) {
+            $projects->when(isset($location[1]), function ($query) use ($location) {
+                $query->where('city_id', $location[1]);
+            })->when(isset($location[0]), function ($query) use ($location) {
+                $query->where('location_id', $location[0]);
+            });
+        }
 
-                $projects->where(function ($query) use ($minPriceInLacs, $maxPriceInLacs) {
-                    // Check price_from is within range when in lacs
-                    $query->where(function ($q) use ($minPriceInLacs, $maxPriceInLacs) {
-                        $q->where('price_from_unit', 'lacs')
-                            ->where('price_from', '>=', $minPriceInLacs)
-                            ->where('price_from', '<=', $maxPriceInLacs);
-                    })
-                        // Check price_from is within range when in crores
-                        ->orWhere(function ($q) use ($minPriceInLacs, $maxPriceInLacs) {
-                            $q->where('price_from_unit', 'crores')
-                                ->where('price_from', '>=', $minPriceInLacs / 100)
-                                ->where('price_from', '<=', $maxPriceInLacs / 100);
-                        });
-                });
-            }
+        if (isset($filters['amenities'])) {
+            $amenityIds = explode(',', $filters['amenities']);
+            $projects->where(function ($query) use ($amenityIds) {
+                foreach ($amenityIds as $amenityId) {
+                    $query->whereRaw("FIND_IN_SET(?, amenities)", [$amenityId]);
+                }
+            });
+        }
+
+        if (isset($filters['budget'])) {
+            $this->applyBudgetFilter($projects, $filters['budget']);
         }
 
         $projects = $projects->get();
 
-        dd($projects);
+        $priceUnit = Project::$priceUnit;
 
-        return view('frontend.check-and-match-property.result', compact(
-            'displayProperty',
-            'displaySqft',
-            'displayLocation',
-            'displayAmenities',
-            'displayBudget',
-            'allReqDataString',
-            'projects'
+        return view('frontend.check-and-match-property.result', array_merge(
+            $displayValues,
+            [
+                'allReqDataString' => http_build_query($filters),
+                'projects' => $projects,
+                'priceUnit' => $priceUnit
+            ]
         ));
+    }
+
+    private function buildDisplayValues(array $filters, array $location): array
+    {
+        return [
+            'displayProperty' => Project::$propertyType[$filters['property_type'] ?? ''] ?? '',
+            'displaySqft' => isset($filters['sqft']) ? collect(explode(',', $filters['sqft']))
+                ->map(fn($size) => "< {$size} Sq ft")
+                ->implode(', ') : '',
+            'displayLocation' => $this->formatLocation($location),
+            'displayAmenities' => isset($filters['amenities']) ?
+                Amenity::whereIn('id', explode(',', $filters['amenities']))
+                ->pluck('amenity_name')
+                ->implode(', ') : '',
+            'displayBudget' => isset($filters['budget']) ? '₹' . str_replace(',', ', ₹', $filters['budget']) : ''
+        ];
+    }
+
+    private function formatLocation(array $location): string
+    {
+        if (count($location) < 1) {
+            return '';
+        }
+
+        $area = isset($location[0]) ? Location::find($location[0]) : null;
+        $city = isset($location[1]) ? City::find($location[1]) : null;
+
+        if (!$area && !$city) {
+            return '';
+        }
+
+        $locationParts = [];
+        if ($area && $area->location_name) {
+            $locationParts[] = $area->location_name;
+        }
+        if ($city && $city->city_name) {
+            $locationParts[] = $city->city_name;
+        }
+
+        return implode(', ', $locationParts);
+    }
+
+    private function applyBudgetFilter($query, string $budget): void
+    {
+        $budgetRange = explode('-', $budget);
+
+        if (count($budgetRange) === 1) {
+            // Handle "2CR+" case
+            $minPrice = (float) str_replace(['CR', 'L'], '', $budgetRange[0]);
+            $minPriceInLacs = str_contains($budgetRange[0], 'CR') ? $minPrice * 100 : $minPrice;
+
+            $this->applyMinimumBudgetFilter($query, $minPriceInLacs);
+        } else {
+            // Handle range case
+            $this->applyBudgetRangeFilter($query, $budgetRange);
+        }
+    }
+
+    private function applyMinimumBudgetFilter($query, float $minPriceInLacs): void
+    {
+        $query->where(function ($q) use ($minPriceInLacs) {
+            // Convert price to lacs based on unit
+            $q->where(function ($subQ) use ($minPriceInLacs) {
+                $subQ->where('price_from_unit', 'lacs')
+                    ->where('price_from', '>=', $minPriceInLacs);
+            })->orWhere(function ($subQ) use ($minPriceInLacs) {
+                $subQ->where('price_from_unit', 'crores')
+                    ->where('price_from', '>=', $minPriceInLacs / 100);
+            });
+        });
+    }
+
+    private function applyBudgetRangeFilter($query, array $budgetRange): void
+    {
+        // Extract min and max values from range (e.g. "25L-50L")
+        $minValue = (float) str_replace(['CR', 'L'], '', $budgetRange[0]);
+        $maxValue = (float) str_replace(['CR', 'L'], '', $budgetRange[1]);
+
+        // Convert to lacs if CR
+        $minInLacs = str_contains($budgetRange[0], 'CR') ? $minValue * 100 : $minValue;
+        $maxInLacs = str_contains($budgetRange[1], 'CR') ? $maxValue * 100 : $maxValue;
+
+        $query->where(function ($q) use ($minInLacs, $maxInLacs) {
+            // Handle price in lacs
+            $q->where(function ($subQ) use ($minInLacs, $maxInLacs) {
+                $subQ->where('price_from_unit', 'lacs')
+                    ->where('price_from', '>=', $minInLacs)
+                    ->where('price_from', '<=', $maxInLacs);
+            })
+                // Handle price in crores
+                ->orWhere(function ($subQ) use ($minInLacs, $maxInLacs) {
+                    $subQ->where('price_from_unit', 'crores')
+                        ->where('price_from', '>=', $minInLacs / 100)
+                        ->where('price_from', '<=', $maxInLacs / 100);
+                });
+        });
     }
 }

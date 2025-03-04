@@ -74,20 +74,49 @@ async function loadMarkers(projects) {
                     title: location.project_name,
                 });
 
+                let priceRange;
+                let priceFromUnit = priceUnit[location.price_from_unit];
+                let priceToUnit = priceUnit[location.price_to_unit];
+                if (location.price_from && location.price_to) {
+                    priceRange = `${location.price_from} - ${location.price_to} ${priceToUnit}`;
+                } else if (location.price_from) {
+                    priceRange = `${location.price_from} ${priceFromUnit}`;
+                } else {
+                    priceRange = 'Price on request';
+                }
+
                 // Create InfoWindow content
                 const infoWindowContent = `
                     <div class="map-info-window">
-                        <h4>${location.project_name}</h4>
-                        <p>${location.address || "Address not available"}</p>
-                        ${
-                            location.image_url
-                                ? `<img src="${location.image_url}" alt="${location.project_name}" style="max-width: 200px;">`
-                                : ""
-                        }
-                        <div class="mt-2">
-                            <a href="${
-                                location.detail_url || "#"
-                            }" class="btn btn-primary btn-sm">View Details</a>
+                        <div class="property-card">
+                            ${location.image_url
+                        ? `<div class="property-image">
+                                        <img src="${location.image_url}" alt="${location.project_name}">
+                                        <div class="property-tag">Best for investment</div>
+                                        <button class="favorite-btn"><i class="far fa-heart"></i></button>
+                                       </div>`
+                        : ''
+                    }
+                            <div class="property-details">
+                                <div class="price-range">₹${priceRange}</div>
+                                <h4 class="property-name">${location.project_name}</h4>
+                                <p class="property-location">${location.address || 'Address not available'}</p>
+                                <div class="property-specs">
+                                    <span>${location.configuration || ''}</span>
+                                    <span>${location.area || ''}</span>
+                                    <span>${location.location_name || ''}</span>
+                                </div>
+                                <div class="property-footer">
+                                    <div class="exio-suggest">
+                                        <span class="exio-icon">E</span>
+                                        <span class="exio-percent">${location.exio_suggest_percentage || 0}%</span>
+                                    </div>
+                                    <div class="action-buttons">
+                                        <input type="checkbox" class="compare-checkbox">
+                                        <a href="${location.detail_url || '#'}" class="view-details-btn">View Details</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -149,7 +178,7 @@ function createImagePin(imageUrl) {
     const pin = document.createElement("div");
     pin.innerHTML = `
         <img src="${imageUrl}"
-             style="width: 70px; height: 70px;"
+             style="width: 50px; height: 50px;"
              alt="Location marker">
     `;
     return pin;

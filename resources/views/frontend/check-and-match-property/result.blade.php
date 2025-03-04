@@ -87,6 +87,7 @@
     <script>
         var projects = {!! json_encode($projects) !!};
         var map_pin = "{{ asset('frontend/assest/images/map-pin.png') }}";
+        var priceUnit = @json($priceUnit);
     </script>
     <script src="{{ $baseUrl }}/assest/js/pages/check-and-match-property-result.js"></script>
 @endsection
