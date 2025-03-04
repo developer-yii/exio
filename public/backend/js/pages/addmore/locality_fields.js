@@ -31,7 +31,7 @@ $(document).ready(function () {
                                             name="locality[${localityIndex}][distance]"
                                             class="form-control locality_${localityIndex}_distance"
                                             placeholder="Enter Distance"
-                                            step="1"
+                                            step="any"
                                             min="0"
                                             value="${
                                                 data ? data.distance : ""

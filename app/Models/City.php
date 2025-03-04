@@ -46,4 +46,9 @@ class City extends Model
     {
         return $this->hasMany(Project::class, 'city_id');
     }
+
+    public function scopeIsActive($query)
+    {
+        return $query->where('status', self::ACTIVE);
+    }
 }

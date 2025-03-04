@@ -394,7 +394,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <label for="video" class="form-label d-block">Project Video</label>
-                                        <input type="file" name="video" id="video" class="form-control"
+                                        <input type="file" name="video" id="video" class="form-control video"
                                             accept="video/*">
                                         <span class="error"></span>
                                     </div>
@@ -745,7 +745,7 @@
                     </div>
                 </div>
 
-                <!-- Map View -->
+                <!-- Exio Suggest -->
                 <div class="card border-1">
                     <div class="card-header" id="headingExioSuggest">
                         <h5 class="m-0">
@@ -860,12 +860,13 @@
         @if (isset($existingProjectImages))
             var existingProjectImages = {!! json_encode($existingProjectImages) !!};
         @endif
-        console.log(existingProjectImages);
-        var assetUrl = "{{ asset('') }}";
     </script>
 @endsection
 
 @section('pagejs')
+    <script>
+        var assetUrl = "{{ asset('') }}";
+    </script>
     <script
         src="https://maps.googleapis.com/maps/api/js?key={{ config('constants.google_maps_api_key') }}&libraries=places">
     </script>

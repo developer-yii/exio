@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Frondend\ContactController;
 use App\Http\Controllers\Frontend\AuthController;
+use App\Http\Controllers\Frontend\CheckAndMatchPropertyController;
 use App\Http\Controllers\Frontend\CityController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\HomeController;
@@ -20,12 +21,20 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
+Auth::routes();
 
 Route::name('front.')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
-});
 
-Auth::routes();
+    Route::middleware('guest')->group(function () {
+        Route::prefix('check-and-match-property')->group(function () {
+            Route::get('/', [CheckAndMatchPropertyController::class, 'checkAndMatchProperty'])->name('check-and-match-property');
+            Route::get('/result', [CheckAndMatchPropertyController::class, 'checkAndMatchPropertyResult'])->name('check-and-match-property.result');
+            Route::post('/submit', [CheckAndMatchPropertyController::class, 'checkAndMatchPropertySubmit'])->name('check-and-match-property.submit');
+            Route::get('/get-amenities', [CheckAndMatchPropertyController::class, 'getAmenities'])->name('check-and-match-property.get-amenities');
+        });
+    });
+});
 
 Route::get('redirect/{provider}', [SocialController::class, 'redirect'])->name('social');
 Route::get('callback/{provider}', [SocialController::class, 'callback'])->name('social.callback');
@@ -45,12 +54,10 @@ Route::middleware('guest')->group(function () {
     Route::post('contact-us/submit', [ContactController::class, 'submit'])->name('contact.submit');
 });
 
-Route::middleware(['auth', 'isUser'])->group(function () {
-
-});
+Route::middleware(['auth', 'isUser'])->group(function () {});
 
 Route::middleware(['auth'])->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 });
 
-require __DIR__.'/admin.php';
+require __DIR__ . '/admin.php';

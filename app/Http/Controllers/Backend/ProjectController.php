@@ -252,7 +252,7 @@ class ProjectController extends Controller
 
         //save amenities
         $amenities = $request->amenities;
-        $amenities = implode(',', $amenities);
+        $amenities = (isset($amenities) && !empty($amenities)) ? implode(',', $amenities) : '';
         $model->amenities = $amenities;
 
         if ($request->hasFile('property_document')) {

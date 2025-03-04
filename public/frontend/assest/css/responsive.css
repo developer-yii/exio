@@ -1,4 +1,3 @@
-
 @media (max-width:1499px) {
     .checkProperty .main_property .left_propertyBox {
         width: 45%;
@@ -12,7 +11,9 @@
         width: 10%;
     }
 
-    #overView .overViewBox, #documents .documentBox, #locality .localityBox {
+    #overView .overViewBox,
+    #documents .documentBox,
+    #locality .localityBox {
         gap: 18px;
     }
 }
@@ -108,10 +109,11 @@
         gap: 0;
     }
 
-    .checkProperty .main_property .left_propertyBox, .checkProperty .main_property .right_propertyBox {
+    .checkProperty .main_property .left_propertyBox,
+    .checkProperty .main_property .right_propertyBox {
         width: 100%;
     }
-    
+
     .checkProperty .checkPropertyBox .topFilterBar .filterBox {
         width: 5%;
     }
@@ -120,7 +122,7 @@
         height: auto;
     }
 
-    .checkProperty .checkPropertyBox .proertyMapBox iframe {
+    .checkProperty .checkPropertyBox .proertyMapBox #map {
         display: none;
     }
 
@@ -149,7 +151,7 @@
     .propertyModal {
         padding: 0 15px;
     }
-     
+
     .left_traking_stepSec .stepallBox {
         gap: 10px;
     }
@@ -242,7 +244,7 @@
     .overview .stickyTabpanel ul li a {
         font-size: 15px;
     }
-    
+
 }
 
 @media (max-width:991px) {
@@ -376,6 +378,7 @@
 }
 
 @media (max-width: 767px) {
+
     /* header responsive */
     header .main-nav nav {
         position: fixed;
@@ -427,7 +430,7 @@
         left: calc(100% - 40px);
     }
 
-    header .main-nav .btn-box{
+    header .main-nav .btn-box {
         padding-right: 20px;
     }
 
@@ -435,6 +438,7 @@
         margin-left: 0;
         margin-right: 20px;
     }
+
     /* header responsive */
 
     .mobile {
@@ -463,7 +467,12 @@
         font-size: 22px;
     }
 
-    h1, h2, h3, h4, h5, h6 {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
         margin-bottom: 10px;
     }
 
@@ -496,7 +505,8 @@
         display: none;
     }
 
-    .about, .latesNews {
+    .about,
+    .latesNews {
         background: linear-gradient(to bottom, #ffffff 50%, #ffffff 50%);
     }
 
@@ -516,7 +526,8 @@
         padding-top: 0 !important;
     }
 
-    .latesNews .latesNewsBox .owl-nav .owl-prev img, .latesNews .latesNewsBox .owl-nav .owl-next img {
+    .latesNews .latesNewsBox .owl-nav .owl-prev img,
+    .latesNews .latesNewsBox .owl-nav .owl-next img {
         max-width: 40px;
     }
 
@@ -554,6 +565,7 @@
         height: 200px;
         position: relative;
     }
+
     .left_traking_stepSec .stepallBox .stepText {
         flex-wrap: wrap;
         width: 100%;
@@ -580,14 +592,14 @@
     .detailmainSec .detailsTextSec .priceShare {
         width: 100%;
     }
-    
+
     .detailmainSec .detailsTextSec .priceShare ul {
         justify-content: start;
     }
 
     .detailmainSec .endText p span.line {
         margin: 0 5px;
-    } 
+    }
 
     .detailmainSec .endText p {
         font-size: 14px;
@@ -623,10 +635,11 @@
     }
 
     .detail_Sec .detailsTextSec,
-    .detail_Sec .endText, .detail_Sec .menuBread {
+    .detail_Sec .endText,
+    .detail_Sec .menuBread {
         padding: 0 20px;
     }
-     
+
     .detailmainSec .imageGallery .rightImg {
         display: none;
     }
@@ -710,7 +723,11 @@
         transform: rotate(90deg);
     }
 
-    #amenites, #master_plan, #propert_document, #documents, #developers .title {
+    #amenites,
+    #master_plan,
+    #propert_document,
+    #documents,
+    #developers .title {
         margin: 0 !important;
     }
 
@@ -753,12 +770,14 @@
         color: var(--blue-color);
     }
 
-    #master_plan .tabBox nav, #floor_paln .tabBox nav {
+    #master_plan .tabBox nav,
+    #floor_paln .tabBox nav {
         justify-content: center;
         border-bottom: none;
     }
 
-    #master_plan .tabBox .nav-tabs, #floor_paln .tabBox .nav-tabs {
+    #master_plan .tabBox .nav-tabs,
+    #floor_paln .tabBox .nav-tabs {
         border-bottom: none;
     }
 
@@ -1068,7 +1087,7 @@
         border-radius: 50%;
     }
 
-    .about .aboutBox  .aboutText .aboutInfo .boxbox {
+    .about .aboutBox .aboutText .aboutInfo .boxbox {
         width: calc(46%);
     }
 
@@ -1076,7 +1095,9 @@
         display: none;
     }
 
-    footer .footer-box .quickLinks ul li a, footer .footer-box .getInTouch ul li a, .footer-part .copyRight .privacy ul li a {
+    footer .footer-box .quickLinks ul li a,
+    footer .footer-box .getInTouch ul li a,
+    .footer-part .copyRight .privacy ul li a {
         font-size: 14px;
     }
 
@@ -1087,6 +1108,7 @@
     .footer-part .copyRight .privacy ul li:last-child {
         padding-right: 0 !important;
     }
+
     .footer-part .copyRight .privacy ul li:first-child {
         padding-left: 0 !important;
     }
@@ -1103,7 +1125,8 @@
         font-size: 16px;
     }
 
-    .feetSelectBox .checkbox__label, .lookingProperty .feetSelectBox .clickTo .keyword-label {
+    .feetSelectBox .checkbox__label,
+    .lookingProperty .feetSelectBox .clickTo .keyword-label {
         font-size: 16px;
     }
 
@@ -1132,7 +1155,7 @@
         width: 100%;
         height: 100%;
     }
-     
+
     .btn-container {
         flex-wrap: wrap;
     }
@@ -1148,7 +1171,7 @@
         gap: 10px;
     }
 
-    #map_view .mapMianbox .mapmain iframe {
+    #map_view .mapMianbox .mapmain #map {
         min-height: 300px;
     }
 
@@ -1262,7 +1285,8 @@
         bottom: -50px;
     }
 
-    .latesNews .latesNewsBox .owl-nav .owl-prev img, .latesNews .latesNewsBox .owl-nav .owl-next img {
+    .latesNews .latesNewsBox .owl-nav .owl-prev img,
+    .latesNews .latesNewsBox .owl-nav .owl-next img {
         max-width: 35px;
     }
 
@@ -1276,7 +1300,7 @@
 
     .question .accordion-button {
         font-size: 16px;
-    } 
+    }
 
     .about .aboutBox .aboutText .btnExplore {
         width: 100%;
@@ -1346,7 +1370,7 @@
     #documents .documentBox .boxBox {
         width: 100%;
     }
-    
+
     .aboutUs .countourView .box {
         width: calc(100%);
     }
@@ -1388,7 +1412,7 @@
         max-width: 250px;
     }
 
-    .compare_project .borderBox .owl-nav .owl-prev img, 
+    .compare_project .borderBox .owl-nav .owl-prev img,
     .compare_project .borderBox .owl-nav .owl-next img {
         max-width: 28px;
     }

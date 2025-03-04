@@ -9,7 +9,8 @@
                     <a href="javascript:void(0)"><i class="fa-solid fa-bars"></i></a>
                 </div>
                 <div class="logo-box">
-                    <a href="{{route('front.home')}}"><img src="{{ $baseUrl }}assest/images/logo-img.png" alt="logo-img" /></a>
+                    <a href="{{ route('front.home') }}"><img src="{{ $baseUrl }}assest/images/logo-img.png"
+                            alt="logo-img" /></a>
                 </div>
                 <div class="main-nav">
                     <ul>
@@ -52,7 +53,7 @@
                             </ul>
                         </li>
                         <li class="moblieHide">
-                            <a href="check_property_video.html" class="second-menu"><i
+                            <a href="{{ route('front.check-and-match-property') }}" class="second-menu"><i
                                     class="fa-solid fa-circle-check"></i> Check and
                                 match property</a>
                         </li>
@@ -60,7 +61,8 @@
                             <a href="javascript:void(0)" class="user-menu"><i class="fa-solid fa-user"></i></a>
                             <ul class="userDropDown">
                                 @if (Auth::user())
-                                    <li><a href=""><img src="{{ $baseUrl }}assest/images/login.png" alt="login">Profile({{Auth::user()->name}})</a></li>
+                                    <li><a href=""><img src="{{ $baseUrl }}assest/images/login.png"
+                                                alt="login">Profile({{ Auth::user()->name }})</a></li>
                                 @else
                                     <li>
                                         <a href="{{ route('login') }}">
@@ -86,8 +88,9 @@
                                             alt="assist">Property Assist</a>
                                 </li>
                                 <li>
-                                    <a href="{{route('contact-us')}}">
-                                        <img src="{{ $baseUrl }}assest/images/contact.png" alt="contact">Contact Us
+                                    <a href="{{ route('contact-us') }}">
+                                        <img src="{{ $baseUrl }}assest/images/contact.png" alt="contact">Contact
+                                        Us
                                     </a>
                                 </li>
                                 @if (Auth::user())
