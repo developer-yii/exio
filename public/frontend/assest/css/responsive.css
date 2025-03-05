@@ -111,7 +111,7 @@
     .checkProperty .main_property .left_propertyBox, .checkProperty .main_property .right_propertyBox {
         width: 100%;
     }
-    
+
     .checkProperty .checkPropertyBox .topFilterBar .filterBox {
         width: 5%;
     }
@@ -149,7 +149,7 @@
     .propertyModal {
         padding: 0 15px;
     }
-     
+
     .left_traking_stepSec .stepallBox {
         gap: 10px;
     }
@@ -242,7 +242,7 @@
     .overview .stickyTabpanel ul li a {
         font-size: 15px;
     }
-    
+
 }
 
 @media (max-width:991px) {
@@ -580,14 +580,14 @@
     .detailmainSec .detailsTextSec .priceShare {
         width: 100%;
     }
-    
+
     .detailmainSec .detailsTextSec .priceShare ul {
         justify-content: start;
     }
 
     .detailmainSec .endText p span.line {
         margin: 0 5px;
-    } 
+    }
 
     .detailmainSec .endText p {
         font-size: 14px;
@@ -626,7 +626,7 @@
     .detail_Sec .endText, .detail_Sec .menuBread {
         padding: 0 20px;
     }
-     
+
     .detailmainSec .imageGallery .rightImg {
         display: none;
     }
@@ -766,8 +766,8 @@
         flex-wrap: wrap;
     }
 
-    #master_plan .tabBox .tab-content .tab-pane .viewText,
-    #master_plan .tabBox .tab-content .tab-pane .masterImg {
+    #master_plan .tabBox .viewText,
+    #master_plan .tabBox .tab-content {
         width: 100%;
     }
 
@@ -810,11 +810,28 @@
         max-width: 100px;
     }
 
-    #master_plan .tabBox .tab-content .tab-pane .viewText ul li a {
+    #master_plan .tabBox .viewText ul li a {
         background-color: var(--light-blue);
         width: 100%;
         padding: 5px 20px;
         border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    #master_plan .tabBox .viewText ul li a i {
+        color: #6A6A71;
+        font-size: 16px;
+        transition: 0.2s;
+    }
+
+    #master_plan .tabBox .viewText ul li a i.active {
+        transform: rotate(180deg);
+    }
+
+    #master_plan .tabBox .viewText ul li a span {
+        color: var(--heading-text);
     }
 
     #floor_paln .sliderImgSec .owl-nav {
@@ -909,9 +926,41 @@
         font-size: 14px;
     }
 
-    .comparePorjectModal .comparePorjectCard {
+    .comparePorjectModal .comparePorjectCard,
+    #master_plan .tabBox .newMaster {
         flex-wrap: wrap;
     }
+
+    #master_plan .tabBox .viewText {
+        position: relative;
+        margin-bottom: 0;
+    }
+
+    #master_plan .tabBox .viewText .dataDropdown {
+        position: absolute;
+        display: none;
+        left: 0;
+        top: 70px;
+        z-index: 55;
+        width: 100%;
+        background: #fff;
+        box-shadow: 0px 0px 10px #00000012;
+    }
+
+    #master_plan .tabBox .viewText .dataDropdown.active {
+        display: block;
+    }
+
+    #master_plan .tabBox .viewText .dataDropdown li a {
+        background-color: #fff;
+        transition: 0.2s;
+        display: block;
+    }
+
+    #master_plan .tabBox .viewText .dataDropdown li a:hover {
+        background-color: var(--light-blue);
+    }
+
 }
 
 @media (max-width:575px) {
@@ -1132,7 +1181,7 @@
         width: 100%;
         height: 100%;
     }
-     
+
     .btn-container {
         flex-wrap: wrap;
     }
@@ -1276,7 +1325,7 @@
 
     .question .accordion-button {
         font-size: 16px;
-    } 
+    }
 
     .about .aboutBox .aboutText .btnExplore {
         width: 100%;
@@ -1346,7 +1395,7 @@
     #documents .documentBox .boxBox {
         width: 100%;
     }
-    
+
     .aboutUs .countourView .box {
         width: calc(100%);
     }
@@ -1388,7 +1437,7 @@
         max-width: 250px;
     }
 
-    .compare_project .borderBox .owl-nav .owl-prev img, 
+    .compare_project .borderBox .owl-nav .owl-prev img,
     .compare_project .borderBox .owl-nav .owl-next img {
         max-width: 28px;
     }
@@ -1399,6 +1448,14 @@
 
     .compare_project .borderBox .owl-nav .owl-prev {
         left: -40px;
+    }
+
+    .detailmainSec .imageGallery .leftVideo .videoCoverImage video {
+        height: 290px;
+    }
+
+    .share_property .modal-body {
+        padding: 15px 15px 40px 15px;
     }
 }
 

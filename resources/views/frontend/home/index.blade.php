@@ -100,54 +100,53 @@
     <section class="bestProperty webViewSection">
         <div class="container">
             <div class="sectionTitleBox">
-                <h3>Best Property In Ahmedabad</h3>
+                <h3>Best Properties</h3>
             </div>
             <div class="bestPropertyBox">
                 <div class="row">
                     @if ($top_properties->count() > 0)
                         @foreach ($top_properties as $property)
                             <div class="col-xl-4 col-md-6">
-                                <div class="propertySec">
-                                    <div class="imgBox">
-                                        @if ($property->cover_image)
-                                            <img src="{{ asset('/storage/project_images/' . $property->cover_image) }}"
-                                                alt="property-img" loading="lazy">
-                                        @else
-                                            <img src="{{ $baseUrl }}assest/images/property-img.png" alt="property-img"
-                                                loading="lazy">
-                                        @endif
-                                    </div>
-                                    <div class="propertyName">
-                                        <h5>{{ $property->project_name }}</h5>
-                                    </div>
-                                    <div class="locationProperty">
-                                        <div class="homeBox comBox">
-                                            <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home">
-                                            <p>{{ $property->custom_property_type ?? '' }}</p>
+                                <a href="{{route('property.details', [$property->slug])}}">
+                                    <div class="propertySec">
+                                        <div class="imgBox">
+                                            @if ($property->cover_image)
+                                                <img src="{{ asset('/storage/project_images/' . $property->cover_image) }}"
+                                                    alt="property-img" loading="lazy">
+                                            @else
+                                                <img src="{{ $baseUrl }}assest/images/property-img.png" alt="property-img"
+                                                    loading="lazy">
+                                            @endif
                                         </div>
-                                        <div class="location comBox">
-                                            <img src="{{ $baseUrl }}assest/images/Location.png" alt="Location">
-                                            <p>{{ $property->location->location_name . ', ' . $property->city->city_name }}
-                                            </p>
+                                        <div class="propertyName">
+                                            <h5>{{ $property->project_name }}</h5>
                                         </div>
-                                    </div>
-                                    <div class="suggestBox">
-                                        <div class="leftBtn">
-                                            <a href="javascript:void(0)"><img
-                                                    src="{{ $baseUrl }}assest/images/x-btn.png" alt="x-btn"></a>
+                                        <div class="locationProperty">
+                                            <div class="homeBox comBox">
+                                                <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home">
+                                                <p>{{ $property->custom_property_type ?? '' }}</p>
+                                            </div>
+                                            <div class="location comBox">
+                                                <img src="{{ $baseUrl }}assest/images/Location.png" alt="Location">
+                                                <p>{{ $property->location->location_name . ', ' . $property->city->city_name }}
+                                                </p>
+                                            </div>
                                         </div>
-                                        <div class="rightBar">
-                                            <h5>{{ $property->exio_suggest_percentage }}%</h5>
-                                            <div class="progress">
-                                                <div class="progress-bar"
-                                                    style="width: {{ $property->exio_suggest_percentage }}%"
-                                                    role="progressbar"
-                                                    aria-valuenow="{{ $property->exio_suggest_percentage }}"
-                                                    aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="suggestBox">
+                                            <div class="leftBtn">
+                                                {{-- <a href="javascript:void(0)"> --}}
+                                                    <img src="{{ $baseUrl }}assest/images/x-btn.png" alt="x-btn">
+                                                {{-- </a> --}}
+                                            </div>
+                                            <div class="rightBar">
+                                                <h5>{{ $property->exio_suggest_percentage }}%</h5>
+                                                <div class="progress">
+                                                    <div class="progress-bar" style="width: {{ $property->exio_suggest_percentage }}%" role="progressbar" aria-valuenow="{{ $property->exio_suggest_percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </a>
                             </div>
                         @endforeach
                     @endif
@@ -162,53 +161,53 @@
     <section class="bestProperty mobileViewSection">
         <div class="container">
             <div class="sectionTitleBox">
-                <h3>Best Property In Ahmedabad</h3>
+                <h3>Best Properties</h3>
             </div>
             <div class="bestPropertyBox">
                 <div class="owl-carousel owl-theme">
                     @if ($top_properties->count() > 0)
                         @foreach ($top_properties as $property)
                             <div class="item">
-                                <div class="propertySec">
-                                    <div class="imgBox">
-                                        @if ($property->cover_image)
-                                            <img src="{{ asset('/storage/project_images/' . $property->cover_image) }}"
-                                                alt="property-img" loading="lazy">
-                                        @else
-                                            <img src="{{ $baseUrl }}assest/images/property-img.png"
-                                                alt="property-img" loading="lazy">
-                                        @endif
-                                    </div>
-                                    <div class="propertyName">
-                                        <h5>{{ $property->project_name }}</h5>
-                                    </div>
-                                    <div class="locationProperty">
-                                        <div class="homeBox comBox">
-                                            <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home">
-                                            <p>{{ $property->custom_property_type ?? '' }}</p>
+                                <a href="{{route('property.details', [$property->slug])}}">
+                                    <div class="propertySec">
+                                        <div class="imgBox">
+                                            @if ($property->cover_image)
+                                                <img src="{{ asset('/storage/project_images/' . $property->cover_image) }}" alt="property-img" loading="lazy">
+                                            @else
+                                                <img src="{{ $baseUrl }}assest/images/property-img.png" alt="property-img" loading="lazy">
+                                            @endif
                                         </div>
-                                        <div class="location comBox">
-                                            <img src="{{ $baseUrl }}assest/images/Location.png" alt="Location">
-                                            <p>{{ $property->location->location_name . ', ' . $property->city->city_name }}
-                                            </p>
+                                        <div class="propertyName">
+                                            <h5>{{ $property->project_name }}</h5>
                                         </div>
-                                    </div>
-                                    <div class="suggestBox">
-                                        <div class="leftBtn">
-                                            <a href="javascript:void(0)"><img
-                                                    src="{{ $baseUrl }}assest/images/x-btn.png" alt="x-btn"></a>
+                                        <div class="locationProperty">
+                                            <div class="homeBox comBox">
+                                                <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home">
+                                                <p>{{ $property->custom_property_type ?? '' }}</p>
+                                            </div>
+                                            <div class="location comBox">
+                                                <img src="{{ $baseUrl }}assest/images/Location.png" alt="Location">
+                                                <p>{{ $property->location->location_name . ', ' . $property->city->city_name }}
+                                                </p>
+                                            </div>
                                         </div>
-                                        <div class="rightBar">
-                                            <h5>{{ $property->exio_suggest_percentage }}%</h5>
-                                            <div class="progress">
-                                                <div class="progress-bar" role="progressbar"
-                                                    style="width: {{ $property->exio_suggest_percentage }}%"
-                                                    aria-valuenow="{{ $property->exio_suggest_percentage }}"
-                                                    aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="suggestBox">
+                                            <div class="leftBtn">
+                                                <img src="{{ $baseUrl }}assest/images/x-btn.png" alt="x-btn">
+                                            </div>
+                                            <div class="rightBar">
+                                                <h5>{{ $property->exio_suggest_percentage }}%</h5>
+                                                <div class="progress">
+                                                    <div class="progress-bar" role="progressbar"
+                                                        style="width: {{ $property->exio_suggest_percentage }}%"
+                                                        aria-valuenow="{{ $property->exio_suggest_percentage }}"
+                                                        aria-valuemin="0" aria-valuemax="100">
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </a>
                             </div>
                         @endforeach
                     @endif

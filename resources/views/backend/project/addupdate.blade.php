@@ -145,11 +145,14 @@
                                 <div class="col-md-12">
                                     <div class="form-group mb-3">
                                         <label for="project_about" class="form-label">Project About</label>
-                                        <div id="project_about" style="height: 100px;">
+                                        {{-- <div id="project_about" style="height: 100px;">
                                             @if (isset($model->id) && !empty($model->project_about))
                                                 {!! $model->project_about !!}
                                             @endif
-                                        </div>
+                                        </div> --}}
+                                        <textarea name="project_about" class="form-control project_about" id="project_about">
+                                            @if (isset($model->id)) {!! $model->project_about !!} @endif
+                                        </textarea>
                                         <span class="error"></span>
                                     </div>
                                 </div>
@@ -860,8 +863,8 @@
         @if (isset($existingProjectImages))
             var existingProjectImages = {!! json_encode($existingProjectImages) !!};
         @endif
-        console.log(existingProjectImages);
         var assetUrl = "{{ asset('') }}";
+        var uploadImageUrl = "{{ route('admin.ckeditor.image.upload') }}";
     </script>
 @endsection
 

@@ -45,7 +45,7 @@
 @section('js')
     <script>
         var addUpdateUrl = "{{ route('admin.page.update') }}";
-        var uploadImageUrl = "{{ route('admin.page.image') }}";
+        var uploadImageUrl = "{{ route('admin.ckeditor.image.upload') }}";
     </script>
 @endsection
 

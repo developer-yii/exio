@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Frondend\ContactController;
+use App\Http\Controllers\Frondend\PropertyController;
 use App\Http\Controllers\Frontend\AuthController;
 use App\Http\Controllers\Frontend\CityController;
 use Illuminate\Support\Facades\Route;
@@ -43,7 +44,16 @@ Route::middleware('guest')->group(function () {
 
     Route::get('contact-us', [ContactController::class, 'index'])->name('contact-us');
     Route::post('contact-us/submit', [ContactController::class, 'submit'])->name('contact.submit');
+
 });
+
+Route::group(['prefix' => 'property'], function () {
+    Route::get('/{slug}', [PropertyController::class, 'details'])->name('property.details');
+    // Route::get('/details/{slug}/{id}', [PropertyController::class, 'details'])->name('property.details');
+    Route::post('/details/like-unlike', [PropertyController::class, 'addRemoveWishlist'])->name('property.like-unlike');
+    Route::post('/details/download-brochure-form', [PropertyController::class, 'downloadBrochureForm'])->name('property.download-brochure-form');
+});
+
 
 Route::middleware(['auth', 'isUser'])->group(function () {
 

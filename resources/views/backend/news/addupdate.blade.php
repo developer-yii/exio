@@ -117,7 +117,7 @@
     <script>
         var addUpdateUrl = "{{ route('admin.news.addupdate') }}";
         var newsUrl = "{{ route('admin.news') }}";
-        var uploadImageUrl = "{{ route('admin.news.image') }}";
+        var uploadImageUrl = "{{ route('admin.ckeditor.image.upload') }}";
     </script>
 @endsection
 

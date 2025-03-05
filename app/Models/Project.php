@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Project extends Model
 {
@@ -102,4 +103,51 @@ class Project extends Model
     {
         return $this->hasMany(ProjectImage::class, 'project_id');
     }
+
+    public function wishlistedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'property_wishlists', 'project_id', 'user_id');
+    }
+
+    public function wishlist()
+    {
+        return $this->hasMany(PropertyWishlist::class, 'project_id');
+    }
+
+    public function getVideoUrl()
+    {
+        $video = $this->video;
+        if ($video) {
+            $filePath = "public/project/videos/{$video}";  // Updated path based on type
+            if (Storage::disk('local')->exists($filePath)) {
+                return asset('storage/project/videos/' . $video);  // Correct URL structure
+            }
+        }
+        return '';  // Return an empty string if the file doesn't exist
+    }
+
+    public function getCoverImageUrl()
+    {
+        $coverImage = $this->cover_image;
+        if ($coverImage) {
+            $filePath = "public/project_images/{$coverImage}";  // Updated path based on type
+            if (Storage::disk('local')->exists($filePath)) {
+                return asset('storage/project_images/' . $coverImage);  // Correct URL structure
+            }
+        }
+        return asset('images/no_image_available.jpg');
+    }
+
+    public function getDocumentUrl()
+    {
+        $document = $this->property_document;
+        if ($document) {
+            $filePath = "public/property_documents/{$document}";  // Updated path based on type
+            if (Storage::disk('local')->exists($filePath)) {
+                return asset('storage/property_documents/' . $document);  // Correct URL structure
+            }
+        }
+        return asset('images/no_image_available.jpg');
+    }
+
 }

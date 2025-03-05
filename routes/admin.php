@@ -43,6 +43,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('confirm-password', [ConfirmablePasswordController::class, 'store'])->name('password.confirm.post');
 
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::post('/upload-image', [DashboardController::class, 'ckEditorimageUpload'])->name('ckeditor.image.upload');
 
         Route::group(['prefix' => 'profile'], function () {
             Route::get('/', [UserController::class, 'profile'])->name('profile');
@@ -71,7 +72,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::group(['prefix' => 'cms-page'], function () {
             Route::get('/{page_name}', [CmsPagesController::class, 'index'])->name('page');
             Route::post('/update', [CmsPagesController::class, 'update'])->name('page.update');
-            Route::post('/upload-image', [CmsPagesController::class, 'imageUpload'])->name('page.image');
         });
 
 
@@ -162,7 +162,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/edit/{news_id}', [NewsController::class, 'edit'])->name('news.edit');
             Route::post('/delete', [NewsController::class, 'delete'])->name('news.delete');
             Route::post('/addupdate', [NewsController::class, 'addupdate'])->name('news.addupdate');
-            Route::post('/upload-image', [NewsController::class, 'imageUpload'])->name('news.image');
         });
     });
 });

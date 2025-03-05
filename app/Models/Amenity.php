@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Amenity extends Model
 {
@@ -30,5 +31,17 @@ class Amenity extends Model
     public function updatedBy()
     {
         return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    public function getAmenityIconUrl()
+    {
+        $amenityIcon = $this->amenity_icon;
+        if ($amenityIcon) {
+            $filePath = "public/amenity/icon/{$amenityIcon}";  // Updated path based on type
+            if (Storage::disk('local')->exists($filePath)) {
+                return asset('storage/amenity/icon/' . $amenityIcon);  // Correct URL structure
+            }
+        }
+        return asset('images/no_image_available.jpg');
     }
 }

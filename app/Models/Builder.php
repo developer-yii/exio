@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Builder extends Model
 {
@@ -40,5 +41,17 @@ class Builder extends Model
     public function projects()
     {
         return $this->hasMany(Project::class, 'builder_id', 'id');
+    }
+
+    public function getBuilderLogoUrl()
+    {
+        $builderLogo = $this->builder_logo;
+        if ($builderLogo) {
+            $filePath = "public/builder/logo/{$builderLogo}";  // Updated path based on type
+            if (Storage::disk('local')->exists($filePath)) {
+                return asset('storage/builder/logo/' . $builderLogo);  // Correct URL structure
+            }
+        }
+        return asset('images/no_image_available.jpg');
     }
 }

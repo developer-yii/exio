@@ -1,4 +1,11 @@
 <?php
+
+use App\Models\Amenity;
+use App\Models\Project;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
 if (! function_exists('pr')) {
     function pr($data)
     {
@@ -88,3 +95,124 @@ if (!function_exists('getSetting')) {
         return $settings[$option_key] ?? $default;
     }
 }
+if (!function_exists('ckEditoruploadImage')) {
+    function ckEditoruploadImage(Request $request, string $defaultFolder = 'uploads', int $maxSize = 5120)
+    {
+        // Validate the request
+        $folder = $request->query('folder', $defaultFolder);
+
+        $request->validate([
+            'upload' => "required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:$maxSize",
+        ]);
+
+        $image = $request->file('upload');
+
+        // Generate unique filename
+        $fileName = time() . '_' . Str::random(20) . '.' . $image->getClientOriginalExtension();
+        $relativePath = "public/{$folder}/editor_images/" . $fileName; // Relative path
+
+        // Store the file
+        $path = Storage::put($relativePath, file_get_contents($image));
+
+        if (!$path) {
+            return [
+                'uploaded' => false,
+                'error'    => ['message' => 'Failed to upload image.'],
+            ];
+        }
+
+        // Return success response
+        return [
+            "uploaded" => 1,
+            "fileName" => $fileName,
+            "url"      => Storage::url($relativePath),
+        ];
+    }
+}
+
+if (!function_exists('getDeviceType')) {
+    function getDeviceType() {
+        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+
+        $mobileDevices = ['iPhone', 'Android', 'Windows Phone', 'BlackBerry'];
+
+        foreach ($mobileDevices as $device) {
+            if (stripos($userAgent, $device) !== false) {
+                return 'mobile';
+            }
+        }
+
+        return 'desktop';
+    }
+}
+
+if (!function_exists('formatPriceUnit')) {
+    function formatPriceUnit($price_unit) {
+        $price_unit =  Project::$priceUnit[$price_unit];
+        return $price_unit;
+    }
+}
+
+if (!function_exists('getPropertyType')) {
+    function getPropertyType($property_type) {
+        if ($property_type === 'both') {
+            // Exclude 'Both' and return only 'Residential, Commercial'
+            return implode(', ', array_diff(Project::$propertyType, ['Both']));
+        }
+        return Project::$propertyType[$property_type] ?? 'Unknown';
+    }
+}
+
+
+if (!function_exists('getAgeOfConstruction')) {
+    function getAgeOfConstruction($age_of_construction) {
+        return Project::$ageOfConstruction[$age_of_construction] ?? 'Unknown';
+    }
+}
+
+if (! function_exists('getFormatedDate')) {
+    function getFormatedDate($date, $format)
+    {
+        return \Carbon\Carbon::createFromFormat('Y-m-d', $date)->format($format);
+    }
+}
+
+if (!function_exists('getProgressBarColorClass')) {
+    function getProgressBarColorClass($percentage)
+    {
+        if ($percentage <= 25) return 'yellowLight';        // 0 - 25% (Red)
+        if ($percentage <= 50) return 'yellow';     // 26 - 50% (Orange)
+        if ($percentage <= 75) return 'brown';     // 51 - 75% (Yellow)
+        return 'green';                             // 76 - 100% (Green)
+    }
+}
+
+if (!function_exists('convertToLacs')) {
+    function convertToLacs($price, $unit)
+    {
+        if ($unit == 'crores') {
+            return $price * 100; // 1 Crore = 100 Lacs
+        }
+        return $price; // Already in Lacs
+    }
+}
+
+if (!function_exists('getAmenitiesList')) {
+    function getAmenitiesList($amenities)
+    {
+        if (!$amenities) {
+            return '';
+        }
+
+        $amenitiesArray = Amenity::whereIn('id', explode(',', $amenities))
+            ->pluck('amenity_name')
+            ->toArray();
+
+        return implode(', ', $amenitiesArray);
+    }
+}
+
+
+
+
+

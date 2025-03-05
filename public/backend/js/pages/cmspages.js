@@ -50,11 +50,14 @@ $(document).ready(function () {
     // }
 
 
-    CKEDITOR.replace( 'content', {
-        height: 600,
-        filebrowserUploadUrl: uploadImageUrl + '?_token=' + document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-        filebrowserImageUploadUrl: uploadImageUrl + '?_token=' + document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-    });
+    // CKEDITOR.replace( 'content', {
+    //     height: 600,
+    //     filebrowserUploadUrl: uploadImageUrl + '?_token=' + document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+    //     filebrowserImageUploadUrl: uploadImageUrl + '?_token=' + document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+    // });
+
+
+    initializeCKEditor("content", 600, "cmspages");
 
     let tableId = '#dataTableMain',
         formId = '#add-form';
