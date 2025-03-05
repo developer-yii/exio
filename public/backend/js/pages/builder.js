@@ -1,63 +1,65 @@
 $(document).ready(function () {
-    let quill = "";
-    if ($("#builder_about").length > 0) {
-        quill = new Quill("#builder_about", {
-            theme: "snow",
-            modules: {
-                imageResize: {
-                    displaySize: true,
-                },
-                toolbar: [
-                    [{ font: [] }, { size: [] }],
-                    ["bold", "italic", "underline", "strike"],
-                    [{ color: [] }, { background: [] }],
-                    [{ script: "super" }, { script: "sub" }],
-                    [
-                        { header: [!1, 1, 2, 3, 4, 5, 6] },
-                        "blockquote",
-                        "code-block",
-                    ],
-                    [
-                        { list: "ordered" },
-                        { list: "bullet" },
-                        { indent: "-1" },
-                        { indent: "+1" },
-                    ],
-                    ["direction", { align: [] }],
-                    ["link", "image"],
-                    ["clean"],
-                ],
-            },
-        });
+    // let quill = "";
+    // if ($("#builder_about").length > 0) {
+    //     quill = new Quill("#builder_about", {
+    //         theme: "snow",
+    //         modules: {
+    //             imageResize: {
+    //                 displaySize: true,
+    //             },
+    //             toolbar: [
+    //                 [{ font: [] }, { size: [] }],
+    //                 ["bold", "italic", "underline", "strike"],
+    //                 [{ color: [] }, { background: [] }],
+    //                 [{ script: "super" }, { script: "sub" }],
+    //                 [
+    //                     { header: [!1, 1, 2, 3, 4, 5, 6] },
+    //                     "blockquote",
+    //                     "code-block",
+    //                 ],
+    //                 [
+    //                     { list: "ordered" },
+    //                     { list: "bullet" },
+    //                     { indent: "-1" },
+    //                     { indent: "+1" },
+    //                 ],
+    //                 ["direction", { align: [] }],
+    //                 ["link", "image"],
+    //                 ["clean"],
+    //             ],
+    //         },
+    //     });
 
-        quill.getModule("toolbar").addHandler("image", () => {
-            const input = document.createElement("input");
-            input.setAttribute("type", "file");
-            input.setAttribute("accept", "image/*");
-            input.click();
+    //     quill.getModule("toolbar").addHandler("image", () => {
+    //         const input = document.createElement("input");
+    //         input.setAttribute("type", "file");
+    //         input.setAttribute("accept", "image/*");
+    //         input.click();
 
-            input.onchange = () => {
-                const file = input.files[0];
-                // Validate file
-                if (!file.type.match(/^image\/(jpeg|png|gif)$/)) {
-                    alert("Invalid file type. Please select an image file.");
-                    return;
-                }
-                if (file.size > 2 * 1024 * 1024) {
-                    // 2MB limit
-                    alert("File is too large. Maximum size is 2MB.");
-                    return;
-                }
-                const reader = new FileReader();
-                reader.onload = () => {
-                    const base64Image = reader.result;
-                    const range = quill.getSelection();
-                    quill.insertEmbed(range.index, "image", base64Image);
-                };
-                reader.readAsDataURL(file);
-            };
-        });
-    }
+    //         input.onchange = () => {
+    //             const file = input.files[0];
+    //             // Validate file
+    //             if (!file.type.match(/^image\/(jpeg|png|gif)$/)) {
+    //                 alert("Invalid file type. Please select an image file.");
+    //                 return;
+    //             }
+    //             if (file.size > 2 * 1024 * 1024) {
+    //                 // 2MB limit
+    //                 alert("File is too large. Maximum size is 2MB.");
+    //                 return;
+    //             }
+    //             const reader = new FileReader();
+    //             reader.onload = () => {
+    //                 const base64Image = reader.result;
+    //                 const range = quill.getSelection();
+    //                 quill.insertEmbed(range.index, "image", base64Image);
+    //             };
+    //             reader.readAsDataURL(file);
+    //         };
+    //     });
+    // }
+
+    initializeCKEditor("builder_about", 300, "builder");
 
     let tableId = "#dataTableMain",
         formId = "#add-form",
@@ -88,14 +90,19 @@ $(document).ready(function () {
     $(formId).submit(function (event) {
         event.preventDefault();
         var $this = $(this);
+
+        for ( instance in CKEDITOR.instances ) {
+            CKEDITOR.instances[instance].updateElement();
+        }
+
         var formData = new FormData(this);
 
         $(formId).find(".error").html("");
         $(formId).find(".is-invalid").removeClass("is-invalid");
 
-        if (quill) {
-            formData.append("builder_about", quill.root.innerHTML);
-        }
+        // if (quill) {
+        //     formData.append("builder_about", quill.root.innerHTML);
+        // }
 
         $.ajax({
             url: addUpdateUrl,
@@ -111,8 +118,6 @@ $(document).ready(function () {
             success: function (result) {
                 $($this).find('button[type="submit"]').prop("disabled", false);
                 $($this).find('button[type="submit"]').html("Save");
-
-                console.log(result);
 
                 if (result.status == true) {
                     $this[0].reset();
@@ -170,13 +175,18 @@ $(document).ready(function () {
                     $(formId)
                         .find(".builder_name")
                         .val(result.data.builder_name);
-                    $(formId)
-                        .find(".builder_about")
-                        .val(result.data.builder_about || "");
-                    if (quill) {
-                        console.log(result.data.builder_about);
-                        quill.root.innerHTML = result.data.builder_about || ""; // Safely set Quill content
+                    // $(formId)
+                    //     .find(".builder_about")
+                    //     .val(result.data.builder_about || "");
+
+                    if (CKEDITOR.instances['builder_about']) {
+                        CKEDITOR.instances['builder_about'].setData(result.data.builder_about || "");
                     }
+
+                    // if (quill) {
+                    //     console.log(result.data.builder_about);
+                    //     quill.root.innerHTML = result.data.builder_about || ""; // Safely set Quill content
+                    // }
                     $(formId).find(".city_id").val(result.data.city_id);
                     $(formId).find(".status").val(result.data.status);
                 } else {
