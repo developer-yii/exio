@@ -96,15 +96,17 @@
                             <div class="col-md-12">
                                 <div class="form-group mb-3">
                                     <label for="builder_about" class="form-label">Builder About </label>
-                                    <div id="builder_about" name="builder_about" class="builder_about"
-                                        style="height: 100px;"></div>
+                                    <textarea name="builder_about" class="form-control builder_about" id="builder_about"></textarea>
+
+                                    {{-- <div id="builder_about" name="builder_about" class="builder_about"
+                                        style="height: 100px;"></div> --}}
                                     <span class="error"></span>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label for="city_id" class="form-label">City </label>
+                                    <label for="city_id" class="form-label">City <span class="text-danger add_edit_required">*</span></label>
                                     <select id="city_id" class="form-control city_id" name="city_id">
                                         <option value="">Select City</option>
                                         @if (isset($cities) && count($cities) > 0)
@@ -159,7 +161,7 @@
                                         <th width="30%">Builder Name</th>
                                         <td><span class="builder_name"></span></td>
                                     </tr>
-                                    <tr>    
+                                    <tr>
                                         <th width="30%">Builder Logo</th>
                                         <td><span class="builder_logo"></span></td>
                                     </tr>
@@ -204,6 +206,7 @@
         var detailUrl = "{{ route('admin.builder.detail') }}";
         var deleteUrl = "{{ route('admin.builder.delete') }}";
         var addUpdateUrl = "{{ route('admin.builder.addupdate') }}";
+        var uploadImageUrl = "{{ route('admin.ckeditor.image.upload') }}";
     </script>
 @endsection
 

@@ -92,37 +92,5 @@ class CmsPagesController extends Controller
     //     echo $response;
     // }
 
-    public function imageUpload(Request $request)
-{
-    $request->validate([
-        'upload' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-    ]);
-
-    $image = $request->file('upload');
-
-    // Define storage path
-    $fileName = uniqid() . '.' . $image->getClientOriginalExtension();
-    $relativePath = "public/cmspages/" . $fileName; // Relative path for Laravel Storage
-
-    // Store the file properly
-    $path = Storage::put($relativePath, file_get_contents($image));
-
-    if ($path) {
-        $url = Storage::url($relativePath); // Get the public URL
-    } else {
-        return response()->json([
-            'uploaded' => false,
-            'error'    => ['message' => 'Failed to upload image.'],
-        ]);
-    }
-
-    $CKEditorFuncNum = $request->input('CKEditorFuncNum');
-    return response()->json([
-        "uploaded" => 1,
-        "fileName" => $fileName,
-        "url"      => $url,
-    ]);
-}
-
 
 }

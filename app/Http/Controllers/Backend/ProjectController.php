@@ -635,4 +635,5 @@ class ProjectController extends Controller
         $propertySubTypes = Project::getPropertySubTypes($request->property_type);
         return response()->json(['status' => true, 'message' => '', 'data' => $propertySubTypes]);
     }
+
 }

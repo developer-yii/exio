@@ -703,7 +703,7 @@ header .header-box .mobileIcon {
     width: 30%;
 }
 
-.bestProperty .propertySec .suggestBox .leftBtn a img {
+.bestProperty .propertySec .suggestBox .leftBtn img {
     max-width: 120px;
     width: 100%;
 }
@@ -1691,10 +1691,10 @@ body.matchProperty {
     -webkit-box-orient: vertical;
     margin-bottom: 0;
     width: 100%;
-    max-width: 250px;
+    max-width: 320px;
 }
 
-.propertyCard .addressBox a {
+.propertyCard .addressBox span {
     color: var(--blue-color);
     margin-left: 5px;
 }
@@ -1733,7 +1733,7 @@ body.matchProperty {
     object-fit: cover;
 }
 
-.detailmainSec .imageGallery .leftVideo .videoCoverImage #map {
+.detailmainSec .imageGallery .leftVideo .videoCoverImage video {
     height: 375px;
 }
 
@@ -2024,12 +2024,22 @@ body.matchProperty {
     margin: 20px 0;
 }
 
-#master_plan .tabBox .tab-content .tab-pane .viewText {
+#master_plan .tabBox .newMaster {
+    display: flex;
+    gap: 20px;
+}
+
+#master_plan .tabBox .viewText {
     width: 35%;
+    margin: 20px 0;
+}
+
+#master_plan .tabBox .tab-content {
+    width: 65%;
 }
 
 #master_plan .tabBox .tab-content .tab-pane .masterImg {
-    width: 65%;
+    width: 100%;
     border: 1px solid var(--border-color);
     border-radius: 5px;
     padding: 6px;
@@ -2152,7 +2162,7 @@ body.matchProperty {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
-    justify-content: space-between;
+    justify-content: start;
 }
 
 #amenites .amenitesBox .amenitiesItem .itemsBox {
@@ -4464,3 +4474,107 @@ textarea.inputClass {
     box-shadow: none !important;
     outline: none;
 }
+
+/* --------- share_property modal css ------------ */
+
+.share_property .modal-content {
+    border: none;
+    border-radius: 0.6rem;
+}
+
+.share_property .modal-body {
+    border-radius: 10px;
+    padding: 20px 30px 50px 30px;
+}
+
+.share_property .modal-body .btn-close {
+    margin-left: auto;
+    display: block;
+    box-shadow: none;
+    outline: none;
+}
+
+.share_property .titlebox {
+    margin: 20px 0;
+}
+
+.share_property .titlebox p {
+    color: var(--gray-color);
+    font-weight: 400;
+    font-family: "Inter", serif;
+    font-size: 24px;
+    margin: 5px 0;
+    text-align: center;
+}
+
+.share_property .modal-body .iconBox ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    margin: 30px 0;
+}
+
+.share_property .modal-body .iconBox ul li a {
+    border-radius: 50%;
+}
+
+.share_property .modal-body .iconBox ul li a i {
+    font-size: 25px;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    color: #fff;
+    justify-content: center;
+}
+
+#whatsapp-link {
+    background-color: #25D366;
+}
+
+#facebook-link {
+    background-color: #3B5998;
+}
+
+#linkedin-link {
+    background-color: #007bb5;
+}
+
+#twitter-link {
+    background-color: #55ACEE;
+}
+
+.share_property .modal-body .input-group {
+    position: relative;
+}
+
+.share_property .modal-body .input-group input {
+    border: 1px solid #d7d7d7;
+    padding: 10px 60px 10px 10px;
+    border-radius: 30px !important;
+}
+
+.share_property .modal-body .input-group .btn-outline-secondary {
+    font-weight: 600;
+    font-family: "Inter", serif;
+    color: #d8232a;
+    font-size: 14px;
+    border: none;
+    padding: 0;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    line-height: 1;
+    box-shadow: none;
+    outline: none;
+}
+
+.share_property .modal-body .input-group .btn-outline-secondary:hover {
+    background-color: transparent;
+}
+
+
+/* --------- share_property modal css ------------ */

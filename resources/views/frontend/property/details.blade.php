@@ -1,0 +1,715 @@
+@php
+    $baseUrl = asset('frontend') . '/';
+    $metaTitle = "Exio | " . $project->project_name;
+    $metaDesc = $project->project_name. " by " . $project->builder->builder_name;
+@endphp
+
+@section('title', 'Property Details')
+@section('meta_details')
+    {{-- @include('frontend.include.meta', ['title' => $metaTitle, 'description' => $metaDesc]) --}}
+    @section('og_title', $metaTitle)
+    @section('og_description', $metaDesc)
+    @section('og_image', asset($project->builder->getBuilderLogoUrl()))
+    @section('og_url', url()->current())
+
+@endsection
+
+@extends('frontend.layouts.app')
+
+@section('title', 'Home Page')
+@section('content')
+    <!-- details banner -->
+    <section class="detail_Sec">
+        <div class="container">
+            <div class="detail_Box">
+                <div class="menuBread">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item" aria-current="page">Listing</li>
+                            <li class="breadcrumb-item" aria-current="page">{{ $project->project_name }}</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="detailmainSec">
+                    <div class="imageGallery">
+                        <div class="leftVideo">
+                            <div class="videoCoverImage">
+                                <video controls id="myVideo">
+                                    <source src="{{ $project->getVideoUrl() }}">
+                                </video>
+                                <div class="playIcon" id="playIcon">
+                                    <a href="javascript:void(0)"><img src="{{ $baseUrl }}assest/images/playBtn.png" alt="playBtn" loading="lazy"></a>
+                                </div>
+                            </div>
+
+                            @if ($project->projectImages->count() > 4)
+                                <div class="moreBnt mobile">
+                                    <a href="javascript:void(0)" class="lightBoximg">
+                                        {{ $project->projectImages->count() - 4 }}+ more Photos
+                                    </a>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="rightImg">
+                            @foreach ($project->projectImages->take(4) as $projImg)
+                                @if ($loop->last && $project->projectImages->count() > 4)
+                                    <div class="boxImg fourBox">
+                                        <a href="{{ $projImg->getProjectImageUrl() }}" data-fancybox="gallery">
+                                            <img src="{{ $projImg->getProjectImageUrl() }}" alt="Property Images" loading="lazy">
+                                        </a>
+                                        <div class="moreBnt">
+                                            <a href="javascript:void(0)" class="lightBoximg">{{ $project->projectImages->count() - 4 }}+ more
+                                                Photos</a>
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="boxImg">
+                                        <a href="{{ $projImg->getProjectImageUrl() }}" data-fancybox="gallery">
+                                            <img src="{{ $projImg->getProjectImageUrl() }}" alt="Project Image" loading="lazy">
+                                        </a>
+                                    </div>
+                                @endif
+                            @endforeach
+                            @foreach ($project->projectImages->skip(4) as $projImg)
+                                <a href="{{ $projImg->getProjectImageUrl() }}" data-fancybox="gallery" style="display: none;"></a>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="detailsTextSec">
+                        <div class="{{ getDeviceType() }}">
+                            <div class="siteDetails">
+                                <div class="logoMain">
+                                    <img src="{{ $project->builder->getBuilderLogoUrl() }}" loading="lazy">
+                                </div>
+                                <div class="textBox">
+                                    <h5>{{ $project->project_name }}</h5>
+                                    <span>By {{ $project->builder ? $project->builder->builder_name : '' }}</span>
+                                    <div class="locationProperty">
+                                        <div class="homeBox comBox">
+                                            <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home" loading="lazy">
+                                            <p>{{ $project->custom_property_type ?? '' }}</p>
+                                        </div>
+                                        <div class="location comBox">
+                                            <img src="{{ $baseUrl }}assest/images/Location.png" alt="Location" loading="lazy">
+                                            <p>{{ $project->location->location_name . ', ' . $project->city->city_name }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="priceShare">
+                            <ul>
+                                <li>
+                                    <a href="javascript:void(0)" class="save-property" data-id="{{ $project->id }}">
+                                        @if (Auth::user())
+                                            <a href="javascript:void(0)" class="save-property"
+                                                data-id="{{ $project->id }}">
+                                                <i
+                                                    class="{{ $project->wishlistedByUsers->contains(auth()->id()) ? 'fa-solid' : 'fa-regular' }} fa-heart"></i>
+                                                Save
+                                            </a>
+                                        @endif
+                                    </a>
+                                </li>
+
+                                <li><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#share_property"><i class="fa-solid fa-arrow-up-from-bracket"></i>Share</a>
+                                </li>
+                            </ul>
+                            <h5><span>₹ {{ $project->price_from }} {{ formatPriceUnit($project->price_from_unit) }}</span>
+                                - <span>₹ {{ $project->price_to }} {{ formatPriceUnit($project->price_to_unit) }}</span>
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="endText">
+                        <p><i class="fa-regular fa-calendar"></i> Possession by
+                            {{ getFormatedDate($project->possession_by, 'M, Y') }}
+                            <span class="line">|</span> RERA
+                            No. {{ $project->rera_number }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- details banner -->
+
+    <!-- propert overview section -->
+    <div class="overview">
+        @if (getDeviceType() == 'desktop')
+            <div class="stickyTabpanel desktop">
+                <div class="container">
+                    <ul>
+                        <li><a class="active" href="#overView">Overview</a></li>
+                        <li><a href="#master_plan">Master Plan</a></li>
+                        <li><a href="#floor_paln">Floor Plan</a></li>
+                        <li><a href="#amenites">Amenities</a></li>
+                        <li><a href="#propert_document">Brochure</a></li>
+                        <li><a href="#locality">Locality</a></li>
+                        <li><a href="#documents">Documents</a></li>
+                        <li><a href="#map_view">Map</a></li>
+                        <li><a href="#developers">Developer</a></li>
+                    </ul>
+                </div>
+            </div>
+        @endif
+        <div class="overViewSection">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8">
+                        @if (getDeviceType() == 'desktop')
+                            <div class="leftScrollSection desktop">
+                                @include('frontend.include.common-html-mobile-web', ['type' => 'overview'])
+
+                                {{-- master plan web view --}}
+                                <div id="master_plan">
+                                    <div class="materHeader">
+                                        <div class="tabBox">
+                                            <nav>
+                                                <h5>Master Plan</h5>
+                                                @include('frontend.include.common-html-mobile-web', ['type' => 'master-plan-2d-3d-section'])
+                                            </nav>
+                                            <div class="newMaster">
+                                                <div class="viewText">
+                                                    <ul id="masterPlanList" data-section="web">
+                                                        @foreach ($project->masterPlans as $index => $masterPlan)
+                                                            <li class="{{ $index === 0 ? 'active' : '' }}"
+                                                                data-index="{{ $index }}"
+                                                                data-2dImage="{{ $masterPlan->get2DImageUrl() }}"
+                                                                data-3dImage="{{ $masterPlan->get3DImageUrl() }}">
+                                                                <h6>{{ $masterPlan->name }}</h6>
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+
+                                                @include('frontend.include.common-html-mobile-web', ['type' => 'master-plan-2d-3d-image'])
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="floor_paln">
+                                    <div class="floorPlan">
+                                        <div class="tabBox">
+                                            <nav>
+                                                <div class="title">
+                                                    <h5>Floor Plan</h5>
+                                                    <p>{{ $project->floorPlans->count() }} Floor Plans Available</p>
+                                                </div>
+                                                @include('frontend.include.common-html-mobile-web', ['type' => 'floor-plan-2d-3d-section'])
+                                            </nav>
+                                            @include('frontend.include.common-html-mobile-web', ['type' => 'floor-plan-2d-3d-image'])
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="amenites">
+                                    <div class="amenitesBox">
+                                        <div class="title">
+                                            <h5>Amenities</h5>
+                                            <p>Total {{ count($amenitiesList) }}+ Amenities</p>
+                                        </div>
+                                        <div class="amenitiesItem">
+                                            @include('frontend.include.common-html-mobile-web', ['type' => 'amenities'])
+                                            @include('frontend.include.common-html-mobile-web', ['type' => 'amenities-more-button'])
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="propert_document">
+                                    <div class="title">
+                                        <h5>Property Documents</h5>
+                                    </div>
+                                    @include('frontend.include.common-html-mobile-web', ['type' => 'download-brochure'])
+                                </div>
+
+                                <div id="locality">
+                                    <div class="title">
+                                        <h5>Locality</h5>
+                                    </div>
+                                    <div class="localityBox">
+                                        @include('frontend.include.common-html-mobile-web', ['type' => 'localities'])
+                                        @include('frontend.include.common-html-mobile-web', ['type' => 'localities-more-button'])
+                                    </div>
+                                </div>
+
+                                @include('frontend.include.common-html-mobile-web', ['type' => 'rera-document'])
+
+                                <div id="map_view">
+                                    <div class="title">
+                                        <h5>Map View</h5>
+                                    </div>
+                                    <div class="mapMianbox">
+                                        @include('frontend.include.common-html-mobile-web', ['type' => 'map'])
+                                    </div>
+                                    @include('frontend.include.common-html-mobile-web', ['type' => 'about'])
+                                </div>
+                            </div>
+                        @endif
+                        @if (getDeviceType() == 'mobile')
+                            <div class="leftScrollSection mobile">
+                                <div class="accordion accordion-flush" id="accordionFlushExample">
+                                    {{-- overview --}}
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="flush-headingOne">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
+                                                aria-expanded="false" aria-controls="flush-collapseOne">
+                                                Overview
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseOne" class="accordion-collapse collapse"
+                                            aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                            <div class="accordion-body">
+                                                @include('frontend.include.common-html-mobile-web', ['type' => 'overview'])
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{-- master-plan mobile view --}}
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="flush-headingTwo">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo"
+                                                aria-expanded="false" aria-controls="flush-collapseTwo">
+                                                Master Plan
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseTwo" class="accordion-collapse collapse"
+                                            aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                                            <div class="accordion-body">
+                                                <div id="master_plan">
+                                                    <div class="materHeader">
+                                                        <div class="tabBox">
+                                                            <nav>
+                                                                <!-- <h5>Master Plan</h5> -->
+                                                                @include('frontend.include.common-html-mobile-web', ['type' => 'master-plan-2d-3d-section'])
+                                                            </nav>
+                                                            <div class="newMaster">
+                                                                <div class="viewText">
+                                                                    <ul id="master_plan">
+                                                                        <li>
+                                                                            @foreach ($project->masterPlans->take(1) as $index => $masterPlan)
+                                                                                <a class="masterClick" href="javascript:void(0)">
+                                                                                    <div>
+                                                                                        <span>Plan</span>
+                                                                                        <h6>{{$masterPlan->name}}</h6>
+                                                                                    </div>
+                                                                                    <i class="fa-solid fa-chevron-down"></i>
+                                                                                </a>
+                                                                            @endforeach
+                                                                            <ul class="dataDropdown" id="masterPlanList" data-section="mobile">
+                                                                                <li>
+                                                                                    @foreach ($project->masterPlans as $index => $masterPlan)
+                                                                                        <a href="javascript:void(0)" data-index="{{ $index }}" data-2dImage="{{$masterPlan->get2DImageUrl()}}" data-3dImage="{{$masterPlan->get3DImageUrl()}}">
+                                                                                            <span>Plan</span>
+                                                                                            <h6>{{$masterPlan->name}}</h6>
+                                                                                        </a>
+                                                                                    @endforeach
+                                                                                </li>
+                                                                            </ul>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                                @include('frontend.include.common-html-mobile-web', ['type' => 'master-plan-2d-3d-image'])
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{-- Floor plan --}}
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="flush-headingThree">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#flush-collapseThree"
+                                                aria-expanded="false" aria-controls="flush-collapseThree">
+                                                Floor Plan
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseThree" class="accordion-collapse collapse"
+                                            aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                                            <div class="accordion-body">
+                                                <div id="floor_paln">
+                                                    <div class="floorPlan">
+                                                        <div class="tabBox">
+                                                            <nav>
+                                                                @include('frontend.include.common-html-mobile-web', ['type' => 'floor-plan-2d-3d-section'])
+                                                            </nav>
+                                                            @include('frontend.include.common-html-mobile-web', ['type' => 'floor-plan-2d-3d-image'])
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{-- amenities --}}
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="flush-headingFour">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseFour">
+                                                Amenities
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseFour" class="accordion-collapse collapse"
+                                            aria-labelledby="flush-headingFour" data-bs-parent="#accordionFlushExample">
+                                            <div class="accordion-body">
+                                                <div id="amenites">
+                                                    <div class="amenitesBox">
+                                                        <div class="title">
+                                                            <h5>Amenities</h5>
+                                                            <p>Total {{ count($amenitiesList) }}+ Amenities</p>
+                                                        </div>
+                                                        <div class="amenitiesItem">
+                                                            @include('frontend.include.common-html-mobile-web', ['type' => 'amenities'])
+                                                        </div>
+                                                        @include('frontend.include.common-html-mobile-web', ['type' => 'amenities-more-button'])
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{-- Property Documents --}}
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="flush-headingFive">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#flush-collapseFive"
+                                                aria-expanded="false" aria-controls="flush-collapseFive">
+                                                Brochure
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseFive" class="accordion-collapse collapse" aria-labelledby="flush-headingFive" data-bs-parent="#accordionFlushExample">
+                                            <div class="accordion-body">
+                                                <div id="propert_document">
+                                                    @include('frontend.include.common-html-mobile-web', ['type' => 'download-brochure'])
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{-- Locality --}}
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="flush-headingSix">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSix" aria-expanded="false" aria-controls="flush-collapseSix">
+                                                Locality
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseSix" class="accordion-collapse collapse"
+                                            aria-labelledby="flush-headingSix" data-bs-parent="#accordionFlushExample">
+                                            <div class="accordion-body">
+                                                <div id="locality">
+                                                    <div class="title">
+                                                        <h5>Locality</h5>
+                                                    </div>
+                                                    <div class="localityBox">
+                                                        @include('frontend.include.common-html-mobile-web', ['type' => 'localities'])
+                                                    </div>
+                                                        @include('frontend.include.common-html-mobile-web', ['type' => 'localities-more-button'])
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{-- Rera Documents --}}
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="flush-headingSeven">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSeven" aria-expanded="false" aria-controls="flush-collapseSeven">
+                                                Documents
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseSeven" class="accordion-collapse collapse"
+                                            aria-labelledby="flush-headingSeven" data-bs-parent="#accordionFlushExample">
+                                            <div class="accordion-body">
+                                                @include('frontend.include.common-html-mobile-web', ['type' => 'rera-document'])
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{-- map --}}
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="flush-headingEight">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseEight" aria-expanded="false" aria-controls="flush-collapseEight">
+                                                Map
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseEight" class="accordion-collapse collapse" aria-labelledby="flush-headingEight" data-bs-parent="#accordionFlushExample">
+                                            <div class="accordion-body">
+                                                <div id="map_view">
+                                                    <div class="mapMianbox">
+                                                        @include('frontend.include.common-html-mobile-web', ['type' => 'map'])
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{-- developer --}}
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="flush-headingNine">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseNine" aria-expanded="false" aria-controls="flush-collapseNine">
+                                                Developer
+                                            </button>
+                                        </h2>
+                                        <div id="flush-collapseNine" class="accordion-collapse collapse" aria-labelledby="flush-headingNine" data-bs-parent="#accordionFlushExample">
+                                            <div class="accordion-body">
+                                                @include('frontend.include.common-html-mobile-web', ['type' => 'about'])
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div id="rightStickySection">
+                            <div class="StickyBox">
+                                <div class="topReportBtn">
+                                    <a href="javascript:void(0)">
+                                        <i class="bi bi-file-earmark"></i> Download Insight Report
+                                    </a>
+                                </div>
+                                <div class="insightReport">
+                                    <div class="reportTitle">
+                                        <img src="{{ $baseUrl }}assest/images/x-btn.png" alt="x-btn" loading="lazy">
+                                        <span>{{ $project->exio_suggest_percentage }}%</span>
+                                    </div>
+                                    <div class="ourReportdetail">
+                                        <div class="boxOne comBoxPersantage">
+                                            <div class="topBar">
+                                                <h5>Amenities</h5>
+                                                <span>{{ $project->amenities_percentage }}%</span>
+                                            </div>
+                                            <div class="barBox">
+                                                <div class="progress">
+                                                    <div class="progress-bar {{ getProgressBarColorClass($project->amenities_percentage) }}"
+                                                        role="progressbar"
+                                                        aria-valuenow="{{ $project->amenities_percentage }}"
+                                                        aria-valuemin="0" aria-valuemax="100"
+                                                        style="width:{{ $project->amenities_percentage }}%"></div>
+                                                </div>
+                                                <p>It is a long established fact that a reader will be distracted by the
+                                                    readable content of a page when looking at its layout.</p>
+                                            </div>
+                                        </div>
+                                        <div class="boxTwo comBoxPersantage">
+                                            <div class="topBar">
+                                                <h5>Project Plan</h5>
+                                                <span>{{ $project->project_plan_percentage }}%</span>
+                                            </div>
+                                            <div class="barBox">
+                                                <div class="progress">
+                                                    <div class="progress-bar {{ getProgressBarColorClass($project->project_plan_percentage) }}"
+                                                        role="progressbar"
+                                                        aria-valuenow="{{ $project->project_plan_percentage }}"
+                                                        aria-valuemin="0" aria-valuemax="100"
+                                                        style="width:{{ $project->project_plan_percentage }}%"></div>
+                                                </div>
+                                                <p>It is a long established fact that a reader will be distracted by the
+                                                    readable content of a page when looking at its layout.</p>
+                                            </div>
+                                        </div>
+                                        <div class="boxThree comBoxPersantage">
+                                            <div class="topBar">
+                                                <h5>Locality</h5>
+                                                <span>{{ $project->locality_percentage }}%</span>
+                                            </div>
+                                            <div class="barBox">
+                                                <div class="progress">
+                                                    <div class="progress-bar {{ getProgressBarColorClass($project->locality_percentage) }}"
+                                                        role="progressbar"
+                                                        aria-valuenow="{{ $project->locality_percentage }}"
+                                                        aria-valuemin="0" aria-valuemax="100"
+                                                        style="width:{{ $project->locality_percentage }}%"></div>
+                                                </div>
+                                                <p>It is a long established fact that a reader will be distracted by the
+                                                    readable content of a page when looking at its layout.</p>
+                                            </div>
+                                        </div>
+                                        <div class="boxFour comBoxPersantage">
+                                            <div class="topBar">
+                                                <h5>Return of Investment</h5>
+                                                <span>{{ $project->return_of_investment_percentage }}%</span>
+                                            </div>
+                                            <div class="barBox">
+                                                <div class="progress">
+                                                    <div class="progress-bar {{ getProgressBarColorClass($project->return_of_investment_percentage) }}"
+                                                        role="progressbar"
+                                                        aria-valuenow="{{ $project->return_of_investment_percentage }}"
+                                                        aria-valuemin="0" aria-valuemax="100"
+                                                        style="width:{{ $project->return_of_investment_percentage }}%">
+                                                    </div>
+                                                </div>
+                                                <p>It is a long established fact that a reader will be distracted by the
+                                                    readable content of a page when looking at its layout.</p>
+                                            </div>
+                                        </div>
+                                        <div class="contactBtn">
+                                            <a class="linkBtn" href="{{ route('contact-us') }}">Contact Exio Agent</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="developers">
+            <div class="container">
+                <div class="title">
+                    <h4>Similar Properties</h4>
+                </div>
+                @if (getDeviceType() == 'desktop')
+                    <div class="developersProprty webViewSection">
+                        <div class="row">
+                            @foreach ($similarProperties as $similarProperty)
+                                <div class="col-lg-4 col-md-6">
+                                    @include('frontend.include.common-html-mobile-web', ['type' => 'similar-property'])
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+                @if (getDeviceType() == 'mobile')
+                    <div class="developersProprty mobileViewSection">
+                        <div class="owl-carousel owl-theme">
+                            @foreach ($similarProperties as $similarProperty)
+                                <div class="item">
+                                    @include('frontend.include.common-html-mobile-web', ['type' => 'similar-property'])
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+    <!-- propert overview section -->
+
+@endsection
+@section('modal')
+    <!-- imageModal Modal -->
+    <div class="modal fade imageLightBox" id="imageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="img_view_section">
+                        <img src="" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- imageModal Modal -->
+
+    <!-- downloadBrochure Modal -->
+    <div class="modal fade downloadBrochure" id="downloadBrochure" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="docHeader">
+                        <h5>Download Brochure of</h5>
+                        <div class="glorybox">
+                            <div class="gloryImg">
+                                <img src="{{ $project->builder->getBuilderLogoUrl() }}"
+                                    alt="{{ $project->builder->builder_name }}">
+                            </div>
+                            <div class="gloryText">
+                                <h6>{{ $project->project_name }}</h6>
+                                <p>By {{ $project->builder->builder_name }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="brochureBox">
+                        <p>Please share below details,</p>
+                        <form id="downloadBrochureForm">
+                            @csrf
+                            <div class="form-group">
+                                <input type="hidden" name="project_id" id="project_id" value="{{ $project->id}}">
+                                <span class="error"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="labelClass" for="">Full Name<span>*</span></label>
+                                <input class="inputClass" type="text" name="name" id="name" placeholder="Mike Jhone">
+                                <span class="error"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="labelClass" for="">Phone Number<span>*</span></label>
+                                <input class="inputClass" type="number"  name="phone_number" id="phone_number" placeholder="+91 98989 89898">
+                                <span class="error"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="labelClass" for="">Email Address<span>*</span></label>
+                                <input class="inputClass" type="text"  name="email" id="email" placeholder="Mikejhone1469@gmail.com">
+                                <span class="error"></span>
+                            </div>
+                            <div class="btnDown">
+                                <button type="submit" class="btn btnDownload">Download</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- downloadBrochure Modal -->
+
+    <!-- Share_property Modal -->
+    <div class="modal fade share_property" id="share_property" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="titlebox">
+                        <p>Share Property</p>
+                    </div>
+                    <div class="iconBox">
+                        <ul>
+                            <li>
+                                <a href="javascript:void(0)" id="whatsapp-link" class="social_media_share"><i class="fa-brands fa-whatsapp"></i></a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" id="facebook-link" class="social_media_share"><i class="fa-brands fa-facebook-f"></i></a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" id="twitter-link" class="social_media_share"><i class="fa-brands fa-twitter"></i></a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" id="linkedin-link" class="social_media_share"><i class="fa-brands fa-linkedin"></i></a>
+                            </li>
+                            {{-- <li>
+                                <a href="javascript:void(0)" id="email-link" class="social_media_share"><i class="fa-brands fa-email"></i></a>
+                            </li> --}}
+                        </ul>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="copy-link" class="form-control" aria-describedby="basic-addon2" disabled>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" onClick="copyToClipboard()">Copy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@endsection
+@section('js')
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ config('constants.google_maps_api_key') }}&callback=initMap" async defer></script>
+    <script>
+        var latitude = {{ $project->latitude }};
+        var longitude = {{ $project->longitude }};
+        var propertyLikeUrl = "{{ route('property.like-unlike') }}";
+        var downloadBrochureUrl = "{{ route('property.download-brochure-form') }}";
+        var baseUrl = "{{ $baseUrl }}";
+    </script>
+    <script src="{{ frontendPageJsLink('property-details.js') }}"></script>
+@endsection

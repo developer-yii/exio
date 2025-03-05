@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Locality extends Model
 {
@@ -31,5 +32,17 @@ class Locality extends Model
     public function updatedBy()
     {
         return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    public function getLocalityImageUrl()
+    {
+        $localityImg = $this->locality_image;
+        if ($localityImg) {
+            $filePath = "public/locality/image/{$localityImg}";  // Updated path based on type
+            if (Storage::disk('local')->exists($filePath)) {
+                return asset('storage/locality/image/' . $localityImg);  // Correct URL structure
+            }
+        }
+        return asset('images/no_image_available.jpg');
     }
 }
