@@ -1,63 +1,65 @@
 $(document).ready(function () {
-    let quill = "";
-    if ($("#project_about").length > 0) {
-        quill = new Quill("#project_about", {
-            theme: "snow",
-            modules: {
-                imageResize: {
-                    displaySize: true,
-                },
-                toolbar: [
-                    [{ font: [] }, { size: [] }],
-                    ["bold", "italic", "underline", "strike"],
-                    [{ color: [] }, { background: [] }],
-                    [{ script: "super" }, { script: "sub" }],
-                    [
-                        { header: [!1, 1, 2, 3, 4, 5, 6] },
-                        "blockquote",
-                        "code-block",
-                    ],
-                    [
-                        { list: "ordered" },
-                        { list: "bullet" },
-                        { indent: "-1" },
-                        { indent: "+1" },
-                    ],
-                    ["direction", { align: [] }],
-                    ["link", "image"],
-                    ["clean"],
-                ],
-            },
-        });
+    // let quill = "";
+    // if ($("#project_about").length > 0) {
+    //     quill = new Quill("#project_about", {
+    //         theme: "snow",
+    //         modules: {
+    //             imageResize: {
+    //                 displaySize: true,
+    //             },
+    //             toolbar: [
+    //                 [{ font: [] }, { size: [] }],
+    //                 ["bold", "italic", "underline", "strike"],
+    //                 [{ color: [] }, { background: [] }],
+    //                 [{ script: "super" }, { script: "sub" }],
+    //                 [
+    //                     { header: [!1, 1, 2, 3, 4, 5, 6] },
+    //                     "blockquote",
+    //                     "code-block",
+    //                 ],
+    //                 [
+    //                     { list: "ordered" },
+    //                     { list: "bullet" },
+    //                     { indent: "-1" },
+    //                     { indent: "+1" },
+    //                 ],
+    //                 ["direction", { align: [] }],
+    //                 ["link", "image"],
+    //                 ["clean"],
+    //             ],
+    //         },
+    //     });
 
-        quill.getModule("toolbar").addHandler("image", () => {
-            const input = document.createElement("input");
-            input.setAttribute("type", "file");
-            input.setAttribute("accept", "image/*");
-            input.click();
+    //     quill.getModule("toolbar").addHandler("image", () => {
+    //         const input = document.createElement("input");
+    //         input.setAttribute("type", "file");
+    //         input.setAttribute("accept", "image/*");
+    //         input.click();
 
-            input.onchange = () => {
-                const file = input.files[0];
-                // Validate file
-                if (!file.type.match(/^image\/(jpeg|png|gif)$/)) {
-                    alert("Invalid file type. Please select an image file.");
-                    return;
-                }
-                if (file.size > 2 * 1024 * 1024) {
-                    // 2MB limit
-                    alert("File is too large. Maximum size is 2MB.");
-                    return;
-                }
-                const reader = new FileReader();
-                reader.onload = () => {
-                    const base64Image = reader.result;
-                    const range = quill.getSelection();
-                    quill.insertEmbed(range.index, "image", base64Image);
-                };
-                reader.readAsDataURL(file);
-            };
-        });
-    }
+    //         input.onchange = () => {
+    //             const file = input.files[0];
+    //             // Validate file
+    //             if (!file.type.match(/^image\/(jpeg|png|gif)$/)) {
+    //                 alert("Invalid file type. Please select an image file.");
+    //                 return;
+    //             }
+    //             if (file.size > 2 * 1024 * 1024) {
+    //                 // 2MB limit
+    //                 alert("File is too large. Maximum size is 2MB.");
+    //                 return;
+    //             }
+    //             const reader = new FileReader();
+    //             reader.onload = () => {
+    //                 const base64Image = reader.result;
+    //                 const range = quill.getSelection();
+    //                 quill.insertEmbed(range.index, "image", base64Image);
+    //             };
+    //             reader.readAsDataURL(file);
+    //         };
+    //     });
+    // }
+
+    initializeCKEditor("project_about", 300, "project_images");
 
     let formId = "#add-form";
     let addFormBtnId = "#addorUpdateBtn";
@@ -66,17 +68,21 @@ $(document).ready(function () {
     let propertySubTypes = [];
 
     $(formId).submit(function (event) {
-        console.log("Project Add Update");
         event.preventDefault();
         var $this = $(this);
+
+        for (instance in CKEDITOR.instances) {
+            CKEDITOR.instances[instance].updateElement();
+        }
+
         var formData = new FormData(this);
 
         $(formId).find(".error").html("");
         $(formId).find(".is-invalid").removeClass("is-invalid");
 
-        if (quill) {
-            formData.append("project_about", quill.root.innerHTML);
-        }
+        // if (quill) {
+        //     formData.append("project_about", quill.root.innerHTML);
+        // }
 
         $.ajax({
             url: addUpdateUrl,

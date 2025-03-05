@@ -59,6 +59,8 @@ $(document).ready(function () {
     //     });
     // }
 
+    initializeCKEditor("content", 300, "news");
+
     CKEDITOR.replace("content", {
         height: 600,
         filebrowserUploadUrl:

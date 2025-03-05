@@ -63,3 +63,18 @@ function showToastMessage(toast_type = "success", message = "") {
         });
     }
 }
+function initializeCKEditor(elementId, height, folderPath) {
+    CKEDITOR.replace(elementId, {
+        height: height,
+        filebrowserUploadUrl:
+            uploadImageUrl +
+            "?_token=" +
+            document.querySelector('meta[name="csrf-token"]').getAttribute("content") +
+            "&folder=" + folderPath + "/editor_images",
+        filebrowserImageUploadUrl:
+            uploadImageUrl +
+            "?_token=" +
+            document.querySelector('meta[name="csrf-token"]').getAttribute("content") +
+            "&folder=" + folderPath,
+    });
+}
