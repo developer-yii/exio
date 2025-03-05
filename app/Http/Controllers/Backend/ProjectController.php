@@ -126,7 +126,6 @@ class ProjectController extends Controller
             'slug' => [
                 'nullable',
                 'string',
-                Rule::unique('projects', 'slug')->ignore($request->id)->whereNull('deleted_at')->where('builder_id', $request->builder_id)
             ],
             'video' => [
                 Rule::requiredIf(!$isUpdate),
@@ -217,10 +216,15 @@ class ProjectController extends Controller
         }
 
         $model->project_name = ucwords(strtolower(trim($request->project_name)));
-        $slug = !empty($request->slug) ? $request->slug : Str::slug($request->project_name);
-        if (Project::where('slug', $slug)->where('id', '!=', $model->id)->exists()) {
-            $slug = $slug . '-' . Str::random(5);
+        $slug = !empty($request->slug) ? Str::slug($request->slug) : Str::slug($request->project_name);
+        $originalSlug = $slug;
+        $count = 1;
+
+        while (Project::where('slug', $slug)->where('id', '!=', $model->id)->exists()) {
+            $slug = $originalSlug . '-' . $count;
+            $count++;
         }
+
         $model->slug = $slug;
         $model->project_about = $request->project_about;
         $model->city_id  = $request->city_id;

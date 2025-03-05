@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
-            $table->string('setting_key', 255)->unique();
+            $table->string('setting_key', 255);
             $table->string('setting_label', 255);
             $table->text('setting_value');
             $table->text('description')->nullable();
