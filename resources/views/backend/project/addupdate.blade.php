@@ -134,7 +134,8 @@
                                 <div class="col-md-12">
                                     <div class="form-group mb-3">
                                         <label for="slug" class="form-label d-block">Project Slug<span
-                                                class="text-danger add_edit_required">*</span></label>
+                                                class="text-danger add_edit_required"> (leave blank if you want to auto
+                                                generate slug)</span></label>
                                         <input type="text" name="slug" class="form-control slug"
                                             placeholder="Enter Slug" value="{{ $model->slug ?? '' }}">
                                         <span class="error"></span>
