@@ -64,7 +64,7 @@ class CheckAndMatchPropertyController extends Controller
 
         $displayValues = $this->buildDisplayValues($filters);
 
-        $projects = Project::query();
+        $projects = Project::with('projectImages', 'projectBadge', 'floorPlans', 'city', 'location');
 
         if (isset($filters['property_type'])) {
             $projects->where(function ($query) use ($filters) {

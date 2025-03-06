@@ -127,7 +127,7 @@ class AuthController extends Controller
             if (password_verify($password, $user->password)) {
                 Auth::login($user, $remember);
                 session()->flash('success', "Your account login successfully");
-                return redirect()->route("front.home");
+                return redirect()->intended();
             }
         }
         return redirect()->route("login")->withInput()->withErrors(['email' => 'Oppes! You have entered invalid credentials']);

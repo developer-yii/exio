@@ -31,6 +31,27 @@
             border-radius: 5px;
             box-shadow: 0px 7px 25px #00000028;
         }
+
+        .selected-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .selected-item {
+            background: #EEF6FF;
+            padding: 4px 12px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .remove-item {
+            cursor: pointer;
+            color: #666;
+        }
     </style>
 @endsection
 
@@ -43,64 +64,139 @@
                     <h1>Fed Up With The Hunt For <br>Your Ideal Property?</h1>
                     <h5>Exio delivers the best property matches, effortlessly.</h5>
                 </div>
-                <div class="mobileFilterHero">
-                    <div class="cityDropDown">
-                        <ul>
-                            <li>
-                                <a class="cityClick" href="javascript:void(0)">Ahmedabad <i
-                                        class="fa-solid fa-chevron-down"></i></a>
-                                <ul class="citySelect">
-                                    <li><a href="javascript:void(0)">Ahmedabad</a></li>
-                                    <li><a href="javascript:void(0)">Bharuch</a></li>
-                                    <li><a href="javascript:void(0)">Surat</a></li>
-                                    <li><a href="javascript:void(0)">Vadodara</a></li>
-                                    <li><a href="javascript:void(0)">Mehsana</a></li>
-                                    <li><a href="javascript:void(0)">Rajkot</a></li>
-                                    <li><a href="javascript:void(0)">Jamnagar</a></li>
+                @if (getDeviceType() == 'mobile')
+                    <div class="mobileFilterHero">
+                        <div class="cityDropDown">
+                            <input type="text" name="city" id="city" class="autocomplete-mobile form-control"
+                                placeholder="Ahmedabad" />
+                        </div>
+                        <div class="seacrhNewBox">
+                            <div class="selected-items-mobile"></div>
+                            <input type="search" class="clickListMobile" placeholder="Search Locality"
+                                onkeyup="searchListM(this);">
+                            <div class="search-key d-none">
+                                <ul>
+                                    @if ($localities->count() > 0)
+                                        <h6>Locality</h6>
+                                        @foreach ($localities as $locality)
+                                            <li style="display: none;">
+                                                <a href="javascript:void(0)" data-type="locality"
+                                                    data-id="{{ $locality->id }}"
+                                                    data-name="{{ $locality->locality_name }}">
+                                                    {{ $locality->locality_name }}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    @endif
+                                    <h6>Landmark</h6>
+                                    {{-- @if ($landmarks->count() > 0)
+                                        @foreach ($landmarks as $landmark)
+                                            <li style="display: none;"><a
+                                                    href="javascript:void(0)" data-landmark="{{ $landmark->id }}">{{ $landmark->landmark_name }}</a></li>
+                                        @endforeach
+                                    @endif --}}
+                                    <h6>Project</h6>
+                                    @if ($projects->count() > 0)
+                                        @foreach ($projects as $project)
+                                            <li style="display: none;">
+                                                <a href="javascript:void(0)" data-type="project"
+                                                    data-id="{{ $project->id }}" data-name="{{ $project->project_name }}">
+                                                    {{ $project->project_name }}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    @endif
+                                    <h6>Builder</h6>
+                                    @if ($builders->count() > 0)
+                                        @foreach ($builders as $builder)
+                                            <li style="display: none;"><a href="javascript:void(0)" data-type="builder"
+                                                    data-id="{{ $builder->id }}"
+                                                    data-name="{{ $builder->builder_name }}">{{ $builder->builder_name }}</a>
+                                            </li>
+                                        @endforeach
+                                    @endif
                                 </ul>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="seacrhNewBox">
-                        <input type="search" placeholder="Search Locality">
-                        <div class="searchIcon">
-                            <a href="check_property_video.html" class="btn btnIcon"><i class="bi bi-search"></i></a>
+                            </div>
+                            <div class="searchIcon">
+                                <a href="" class="btn btnIcon"><i class="bi bi-search"></i></a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endif
             </div>
         </div>
     </section>
     <!-- Banner section -->
 
-    <!-- banner filter -->
-    <div class="filterSec filterHide">
-        <div class="container">
-            <div class="bannerFilterBox">
-                <div class="cityFilter">
-                    <p>Choose City</p>
-                    {{-- <select id="autocomplete" name="city" class="form-control" style="width: 100%;">
+    @if (getDeviceType() == 'desktop')
+        <!-- banner filter -->
+        <div class="filterSec filterHide">
+            <div class="container">
+                <div class="bannerFilterBox">
+                    <div class="cityFilter">
+                        <p>Choose City</p>
+                        {{-- <select id="autocomplete" name="city" class="form-control" style="width: 100%;">
                         <option value="" class="d-none">Choose City</option>
                         @foreach ($cities as $city)
                             <option value="{{ $city->id }}">{{ $city->city_name }}</option>
                         @endforeach
                     </select> --}}
-                    <input type="text" name="city" id="city" class="autocomplete form-control"
-                        placeholder="Ahmedabad" />
-                </div>
-                <div class="landMarkFilter">
-                    <div class="searchBox">
-                        <p>Search</p>
-                        <input type="search" placeholder="Locality, Landmark, Project, or Builder|">
+                        <input type="text" name="city" id="city" class="autocomplete form-control"
+                            placeholder="Ahmedabad" />
                     </div>
-                    <div class="searchIcon">
-                        <a href="check_match_property.html" class="btn btnIcon"><i class="bi bi-search"></i></a>
+                    <div class="landMarkFilter">
+                        <div class="searchBox">
+                            <p>Search</p>
+                            <div class="selected-items"></div>
+                            <input type="search" class="clickList" placeholder="Locality, Landmark, Project, or Builder"
+                                onkeyup="searchList(this);">
+                            <div class="search-key d-none">
+                                <ul>
+                                    @if ($localities->count() > 0)
+                                        <h6>Locality</h6>
+                                        @foreach ($localities as $locality)
+                                            <li style="display: none;"><a href="javascript:void(0)" data-type="locality"
+                                                    data-id="{{ $locality->id }}"
+                                                    data-name="{{ $locality->locality_name }}">{{ $locality->locality_name }}</a>
+                                        @endforeach
+                                    @endif
+                                    <h6>Landmark</h6>
+                                    {{-- @if ($landmarks->count() > 0)
+                                        @foreach ($landmarks as $landmark)
+                                            <li style="display: none;"><a
+                                                    href="javascript:void(0)" data-landmark="{{ $landmark->id }}">{{ $landmark->landmark_name }}</a></li>
+                                        @endforeach
+                                    @endif --}}
+                                    <h6>Project</h6>
+                                    @if ($projects->count() > 0)
+                                        @foreach ($projects as $project)
+                                            <li style="display: none;"><a href="javascript:void(0)" data-type="project"
+                                                    data-id="{{ $project->id }}"
+                                                    data-name="{{ $project->project_name }}">{{ $project->project_name }}</a>
+                                            </li>
+                                        @endforeach
+                                    @endif
+                                    <h6>Builder</h6>
+                                    @if ($builders->count() > 0)
+                                        @foreach ($builders as $builder)
+                                            <li style="display: none;"><a href="javascript:void(0)" data-type="builder"
+                                                    data-id="{{ $builder->id }}"
+                                                    data-name="{{ $builder->builder_name }}">{{ $builder->builder_name }}</a>
+                                            </li>
+                                        @endforeach
+                                    @endif
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="searchIcon">
+                            <a href="" class="btn btnIcon"><i class="bi bi-search"></i></a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- banner filter -->
+        <!-- banner filter -->
+    @endif
 
     <!-- discuss section -->
     <section class="discuss">
@@ -128,127 +224,139 @@
     <!-- discuss section -->
 
     <!-- best-property section -->
-    <section class="bestProperty webViewSection">
-        <div class="container">
-            <div class="sectionTitleBox">
-                <h3>Best Properties</h3>
-            </div>
-            <div class="bestPropertyBox">
-                <div class="row">
-                    @if ($top_properties->count() > 0)
-                        @foreach ($top_properties as $property)
-                            <div class="col-xl-4 col-md-6">
-                                <a href="{{route('property.details', [$property->slug])}}">
-                                    <div class="propertySec">
-                                        <div class="imgBox">
-                                            @if ($property->cover_image)
-                                                <img src="{{ asset('/storage/project_images/' . $property->cover_image) }}"
-                                                    alt="property-img" loading="lazy">
-                                            @else
-                                                <img src="{{ $baseUrl }}assest/images/property-img.png" alt="property-img"
-                                                    loading="lazy">
-                                            @endif
-                                        </div>
-                                        <div class="propertyName">
-                                            <h5>{{ $property->project_name }}</h5>
-                                        </div>
-                                        <div class="locationProperty">
-                                            <div class="homeBox comBox">
-                                                <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home">
-                                                <p>{{ $property->custom_property_type ?? '' }}</p>
+    @if (getDeviceType() == 'desktop')
+        <section class="bestProperty webViewSection">
+            <div class="container">
+                <div class="sectionTitleBox">
+                    <h3>Best Properties</h3>
+                </div>
+                <div class="bestPropertyBox">
+                    <div class="row">
+                        @if ($top_properties->count() > 0)
+                            @foreach ($top_properties as $property)
+                                <div class="col-xl-4 col-md-6">
+                                    <a href="{{ route('property.details', [$property->slug]) }}">
+                                        <div class="propertySec">
+                                            <div class="imgBox">
+                                                @if ($property->cover_image)
+                                                    <img src="{{ asset('/storage/project_images/' . $property->cover_image) }}"
+                                                        alt="property-img" loading="lazy">
+                                                @else
+                                                    <img src="{{ $baseUrl }}assest/images/property-img.png"
+                                                        alt="property-img" loading="lazy">
+                                                @endif
                                             </div>
-                                            <div class="location comBox">
-                                                <img src="{{ $baseUrl }}assest/images/Location.png" alt="Location">
-                                                <p>{{ $property->location->location_name . ', ' . $property->city->city_name }}
-                                                </p>
+                                            <div class="propertyName">
+                                                <h5>{{ $property->project_name }}</h5>
                                             </div>
-                                        </div>
-                                        <div class="suggestBox">
-                                            <div class="leftBtn">
-                                                {{-- <a href="javascript:void(0)"> --}}
-                                                    <img src="{{ $baseUrl }}assest/images/x-btn.png" alt="x-btn">
-                                                {{-- </a> --}}
-                                            </div>
-                                            <div class="rightBar">
-                                                <h5>{{ $property->exio_suggest_percentage }}%</h5>
-                                                <div class="progress">
-                                                    <div class="progress-bar" style="width: {{ $property->exio_suggest_percentage }}%" role="progressbar" aria-valuenow="{{ $property->exio_suggest_percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                            <div class="locationProperty">
+                                                <div class="homeBox comBox">
+                                                    <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home">
+                                                    <p>{{ $property->custom_property_type ?? '' }}</p>
+                                                </div>
+                                                <div class="location comBox">
+                                                    <img src="{{ $baseUrl }}assest/images/Location.png"
+                                                        alt="Location">
+                                                    <p>{{ $property->location->location_name . ', ' . $property->city->city_name }}
+                                                    </p>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        @endforeach
-                    @endif
-                </div>
-                <div class="exploreMore">
-                    <a class="btn btnExplore" href="javascript:void(0)">Explore More</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="bestProperty mobileViewSection">
-        <div class="container">
-            <div class="sectionTitleBox">
-                <h3>Best Properties</h3>
-            </div>
-            <div class="bestPropertyBox">
-                <div class="owl-carousel owl-theme">
-                    @if ($top_properties->count() > 0)
-                        @foreach ($top_properties as $property)
-                            <div class="item">
-                                <a href="{{route('property.details', [$property->slug])}}">
-                                    <div class="propertySec">
-                                        <div class="imgBox">
-                                            @if ($property->cover_image)
-                                                <img src="{{ asset('/storage/project_images/' . $property->cover_image) }}" alt="property-img" loading="lazy">
-                                            @else
-                                                <img src="{{ $baseUrl }}assest/images/property-img.png" alt="property-img" loading="lazy">
-                                            @endif
-                                        </div>
-                                        <div class="propertyName">
-                                            <h5>{{ $property->project_name }}</h5>
-                                        </div>
-                                        <div class="locationProperty">
-                                            <div class="homeBox comBox">
-                                                <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home">
-                                                <p>{{ $property->custom_property_type ?? '' }}</p>
-                                            </div>
-                                            <div class="location comBox">
-                                                <img src="{{ $baseUrl }}assest/images/Location.png" alt="Location">
-                                                <p>{{ $property->location->location_name . ', ' . $property->city->city_name }}
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="suggestBox">
-                                            <div class="leftBtn">
-                                                <img src="{{ $baseUrl }}assest/images/x-btn.png" alt="x-btn">
-                                            </div>
-                                            <div class="rightBar">
-                                                <h5>{{ $property->exio_suggest_percentage }}%</h5>
-                                                <div class="progress">
-                                                    <div class="progress-bar" role="progressbar"
-                                                        style="width: {{ $property->exio_suggest_percentage }}%"
-                                                        aria-valuenow="{{ $property->exio_suggest_percentage }}"
-                                                        aria-valuemin="0" aria-valuemax="100">
+                                            <div class="suggestBox">
+                                                <div class="leftBtn">
+                                                    {{-- <a href="javascript:void(0)"> --}}
+                                                    <img src="{{ $baseUrl }}assest/images/x-btn.png" alt="x-btn">
+                                                    {{-- </a> --}}
+                                                </div>
+                                                <div class="rightBar">
+                                                    <h5>{{ $property->exio_suggest_percentage }}%</h5>
+                                                    <div class="progress">
+                                                        <div class="progress-bar"
+                                                            style="width: {{ $property->exio_suggest_percentage }}%"
+                                                            role="progressbar"
+                                                            aria-valuenow="{{ $property->exio_suggest_percentage }}"
+                                                            aria-valuemin="0" aria-valuemax="100"></div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </a>
-                            </div>
-                        @endforeach
-                    @endif
-                </div>
-                <div class="exploreMore">
-                    <a class="btn btnExplore" href="javascript:void(0)">Explore More</a>
+                                    </a>
+                                </div>
+                            @endforeach
+                        @endif
+                    </div>
+                    <div class="exploreMore">
+                        <a class="btn btnExplore" href="javascript:void(0)">Explore More</a>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    @endif
+
+    @if (getDeviceType() == 'mobile')
+        <section class="bestProperty mobileViewSection">
+            <div class="container">
+                <div class="sectionTitleBox">
+                    <h3>Best Properties</h3>
+                </div>
+                <div class="bestPropertyBox">
+                    <div class="owl-carousel owl-theme">
+                        @if ($top_properties->count() > 0)
+                            @foreach ($top_properties as $property)
+                                <div class="item">
+                                    <a href="{{ route('property.details', [$property->slug]) }}">
+                                        <div class="propertySec">
+                                            <div class="imgBox">
+                                                @if ($property->cover_image)
+                                                    <img src="{{ asset('/storage/project_images/' . $property->cover_image) }}"
+                                                        alt="property-img" loading="lazy">
+                                                @else
+                                                    <img src="{{ $baseUrl }}assest/images/property-img.png"
+                                                        alt="property-img" loading="lazy">
+                                                @endif
+                                            </div>
+                                            <div class="propertyName">
+                                                <h5>{{ $property->project_name }}</h5>
+                                            </div>
+                                            <div class="locationProperty">
+                                                <div class="homeBox comBox">
+                                                    <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home">
+                                                    <p>{{ $property->custom_property_type ?? '' }}</p>
+                                                </div>
+                                                <div class="location comBox">
+                                                    <img src="{{ $baseUrl }}assest/images/Location.png"
+                                                        alt="Location">
+                                                    <p>{{ $property->location->location_name . ', ' . $property->city->city_name }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="suggestBox">
+                                                <div class="leftBtn">
+                                                    <img src="{{ $baseUrl }}assest/images/x-btn.png" alt="x-btn">
+                                                </div>
+                                                <div class="rightBar">
+                                                    <h5>{{ $property->exio_suggest_percentage }}%</h5>
+                                                    <div class="progress">
+                                                        <div class="progress-bar" role="progressbar"
+                                                            style="width: {{ $property->exio_suggest_percentage }}%"
+                                                            aria-valuenow="{{ $property->exio_suggest_percentage }}"
+                                                            aria-valuemin="0" aria-valuemax="100">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            @endforeach
+                        @endif
+                    </div>
+                    <div class="exploreMore">
+                        <a class="btn btnExplore" href="javascript:void(0)">Explore More</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    @endif
     <!-- best-property section -->
 
     <!-- find your ideal section -->
@@ -405,11 +513,12 @@
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="heading{{ $faq->id }}">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                        data-bs-target="#collapse_{{ $faq->id }}" aria-expanded="false"
+                                        aria-controls="collapse_{{ $faq->id }}">
                                         {{ $faq->question }}
                                     </button>
                                 </h2>
-                                <div id="collapseOne" class="accordion-collapse collapse"
+                                <div id="collapse_{{ $faq->id }}" class="accordion-collapse collapse"
                                     aria-labelledby="heading{{ $faq->id }}" data-bs-parent="#faqsExample">
                                     <div class="accordion-body">
                                         <p>{{ $faq->answer }}</p>
@@ -417,75 +526,6 @@
                                 </div>
                             </div>
                         @endforeach
-
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingTwo">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                    What are the charges for property registration?
-                                </button>
-                            </h2>
-                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-                                data-bs-parent="#faqsExample">
-                                <div class="accordion-body">
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                                        Ipsum has been the industry's standard dummy text ever since the 1500s, when an
-                                        unknown printer took a galley of type and scrambled it to make a type specimen book.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingThree">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                    Do women buyers get a discount in registration charges?
-                                </button>
-                            </h2>
-                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
-                                data-bs-parent="#faqsExample">
-                                <div class="accordion-body">
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                                        Ipsum has been the industry's standard dummy text ever since the 1500s, when an
-                                        unknown printer took a galley of type and scrambled it to make a type specimen book.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingFour">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                    How much time does it take for the documents to get registered?
-                                </button>
-                            </h2>
-                            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
-                                data-bs-parent="#faqsExample">
-                                <div class="accordion-body">
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                                        Ipsum has been the industry's standard dummy text ever since the 1500s, when an
-                                        unknown printer took a galley of type and scrambled it to make a type specimen book.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingFive">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                                    Should the seller/buyer be present at the time of registration?
-                                </button>
-                            </h2>
-                            <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive"
-                                data-bs-parent="#faqsExample">
-                                <div class="accordion-body">
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                                        Ipsum has been the industry's standard dummy text ever since the 1500s, when an
-                                        unknown printer took a galley of type and scrambled it to make a type specimen book.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -502,14 +542,91 @@
                 value: city.id
             }));
 
-            $('.autocomplete').autocomplete({
-                source: filteredCities,
-                minLength: 1,
-                select: function(event, ui) {
-                    event.preventDefault();
-                    $(this).val(ui.item.label);
-                    $('#city').val(ui.item.label);
+            @if (getDeviceType() == 'desktop')
+                $('.autocomplete').autocomplete({
+                    source: filteredCities,
+                    minLength: 0,
+                    select: function(event, ui) {
+                        event.preventDefault();
+                        $(this).val(ui.item.label);
+                        $('#city').val(ui.item.label);
+                    }
+                });
+
+                $('.autocomplete').on('focus', function() {
+                    $('.autocomplete').autocomplete('search', '');
+                });
+
+                $(".clickList").on("keyup", function() {
+                    handleSearch($(this), '.searchBox');
+                });
+            @endif
+
+            @if (getDeviceType() == 'mobile')
+                $('.autocomplete-mobile').autocomplete({
+                    source: filteredCities,
+                    minLength: 0,
+                    select: function(event, ui) {
+                        event.preventDefault();
+                        $(this).val(ui.item.label);
+                        $('#city').val(ui.item.label);
+                    }
+                });
+
+                $('.autocomplete-mobile').on('focus', function() {
+                    $('.autocomplete-mobile').autocomplete('search', '');
+                });
+
+                $(".clickListMobile").on("keyup", function() {
+                    handleSearch($(this), '.seacrhNewBox');
+                });
+            @endif
+
+            function handleSearch($input, parentClass) {
+                var value = $input.val().toLowerCase();
+                if (value === "") {
+                    $input.closest(parentClass).find('.search-key').addClass('d-none');
+                } else {
+                    $input.closest(parentClass).find('.search-key').removeClass('d-none');
+                    $input.closest(parentClass).find("li").filter(function() {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                    });
                 }
+            }
+
+            $('.search-key a').click(function() {
+                const type = $(this).data('type');
+                const id = $(this).data('id');
+                const name = $(this).data('name');
+                const isMobile = $(this).closest('.mobileFilterHero').length > 0;
+
+                if (isMobile) {
+                    addSelectedItem(type, id, name, '.selected-items-mobile', '.clickListMobile');
+                } else {
+                    addSelectedItem(type, id, name, '.selected-items', '.clickList');
+                }
+
+                $(this).closest('.search-key').addClass('d-none');
+            });
+
+            function addSelectedItem(type, id, name, containerClass, inputClass) {
+                if ($(`${containerClass} [data-selected-id="${id}"][data-selected-type="${type}"]`).length > 0) {
+                    return;
+                }
+
+                const item = `
+                    <div class="selected-item" data-selected-type="${type}" data-selected-id="${id}">
+                        <span>${name}</span>
+                        <span class="remove-item">×</span>
+                    </div>
+                `;
+
+                $(containerClass).append(item);
+                $(inputClass).val('');
+            }
+
+            $(document).on('click', '.remove-item', function() {
+                $(this).parent('.selected-item').remove();
             });
         });
     </script>

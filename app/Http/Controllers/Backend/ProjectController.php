@@ -13,6 +13,7 @@ use App\Models\ProjectdetailAddMore;
 use App\Models\FloorPlanAddMore;
 use App\Models\Locality;
 use App\Models\LocalityAddMore;
+use App\Models\ProjectBadge;
 use App\Models\ProjectImage;
 use App\Models\ReraDetailsAddMore;
 use Illuminate\Http\Request;
@@ -44,7 +45,8 @@ class ProjectController extends Controller
             ->leftJoin('cities', 'projects.city_id', '=', 'cities.id')
             ->leftJoin('builders', 'projects.builder_id', '=', 'builders.id')
             ->leftJoin('locations', 'projects.location_id', '=', 'locations.id')
-            ->with('city:id,city_name', 'builder:id,builder_name', 'location:id,location_name');
+            ->leftJoin('project_badges', 'projects.project_badge', '=', 'project_badges.id')
+            ->with('city:id,city_name', 'builder:id,builder_name', 'location:id,location_name', 'projectBadge:id,name');
 
         return DataTables::eloquent($sqlQuery)
             ->editColumn('project_logo', function ($row) {
@@ -52,6 +54,9 @@ class ProjectController extends Controller
             })
             ->editColumn('project_about', function ($row) {
                 return ($row->project_about) ? \Illuminate\Support\Str::limit($row->project_about, 20) : "";
+            })
+            ->editColumn('project_badge', function ($row) {
+                return ($row->project_badge) ? $row->projectBadge->name : "";
             })
             ->editColumn('builder_name', function ($row) {
                 return ($row->builder->builder_name) ? $row->builder->builder_name : "";
@@ -143,7 +148,6 @@ class ProjectController extends Controller
             'rera_number' => 'required',
             'price_from' => 'required',
             'price_to' => 'required',
-            'carpet_area' => 'required',
             'total_floors' => 'required',
             'total_tower' => 'required',
             'age_of_construction' => 'required',
@@ -239,10 +243,11 @@ class ProjectController extends Controller
         $model->price_from_unit = $request->price_from_unit;
         $model->price_to = $request->price_to;
         $model->price_to_unit = $request->price_to_unit;
-        $model->carpet_area = $request->carpet_area;
         $model->total_floors = $request->total_floors;
         $model->total_tower = $request->total_tower;
         $model->age_of_construction = $request->age_of_construction;
+        $model->appraisal_property = $request->appraisal_property;
+        $model->project_badge = $request->project_badge;
         $model->status = $request->boolean('project_status', false);
         $model->address = $request->address;
         $model->latitude = $request->latitude;
@@ -564,6 +569,8 @@ class ProjectController extends Controller
         $priceUnit = Project::$priceUnit;
         $projectStatus = Project::$status;
         $ageOfConstruction = Project::$ageOfConstruction;
+        $appraisalProperty = Project::$appraisalProperty;
+        $projectBadges = ProjectBadge::where('status', ProjectBadge::ACTIVE)->pluck('name', 'id');
 
         $existingProjectDetails = $model->projectDetails;
         $existingMasterPlans = $model->masterPlans;
@@ -590,7 +597,9 @@ class ProjectController extends Controller
             'locality',
             'existingLocalities',
             'existingReraDetails',
-            'existingProjectImages'
+            'existingProjectImages',
+            'appraisalProperty',
+            'projectBadges'
         ));
     }
 
@@ -608,8 +617,10 @@ class ProjectController extends Controller
         $ageOfConstruction = Project::$ageOfConstruction;
         $amenities = Amenity::where('status', 1)->pluck('amenity_name', 'id');
         $locality = Locality::where('status', 1)->pluck('locality_name', 'id');
+        $appraisalProperty = Project::$appraisalProperty;
+        $projectBadges = ProjectBadge::where('status', ProjectBadge::ACTIVE)->pluck('name', 'id');
 
-        return view('backend.project.addupdate', compact('model', 'builder', 'city', 'area', 'propertyTypes', 'priceUnit', 'projectStatus', 'ageOfConstruction', 'amenities', 'locality'));
+        return view('backend.project.addupdate', compact('model', 'builder', 'city', 'area', 'propertyTypes', 'priceUnit', 'projectStatus', 'ageOfConstruction', 'amenities', 'locality', 'appraisalProperty', 'projectBadges'));
     }
 
     public function view($id)
@@ -635,5 +646,4 @@ class ProjectController extends Controller
         $propertySubTypes = Project::getPropertySubTypes($request->property_type);
         return response()->json(['status' => true, 'message' => '', 'data' => $propertySubTypes]);
     }
-
 }

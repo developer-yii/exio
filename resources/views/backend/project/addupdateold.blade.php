@@ -214,17 +214,6 @@
                                 </div>
                             </div>
 
-                            <!-- Carpet Area -->
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label for="carpet_area" class="form-label">Carpet Area</label>
-                                    <input type="number" name="carpet_area" class="form-control carpet_area"
-                                        min="0"
-                                        value="{{ isset($model->carpet_area) ? $model->carpet_area : '' }}">
-                                    <span class="error"></span>
-                                </div>
-                            </div>
-
                             <!-- Total Floors -->
                             <div class="col-md-6">
                                 <div class="form-group mb-3">

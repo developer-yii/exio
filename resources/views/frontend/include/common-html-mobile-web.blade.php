@@ -2,10 +2,6 @@
     <div id="overView">
         <div class="overViewBox">
             <div class="overBox">
-                <span>Carpet Area</span>
-                <h6>{{ $project->carpet_area }}sqft</h6>
-            </div>
-            <div class="overBox">
                 <span>Total Floors</span>
                 <h6>{{ $project->total_floors }} Floors</h6>
             </div>

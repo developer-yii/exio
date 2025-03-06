@@ -69,11 +69,6 @@
                             <label class="text-muted">Possession By</label>
                             <p class="mb-3">{{ date('m-Y', strtotime($model->possession_by)) }}</p>
                         </div>
-
-                        <div class="info-group">
-                            <label class="text-muted">Carpet Area</label>
-                            <p class="mb-3">{{ $model->carpet_area }} Sq.ft.</p>
-                        </div>
                     </div>
 
                     <div class="col-md-6">

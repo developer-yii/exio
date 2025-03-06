@@ -28,7 +28,6 @@ return new class extends Migration
             $table->string('price_to_unit')->nullable();
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
-            $table->string('carpet_area')->nullable();
             $table->string('total_floors')->nullable();
             $table->string('total_tower')->nullable();
             $table->string('age_of_construction')->nullable();

@@ -119,6 +119,10 @@
                             <a class="{{ isActiveRoute(['location']) }}"
                                 href="{{ route('admin.location') }}">Locations</a>
                         </li>
+                        <li>
+                            <a class="{{ isActiveRoute(['project-badge']) }}"
+                                href="{{ route('admin.project-badge') }}">Project Badges</a>
+                        </li>
                     </ul>
                 </div>
             </li>

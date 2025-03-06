@@ -152,7 +152,9 @@
                                             @endif
                                         </div> --}}
                                         <textarea name="project_about" class="form-control project_about" id="project_about">
-                                            @if (isset($model->id)) {!! $model->project_about !!} @endif
+                                            @if (isset($model->id))
+{!! $model->project_about !!}
+@endif
                                         </textarea>
                                         <span class="error"></span>
                                     </div>
@@ -162,7 +164,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <label for="city_id" class="form-label">City</label>
-                                        <select id="city_id" class="form-control city_id" name="city_id">
+                                        <select id="city_id" class="form-control form-select city_id" name="city_id">
                                             <option value="">Select City</option>
                                             @foreach ($city as $key => $value)
                                                 <option value="{{ $key }}"
@@ -179,7 +181,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <label for="area_id" class="form-label">Area</label>
-                                        <select id="area_id" class="form-control area_id" name="area_id">
+                                        <select id="area_id" class="form-control form-select area_id" name="area_id">
                                             <option value="">Select Area</option>
                                             @foreach ($area as $key => $value)
                                                 <option value="{{ $key }}"
@@ -196,7 +198,8 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <label for="builder_id" class="form-label">Builder</label>
-                                        <select id="builder_id" class="form-control builder_id" name="builder_id">
+                                        <select id="builder_id" class="form-control form-select builder_id"
+                                            name="builder_id">
                                             <option value="">Select Builder</option>
                                             @foreach ($builder as $key => $value)
                                                 <option value="{{ $key }}"
@@ -232,8 +235,8 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <label for="property_sub_types" class="form-label">Property Sub Types</label>
-                                        <select id="property_sub_types" class="form-control property_sub_types"
-                                            name="property_sub_types">
+                                        <select id="property_sub_types"
+                                            class="form-control form-select property_sub_types" name="property_sub_types">
                                             <option value="">Select Property Sub Type</option>
                                         </select>
                                         <span class="error"></span>
@@ -321,17 +324,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Carpet Area -->
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label for="carpet_area" class="form-label">Carpet Area (sqft)</label>
-                                        <input type="text" name="carpet_area" class="form-control carpet_area"
-                                            min="0"
-                                            value="{{ isset($model->carpet_area) ? $model->carpet_area : '' }}">
-                                        <span class="error"></span>
-                                    </div>
-                                </div>
-
                                 <!-- Total Floors -->
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
@@ -358,7 +350,8 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <label for="age_of_construction" class="form-label">Age Of Construction</label>
-                                        <select id="age_of_construction" class="form-control age_of_construction"
+                                        <select id="age_of_construction"
+                                            class="form-control form-select age_of_construction"
                                             name="age_of_construction">
                                             <option value="">Select Age Of Construction</option>
                                             @if (isset($ageOfConstruction))
@@ -378,7 +371,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <label for="project_status" class="form-label">Project Status</label>
-                                        <select id="project_status" class="form-control project_status"
+                                        <select id="project_status" class="form-control form-select project_status"
                                             name="project_status">
                                             <option value="">Select Project Status</option>
                                             @if (isset($projectStatus))
@@ -400,6 +393,47 @@
                                         <label for="video" class="form-label d-block">Project Video</label>
                                         <input type="file" name="video" id="video" class="form-control video"
                                             accept="video/*">
+                                        <span class="error"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Appraisal Property -->
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Appraisal Property</label>
+                                        <div>
+                                            @if (isset($appraisalProperty))
+                                                @foreach ($appraisalProperty as $key => $value)
+                                                    <div class="form-check form-check-inline">
+                                                        <input type="radio" name="appraisal_property"
+                                                            value="{{ $key }}" class="form-check-input"
+                                                            id="appraisal_property_{{ $key }}"
+                                                            @if (isset($model->appraisal_property) && $model->appraisal_property == $key) checked @endif>
+                                                        <label class="form-check-label"
+                                                            for="appraisal_property_{{ $key }}">{{ $value }}</label>
+                                                    </div>
+                                                @endforeach
+                                            @endif
+                                        </div>
+                                        <span class="error"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Project Badges -->
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Project Badges</label>
+                                        <select class="form-control form-select project_badge" name="project_badge">
+                                            <option value="">Select Project Badge</option>
+                                            @if (isset($projectBadges) && $projectBadges->count() > 0)
+                                                @foreach ($projectBadges as $id => $name)
+                                                    <option value="{{ $id }}"
+                                                        @if (isset($model->project_badge) && $model->project_badge == $id) selected @endif>
+                                                        {{ $name }}
+                                                    </option>
+                                                @endforeach
+                                            @endif
+                                        </select>
                                         <span class="error"></span>
                                     </div>
                                 </div>
