@@ -5,56 +5,6 @@
 
 @section('title', 'Home Page')
 
-@section('css')
-    <style>
-        .ui-menu .ui-menu-item-wrapper:hover {
-            background-color: #EEF6FF;
-            color: var(--blue-color);
-            border: none;
-        }
-
-        .ui-menu .ui-menu-item-wrapper {
-            font-size: 15px;
-            font-weight: 400;
-            font-family: "Inter", serif;
-            width: 100%;
-            padding: 10px 8px;
-            border-radius: 5px;
-            border: none;
-            transition: 0.2s all;
-        }
-
-        .ui-widget.ui-widget-content {
-            background-color: var(--white-color);
-            padding: 15px 10px;
-            margin-top: 10px;
-            border-radius: 5px;
-            box-shadow: 0px 7px 25px #00000028;
-        }
-
-        .selected-items {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-
-        .selected-item {
-            background: #EEF6FF;
-            padding: 4px 12px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .remove-item {
-            cursor: pointer;
-            color: #666;
-        }
-    </style>
-@endsection
-
 @section('content')
     <!-- Banner section -->
     <section class="heroBanner">
@@ -67,12 +17,25 @@
                 @if (getDeviceType() == 'mobile')
                     <div class="mobileFilterHero">
                         <div class="cityDropDown">
-                            <input type="text" name="city" id="city" class="autocomplete-mobile form-control"
-                                placeholder="Ahmedabad" />
+                            <ul>
+                                <li>
+                                    <input type="hidden" name="city_mobile" id="city_mobile" />
+                                    <a class="cityClick" href="javascript:void(0)"><span
+                                            id="city_mobile_name">Ahmedabad</span> <i
+                                            class="fa-solid fa-chevron-down"></i></a>
+                                    <ul class="citySelect">
+                                        @foreach ($cities as $city)
+                                            <li><a href="javascript:void(0)" data-id="{{ $city->id }}"
+                                                    data-name="{{ $city->city_name }}"
+                                                    class="city_click_mobile">{{ $city->city_name }}</a></li>
+                                        @endforeach
+                                    </ul>
+                                </li>
+                            </ul>
                         </div>
                         <div class="seacrhNewBox searchKeyup">
-                            <div class="selected-items-mobile"></div>
-                            <input type="search" class="clickListMobile" placeholder="Search Locality">
+                            <input type="search" class="clickListMobile" placeholder="Search Locality, Project, or Builder"
+                                autocomplete="off">
                             <div class="search-key d-none">
                                 <ul>
                                     @if ($localities->count() > 0)
@@ -87,15 +50,8 @@
                                             </li>
                                         @endforeach
                                     @endif
-                                    <h6>Landmark</h6>
-                                    {{-- @if ($landmarks->count() > 0)
-                                        @foreach ($landmarks as $landmark)
-                                            <li style="display: none;"><a
-                                                    href="javascript:void(0)" data-landmark="{{ $landmark->id }}">{{ $landmark->landmark_name }}</a></li>
-                                        @endforeach
-                                    @endif --}}
-                                    <h6>Project</h6>
                                     @if ($projects->count() > 0)
+                                        <h6>Project</h6>
                                         @foreach ($projects as $project)
                                             <li style="display: none;">
                                                 <a href="javascript:void(0)" data-type="project"
@@ -105,8 +61,8 @@
                                             </li>
                                         @endforeach
                                     @endif
-                                    <h6>Builder</h6>
                                     @if ($builders->count() > 0)
+                                        <h6>Builder</h6>
                                         @foreach ($builders as $builder)
                                             <li style="display: none;"><a href="javascript:void(0)" data-type="builder"
                                                     data-id="{{ $builder->id }}"
@@ -134,20 +90,23 @@
                 <div class="bannerFilterBox">
                     <div class="cityFilter">
                         <p>Choose City</p>
-                        {{-- <select id="autocomplete" name="city" class="form-control" style="width: 100%;">
-                        <option value="" class="d-none">Choose City</option>
-                        @foreach ($cities as $city)
-                            <option value="{{ $city->id }}">{{ $city->city_name }}</option>
-                        @endforeach
-                    </select> --}}
-                        <input type="text" name="city" id="city" class="autocomplete form-control"
-                            placeholder="Ahmedabad" />
+                        <input type="hidden" name="city_desktop" id="city_desktop" />
+                        <a href="javascript:void(0)" class="cityClick"><span id="city_desktop_name">Ahmedabad</span>
+                            <i class="fa-solid fa-chevron-down"></i></a>
+                        <ul class="citySelect">
+                            @foreach ($cities as $city)
+                                <li><a href="javascript:void(0)" data-id="{{ $city->id }}"
+                                        data-name="{{ $city->city_name }}"
+                                        class="city_click_desktop">{{ $city->city_name }}</a>
+                                </li>
+                            @endforeach
+                        </ul>
                     </div>
                     <div class="landMarkFilter">
                         <div class="searchBox searchKeyup">
                             <p>Search</p>
-                            <div class="selected-items"></div>
-                            <input type="search" class="clickList" placeholder="Locality, Landmark, Project, or Builder">
+                            <input type="search" class="clickList" placeholder="Locality, Project, or Builder"
+                                autocomplete="off">
                             <div class="search-key d-none">
                                 <ul>
                                     @if ($localities->count() > 0)
@@ -158,15 +117,8 @@
                                                     data-name="{{ $locality->locality_name }}">{{ $locality->locality_name }}</a>
                                         @endforeach
                                     @endif
-                                    <h6>Landmark</h6>
-                                    {{-- @if ($landmarks->count() > 0)
-                                        @foreach ($landmarks as $landmark)
-                                            <li style="display: none;"><a
-                                                    href="javascript:void(0)" data-landmark="{{ $landmark->id }}">{{ $landmark->landmark_name }}</a></li>
-                                        @endforeach
-                                    @endif --}}
-                                    <h6>Project</h6>
                                     @if ($projects->count() > 0)
+                                        <h6>Project</h6>
                                         @foreach ($projects as $project)
                                             <li style="display: none;"><a href="javascript:void(0)" data-type="project"
                                                     data-id="{{ $project->id }}"
@@ -174,8 +126,8 @@
                                             </li>
                                         @endforeach
                                     @endif
-                                    <h6>Builder</h6>
                                     @if ($builders->count() > 0)
+                                        <h6>Builder</h6>
                                         @foreach ($builders as $builder)
                                             <li style="display: none;"><a href="javascript:void(0)" data-type="builder"
                                                     data-id="{{ $builder->id }}"
@@ -261,9 +213,7 @@
                                             </div>
                                             <div class="suggestBox">
                                                 <div class="leftBtn">
-                                                    {{-- <a href="javascript:void(0)"> --}}
                                                     <img src="{{ $baseUrl }}assest/images/x-btn.png" alt="x-btn">
-                                                    {{-- </a> --}}
                                                 </div>
                                                 <div class="rightBar">
                                                     <h5>{{ $property->exio_suggest_percentage }}%</h5>
@@ -534,47 +484,13 @@
 @section('js')
     <script>
         $(document).ready(function() {
-            let cities = @json($cities);
-            let filteredCities = cities.map(city => ({
-                label: city.city_name,
-                value: city.id
-            }));
-
             @if (getDeviceType() == 'desktop')
-                $('.autocomplete').autocomplete({
-                    source: filteredCities,
-                    minLength: 0,
-                    select: function(event, ui) {
-                        event.preventDefault();
-                        $(this).val(ui.item.label);
-                        $('#city').val(ui.item.label);
-                    }
-                });
-
-                $('.autocomplete').on('focus', function() {
-                    $('.autocomplete').autocomplete('search', '');
-                });
-
                 $(".clickList").on("keyup", function() {
                     handleSearch($(this), '.searchBox');
                 });
             @endif
 
             @if (getDeviceType() == 'mobile')
-                $('.autocomplete-mobile').autocomplete({
-                    source: filteredCities,
-                    minLength: 0,
-                    select: function(event, ui) {
-                        event.preventDefault();
-                        $(this).val(ui.item.label);
-                        $('#city').val(ui.item.label);
-                    }
-                });
-
-                $('.autocomplete-mobile').on('focus', function() {
-                    $('.autocomplete-mobile').autocomplete('search', '');
-                });
-
                 $(".clickListMobile").on("keyup", function() {
                     handleSearch($(this), '.seacrhNewBox');
                 });
@@ -582,13 +498,28 @@
 
             function handleSearch($input, parentClass) {
                 var value = $input.val().toLowerCase();
+                var $searchKey = $input.closest(parentClass).find('.search-key');
+
                 if (value === "") {
-                    $input.closest(parentClass).find('.search-key').addClass('d-none');
+                    $searchKey.addClass('d-none');
+                    $searchKey.find('li, h6').show();
                 } else {
-                    $input.closest(parentClass).find('.search-key').removeClass('d-none');
-                    $input.closest(parentClass).find("li").filter(function() {
+                    $searchKey.removeClass('d-none');
+                    $searchKey.find('li').each(function() {
                         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
                     });
+                    $searchKey.find('h6').each(function() {
+                        var $heading = $(this);
+                        var $lis = $heading.nextUntil('h6', 'li');
+                        if ($lis.filter(':visible').length === 0) {
+                            $heading.hide();
+                        } else {
+                            $heading.show();
+                        }
+                    });
+                    if ($searchKey.find('li:visible').length === 0) {
+                        $searchKey.addClass('d-none');
+                    }
                 }
             }
 
@@ -599,32 +530,34 @@
                 const isMobile = $(this).closest('.mobileFilterHero').length > 0;
 
                 if (isMobile) {
-                    addSelectedItem(type, id, name, '.selected-items-mobile', '.clickListMobile');
+                    $('.clickListMobile').val(name);
                 } else {
-                    addSelectedItem(type, id, name, '.selected-items', '.clickList');
+                    $('.clickList').val(name);
                 }
 
                 $(this).closest('.search-key').addClass('d-none');
             });
 
-            function addSelectedItem(type, id, name, containerClass, inputClass) {
-                if ($(`${containerClass} [data-selected-id="${id}"][data-selected-type="${type}"]`).length > 0) {
-                    return;
+            $('.city_click_mobile').click(function() {
+                const id = $(this).data('id');
+                const name = $(this).data('name');
+                $('#city_mobile').val(id);
+                $('#city_mobile_name').text(name);
+                $('a.cityClick i').toggleClass('rotate');
+            });
+
+            $('.city_click_desktop').click(function() {
+                const id = $(this).data('id');
+                const name = $(this).data('name');
+                $('#city_desktop').val(id);
+                $('#city_desktop_name').text(name);
+                $('a.cityClick i').toggleClass('rotate');
+            });
+
+            $('.clickList, .clickListMobile').on('input', function() {
+                if ($(this).val() === '') {
+                    $('.search-key').addClass('d-none');
                 }
-
-                const item = `
-                    <div class="selected-item" data-selected-type="${type}" data-selected-id="${id}">
-                        <span>${name}</span>
-                        <span class="remove-item">×</span>
-                    </div>
-                `;
-
-                $(containerClass).append(item);
-                $(inputClass).val('');
-            }
-
-            $(document).on('click', '.remove-item', function() {
-                $(this).parent('.selected-item').remove();
             });
         });
     </script>

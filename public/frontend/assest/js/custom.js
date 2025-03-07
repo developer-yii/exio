@@ -1,24 +1,24 @@
 // side-bar click menu
-    $(document).ready(function () {
-        $('header .main-nav .click-menu').click(function () {
-            $('header .main-nav nav').addClass('show')
-            $('header .main-nav .cancel-menu').addClass('show')
-            $('body').css({ 'position': 'fixed', 'width': '100%' });
-        });
-
-        $('header .main-nav .cancel-menu').click(function () {
-            $('header .main-nav nav').removeClass('show')
-            $('header .main-nav .cancel-menu').removeClass('show')
-            $('body').css({ 'position': 'unset', 'width': 'auto' });
-        });
-
+$(document).ready(function () {
+    $('header .main-nav .click-menu').click(function () {
+        $('header .main-nav nav').addClass('show')
+        $('header .main-nav .cancel-menu').addClass('show')
+        $('body').css({ 'position': 'fixed', 'width': '100%' });
     });
+
+    $('header .main-nav .cancel-menu').click(function () {
+        $('header .main-nav nav').removeClass('show')
+        $('header .main-nav .cancel-menu').removeClass('show')
+        $('body').css({ 'position': 'unset', 'width': 'auto' });
+    });
+
+});
 
 
 // header fix
- 
-$(window).scroll(function(){
-    if ($(window).scrollTop () > 50) {
+
+$(window).scroll(function () {
+    if ($(window).scrollTop() > 50) {
         $('header').addClass('show');
     }
     else {
@@ -29,22 +29,23 @@ $(window).scroll(function(){
 
 $(document).ready(function () {
     $('.user-menu').click(function (e) {
-        e.stopPropagation(); 
+        e.stopPropagation();
         $('.userDropDown').toggleClass('show');
         $('.projectDropDown').removeClass('show');
     });
 
     $('.first-menu').click(function (e) {
-        e.stopPropagation(); 
+        e.stopPropagation();
         $('.projectDropDown').toggleClass('show');
-        $('.userDropDown').removeClass('show'); 
+        $('.userDropDown').removeClass('show');
     });
 
     $('.cityClick').click(function (e) {
-        e.stopPropagation(); 
+        e.stopPropagation();
         $('.citySelect').toggleClass('show');
+        $('a.cityClick i').toggleClass('rotate');
         $('.projectDropDown').removeClass('show');
-        $('.userDropDown').removeClass('show'); 
+        $('.userDropDown').removeClass('show');
     });
 
     $(document).click(function () {
@@ -65,13 +66,13 @@ $(document).ready(function () {
         });
     });
 
-    $('.masterClick').click(function(e){
+    $('.masterClick').click(function (e) {
         e.stopPropagation();
         $('.dataDropdown').toggleClass('active');
         $('.masterClick i').toggleClass('active');
     });
 
-    $(document).click(function(){
+    $(document).click(function () {
         $('.dataDropdown').removeClass('active');
         $('.masterClick i').removeClass('active');
     });
@@ -81,46 +82,46 @@ $(document).ready(function () {
 // ================ Slider js
 
 $('.latesNews .owl-carousel').owlCarousel({
-    loop:true,
-    margin:20,
-    nav:true,
-    navText:['<img src="assest/images/left-ar.png" alt="left-ar">','<img src="assest/images/right-ar.png" alt="right-ar">'],
-    dots:false,
-    responsive:{
-        0:{
-            items:1
+    loop: true,
+    margin: 20,
+    nav: true,
+    navText: ['<img src="assest/images/left-ar.png" alt="left-ar">', '<img src="assest/images/right-ar.png" alt="right-ar">'],
+    dots: false,
+    responsive: {
+        0: {
+            items: 1
         },
-        575:{
-            items:2
+        575: {
+            items: 2
         },
-        769:{
-            items:3
+        769: {
+            items: 3
         },
-        1200:{
-            items:4
+        1200: {
+            items: 4
         }
     }
 })
 
 
 $('.mobileViewSection .owl-carousel').owlCarousel({
-    loop:true,
-    margin:10,
-    nav:false,
-    responsive:{
-        0:{
-            items:1
+    loop: true,
+    margin: 10,
+    nav: false,
+    responsive: {
+        0: {
+            items: 1
         }
     }
 })
 
 $('.mobileViewSection .owl-carousel').owlCarousel({
-    loop:true,
-    margin:10,
-    nav:false,
-    responsive:{
-        0:{
-            items:1
+    loop: true,
+    margin: 10,
+    nav: false,
+    responsive: {
+        0: {
+            items: 1
         }
     }
 })
@@ -128,57 +129,57 @@ $('.mobileViewSection .owl-carousel').owlCarousel({
 
 $(document).ready(function () {
     $(".compareBoxOpen").click(function (event) {
-        
-        event.preventDefault(); 
+
+        event.preventDefault();
         event.stopPropagation();
-            $(".comparePorjectModal").addClass("show");
-        });
+        $(".comparePorjectModal").addClass("show");
+    });
 
     $(document).click(function (event) {
         if (!$(event.target).closest(".comparePorjectModal, .compareBoxOpen").length) {
             $(".comparePorjectModal").removeClass("show");
         }
     });
-    $(".propertyCard").click(function (event) {  
+    $(".propertyCard").click(function (event) {
         $('#propertyModal').modal('show');
     });
-     
+
 });
 
 
-$(document).ready(function() {
-    $(".lightBoximg").click(function() {
+$(document).ready(function () {
+    $(".lightBoximg").click(function () {
         $(".boxImg a").first().trigger("click");
     });
 
 
-    $('body').on('click', '#nav-tabContent2 .imgBox, .masterImg', function(e) {
-        let src = $(this).find('img').attr('src') || $(this).attr('src'); 
+    $('body').on('click', '#nav-tabContent2 .imgBox, .masterImg', function (e) {
+        let src = $(this).find('img').attr('src') || $(this).attr('src');
         $('.img_view_section img').attr('src', src);
         $('#imageModal').modal('show');
     });
-    
+
 
 });
 
 // ======== Data counter ========
 
-$('.counter').each(function() {
+$('.counter').each(function () {
     var $this = $(this),
         countTo = $this.attr('data-count');
-   
-    $({ countNum: $this.text()}).animate({
-      countNum: countTo
+
+    $({ countNum: $this.text() }).animate({
+        countNum: countTo
     },
-  
-    {
-      duration: 2000,
-      easing:'linear',
-      step: function() {
-        $this.text(Math.floor(this.countNum));
-      },
-      complete: function() {        
-        $this.text(this.countNum);
-      }
-    });     
+
+        {
+            duration: 2000,
+            easing: 'linear',
+            step: function () {
+                $this.text(Math.floor(this.countNum));
+            },
+            complete: function () {
+                $this.text(this.countNum);
+            }
+        });
 });
