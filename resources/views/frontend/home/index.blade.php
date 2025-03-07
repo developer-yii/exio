@@ -70,10 +70,9 @@
                             <input type="text" name="city" id="city" class="autocomplete-mobile form-control"
                                 placeholder="Ahmedabad" />
                         </div>
-                        <div class="seacrhNewBox">
+                        <div class="seacrhNewBox searchKeyup">
                             <div class="selected-items-mobile"></div>
-                            <input type="search" class="clickListMobile" placeholder="Search Locality"
-                                onkeyup="searchListM(this);">
+                            <input type="search" class="clickListMobile" placeholder="Search Locality">
                             <div class="search-key d-none">
                                 <ul>
                                     @if ($localities->count() > 0)
@@ -145,11 +144,10 @@
                             placeholder="Ahmedabad" />
                     </div>
                     <div class="landMarkFilter">
-                        <div class="searchBox">
+                        <div class="searchBox searchKeyup">
                             <p>Search</p>
                             <div class="selected-items"></div>
-                            <input type="search" class="clickList" placeholder="Locality, Landmark, Project, or Builder"
-                                onkeyup="searchList(this);">
+                            <input type="search" class="clickList" placeholder="Locality, Landmark, Project, or Builder">
                             <div class="search-key d-none">
                                 <ul>
                                     @if ($localities->count() > 0)
