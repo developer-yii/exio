@@ -50,6 +50,7 @@
                                 <th>Project Name</th>
                                 <th>Slug</th>
                                 <th>Project About</th>
+                                <th>Project Badge</th>
                                 <th>Builder</th>
                                 <th>City</th>
                                 <th>Location</th>

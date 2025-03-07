@@ -151,6 +151,16 @@ $(document).ready(function () {
         getPropertySubTypes($(this).val());
     });
 
+    $(document).on("change", "input[name='appraisal_property']", function () {
+        if ($(this).val() == "yes") {
+            $("#appraisal_property_yes").prop("checked", true);
+            $("#appraisal_property_no").prop("checked", false);
+        } else {
+            $("#appraisal_property_yes").prop("checked", false);
+            $("#appraisal_property_no").prop("checked", true);
+        }
+    });
+
     if (propertyTypeValue && propertyTypeValue != "") {
         getPropertySubTypes(propertyTypeValue);
     }

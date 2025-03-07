@@ -1,31 +1,29 @@
-@if($type == 'overviewBox')
-    <div class="overViewBox">
-        <div class="overBox">
-            <span>Carpet Area</span>
-            <h6>{{ $project->carpet_area }}sqft</h6>
-        </div>
-        <div class="overBox">
-            <span>Total Floors</span>
-            <h6>{{ $project->total_floors }} Floors</h6>
-        </div>
-        <div class="overBox">
-            <span>Total Tower</span>
-            <h6>{{ $project->total_tower }}</h6>
-        </div>
-        <div class="overBox">
-            <span>Age of Construction</span>
-            <h6>{{ getAgeOfConstruction($project->age_of_construction) }}</h6>
-        </div>
-        <div class="overBox">
-            <span>Property Type</span>
-            <h6>{{ getPropertyType($project->property_type) }}</h6>
-        </div>
-        @foreach ($project->projectDetails as $projectDetail)
+@if($type == 'overview')
+    <div id="overView">
+        <div class="overViewBox">
             <div class="overBox">
-                <span>{{ $projectDetail->name }}</span>
-                <h6>{{ $projectDetail->value }}</h6>
+                <span>Total Floors</span>
+                <h6>{{ $project->total_floors }} Floors</h6>
             </div>
-        @endforeach
+            <div class="overBox">
+                <span>Total Tower</span>
+                <h6>{{ $project->total_tower }}</h6>
+            </div>
+            <div class="overBox">
+                <span>Age of Construction</span>
+                <h6>{{ getAgeOfConstruction($project->age_of_construction) }}</h6>
+            </div>
+            <div class="overBox">
+                <span>Property Type</span>
+                <h6>{{ getPropertyType($project->property_type) }}</h6>
+            </div>
+            @foreach ($project->projectDetails as $projectDetail)
+                <div class="overBox">
+                    <span>{{ $projectDetail->name }}</span>
+                    <h6>{{ $projectDetail->value }}</h6>
+                </div>
+            @endforeach
+          </div>
     </div>
 @endif
 @if($type == 'project-details')

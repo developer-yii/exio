@@ -36,6 +36,11 @@ class Project extends Model
         'completed' => 'Completed',
     ];
 
+    public static $appraisalProperty = [
+        'yes' => 'Yes',
+        'no' => 'No',
+    ];
+
     public static function getPropertySubTypes($propertyType)
     {
         if ($propertyType == 'both') {
@@ -150,9 +155,13 @@ class Project extends Model
         return asset('images/no_image_available.jpg');
     }
 
+    public function projectBadge()
+    {
+        return $this->belongsTo(ProjectBadge::class, 'project_badge', 'id');
+    }
+  
     public function downloadBrochures()
     {
         return $this->hasMany(DownloadBrochure::class);
     }
-
 }

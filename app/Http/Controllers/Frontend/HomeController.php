@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Builder;
 use App\Models\City;
 use App\Models\Faq;
+use App\Models\Locality;
 use App\Models\News;
 use App\Models\Project;
 
@@ -28,8 +30,12 @@ class HomeController extends Controller
             ->limit(6)
             ->get();
 
+        $localities = Locality::where('status', 1)->get();
+        $projects = Project::where('status', 1)->get();
+        $builders = Builder::where('status', 1)->get();
+
         $news = News::where('status', 1)->orderBy('created_at', 'desc')->limit(8)->get();
 
-        return view('frontend.home.index', compact('cities', 'faqs', 'top_properties', 'news'));
+        return view('frontend.home.index', compact('cities', 'faqs', 'top_properties', 'news', 'localities', 'projects', 'builders'));
     }
 }

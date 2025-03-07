@@ -27,13 +27,10 @@ Auth::routes();
 Route::name('front.')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
-    Route::middleware('guest')->group(function () {
-        Route::prefix('check-and-match-property')->group(function () {
-            Route::get('/', [CheckAndMatchPropertyController::class, 'checkAndMatchProperty'])->name('check-and-match-property');
-            Route::get('/result', [CheckAndMatchPropertyController::class, 'checkAndMatchPropertyResult'])->name('check-and-match-property.result');
-            Route::post('/submit', [CheckAndMatchPropertyController::class, 'checkAndMatchPropertySubmit'])->name('check-and-match-property.submit');
-            Route::get('/get-amenities', [CheckAndMatchPropertyController::class, 'getAmenities'])->name('check-and-match-property.get-amenities');
-        });
+    Route::prefix('check-and-match-property')->group(function () {
+        Route::get('/', [CheckAndMatchPropertyController::class, 'checkAndMatchProperty'])->name('check-and-match-property');
+        Route::post('/submit', [CheckAndMatchPropertyController::class, 'checkAndMatchPropertySubmit'])->name('check-and-match-property.submit');
+        Route::get('/get-amenities', [CheckAndMatchPropertyController::class, 'getAmenities'])->name('check-and-match-property.get-amenities');
     });
 });
 
@@ -53,7 +50,6 @@ Route::middleware('guest')->group(function () {
 
     Route::get('contact-us', [ContactController::class, 'index'])->name('contact-us');
     Route::post('contact-us/submit', [ContactController::class, 'submit'])->name('contact.submit');
-
 });
 
 Route::middleware(['auth', 'isUser'])->group(function () {
@@ -68,7 +64,10 @@ Route::group(['prefix' => 'property'], function () {
     Route::post('/download-brochure-form', [PropertyController::class, 'downloadBrochureForm'])->name('property.download-brochure-form');
     Route::get('/compare-property', [PropertyController::class, 'compareProperty'])->name('property.compare');
     Route::get('/compare', [PropertyController::class, 'comparePropertyPage'])->name('property.comparepage');
+});
 
+Route::middleware(['auth', 'isUser'])->group(function () {
+    Route::get('/check-and-match-property/result', [CheckAndMatchPropertyController::class, 'checkAndMatchPropertyResult'])->name('front.check-and-match-property.result');
     Route::get('/{slug}', [PropertyController::class, 'details'])->name('property.details');
 });
 

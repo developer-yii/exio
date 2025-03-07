@@ -1,22 +1,21 @@
 // side-bar click menu
-    $(document).ready(function () {
-        $('header .main-nav .click-menu').click(function () {
-            $('header .main-nav nav').addClass('show')
-            $('header .main-nav .cancel-menu').addClass('show')
-            $('body').css({ 'position': 'fixed', 'width': '100%' });
-        });
-
-        $('header .main-nav .cancel-menu').click(function () {
-            $('header .main-nav nav').removeClass('show')
-            $('header .main-nav .cancel-menu').removeClass('show')
-            $('body').css({ 'position': 'unset', 'width': 'auto' });
-        });
-
+$(document).ready(function () {
+    $('header .main-nav .click-menu').click(function () {
+        $('header .main-nav nav').addClass('show')
+        $('header .main-nav .cancel-menu').addClass('show')
+        $('body').css({ 'position': 'fixed', 'width': '100%' });
     });
+
+    $('header .main-nav .cancel-menu').click(function () {
+        $('header .main-nav nav').removeClass('show')
+        $('header .main-nav .cancel-menu').removeClass('show')
+        $('body').css({ 'position': 'unset', 'width': 'auto' });
+    });
+
+});
 
 
 // header fix
-
 $(window).scroll(function(){
     if ($(window).scrollTop () > 50) {
         $('header').addClass('show');
@@ -43,6 +42,7 @@ $(document).ready(function () {
     $('.cityClick').click(function (e) {
         e.stopPropagation();
         $('.citySelect').toggleClass('show');
+        $('a.cityClick i').toggleClass('rotate');
         $('.projectDropDown').removeClass('show');
         $('.userDropDown').removeClass('show');
     });
@@ -65,13 +65,13 @@ $(document).ready(function () {
         });
     });
 
-    $('.masterClick').click(function(e){
+    $('.masterClick').click(function (e) {
         e.stopPropagation();
         $('.dataDropdown').toggleClass('active');
         $('.masterClick i').toggleClass('active');
     });
 
-    $(document).click(function(){
+    $(document).click(function () {
         $('.dataDropdown').removeClass('active');
         $('.masterClick i').removeClass('active');
     });
@@ -81,50 +81,49 @@ $(document).ready(function () {
 // ================ Slider js
 
 $('.latesNews .owl-carousel').owlCarousel({
-    loop:true,
-    margin:20,
-    nav:true,
-    navText:['<img src="assest/images/left-ar.png" alt="left-ar">','<img src="assest/images/right-ar.png" alt="right-ar">'],
-    dots:false,
-    responsive:{
-        0:{
-            items:1
+    loop: true,
+    margin: 20,
+    nav: true,
+    navText: ['<img src="assest/images/left-ar.png" alt="left-ar">', '<img src="assest/images/right-ar.png" alt="right-ar">'],
+    dots: false,
+    responsive: {
+        0: {
+            items: 1
         },
-        575:{
-            items:2
+        575: {
+            items: 2
         },
-        769:{
-            items:3
+        769: {
+            items: 3
         },
-        1200:{
-            items:4
+        1200: {
+            items: 4
         }
     }
 })
 
 
 $('.mobileViewSection .owl-carousel').owlCarousel({
-    loop:true,
-    margin:10,
-    nav:false,
-    responsive:{
-        0:{
-            items:1
+    loop: true,
+    margin: 10,
+    nav: false,
+    responsive: {
+        0: {
+            items: 1
         }
     }
 })
 
 $('.mobileViewSection .owl-carousel').owlCarousel({
-    loop:true,
-    margin:10,
-    nav:false,
-    responsive:{
-        0:{
-            items:1
+    loop: true,
+    margin: 10,
+    nav: false,
+    responsive: {
+        0: {
+            items: 1
         }
     }
 })
-
 
 // $(document).ready(function () {
 //     $(".compareBoxOpen").click(function (event) {
@@ -149,11 +148,10 @@ $('.mobileViewSection .owl-carousel').owlCarousel({
 // });
 
 
-$(document).ready(function() {
-    $(".lightBoximg").click(function() {
+$(document).ready(function () {
+    $(".lightBoximg").click(function () {
         $(".boxImg a").first().trigger("click");
     });
-
 
     $('body').on('click', '#nav-tabContent2 .imgBox, .masterImg', function(e) {
         let src = $(this).find('img').attr('src') || $(this).attr('src');
@@ -166,14 +164,14 @@ $(document).ready(function() {
 
 // ======== Data counter ========
 
-$('.counter').each(function() {
+$('.counter').each(function () {
     var $this = $(this),
         countTo = $this.attr('data-count');
-
+  
     $({ countNum: $this.text()}).animate({
       countNum: countTo
     },
-
+                                         
     {
       duration: 2000,
       easing:'linear',

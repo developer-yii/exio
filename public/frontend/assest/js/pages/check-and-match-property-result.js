@@ -78,43 +78,55 @@ async function loadMarkers(projects) {
                 let priceFromUnit = priceUnit[location.price_from_unit];
                 let priceToUnit = priceUnit[location.price_to_unit];
                 if (location.price_from && location.price_to) {
-                    priceRange = `${location.price_from} - ${location.price_to} ${priceToUnit}`;
+                    if (priceFromUnit === 'L' && priceToUnit === 'Cr') {
+                        priceRange = `₹${location.price_from}L-${location.price_to}Cr`;
+                    } else if (priceFromUnit === 'L') {
+                        priceRange = `₹${location.price_from}L-${location.price_to}L`;
+                    } else {
+                        priceRange = `₹${location.price_from}Cr-${location.price_to}Cr`;
+                    }
                 } else if (location.price_from) {
-                    priceRange = `${location.price_from} ${priceFromUnit}`;
+                    priceRange = `₹${location.price_from}${priceFromUnit}`;
                 } else {
                     priceRange = 'Price on request';
                 }
 
-                // Create InfoWindow content
+                console.log(location.project_badge);
+
                 const infoWindowContent = `
                     <div class="map-info-window">
-                        <div class="property-card">
-                            ${location.image_url
-                        ? `<div class="property-image">
-                                        <img src="${location.image_url}" alt="${location.project_name}">
-                                        <div class="property-tag">Best for investment</div>
-                                        <button class="favorite-btn"><i class="far fa-heart"></i></button>
-                                       </div>`
-                        : ''
-                    }
-                            <div class="property-details">
-                                <div class="price-range">₹${priceRange}</div>
-                                <h4 class="property-name">${location.project_name}</h4>
-                                <p class="property-location">${location.address || 'Address not available'}</p>
-                                <div class="property-specs">
-                                    <span>${location.configuration || ''}</span>
-                                    <span>${location.area || ''}</span>
-                                    <span>${location.location_name || ''}</span>
+                        <div class="propertyCard propertyCardMap">
+                            <div class="owl-carousel owl-theme">
+                                ${location.project_images.map(image => `
+                                <div class="item">
+                                    <div class="imgBox">
+                                        <img src="${assetUrl}storage/project_images/${image.image}" alt="${location.project_name}">
+                                        <div class="imgheader">
+                                            ${location.project_badge ? `<span>${location.project_badge.name}</span>` : ''}
+                                            <i class="fa-regular fa-heart heartIconFill"></i>
+                                        </div>
+                                    </div>
+                                </div>`).join('')}
+                            </div>
+                            <div class="priceBox">
+                                <div class="price">
+                                    <h5>${priceRange}</h5>
                                 </div>
-                                <div class="property-footer">
-                                    <div class="exio-suggest">
-                                        <span class="exio-icon">E</span>
-                                        <span class="exio-percent">${location.exio_suggest_percentage || 0}%</span>
-                                    </div>
-                                    <div class="action-buttons">
-                                        <input type="checkbox" class="compare-checkbox">
-                                        <a href="${location.detail_url || '#'}" class="view-details-btn">View Details</a>
-                                    </div>
+                            </div>
+                            <div class="propertyName">
+                                <h5>${location.project_name}</h5>
+                            </div>
+                            <div class="locationProperty">
+                                <p>${location.custom_property_type || ''} | ${location.floor_plans.map(plan => plan.carpet_area).join(', ') + ' Sqft' || ''} | ${location.location.location_name || ''}</p>
+                            </div>
+                            <div class="addressBoxMap">
+                                <div class="boxLogo">
+                                    <img src="${assetUrl}frontend/assest/images/x-btn.png" alt="x-btn">
+                                    <span>${location.exio_suggest_percentage || 0}%</span>
+                                </div>
+                                <div class="clickTo">
+                                    <input type="checkbox" class="form-check-input checkbox" id="checkbox-signin" name="remember" autocomplete="off">
+                                    <label for="">Compare</label>
                                 </div>
                             </div>
                         </div>
@@ -140,7 +152,20 @@ async function loadMarkers(projects) {
                     });
                     currentInfoWindow = infoWindow;
 
-                    // Center the map on the clicked marker
+                    setTimeout(() => {
+                        $('.propertyCardMap .owl-carousel').owlCarousel({
+                            loop: true,
+                            margin: 10,
+                            nav: false,
+                            dots: true,
+                            responsive: {
+                                0: {
+                                    items: 1
+                                }
+                            }
+                        });
+                    }, 100);
+
                     map.panTo(marker.position);
                     map.setZoom(10);
                 });

@@ -22,6 +22,7 @@ use App\Http\Controllers\Backend\LocalityController;
 use App\Http\Controllers\Backend\NewsController;
 use App\Http\Controllers\Backend\ProjectController;
 use App\Http\Controllers\Backend\ReraProgressController;
+use App\Http\Controllers\Backend\ProjectBadgeController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/', function () {
@@ -165,6 +166,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/addupdate', [NewsController::class, 'addupdate'])->name('news.addupdate');
         });
 
+        Route::group(['prefix' => 'project-badges'], function () {
+            Route::get('/', [ProjectBadgeController::class, 'index'])->name('project-badge');
+            Route::get('/get', [ProjectBadgeController::class, 'get'])->name('project-badge.list');
+            Route::get('/detail', [ProjectBadgeController::class, 'detail'])->name('project-badge.detail');
+            Route::post('/delete', [ProjectBadgeController::class, 'delete'])->name('project-badge.delete');
+            Route::post('/addupdate', [ProjectBadgeController::class, 'addupdate'])->name('project-badge.addupdate');
+        });
         Route::group(['prefix' => 'download-brochure'], function () {
             Route::get('/', [DownloadBrochureDataController::class, 'index'])->name('download-brochure');
             Route::get('/get', [DownloadBrochureDataController::class, 'get'])->name('download-brochure.list');

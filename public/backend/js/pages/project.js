@@ -112,6 +112,14 @@ $(document).ready(function () {
                 },
             },
             {
+                name: "project_badge",
+                data: "project_badge",
+                sortable: true,
+                render: function (_, _, full) {
+                    return full["project_badge"];
+                },
+            },
+            {
                 name: "builder_name",
                 data: "builder_name",
                 sortable: true,
