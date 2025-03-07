@@ -17,6 +17,7 @@ use App\Http\Controllers\Backend\LocationController;
 use App\Http\Controllers\Backend\CommonController;
 use App\Http\Controllers\Backend\BuilderController;
 use App\Http\Controllers\Backend\CmsPagesController;
+use App\Http\Controllers\Backend\DownloadBrochureDataController;
 use App\Http\Controllers\Backend\LocalityController;
 use App\Http\Controllers\Backend\NewsController;
 use App\Http\Controllers\Backend\ProjectController;
@@ -171,6 +172,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/detail', [ProjectBadgeController::class, 'detail'])->name('project-badge.detail');
             Route::post('/delete', [ProjectBadgeController::class, 'delete'])->name('project-badge.delete');
             Route::post('/addupdate', [ProjectBadgeController::class, 'addupdate'])->name('project-badge.addupdate');
+        });
+        Route::group(['prefix' => 'download-brochure'], function () {
+            Route::get('/', [DownloadBrochureDataController::class, 'index'])->name('download-brochure');
+            Route::get('/get', [DownloadBrochureDataController::class, 'get'])->name('download-brochure.list');
         });
     });
 });

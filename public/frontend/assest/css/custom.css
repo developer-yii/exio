@@ -63,3 +63,7 @@
     background: #25D366;
     color: white;
   }
+
+  .cursor-default{
+    cursor: default !important;
+  }

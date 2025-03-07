@@ -68,6 +68,13 @@
                 </a>
             </li>
 
+            <li class="side-nav-item {{ isActiveRouteMain('locality') }}">
+                <a href="{{ route('admin.download-brochure') }}" class="side-nav-link {{ isActiveRoute(['locality']) }}">
+                    <i class="uil-file"></i>
+                    <span> Brochure Data </span>
+                </a>
+            </li>
+
             <li class="side-nav-item {{ isActiveRouteMain(['faqs']) }}">
                 <a data-bs-toggle="collapse" href="#faqs_menu" aria-expanded="false" aria-controls="faqs_menu"
                     class="side-nav-link collapsed">

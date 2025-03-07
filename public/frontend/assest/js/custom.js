@@ -16,9 +16,8 @@ $(document).ready(function () {
 
 
 // header fix
-
-$(window).scroll(function () {
-    if ($(window).scrollTop() > 50) {
+$(window).scroll(function(){
+    if ($(window).scrollTop () > 50) {
         $('header').addClass('show');
     }
     else {
@@ -126,25 +125,27 @@ $('.mobileViewSection .owl-carousel').owlCarousel({
     }
 })
 
+// $(document).ready(function () {
+//     $(".compareBoxOpen").click(function (event) {
 
-$(document).ready(function () {
-    $(".compareBoxOpen").click(function (event) {
+//         // event.preventDefault();
+//         // event.stopPropagation();
+//             $(".comparePorjectModal").addClass("show");
+//         });
 
-        event.preventDefault();
-        event.stopPropagation();
-        $(".comparePorjectModal").addClass("show");
-    });
+//     $(document).click(function (event) {
+//         if (!$(event.target).closest(".comparePorjectModal, .compareBoxOpen").length) {
+//             $(".comparePorjectModal").removeClass("show");
+//         }
+//     });
+//     $(".propertyCard").click(function (event) {
+//         if(!$(event.target).hasClass('checkbox') && !$(event.target).hasClass('compareBoxOpen'))
+//         {
+//             $('#propertyModal').modal('show');
+//         }
+//     });
 
-    $(document).click(function (event) {
-        if (!$(event.target).closest(".comparePorjectModal, .compareBoxOpen").length) {
-            $(".comparePorjectModal").removeClass("show");
-        }
-    });
-    $(".propertyCard").click(function (event) {
-        $('#propertyModal').modal('show');
-    });
-
-});
+// });
 
 
 $(document).ready(function () {
@@ -152,8 +153,7 @@ $(document).ready(function () {
         $(".boxImg a").first().trigger("click");
     });
 
-
-    $('body').on('click', '#nav-tabContent2 .imgBox, .masterImg', function (e) {
+    $('body').on('click', '#nav-tabContent2 .imgBox, .masterImg', function(e) {
         let src = $(this).find('img').attr('src') || $(this).attr('src');
         $('.img_view_section img').attr('src', src);
         $('#imageModal').modal('show');
@@ -167,19 +167,19 @@ $(document).ready(function () {
 $('.counter').each(function () {
     var $this = $(this),
         countTo = $this.attr('data-count');
-
-    $({ countNum: $this.text() }).animate({
-        countNum: countTo
+  
+    $({ countNum: $this.text()}).animate({
+      countNum: countTo
     },
-
-        {
-            duration: 2000,
-            easing: 'linear',
-            step: function () {
-                $this.text(Math.floor(this.countNum));
-            },
-            complete: function () {
-                $this.text(this.countNum);
-            }
-        });
+                                         
+    {
+      duration: 2000,
+      easing:'linear',
+      step: function() {
+        $this.text(Math.floor(this.countNum));
+      },
+      complete: function() {
+        $this.text(this.countNum);
+      }
+    });
 });

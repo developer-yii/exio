@@ -1664,7 +1664,7 @@ body.matchProperty {
 
 .propertyCard .imgBox img {
     width: 100%;
-    min-height: 200px;
+    height: 200px;
     border-radius: 5px;
     object-fit: cover;
 }

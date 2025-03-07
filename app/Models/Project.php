@@ -159,4 +159,9 @@ class Project extends Model
     {
         return $this->belongsTo(ProjectBadge::class, 'project_badge', 'id');
     }
+  
+    public function downloadBrochures()
+    {
+        return $this->hasMany(DownloadBrochure::class);
+    }
 }
