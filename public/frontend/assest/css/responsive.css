@@ -1311,6 +1311,15 @@
         top: 48px;
         border-radius: 5px;
     }
+
+    .comparePorjectModal .detailmainSec {
+        width: 100%;
+    }
+
+    .comparePorjectModal .compareMain .closeModal {
+        top: -28px;
+        right: -10px;
+    }
 }
 
 @media (max-width:479px) {
