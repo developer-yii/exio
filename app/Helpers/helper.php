@@ -223,6 +223,7 @@ if (!function_exists('convertToLacs')) {
 }
 
 if (!function_exists('getAmenitiesList')) {
+
     function getAmenitiesList($amenities)
     {
         if (!$amenities) {
@@ -236,6 +237,26 @@ if (!function_exists('getAmenitiesList')) {
         return implode(', ', $amenitiesArray);
     }
 }
+
+if (!function_exists('truncateText')) {
+    function truncateText($text, $maxLength) {
+        return (strlen($text) > $maxLength) ? substr($text, 0, $maxLength) . "..." : $text;
+    }
+}
+
+if (!function_exists('renderProgressBar')) {
+    function renderProgressBar($percentage)
+    {
+        return '<div class="progress-bar ' . getProgressBarColorClass($percentage) . '"
+                    role="progressbar"
+                    aria-valuenow="' . $percentage . '"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    style="width:' . $percentage . '%">
+                </div>';
+    }
+}
+
 
 
 

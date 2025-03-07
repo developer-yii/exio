@@ -15,4 +15,9 @@ class DownloadBrochure extends Model
         'phone_number',
         'email'
     ];
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
+    }
 }

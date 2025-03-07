@@ -56,16 +56,20 @@ Route::middleware('guest')->group(function () {
 
 });
 
-Route::group(['prefix' => 'property'], function () {
-    Route::get('/{slug}', [PropertyController::class, 'details'])->name('property.details');
-    // Route::get('/details/{slug}/{id}', [PropertyController::class, 'details'])->name('property.details');
-    Route::post('/details/like-unlike', [PropertyController::class, 'addRemoveWishlist'])->name('property.like-unlike');
-    Route::post('/details/download-brochure-form', [PropertyController::class, 'downloadBrochureForm'])->name('property.download-brochure-form');
+Route::middleware(['auth', 'isUser'])->group(function () {
+    Route::group(['prefix' => 'property'], function () {
+        Route::post('/like-unlike', [PropertyController::class, 'addRemoveWishlist'])->name('property.like-unlike');
+        Route::get('/shortlisted', [PropertyController::class, 'likedProperty'])->name('property.shortlisted');
+        Route::get('/liked/details', [PropertyController::class, 'likedPropertyDetails'])->name('property.liked.details');
+    });
 });
 
+Route::group(['prefix' => 'property'], function () {
+    Route::post('/download-brochure-form', [PropertyController::class, 'downloadBrochureForm'])->name('property.download-brochure-form');
+    Route::get('/compare-property', [PropertyController::class, 'compareProperty'])->name('property.compare');
+    Route::get('/compare', [PropertyController::class, 'comparePropertyPage'])->name('property.comparepage');
 
-Route::middleware(['auth', 'isUser'])->group(function () {
-
+    Route::get('/{slug}', [PropertyController::class, 'details'])->name('property.details');
 });
 
 Route::middleware(['auth'])->group(function () {

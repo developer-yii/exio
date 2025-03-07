@@ -9,8 +9,7 @@
                     <a href="javascript:void(0)"><i class="fa-solid fa-bars"></i></a>
                 </div>
                 <div class="logo-box">
-                    <a href="{{ route('front.home') }}"><img src="{{ $baseUrl }}assest/images/logo-img.png"
-                            alt="logo-img" /></a>
+                    <a href="{{ route('front.home') }}"><img src="{{ $baseUrl }}assest/images/logo-img.png" alt="logo-img" /></a>
                 </div>
                 <div class="main-nav">
                     <ul>
@@ -53,16 +52,20 @@
                             </ul>
                         </li>
                         <li class="moblieHide">
-                            <a href="{{ route('front.check-and-match-property') }}" class="second-menu"><i
-                                    class="fa-solid fa-circle-check"></i> Check and
-                                match property</a>
+                            <a href="{{ route('front.check-and-match-property') }}" class="second-menu">
+                                <i class="fa-solid fa-circle-check"></i> Check and match property
+                            </a>
                         </li>
                         <li>
                             <a href="javascript:void(0)" class="user-menu"><i class="fa-solid fa-user"></i></a>
                             <ul class="userDropDown">
                                 @if (Auth::user())
-                                    <li><a href=""><img src="{{ $baseUrl }}assest/images/login.png"
-                                                alt="login">Profile({{ Auth::user()->name }})</a></li>
+                                    <li>
+                                        <a href="">
+                                            <img src="{{ $baseUrl }}assest/images/login.png"
+                                                alt="login">Profile({{ Auth::user()->name }})
+                                        </a>
+                                    </li>
                                 @else
                                     <li>
                                         <a href="{{ route('login') }}">
@@ -70,13 +73,20 @@
                                         </a>
                                     </li>
                                 @endif
-                                <li><a href="site_traking_listing.html"><img
-                                            src="{{ $baseUrl }}assest/images/project.png" alt="project">Project
-                                        Insights</a></li>
-                                <li><a href="liked_properties.html"><img
-                                            src="{{ $baseUrl }}assest/images/shortlist.png"
-                                            alt="shortlist">Shortlisted
-                                        Properties</a></li>
+                                <li>
+                                    <a href="site_traking_listing.html">
+                                        <img src="{{ $baseUrl }}assest/images/project.png" alt="project"> Project
+                                        Insights
+                                    </a>
+                                </li>
+                                @if (Auth::user())
+                                    <li>
+                                        <a href="{{ route('property.shortlisted') }}">
+                                            <img src="{{ $baseUrl }}assest/images/shortlist.png"
+                                                alt="shortlist">Shortlisted Properties
+                                        </a>
+                                    </li>
+                                @endif
                                 <li><a href="downloaded_certificates.html"><img
                                             src="{{ $baseUrl }}assest/images/report.png" alt="report">Downloaded
                                         Reports</a></li>

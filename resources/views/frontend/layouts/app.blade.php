@@ -98,6 +98,7 @@
     {{-- <script src="assest/js/custom.js"></script> --}}
 
     <script>
+        var propertyLikeUrl = "{{ route('property.like-unlike') }}";
         $(document).ready(function() {
             $.ajaxSetup({
                 headers: {

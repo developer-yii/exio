@@ -42,7 +42,7 @@ class PropertyController extends Controller
         $amenityIds = explode(',', $project->amenities);
         $amenitiesList = Amenity::whereIn('id', $amenityIds)->get();
 
-        $similarProperties = Project::with(['location', 'wishlistedByUsers'])->where('city_id', $project->city_id)
+        $similarProperties = Project::with(['projectImages', 'location', 'wishlistedByUsers', 'location.city'])->where('city_id', $project->city_id)
             ->where('location_id', $project->location_id)
             ->where('property_type', $project->property_type)
             // ->where('id', '!=', $project->id)
@@ -108,6 +108,10 @@ class PropertyController extends Controller
 
     public function addRemoveWishlist(Request $request){
 
+        if(!$request->ajax()){
+            return response()->json(['status' => 400, 'message' => 'Invalid Request.', 'data' => []]);
+        }
+
         $loginUser = Auth::user();
 
         $favourite_property = PropertyWishlist::where('project_id', $request->property_id)
@@ -127,4 +131,116 @@ class PropertyController extends Controller
         return response($result);
 
     }
+
+    public function likedProperty(Request $request){
+
+        $loginUser = Auth::user();
+        $projectids = PropertyWishlist::where('user_id', $loginUser->id)->pluck('project_id');
+        $favourite_properties = Project::with([
+            'projectImages' => function ($query) {
+                $query->where('is_cover', 0);
+            },
+            'builder',
+            'location',
+            'projectDetails',
+            'city'
+        ])->whereIn('id', $projectids)->paginate(9);
+
+        return view('frontend.property.liked-properties', compact('favourite_properties'));
+    }
+
+    public function compareProperty(Request $request)
+    {
+
+        if(!$request->ajax()){
+            return response()->json(['status' => 400, 'message' => 'Invalid Request.', 'data' => []]);
+        }
+
+        $properties = Project::with([
+            'projectImages' => function ($query) {
+                $query->where('is_cover', 0);
+            },
+            'builder',
+            'location',
+            'projectDetails',
+            'city'
+        ])->whereIn('id', $request->ids)->take(2)->get();
+
+        foreach($properties as $property){
+            $property->possession_date = getFormatedDate($property->possession_by, 'M, Y');
+            $property->cover_image = $property->getCoverImageUrl();
+            $property->price = "₹" . $property->price_from . formatPriceUnit($property->price_from_unit)  ." - ₹ " . $property->price_to . formatPriceUnit($property->price_to_unit) ;
+            $property->truncatedPropertyType = truncateText($property->custom_property_type, 15);
+            $property->location_city = $property->location->location_name .",". $property->city->city_name;
+            $property->truncatedLocation = truncateText($property->location_city, 15);
+
+        }
+
+        if(!$properties){
+            return response()->json(['status' => false, 'message' => 'Property not found.', 'data' => []]);
+        }
+
+        return response(['status' => true, 'data' => $properties]);
+
+    }
+
+    public function comparePropertyPage(Request $request)
+    {
+        $encodedCompareIds = request()->get('property');
+        $encodedArray = explode(',', $encodedCompareIds);
+
+        $compareIds = array_map(function ($encodedId) {
+            return base64_decode($encodedId);
+        }, $encodedArray);
+
+        $properties = Project::with([
+            'projectImages',
+            'builder',
+            'projectDetails',
+            'masterPlans',
+            'floorPlans',
+            'localities',
+            'localities.locality',
+            'reraDetails'
+        ])->whereIn('id', $compareIds)->get();
+
+        foreach($properties as $property){
+            $amenityIds = explode(',', $property->amenities);
+            $property->amenitiesList = Amenity::whereIn('id', $amenityIds)->get();
+        }
+
+        return view('frontend.property.comparepage', compact('properties'));
+    }
+
+    // public function comparePropertyPage(Request $request)
+    // {
+    //     $encodedCompareIds = request()->get('property');
+    //     $encodedArray = explode(',', $encodedCompareIds);
+
+    //     $compareIds = array_map(function ($encodedId) {
+    //         return base64_decode($encodedId);
+    //     }, $encodedArray);
+
+    //     $propertyId1 = $compareIds[0] ?? null;
+    //     $propertyId2 = $compareIds[1] ?? null;
+
+
+    //     $properties = Project::with([
+    //         'projectImages',
+    //         'builder',
+    //         'projectDetails',
+    //         'masterPlans',
+    //         'floorPlans',
+    //         'localities',
+    //         'localities.locality',
+    //         'reraDetails'
+    //     ])->whereIn('id', $compareIds)->get();
+
+    //     foreach($properties as $property){
+    //         $amenityIds = explode(',', $property->amenities);
+    //         $property->amenitiesList = Amenity::whereIn('id', $amenityIds)->get();
+    //     }
+
+    //     return view('frontend.property.comparepage', compact('properties'));
+    // }
 }

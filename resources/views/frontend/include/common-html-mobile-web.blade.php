@@ -1,37 +1,37 @@
-@if($type == 'overview')
-    <div id="overView">
-        <div class="overViewBox">
-            <div class="overBox">
-                <span>Carpet Area</span>
-                <h6>{{ $project->carpet_area }}sqft</h6>
-            </div>
-            <div class="overBox">
-                <span>Total Floors</span>
-                <h6>{{ $project->total_floors }} Floors</h6>
-            </div>
-            <div class="overBox">
-                <span>Total Tower</span>
-                <h6>{{ $project->total_tower }}</h6>
-            </div>
-            <div class="overBox">
-                <span>Age of Construction</span>
-                <h6>{{ getAgeOfConstruction($project->age_of_construction) }}</h6>
-            </div>
-            <div class="overBox">
-                <span>Property Type</span>
-                <h6>{{ getPropertyType($project->property_type) }}</h6>
-            </div>
-            @foreach ($project->projectDetails as $projectDetail)
-                <div class="overBox">
-                    <span>{{ $projectDetail->name }}</span>
-                    <h6>{{ $projectDetail->value }}</h6>
-                </div>
-            @endforeach
+@if($type == 'overviewBox')
+    <div class="overViewBox">
+        <div class="overBox">
+            <span>Carpet Area</span>
+            <h6>{{ $project->carpet_area }}sqft</h6>
         </div>
-        <div class="textBox">
-            <h6>About {{ $project->project_name }}</h6>
-            <p>{!! $project->project_about !!}</p>
+        <div class="overBox">
+            <span>Total Floors</span>
+            <h6>{{ $project->total_floors }} Floors</h6>
         </div>
+        <div class="overBox">
+            <span>Total Tower</span>
+            <h6>{{ $project->total_tower }}</h6>
+        </div>
+        <div class="overBox">
+            <span>Age of Construction</span>
+            <h6>{{ getAgeOfConstruction($project->age_of_construction) }}</h6>
+        </div>
+        <div class="overBox">
+            <span>Property Type</span>
+            <h6>{{ getPropertyType($project->property_type) }}</h6>
+        </div>
+        @foreach ($project->projectDetails as $projectDetail)
+            <div class="overBox">
+                <span>{{ $projectDetail->name }}</span>
+                <h6>{{ $projectDetail->value }}</h6>
+            </div>
+        @endforeach
+    </div>
+@endif
+@if($type == 'project-details')
+    <div class="textBox">
+        <h6>About {{ $project->project_name }}</h6>
+        <p>{!! $project->project_about !!}</p>
     </div>
 @endif
 
@@ -99,11 +99,45 @@
     </div>
 @endif
 
+{{-- @if($type == "amenities")
+    @if($page == 'compare')
+        @foreach ($project->amenitiesList as $index => $amenity)
+            <div class="itemsBox {{ $index >= 23 ? 'd-none' : '' }}">
+                <div class="iconImg">
+                    <img src="{{ $baseUrl }}assest/images/circle_gray.png" alt="circle_gray"  loading="lazy">
+                </div>
+                <div class="iconText">
+                    <p>{{ $amenity->amenity_name }}</p>
+                </div>
+            </div>
+        @endforeach
+    @else
+        @foreach ($amenitiesList as $index => $amenity)
+            <div class="itemsBox {{ $index >= 23 ? 'd-none' : '' }}">
+                <div class="iconImg">
+                    <img src="{{ $amenity->getAmenityIconUrl() }}" alt="{{ $amenity->name }}" height="20" loading="lazy">
+                </div>
+                <div class="iconText">
+                    <p>{{ $amenity->amenity_name }}</p>
+                </div>
+            </div>
+        @endforeach
+    @endif
+@endif --}}
+
 @if($type == "amenities")
-    @foreach ($amenitiesList as $index => $amenity)
-        <div class="itemsBox {{ $index >= 23 ? 'd-none' : '' }}">
+    @php
+        $amenities = ($page ?? '') == 'compare' ? $project->amenitiesList : $amenitiesList;
+        $iconSrc = ($page ?? '') == 'compare' ? $baseUrl . 'assest/images/circle_gray.png' : null;
+    @endphp
+
+    @foreach ($amenities as $index => $amenity)
+        <div class="itemsBox {{ $index >= $showAmenities ? 'd-none' : '' }}">
             <div class="iconImg">
-                <img src="{{ $amenity->getAmenityIconUrl() }}" alt="{{ $amenity->name }}" height="20" loading="lazy">
+                <img src="{{ $iconSrc ?? $amenity->getAmenityIconUrl() }}"
+                     alt="{{ $iconSrc ? 'circle_gray' : $amenity->name }}"
+                     height="20"
+                     loading="lazy">
             </div>
             <div class="iconText">
                 <p>{{ $amenity->amenity_name }}</p>
@@ -112,18 +146,38 @@
     @endforeach
 @endif
 
+
 @if($type == "amenities-more-button")
-    @if (count($amenitiesList) > 23)
+    @php
+        $amenities = ($page ?? '') == 'compare' ? ($project->amenitiesList ?? []) : ($amenitiesList ?? []);
+    @endphp
+
+    @if (count($amenities) > $showAmenities)
         <div class="itemsBox more">
-            <a href="javascript:void(0)" id="showMoreAmenity">
+            <a href="javascript:void(0)" class="showMoreAmenity">
                 <div class="iconText">
-                    <p>+ {{ count($amenitiesList) - 23 }} <br>more</p>
+                    <p>+ {{ count($amenities) - $showAmenities }} <br>more</p>
                     <i class="fa-solid fa-chevron-down"></i>
                 </div>
             </a>
         </div>
     @endif
 @endif
+
+
+{{-- @if($type == "amenities-more-button")
+    $amenities = ($page ?? '') == 'compare' ? $project->amenitiesList : $amenitiesList;
+    @if (count($amenities) > 11)
+        <div class="itemsBox more">
+            <a href="javascript:void(0)" class="showMoreAmenity">
+                <div class="iconText">
+                    <p>+ {{ count($amenities) - 11 }} <br>more</p>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+            </a>
+        </div>
+    @endif
+@endif --}}
 
 @if($type == "download-brochure")
     <div class="browser_get">
@@ -137,7 +191,11 @@
     @foreach ($project->localities as $index => $locality)
         <div class="localityItem {{ $index >= 7 ? 'd-none' : '' }}">
             <div class="imgIcon">
-                <img src="{{ $locality->locality->getLocalityImageUrl() }}" loading="lazy">
+                @if($page == 'compare')
+                    <img src="{{ $baseUrl }}assest/images/circle_gray.png" alt="circle_gray"  loading="lazy">
+                @else
+                    <img src="{{ $locality->locality->getLocalityImageUrl() }}" loading="lazy">
+                @endif
             </div>
             <div class="textBox">
                 <span>{{ $locality->locality->locality_name }}
@@ -151,7 +209,7 @@
 @if($type == "localities-more-button")
     @if (count($project->localities) > 7)
         <div class="localityItem">
-            <a href="javascript:void(0)" id="showMoreLocality">+
+            <a href="javascript:void(0)" class="showMoreLocality">+
                 {{ count($project->localities) - 7 }} More <i class="fa-solid fa-chevron-down"></i>
             </a>
         </div>
@@ -159,21 +217,14 @@
 @endif
 
 @if($type == "rera-document")
-    <div id="documents">
-        <div class="title">
-            <h5>RERA Details</h5>
-        </div>
-        <div class="documentBox">
-            @foreach ($project->reraDetails as $reraDetail)
-            <a href="{{ $reraDetail->getReraDocumentUrl() }}" download>
-                <div class="boxBox">
-                    <i class="bi bi-file-earmark"></i>
-                    <p>{{ $reraDetail->title }}</p>
-                </div>
-            </a>
-            @endforeach
-        </div>
-    </div>
+    @foreach ($project->reraDetails as $reraDetail)
+        <a href="{{ $reraDetail->getReraDocumentUrl() }}" download>
+            <div class="boxBox">
+                <i class="bi bi-file-earmark"></i>
+                <p>{{ $reraDetail->title }}</p>
+            </div>
+        </a>
+    @endforeach
 @endif
 
 @if($type == "map")
@@ -234,9 +285,8 @@
             <div class="addressBox">
                 <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home" loading="lazy">
                 <p>{{ getAmenitiesList($similarProperty->amenities) }}</p>
-                <span>more</span>
+                <span class="more-locality">more</span>
             </div>
         </div>
     </a>
 @endif
-
