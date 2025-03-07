@@ -150,4 +150,9 @@ class Project extends Model
         return asset('images/no_image_available.jpg');
     }
 
+    public function downloadBrochures()
+    {
+        return $this->hasMany(DownloadBrochure::class);
+    }
+
 }

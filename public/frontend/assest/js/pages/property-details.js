@@ -35,30 +35,6 @@ $(document).ready(function () {
         $('#displayedImage3D').attr('src', imagePath); // Update image
     });
 
-
-    $('.heartIconFill, .save-property').on('click', function (e) {
-        e.preventDefault();
-
-        let propertyId = $(this).data('id'); // Get property ID from data-id
-        let heartIcon = $(this).find('i').length ? $(this).find('i') : $(this);
-        $.ajax({
-            url: propertyLikeUrl,
-            type: "POST",
-            data: { property_id: propertyId },
-            success: function (response) {
-                if (response.status === "liked") {
-                    heartIcon.removeClass('fa-regular').addClass('fa-solid');
-                } else {
-                    heartIcon.removeClass('fa-solid').addClass('fa-regular');
-                }
-                // toastr.success(response.message);
-            },
-            error: function () {
-                alert("Something went wrong. Please try again.");
-            }
-        });
-    });
-
     $('#downloadBrochureForm').submit(function (e) {
         e.preventDefault();
         var formData = $(this).serialize();
@@ -102,16 +78,6 @@ $(document).ready(function () {
 
 clearErrorOnInput('#downloadBrochureForm');
 
-$(document).on("click", ".addressBox span", function (event) {
-    event.preventDefault(); // Prevent redirection
-
-    var parentBox = $(this).closest(".addressBox");
-
-    parentBox.toggleClass("expanded"); // Toggle class
-    $(this).text(parentBox.hasClass("expanded") ? "less" : "more"); // Update text
-});
-
-
 document.addEventListener("DOMContentLoaded", function() {
 
     updateShareLinks();
@@ -152,18 +118,6 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    // amenity section
-    document.getElementById("showMoreAmenity")?.addEventListener("click", function() {
-        document.querySelectorAll("#amenites .itemsBox.d-none").forEach(el => el.classList.remove("d-none"));
-        this.closest(".more").style.display = "none"; // Hide the "More" button
-    });
-
-    // locality section
-    document.getElementById("showMoreLocality")?.addEventListener("click", function() {
-        document.querySelectorAll("#locality .localityItem.d-none").forEach(el => el.classList.remove("d-none"));
-        this.closest(".localityItem").style.display = "none"; // Hide the "More" button
-    });
-
     // smooth scroll section
     document.querySelectorAll('.stickyTabpanel a').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -187,7 +141,6 @@ $('.sliderImgSec .owl-carousel').owlCarousel({
     loop:false,
     margin:20,
     nav:true,
-    // navText:['<img src="../frontend/assest/images/left-ar.png" alt="left-ar">','<img src="../frontend/assest/images/right-ar.png" alt="right-ar">'],
     navText: [
         '<img src="' + baseUrl + 'assest/images/left-ar.png" alt="left-ar">',
         '<img src="' + baseUrl + 'assest/images/right-ar.png" alt="right-ar">'
@@ -268,4 +221,3 @@ function copyToClipboard() {
 
 // Call the function to update share links when the page loads
 window.onload = updateShareLinks;
-

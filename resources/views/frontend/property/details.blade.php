@@ -15,8 +15,6 @@
 @endsection
 
 @extends('frontend.layouts.app')
-
-@section('title', 'Home Page')
 @section('content')
     <!-- details banner -->
     <section class="detail_Sec">
@@ -160,7 +158,11 @@
                     <div class="col-lg-8">
                         @if (getDeviceType() == 'desktop')
                             <div class="leftScrollSection desktop">
-                                @include('frontend.include.common-html-mobile-web', ['type' => 'overview'])
+
+                                <div id="overView">
+                                    @include('frontend.include.common-html-mobile-web', ['type' => 'overviewBox'])
+                                    @include('frontend.include.common-html-mobile-web', ['type' => 'project-details'])
+                                </div>
 
                                 {{-- master plan web view --}}
                                 <div id="master_plan">
@@ -213,8 +215,8 @@
                                             <p>Total {{ count($amenitiesList) }}+ Amenities</p>
                                         </div>
                                         <div class="amenitiesItem">
-                                            @include('frontend.include.common-html-mobile-web', ['type' => 'amenities'])
-                                            @include('frontend.include.common-html-mobile-web', ['type' => 'amenities-more-button'])
+                                            @include('frontend.include.common-html-mobile-web', ['type' => 'amenities', 'page' => 'project-detail', 'showAmenities' => 23])
+                                            @include('frontend.include.common-html-mobile-web', ['type' => 'amenities-more-button', 'page' => 'project-detail', 'showAmenities' => 23])
                                         </div>
                                     </div>
                                 </div>
@@ -231,12 +233,19 @@
                                         <h5>Locality</h5>
                                     </div>
                                     <div class="localityBox">
-                                        @include('frontend.include.common-html-mobile-web', ['type' => 'localities'])
+                                        @include('frontend.include.common-html-mobile-web', ['type' => 'localities', 'page' => 'property-details'])
                                         @include('frontend.include.common-html-mobile-web', ['type' => 'localities-more-button'])
                                     </div>
                                 </div>
 
-                                @include('frontend.include.common-html-mobile-web', ['type' => 'rera-document'])
+                                <div id="documents">
+                                    <div class="title">
+                                        <h5>RERA Details</h5>
+                                    </div>
+                                    <div class="documentBox">
+                                        @include('frontend.include.common-html-mobile-web', ['type' => 'rera-document'])
+                                    </div>
+                                </div>
 
                                 <div id="map_view">
                                     <div class="title">
@@ -264,7 +273,11 @@
                                         <div id="flush-collapseOne" class="accordion-collapse collapse"
                                             aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
                                             <div class="accordion-body">
-                                                @include('frontend.include.common-html-mobile-web', ['type' => 'overview'])
+                                                <div id="overView">
+                                                    @include('frontend.include.common-html-mobile-web', ['type' => 'overviewBox'])
+                                                    @include('frontend.include.common-html-mobile-web', ['type' => 'project-details'])
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -362,13 +375,12 @@
                                                 <div id="amenites">
                                                     <div class="amenitesBox">
                                                         <div class="title">
-                                                            <h5>Amenities</h5>
                                                             <p>Total {{ count($amenitiesList) }}+ Amenities</p>
                                                         </div>
                                                         <div class="amenitiesItem">
-                                                            @include('frontend.include.common-html-mobile-web', ['type' => 'amenities'])
+                                                            @include('frontend.include.common-html-mobile-web', ['type' => 'amenities', 'page' => 'project-detail', 'showAmenities' => 23])
                                                         </div>
-                                                        @include('frontend.include.common-html-mobile-web', ['type' => 'amenities-more-button'])
+                                                            @include('frontend.include.common-html-mobile-web', ['type' => 'amenities-more-button', 'page' => 'project-detail', 'showAmenities' => 23])
                                                     </div>
                                                 </div>
                                             </div>
@@ -404,11 +416,8 @@
                                             aria-labelledby="flush-headingSix" data-bs-parent="#accordionFlushExample">
                                             <div class="accordion-body">
                                                 <div id="locality">
-                                                    <div class="title">
-                                                        <h5>Locality</h5>
-                                                    </div>
                                                     <div class="localityBox">
-                                                        @include('frontend.include.common-html-mobile-web', ['type' => 'localities'])
+                                                        @include('frontend.include.common-html-mobile-web', ['type' => 'localities', 'page' => 'property-details'])
                                                     </div>
                                                         @include('frontend.include.common-html-mobile-web', ['type' => 'localities-more-button'])
                                                 </div>
@@ -426,7 +435,11 @@
                                         <div id="flush-collapseSeven" class="accordion-collapse collapse"
                                             aria-labelledby="flush-headingSeven" data-bs-parent="#accordionFlushExample">
                                             <div class="accordion-body">
-                                                @include('frontend.include.common-html-mobile-web', ['type' => 'rera-document'])
+                                                <div id="documents">
+                                                    <div class="documentBox">
+                                                        @include('frontend.include.common-html-mobile-web', ['type' => 'rera-document'])
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -481,75 +494,22 @@
                                         <span>{{ $project->exio_suggest_percentage }}%</span>
                                     </div>
                                     <div class="ourReportdetail">
-                                        <div class="boxOne comBoxPersantage">
-                                            <div class="topBar">
-                                                <h5>Amenities</h5>
-                                                <span>{{ $project->amenities_percentage }}%</span>
-                                            </div>
-                                            <div class="barBox">
-                                                <div class="progress">
-                                                    <div class="progress-bar {{ getProgressBarColorClass($project->amenities_percentage) }}"
-                                                        role="progressbar"
-                                                        aria-valuenow="{{ $project->amenities_percentage }}"
-                                                        aria-valuemin="0" aria-valuemax="100"
-                                                        style="width:{{ $project->amenities_percentage }}%"></div>
+                                        @foreach(['Amenities' => 'amenities_percentage', 'Project Plan' => 'project_plan_percentage', 'Locality' => 'locality_percentage', 'Return of Investment' => 'return_of_investment_percentage'] as $title => $field)
+                                            <div class="boxOne comBoxPersantage">
+                                                <div class="topBar">
+                                                    <h5>{{ $title }}</h5>
+                                                    <span>{{ $project->$field }}%</span>
                                                 </div>
-                                                <p>It is a long established fact that a reader will be distracted by the
-                                                    readable content of a page when looking at its layout.</p>
-                                            </div>
-                                        </div>
-                                        <div class="boxTwo comBoxPersantage">
-                                            <div class="topBar">
-                                                <h5>Project Plan</h5>
-                                                <span>{{ $project->project_plan_percentage }}%</span>
-                                            </div>
-                                            <div class="barBox">
-                                                <div class="progress">
-                                                    <div class="progress-bar {{ getProgressBarColorClass($project->project_plan_percentage) }}"
-                                                        role="progressbar"
-                                                        aria-valuenow="{{ $project->project_plan_percentage }}"
-                                                        aria-valuemin="0" aria-valuemax="100"
-                                                        style="width:{{ $project->project_plan_percentage }}%"></div>
-                                                </div>
-                                                <p>It is a long established fact that a reader will be distracted by the
-                                                    readable content of a page when looking at its layout.</p>
-                                            </div>
-                                        </div>
-                                        <div class="boxThree comBoxPersantage">
-                                            <div class="topBar">
-                                                <h5>Locality</h5>
-                                                <span>{{ $project->locality_percentage }}%</span>
-                                            </div>
-                                            <div class="barBox">
-                                                <div class="progress">
-                                                    <div class="progress-bar {{ getProgressBarColorClass($project->locality_percentage) }}"
-                                                        role="progressbar"
-                                                        aria-valuenow="{{ $project->locality_percentage }}"
-                                                        aria-valuemin="0" aria-valuemax="100"
-                                                        style="width:{{ $project->locality_percentage }}%"></div>
-                                                </div>
-                                                <p>It is a long established fact that a reader will be distracted by the
-                                                    readable content of a page when looking at its layout.</p>
-                                            </div>
-                                        </div>
-                                        <div class="boxFour comBoxPersantage">
-                                            <div class="topBar">
-                                                <h5>Return of Investment</h5>
-                                                <span>{{ $project->return_of_investment_percentage }}%</span>
-                                            </div>
-                                            <div class="barBox">
-                                                <div class="progress">
-                                                    <div class="progress-bar {{ getProgressBarColorClass($project->return_of_investment_percentage) }}"
-                                                        role="progressbar"
-                                                        aria-valuenow="{{ $project->return_of_investment_percentage }}"
-                                                        aria-valuemin="0" aria-valuemax="100"
-                                                        style="width:{{ $project->return_of_investment_percentage }}%">
+                                                <div class="barBox">
+                                                    <div class="progress">
+                                                        {!! renderProgressBar($project->$field) !!}
                                                     </div>
+                                                    <p>It is a long established fact that a reader will be distracted by the
+                                                        readable content of a page when looking at its layout.</p>
                                                 </div>
-                                                <p>It is a long established fact that a reader will be distracted by the
-                                                    readable content of a page when looking at its layout.</p>
                                             </div>
-                                        </div>
+                                        @endforeach
+
                                         <div class="contactBtn">
                                             <a class="linkBtn" href="{{ route('contact-us') }}">Contact Exio Agent</a>
                                         </div>
@@ -707,7 +667,6 @@
     <script>
         var latitude = {{ $project->latitude }};
         var longitude = {{ $project->longitude }};
-        var propertyLikeUrl = "{{ route('property.like-unlike') }}";
         var downloadBrochureUrl = "{{ route('property.download-brochure-form') }}";
         var baseUrl = "{{ $baseUrl }}";
     </script>

@@ -13,7 +13,7 @@ class UserAuthMiddleware
             return redirect()->route('login');
         }
 
-        if(Auth::user()->role_type != 1){
+        if(Auth::user()->role_type != 2){
             return redirect()->route("front.home");
         }
 
