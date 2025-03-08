@@ -1,5 +1,6 @@
 @php
     $baseUrl = asset('frontend') . '/';
+    $defaultCity = $cities->firstWhere('id', 1)->city_name;
 @endphp
 @extends('frontend.layouts.app')
 
@@ -19,15 +20,19 @@
                         <div class="cityDropDown">
                             <ul>
                                 <li>
-                                    <input type="hidden" name="city_mobile" id="city_mobile" />
-                                    <a class="cityClick" href="javascript:void(0)"><span
-                                            id="city_mobile_name">Ahmedabad</span> <i
-                                            class="fa-solid fa-chevron-down"></i></a>
+                                    <input type="hidden" name="city_mobile" id="city_mobile" value="1" />
+                                    <a class="cityClick" href="javascript:void(0)">
+                                        <span id="city_mobile_name">{{ $defaultCity }}</span>
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </a>
                                     <ul class="citySelect">
                                         @foreach ($cities as $city)
-                                            <li><a href="javascript:void(0)" data-id="{{ $city->id }}"
-                                                    data-name="{{ $city->city_name }}"
-                                                    class="city_click_mobile">{{ $city->city_name }}</a></li>
+                                            <li>
+                                                <a href="javascript:void(0)" data-id="{{ $city->id }}"
+                                                    data-name="{{ $city->city_name }}" class="city_click_mobile">
+                                                    {{ $city->city_name }}
+                                                </a>
+                                            </li>
                                         @endforeach
                                     </ul>
                                 </li>
@@ -64,16 +69,20 @@
                                     @if ($builders->count() > 0)
                                         <h6>Builder</h6>
                                         @foreach ($builders as $builder)
-                                            <li style="display: none;"><a href="javascript:void(0)" data-type="builder"
+                                            <li style="display: none;">
+                                                <a href="javascript:void(0)" data-type="builder"
                                                     data-id="{{ $builder->id }}"
-                                                    data-name="{{ $builder->builder_name }}">{{ $builder->builder_name }}</a>
+                                                    data-name="{{ $builder->builder_name }}">
+                                                    {{ $builder->builder_name }}
+                                                </a>
                                             </li>
                                         @endforeach
                                     @endif
                                 </ul>
                             </div>
                             <div class="searchIcon">
-                                <a href="" class="btn btnIcon"><i class="bi bi-search"></i></a>
+                                <a href="javascript:void(0)" id="search_btn_mobile" class="btn btnIcon"><i
+                                        class="bi bi-search"></i></a>
                             </div>
                         </div>
                     </div>
@@ -90,14 +99,18 @@
                 <div class="bannerFilterBox">
                     <div class="cityFilter">
                         <p>Choose City</p>
-                        <input type="hidden" name="city_desktop" id="city_desktop" />
-                        <a href="javascript:void(0)" class="cityClick"><span id="city_desktop_name">Ahmedabad</span>
-                            <i class="fa-solid fa-chevron-down"></i></a>
+                        <input type="hidden" name="city_desktop" id="city_desktop" value="1" />
+                        <a href="javascript:void(0)" class="cityClick">
+                            <span id="city_desktop_name">{{ $defaultCity }}</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </a>
                         <ul class="citySelect">
                             @foreach ($cities as $city)
-                                <li><a href="javascript:void(0)" data-id="{{ $city->id }}"
-                                        data-name="{{ $city->city_name }}"
-                                        class="city_click_desktop">{{ $city->city_name }}</a>
+                                <li>
+                                    <a href="javascript:void(0)" data-id="{{ $city->id }}"
+                                        data-name="{{ $city->city_name }}" class="city_click_desktop">
+                                        {{ $city->city_name }}
+                                    </a>
                                 </li>
                             @endforeach
                         </ul>
@@ -112,26 +125,36 @@
                                     @if ($localities->count() > 0)
                                         <h6>Locality</h6>
                                         @foreach ($localities as $locality)
-                                            <li style="display: none;"><a href="javascript:void(0)" data-type="locality"
+                                            <li style="display: none;">
+                                                <a href="javascript:void(0)" data-type="locality"
                                                     data-id="{{ $locality->id }}"
-                                                    data-name="{{ $locality->locality_name }}">{{ $locality->locality_name }}</a>
+                                                    data-name="{{ $locality->locality_name }}">
+                                                    {{ $locality->locality_name }}
+                                                </a>
+                                            </li>
                                         @endforeach
                                     @endif
                                     @if ($projects->count() > 0)
                                         <h6>Project</h6>
                                         @foreach ($projects as $project)
-                                            <li style="display: none;"><a href="javascript:void(0)" data-type="project"
+                                            <li style="display: none;">
+                                                <a href="javascript:void(0)" data-type="project"
                                                     data-id="{{ $project->id }}"
-                                                    data-name="{{ $project->project_name }}">{{ $project->project_name }}</a>
+                                                    data-name="{{ $project->project_name }}">
+                                                    {{ $project->project_name }}
+                                                </a>
                                             </li>
                                         @endforeach
                                     @endif
                                     @if ($builders->count() > 0)
                                         <h6>Builder</h6>
                                         @foreach ($builders as $builder)
-                                            <li style="display: none;"><a href="javascript:void(0)" data-type="builder"
+                                            <li style="display: none;">
+                                                <a href="javascript:void(0)" data-type="builder"
                                                     data-id="{{ $builder->id }}"
-                                                    data-name="{{ $builder->builder_name }}">{{ $builder->builder_name }}</a>
+                                                    data-name="{{ $builder->builder_name }}">
+                                                    {{ $builder->builder_name }}
+                                                </a>
                                             </li>
                                         @endforeach
                                     @endif
@@ -139,7 +162,8 @@
                             </div>
                         </div>
                         <div class="searchIcon">
-                            <a href="" class="btn btnIcon"><i class="bi bi-search"></i></a>
+                            <a href="javascript:void(0)" id="search_btn_desktop" class="btn btnIcon desktop-search"><i
+                                    class="bi bi-search"></i></a>
                         </div>
                     </div>
                 </div>
@@ -558,6 +582,23 @@
                 if ($(this).val() === '') {
                     $('.search-key').addClass('d-none');
                 }
+            });
+
+            $('#search_btn_desktop').click(function(event) {
+                event.preventDefault();
+                const city = $('#city_desktop').val();
+                const searchValue = $('.clickList').val();
+                console.log(city, searchValue);
+                window.location.href = "{{ route('property.result.filter') }}?city=" + city + "&search=" +
+                    searchValue;
+            });
+
+            $('#search_btn_mobile').click(function(event) {
+                event.preventDefault();
+                const city = $('#city_mobile').val();
+                const searchValue = $('.clickListMobile').val();
+                window.location.href = "{{ route('property.result.filter') }}?city=" + city + "&search=" +
+                    searchValue;
             });
         });
     </script>

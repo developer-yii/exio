@@ -1,0 +1,7 @@
+.propertyCard .addressBox p {
+    width: unset !important;
+}
+
+.propertyCard .addressBox a {
+    margin-left: 10px !important;
+}
