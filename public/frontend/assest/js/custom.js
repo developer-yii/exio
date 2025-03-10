@@ -16,8 +16,8 @@ $(document).ready(function () {
 
 
 // header fix
-$(window).scroll(function(){
-    if ($(window).scrollTop () > 50) {
+$(window).scroll(function () {
+    if ($(window).scrollTop() > 50) {
         $('header').addClass('show');
     }
     else {
@@ -79,30 +79,6 @@ $(document).ready(function () {
 });
 
 // ================ Slider js
-
-$('.latesNews .owl-carousel').owlCarousel({
-    loop: true,
-    margin: 20,
-    nav: true,
-    navText: ['<img src="assest/images/left-ar.png" alt="left-ar">', '<img src="assest/images/right-ar.png" alt="right-ar">'],
-    dots: false,
-    responsive: {
-        0: {
-            items: 1
-        },
-        575: {
-            items: 2
-        },
-        769: {
-            items: 3
-        },
-        1200: {
-            items: 4
-        }
-    }
-})
-
-
 $('.mobileViewSection .owl-carousel').owlCarousel({
     loop: true,
     margin: 10,
@@ -153,7 +129,7 @@ $(document).ready(function () {
         $(".boxImg a").first().trigger("click");
     });
 
-    $('body').on('click', '#nav-tabContent2 .imgBox, .masterImg', function(e) {
+    $('body').on('click', '#nav-tabContent2 .imgBox, .masterImg', function (e) {
         let src = $(this).find('img').attr('src') || $(this).attr('src');
         $('.img_view_section img').attr('src', src);
         $('#imageModal').modal('show');
@@ -167,19 +143,19 @@ $(document).ready(function () {
 $('.counter').each(function () {
     var $this = $(this),
         countTo = $this.attr('data-count');
-  
-    $({ countNum: $this.text()}).animate({
-      countNum: countTo
+
+    $({ countNum: $this.text() }).animate({
+        countNum: countTo
     },
-                                         
-    {
-      duration: 2000,
-      easing:'linear',
-      step: function() {
-        $this.text(Math.floor(this.countNum));
-      },
-      complete: function() {
-        $this.text(this.countNum);
-      }
-    });
+
+        {
+            duration: 2000,
+            easing: 'linear',
+            step: function () {
+                $this.text(Math.floor(this.countNum));
+            },
+            complete: function () {
+                $this.text(this.countNum);
+            }
+        });
 });

@@ -28,6 +28,8 @@ Auth::routes();
 Route::name('front.')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
+    Route::get('/get-projects', [HomeController::class, 'getProjects'])->name('home.getProjects');
+
     Route::prefix('check-and-match-property')->group(function () {
         Route::get('/', [CheckAndMatchPropertyController::class, 'checkAndMatchProperty'])->name('check-and-match-property');
         Route::post('/submit', [CheckAndMatchPropertyController::class, 'checkAndMatchPropertySubmit'])->name('check-and-match-property.submit');
