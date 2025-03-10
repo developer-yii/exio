@@ -1527,7 +1527,7 @@ body.matchProperty {
     min-height: 45px;
 }
 
-.checkProperty .checkPropertyBox .topFilterBar .searchBar i {
+.checkProperty .checkPropertyBox .topFilterBar .searchBar a {
     position: absolute;
     right: 15px;
     top: 50%;
@@ -4229,7 +4229,9 @@ textarea.inputClass {
 .porpertyFilter .comViewBox.five .selectArea .dropBox {
     width: calc(50%);
     margin-bottom: 0;
-    margin-top: 15px;
+    font-size: 18px;
+    color: var(--heading-text);
+    font-family: 'Inter-Regular';
 }
 
 .filterContent .range-slider {

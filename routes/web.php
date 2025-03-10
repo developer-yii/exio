@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\SocialController;
+use App\Http\Controllers\PropertyFilterController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -26,6 +27,8 @@ Auth::routes();
 
 Route::name('front.')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
+
+    Route::get('/get-projects', [HomeController::class, 'getProjects'])->name('home.getProjects');
 
     Route::prefix('check-and-match-property')->group(function () {
         Route::get('/', [CheckAndMatchPropertyController::class, 'checkAndMatchProperty'])->name('check-and-match-property');
@@ -64,6 +67,10 @@ Route::group(['prefix' => 'property'], function () {
     Route::post('/download-brochure-form', [PropertyController::class, 'downloadBrochureForm'])->name('property.download-brochure-form');
     Route::get('/compare-property', [PropertyController::class, 'compareProperty'])->name('property.compare');
     Route::get('/compare', [PropertyController::class, 'comparePropertyPage'])->name('property.comparepage');
+    Route::get('/result/filter', [PropertyFilterController::class, 'resultFilter'])->name('property.result.filter');
+    Route::get('/result/filter/get-project-data', [PropertyFilterController::class, 'getProjectData'])->name('property.getProjectData');
+    Route::get('/result/filter/get-appraisal-data', [PropertyFilterController::class, 'getAppraisalData'])->name('property.getAppraisalData');
+    Route::get('/result/filter/get-best-match-data', [PropertyFilterController::class, 'getBestMatchData'])->name('property.getBestMatchData');
 });
 
 Route::middleware(['auth', 'isUser'])->group(function () {
