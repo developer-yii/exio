@@ -64,11 +64,6 @@ class Project extends Model
         return $this->belongsTo(User::class, 'updated_by');
     }
 
-    public function scopeIsActive($query)
-    {
-        return $query->where('status', self::ACTIVE);
-    }
-
     public function builder()
     {
         return $this->belongsTo(Builder::class, 'builder_id', 'id');
@@ -102,11 +97,6 @@ class Project extends Model
     public function localities()
     {
         return $this->hasMany(LocalityAddMore::class, 'project_id');
-    }
-
-    public function locality()
-    {
-        return $this->hasManyThrough(Locality::class, LocalityAddMore::class, 'project_id', 'id', 'id');
     }
 
     public function reraDetails()

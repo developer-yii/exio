@@ -25,7 +25,6 @@ class HomeController extends Controller
                 $query->select('id', 'location_name');
             }
         ])
-            ->where('city_id', 1)
             ->where('status', 1)
             ->orderBy('exio_suggest_percentage', 'desc')
             ->limit(6)
@@ -38,27 +37,5 @@ class HomeController extends Controller
         $news = News::where('status', 1)->orderBy('created_at', 'desc')->limit(8)->get();
 
         return view('frontend.home.index', compact('cities', 'faqs', 'top_properties', 'news', 'localities', 'projects', 'builders'));
-    }
-
-    public function getProjects()
-    {
-        $per_page = request()->per_page ?? 6;
-        $projects = Project::with([
-            'builder' => function ($query) {
-                $query->select('id', 'builder_name');
-            },
-            'city' => function ($query) {
-                $query->select('id', 'city_name');
-            },
-            'location' => function ($query) {
-                $query->select('id', 'location_name');
-            }
-        ])->where('city_id', 1)->isActive()->orderBy('exio_suggest_percentage', 'desc')->paginate($per_page);
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Data fetched successfully',
-            'data' => $projects
-        ]);
     }
 }

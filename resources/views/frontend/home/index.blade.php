@@ -1,6 +1,5 @@
 @php
     $baseUrl = asset('frontend') . '/';
-    $defaultCity = $cities->firstWhere('id', 1)->city_name;
 @endphp
 @extends('frontend.layouts.app')
 
@@ -20,19 +19,15 @@
                         <div class="cityDropDown">
                             <ul>
                                 <li>
-                                    <input type="hidden" name="city_mobile" id="city_mobile" value="1" />
-                                    <a class="cityClick" href="javascript:void(0)">
-                                        <span id="city_mobile_name">{{ $defaultCity }}</span>
-                                        <i class="fa-solid fa-chevron-down"></i>
-                                    </a>
+                                    <input type="hidden" name="city_mobile" id="city_mobile" />
+                                    <a class="cityClick" href="javascript:void(0)"><span
+                                            id="city_mobile_name">Ahmedabad</span> <i
+                                            class="fa-solid fa-chevron-down"></i></a>
                                     <ul class="citySelect">
                                         @foreach ($cities as $city)
-                                            <li>
-                                                <a href="javascript:void(0)" data-id="{{ $city->id }}"
-                                                    data-name="{{ $city->city_name }}" class="city_click_mobile">
-                                                    {{ $city->city_name }}
-                                                </a>
-                                            </li>
+                                            <li><a href="javascript:void(0)" data-id="{{ $city->id }}"
+                                                    data-name="{{ $city->city_name }}"
+                                                    class="city_click_mobile">{{ $city->city_name }}</a></li>
                                         @endforeach
                                     </ul>
                                 </li>
@@ -69,20 +64,16 @@
                                     @if ($builders->count() > 0)
                                         <h6>Builder</h6>
                                         @foreach ($builders as $builder)
-                                            <li style="display: none;">
-                                                <a href="javascript:void(0)" data-type="builder"
+                                            <li style="display: none;"><a href="javascript:void(0)" data-type="builder"
                                                     data-id="{{ $builder->id }}"
-                                                    data-name="{{ $builder->builder_name }}">
-                                                    {{ $builder->builder_name }}
-                                                </a>
+                                                    data-name="{{ $builder->builder_name }}">{{ $builder->builder_name }}</a>
                                             </li>
                                         @endforeach
                                     @endif
                                 </ul>
                             </div>
                             <div class="searchIcon">
-                                <a href="javascript:void(0)" id="search_btn_mobile" class="btn btnIcon"><i
-                                        class="bi bi-search"></i></a>
+                                <a href="" class="btn btnIcon"><i class="bi bi-search"></i></a>
                             </div>
                         </div>
                     </div>
@@ -99,18 +90,14 @@
                 <div class="bannerFilterBox">
                     <div class="cityFilter">
                         <p>Choose City</p>
-                        <input type="hidden" name="city_desktop" id="city_desktop" value="1" />
-                        <a href="javascript:void(0)" class="cityClick">
-                            <span id="city_desktop_name">{{ $defaultCity }}</span>
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </a>
+                        <input type="hidden" name="city_desktop" id="city_desktop" />
+                        <a href="javascript:void(0)" class="cityClick"><span id="city_desktop_name">Ahmedabad</span>
+                            <i class="fa-solid fa-chevron-down"></i></a>
                         <ul class="citySelect">
                             @foreach ($cities as $city)
-                                <li>
-                                    <a href="javascript:void(0)" data-id="{{ $city->id }}"
-                                        data-name="{{ $city->city_name }}" class="city_click_desktop">
-                                        {{ $city->city_name }}
-                                    </a>
+                                <li><a href="javascript:void(0)" data-id="{{ $city->id }}"
+                                        data-name="{{ $city->city_name }}"
+                                        class="city_click_desktop">{{ $city->city_name }}</a>
                                 </li>
                             @endforeach
                         </ul>
@@ -125,36 +112,26 @@
                                     @if ($localities->count() > 0)
                                         <h6>Locality</h6>
                                         @foreach ($localities as $locality)
-                                            <li style="display: none;">
-                                                <a href="javascript:void(0)" data-type="locality"
+                                            <li style="display: none;"><a href="javascript:void(0)" data-type="locality"
                                                     data-id="{{ $locality->id }}"
-                                                    data-name="{{ $locality->locality_name }}">
-                                                    {{ $locality->locality_name }}
-                                                </a>
-                                            </li>
+                                                    data-name="{{ $locality->locality_name }}">{{ $locality->locality_name }}</a>
                                         @endforeach
                                     @endif
                                     @if ($projects->count() > 0)
                                         <h6>Project</h6>
                                         @foreach ($projects as $project)
-                                            <li style="display: none;">
-                                                <a href="javascript:void(0)" data-type="project"
+                                            <li style="display: none;"><a href="javascript:void(0)" data-type="project"
                                                     data-id="{{ $project->id }}"
-                                                    data-name="{{ $project->project_name }}">
-                                                    {{ $project->project_name }}
-                                                </a>
+                                                    data-name="{{ $project->project_name }}">{{ $project->project_name }}</a>
                                             </li>
                                         @endforeach
                                     @endif
                                     @if ($builders->count() > 0)
                                         <h6>Builder</h6>
                                         @foreach ($builders as $builder)
-                                            <li style="display: none;">
-                                                <a href="javascript:void(0)" data-type="builder"
+                                            <li style="display: none;"><a href="javascript:void(0)" data-type="builder"
                                                     data-id="{{ $builder->id }}"
-                                                    data-name="{{ $builder->builder_name }}">
-                                                    {{ $builder->builder_name }}
-                                                </a>
+                                                    data-name="{{ $builder->builder_name }}">{{ $builder->builder_name }}</a>
                                             </li>
                                         @endforeach
                                     @endif
@@ -162,8 +139,7 @@
                             </div>
                         </div>
                         <div class="searchIcon">
-                            <a href="javascript:void(0)" id="search_btn_desktop" class="btn btnIcon desktop-search"><i
-                                    class="bi bi-search"></i></a>
+                            <a href="" class="btn btnIcon"><i class="bi bi-search"></i></a>
                         </div>
                     </div>
                 </div>
@@ -198,123 +174,132 @@
     <!-- discuss section -->
 
     <!-- best-property section -->
-    @if (getDeviceType() == 'desktop' && $top_properties->count() > 0)
+    @if (getDeviceType() == 'desktop')
         <section class="bestProperty webViewSection">
             <div class="container">
                 <div class="sectionTitleBox">
-                    <h3>Best Properties in Ahmedabad</h3>
+                    <h3>Best Properties</h3>
                 </div>
                 <div class="bestPropertyBox">
                     <div class="row">
-                        @foreach ($top_properties as $property)
-                            <div class="col-xl-4 col-md-6">
-                                <a href="{{ route('property.details', [$property->slug]) }}">
-                                    <div class="propertySec">
-                                        <div class="imgBox">
-                                            @if ($property->cover_image)
-                                                <img src="{{ asset('/storage/project_images/' . $property->cover_image) }}"
-                                                    alt="property-img" loading="lazy">
-                                            @else
-                                                <img src="{{ $baseUrl }}assest/images/property-img.png"
-                                                    alt="property-img" loading="lazy">
-                                            @endif
-                                        </div>
-                                        <div class="propertyName">
-                                            <h5>{{ $property->project_name }}</h5>
-                                        </div>
-                                        <div class="locationProperty">
-                                            <div class="homeBox comBox">
-                                                <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home">
-                                                <p>{{ $property->custom_property_type ?? '' }}</p>
+                        @if ($top_properties->count() > 0)
+                            @foreach ($top_properties as $property)
+                                <div class="col-xl-4 col-md-6">
+                                    <a href="{{ route('property.details', [$property->slug]) }}">
+                                        <div class="propertySec">
+                                            <div class="imgBox">
+                                                @if ($property->cover_image)
+                                                    <img src="{{ asset('/storage/project_images/' . $property->cover_image) }}"
+                                                        alt="property-img" loading="lazy">
+                                                @else
+                                                    <img src="{{ $baseUrl }}assest/images/property-img.png"
+                                                        alt="property-img" loading="lazy">
+                                                @endif
                                             </div>
-                                            <div class="location comBox">
-                                                <img src="{{ $baseUrl }}assest/images/Location.png" alt="Location">
-                                                <p>{{ $property->location->location_name . ', ' . $property->city->city_name }}
-                                                </p>
+                                            <div class="propertyName">
+                                                <h5>{{ $property->project_name }}</h5>
                                             </div>
-                                        </div>
-                                        <div class="suggestBox">
-                                            <div class="leftBtn">
-                                                <img src="{{ $baseUrl }}assest/images/x-btn.png" alt="x-btn">
+                                            <div class="locationProperty">
+                                                <div class="homeBox comBox">
+                                                    <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home">
+                                                    <p>{{ $property->custom_property_type ?? '' }}</p>
+                                                </div>
+                                                <div class="location comBox">
+                                                    <img src="{{ $baseUrl }}assest/images/Location.png"
+                                                        alt="Location">
+                                                    <p>{{ $property->location->location_name . ', ' . $property->city->city_name }}
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <div class="rightBar">
-                                                <h5>{{ $property->exio_suggest_percentage }}%</h5>
-                                                <div class="progress">
-                                                    <div class="progress-bar"
-                                                        style="width: {{ $property->exio_suggest_percentage }}%"
-                                                        role="progressbar"
-                                                        aria-valuenow="{{ $property->exio_suggest_percentage }}"
-                                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                            <div class="suggestBox">
+                                                <div class="leftBtn">
+                                                    <img src="{{ $baseUrl }}assest/images/x-btn.png" alt="x-btn">
+                                                </div>
+                                                <div class="rightBar">
+                                                    <h5>{{ $property->exio_suggest_percentage }}%</h5>
+                                                    <div class="progress">
+                                                        <div class="progress-bar"
+                                                            style="width: {{ $property->exio_suggest_percentage }}%"
+                                                            role="progressbar"
+                                                            aria-valuenow="{{ $property->exio_suggest_percentage }}"
+                                                            aria-valuemin="0" aria-valuemax="100"></div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </a>
-                            </div>
-                        @endforeach
+                                    </a>
+                                </div>
+                            @endforeach
+                        @endif
                     </div>
                     <div class="exploreMore">
-                        <a class="btn btnExplore" id="exploreMoreDesktop" href="javascript:void(0)">Explore More</a>
+                        <a class="btn btnExplore" href="javascript:void(0)">Explore More</a>
                     </div>
                 </div>
             </div>
         </section>
     @endif
 
-    @if (getDeviceType() == 'mobile' && $top_properties->count() > 0)
+    @if (getDeviceType() == 'mobile')
         <section class="bestProperty mobileViewSection">
             <div class="container">
                 <div class="sectionTitleBox">
-                    <h3>Best Properties in Ahmedabad</h3>
+                    <h3>Best Properties</h3>
                 </div>
                 <div class="bestPropertyBox">
                     <div class="owl-carousel owl-theme">
-                        @foreach ($top_properties as $property)
-                            <div class="item">
-                                <a href="{{ route('property.details', [$property->slug]) }}">
-                                    <div class="propertySec">
-                                        <div class="imgBox">
-                                            @if ($property->cover_image)
-                                                <img src="{{ asset('/storage/project_images/' . $property->cover_image) }}"
-                                                    alt="property-img" loading="lazy">
-                                            @else
-                                                <img src="{{ $baseUrl }}assest/images/property-img.png"
-                                                    alt="property-img" loading="lazy">
-                                            @endif
-                                        </div>
-                                        <div class="propertyName">
-                                            <h5>{{ $property->project_name }}</h5>
-                                        </div>
-                                        <div class="locationProperty">
-                                            <div class="homeBox comBox">
-                                                <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home">
-                                                <p>{{ $property->custom_property_type ?? '' }}</p>
+                        @if ($top_properties->count() > 0)
+                            @foreach ($top_properties as $property)
+                                <div class="item">
+                                    <a href="{{ route('property.details', [$property->slug]) }}">
+                                        <div class="propertySec">
+                                            <div class="imgBox">
+                                                @if ($property->cover_image)
+                                                    <img src="{{ asset('/storage/project_images/' . $property->cover_image) }}"
+                                                        alt="property-img" loading="lazy">
+                                                @else
+                                                    <img src="{{ $baseUrl }}assest/images/property-img.png"
+                                                        alt="property-img" loading="lazy">
+                                                @endif
                                             </div>
-                                            <div class="location comBox">
-                                                <img src="{{ $baseUrl }}assest/images/Location.png" alt="Location">
-                                                <p>{{ $property->location->location_name . ', ' . $property->city->city_name }}
-                                                </p>
+                                            <div class="propertyName">
+                                                <h5>{{ $property->project_name }}</h5>
                                             </div>
-                                        </div>
-                                        <div class="suggestBox">
-                                            <div class="leftBtn">
-                                                <img src="{{ $baseUrl }}assest/images/x-btn.png" alt="x-btn">
+                                            <div class="locationProperty">
+                                                <div class="homeBox comBox">
+                                                    <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home">
+                                                    <p>{{ $property->custom_property_type ?? '' }}</p>
+                                                </div>
+                                                <div class="location comBox">
+                                                    <img src="{{ $baseUrl }}assest/images/Location.png"
+                                                        alt="Location">
+                                                    <p>{{ $property->location->location_name . ', ' . $property->city->city_name }}
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <div class="rightBar">
-                                                <h5>{{ $property->exio_suggest_percentage }}%</h5>
-                                                <div class="progress">
-                                                    <div class="progress-bar" role="progressbar"
-                                                        style="width: {{ $property->exio_suggest_percentage }}%"
-                                                        aria-valuenow="{{ $property->exio_suggest_percentage }}"
-                                                        aria-valuemin="0" aria-valuemax="100">
+                                            <div class="suggestBox">
+                                                <div class="leftBtn">
+                                                    <img src="{{ $baseUrl }}assest/images/x-btn.png" alt="x-btn">
+                                                </div>
+                                                <div class="rightBar">
+                                                    <h5>{{ $property->exio_suggest_percentage }}%</h5>
+                                                    <div class="progress">
+                                                        <div class="progress-bar" role="progressbar"
+                                                            style="width: {{ $property->exio_suggest_percentage }}%"
+                                                            aria-valuenow="{{ $property->exio_suggest_percentage }}"
+                                                            aria-valuemin="0" aria-valuemax="100">
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </a>
-                            </div>
-                        @endforeach
+                                    </a>
+                                </div>
+                            @endforeach
+                        @endif
+                    </div>
+                    <div class="exploreMore">
+                        <a class="btn btnExplore" href="javascript:void(0)">Explore More</a>
                     </div>
                 </div>
             </div>
@@ -424,13 +409,13 @@
 
     <!-- lates news section -->
     <section class="latesNews">
-        @if ($news->count() > 0)
-            <div class="container">
-                <div class="sectionTitleBox">
-                    <h3>Latest News in Exio</h3>
-                </div>
-                <div class="latesNewsBox">
-                    <div class="owl-carousel owl-theme">
+        <div class="container">
+            <div class="sectionTitleBox">
+                <h3>Latest News in Exio</h3>
+            </div>
+            <div class="latesNewsBox">
+                <div class="owl-carousel owl-theme">
+                    @if ($news->count() > 0)
                         @foreach ($news as $item)
                             <div class="item">
                                 <div class="imgbox">
@@ -454,10 +439,12 @@
                                 </div>
                             </div>
                         @endforeach
-                    </div>
+                    @else
+                        <div>No News Found</div>
+                    @endif
                 </div>
             </div>
-        @endif
+        </div>
     </section>
     <!-- lates news section -->
 
@@ -572,154 +559,6 @@
                     $('.search-key').addClass('d-none');
                 }
             });
-
-            $('#search_btn_desktop').click(function(event) {
-                event.preventDefault();
-                const city = $('#city_desktop').val();
-                const searchValue = $('.clickList').val();
-                console.log(city, searchValue);
-                window.location.href = "{{ route('property.result.filter') }}?city=" + city + "&search=" +
-                    searchValue;
-            });
-
-            $('#search_btn_mobile').click(function(event) {
-                event.preventDefault();
-                const city = $('#city_mobile').val();
-                const searchValue = $('.clickListMobile').val();
-                window.location.href = "{{ route('property.result.filter') }}?city=" + city + "&search=" +
-                    searchValue;
-            });
         });
     </script>
-    <script>
-        $(document).ready(function() {
-            $('.latesNews .owl-carousel').owlCarousel({
-                loop: false,
-                margin: 20,
-                nav: true,
-                navText: ['<img src="assest/images/left-ar.png" alt="left-ar">',
-                    '<img src="assest/images/right-ar.png" alt="right-ar">'
-                ],
-                dots: false,
-                responsive: {
-                    0: {
-                        items: 1
-                    },
-                    575: {
-                        items: 2
-                    },
-                    769: {
-                        items: 3
-                    },
-                    1200: {
-                        items: 4
-                    }
-                }
-            });
-        });
-    </script>
-    @if ($top_properties->count() > 0)
-        <script>
-            $(document).ready(function() {
-                let currentPage = 1;
-                let lastPageReached = false;
-
-                function renderProperty(property) {
-                    let propertyUrl = "{{ url('property') }}" + "/" + property.slug;
-                    let imageUrl = property.cover_image ?
-                        "{{ asset('/storage/project_images') }}" + "/" + property.cover_image :
-                        "{{ $baseUrl }}assest/images/property-img.png";
-
-                    return `
-                    <div class="col-xl-4 col-md-6">
-                        <a href="${propertyUrl}">
-                            <div class="propertySec">
-                                <div class="imgBox">
-                                    <img src="${imageUrl}" alt="property-img" loading="lazy">
-                                </div>
-                                <div class="propertyName">
-                                    <h5>${property.project_name}</h5>
-                                </div>
-                                <div class="locationProperty">
-                                    <div class="homeBox comBox">
-                                        <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home">
-                                        <p>${property.custom_property_type ? property.custom_property_type : ''}</p>
-                                    </div>
-                                    <div class="location comBox">
-                                        <img src="{{ $baseUrl }}assest/images/Location.png" alt="Location">
-                                        <p>${property.location.location_name}, ${property.city.city_name}</p>
-                                    </div>
-                                </div>
-                                <div class="suggestBox">
-                                    <div class="leftBtn">
-                                        <img src="{{ $baseUrl }}assest/images/x-btn.png" alt="x-btn">
-                                    </div>
-                                    <div class="rightBar">
-                                        <h5>${property.exio_suggest_percentage}%</h5>
-                                        <div class="progress">
-                                            <div class="progress-bar" style="width: ${property.exio_suggest_percentage}%"
-                                                 role="progressbar" aria-valuenow="${property.exio_suggest_percentage}"
-                                                 aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                `;
-                }
-
-                $('#exploreMoreDesktop').click(function(e) {
-                    e.preventDefault();
-
-                    if (lastPageReached) return;
-
-                    currentPage++;
-
-                    $.ajax({
-                        url: "{{ route('front.home.getProjects') }}",
-                        type: "GET",
-                        data: {
-                            page: currentPage
-                        },
-                        success: function(response) {
-                            // Check that the request was successful and that projects exist.
-                            if (response.status && response.data && response.data.data.length > 0) {
-                                let projects = response.data.data;
-                                let container;
-
-                                if ("{{ getDeviceType() }}" === "desktop") {
-                                    container = $(
-                                        '.bestProperty.webViewSection .bestPropertyBox .row');
-                                    projects.forEach(function(project) {
-                                        container.append(renderProperty(project));
-                                    });
-                                } else {
-                                    container = $(
-                                        '.bestProperty.mobileViewSection .bestPropertyBox .owl-carousel'
-                                    );
-                                    projects.forEach(function(project) {
-                                        container.trigger('add.owl.carousel', [$(
-                                            renderProperty(project))]).trigger(
-                                            'refresh.owl.carousel');
-                                    });
-                                }
-
-                                if (response.data.current_page >= response.data.last_page) {
-                                    lastPageReached = true;
-                                    $('.exploreMore').hide();
-                                }
-                            } else {
-                                lastPageReached = true;
-                                $('.exploreMore').hide();
-                            }
-                        },
-                        error: function() {
-                            console.error("Error loading more properties.");
-                        }
-                    });
-                });
-            });
-        </script>
-    @endif
 @endsection
