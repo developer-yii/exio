@@ -71,6 +71,7 @@ Route::group(['prefix' => 'property'], function () {
     Route::get('/result/filter/get-project-data', [PropertyFilterController::class, 'getProjectData'])->name('property.getProjectData');
     Route::get('/result/filter/get-appraisal-data', [PropertyFilterController::class, 'getAppraisalData'])->name('property.getAppraisalData');
     Route::get('/result/filter/get-best-match-data', [PropertyFilterController::class, 'getBestMatchData'])->name('property.getBestMatchData');
+    Route::get('/result/filter/get-single-project-data', [PropertyFilterController::class, 'getSingleProjectData'])->name('property.getSingleProjectData');
 });
 
 Route::middleware(['auth', 'isUser'])->group(function () {

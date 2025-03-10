@@ -1,7 +1,13 @@
 @php
+    use App\Models\City;
     $baseUrl = asset('frontend') . '/';
+
+    if ($showCityDropdown) {
+        $defaultCity = 'Ahmedabad';
+        $cities = City::where('status', 1)->get();
+    }
 @endphp
-<header>
+<header class="{{ $showCityDropdown ? 'headerInner' : '' }}">
     <div class="header-part">
         <div class="container">
             <div class="header-box">
@@ -9,7 +15,30 @@
                     <a href="javascript:void(0)"><i class="fa-solid fa-bars"></i></a>
                 </div>
                 <div class="logo-box">
-                    <a href="{{ route('front.home') }}"><img src="{{ $baseUrl }}assest/images/logo-img.png" alt="logo-img" /></a>
+                    <a href="{{ route('front.home') }}"><img src="{{ $baseUrl }}assest/images/logo-img.png"
+                            alt="logo-img" /></a>
+                    @if ($showCityDropdown)
+                        <div class="cityDropDown moblieHide">
+                            <ul>
+                                <li>
+                                    <input type="hidden" name="city_header" id="city_header" value="1" />
+                                    <a class="cityClick" href="javascript:void(0)"><span
+                                            id="city_header_name">{{ $defaultCity }}</span> <i
+                                            class="fa-solid fa-chevron-down rotate"></i></a>
+                                    <ul class="citySelect city-select-header">
+                                        @foreach ($cities as $city)
+                                            <li>
+                                                <a href="javascript:void(0)" data-id="{{ $city->id }}"
+                                                    data-name="{{ $city->city_name }}" class="city_click_header">
+                                                    {{ $city->city_name }}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    @endif
                 </div>
                 <div class="main-nav">
                     <ul>

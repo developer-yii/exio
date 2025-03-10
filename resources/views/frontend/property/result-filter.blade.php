@@ -201,14 +201,14 @@
                                         <div class="row">
                                             @foreach ($projects as $project)
                                                 <div class="col-md-6">
-                                                    <div class="propertyCard" data-bs-toggle="modal"
-                                                        data-bs-target="#propertyModal">
+                                                    <div class="propertyCard" data-id="{{ $project->id }}">
                                                         <div class="imgBox">
                                                             <img src="{{ asset('/') }}frontend/assest/images/property-img.png"
                                                                 alt="property-img">
                                                             <div class="imgheader">
                                                                 <span>Best for Investment</span>
-                                                                <i class="fa-regular fa-heart heartIconFill"></i>
+                                                                <i data-id="{{ $project->id }}"
+                                                                    class="{{ $project->wishlistedByUsers->contains(auth()->id()) ? 'fa-solid' : 'fa-regular' }} fa-heart heartIconFill"></i>
                                                             </div>
                                                         </div>
                                                         <div class="priceBox">
@@ -265,14 +265,14 @@
                                         <div class="row">
                                             @foreach ($appraisal as $project)
                                                 <div class="col-md-6">
-                                                    <div class="propertyCard" data-bs-toggle="modal"
-                                                        data-bs-target="#propertyModal">
+                                                    <div class="propertyCard" data-id="{{ $project->id }}">
                                                         <div class="imgBox">
                                                             <img src="{{ asset('/') }}frontend/assest/images/property-img.png"
                                                                 alt="property-img">
                                                             <div class="imgheader">
                                                                 <span>Best for Investment</span>
-                                                                <i class="fa-regular fa-heart heartIconFill"></i>
+                                                                <i data-id="{{ $project->id }}"
+                                                                    class="{{ $project->wishlistedByUsers->contains(auth()->id()) ? 'fa-solid' : 'fa-regular' }} fa-heart heartIconFill"></i>
                                                             </div>
                                                         </div>
                                                         <div class="priceBox">
@@ -301,7 +301,22 @@
                                                         <div class="addressBox">
                                                             <img src="{{ asset('/') }}frontend/assest/images/Home.png"
                                                                 alt="Home">
-                                                            <p>Lift, Gym, Park, Club House Lift, Gym, Park, Club House</p>
+                                                            <p>
+                                                                @php
+                                                                    $amenities_a = explode(',', $project->amenities);
+                                                                    $amenityNames = [];
+                                                                    foreach ($amenities_a as $amenityId) {
+                                                                        if (isset($amenities[$amenityId])) {
+                                                                            $amenityNames[] = $amenities[$amenityId];
+                                                                        }
+                                                                    }
+                                                                    $amenities_a = implode(
+                                                                        ', ',
+                                                                        array_slice($amenityNames, 0, 4),
+                                                                    );
+                                                                @endphp
+                                                                {{ $amenities_a }}
+                                                            </p>
                                                             <a href="javascript:void(0)">more</a>
                                                         </div>
                                                     </div>
@@ -314,14 +329,14 @@
                                         <div class="row">
                                             @foreach ($bestMatch as $project)
                                                 <div class="col-md-6">
-                                                    <div class="propertyCard" data-bs-toggle="modal"
-                                                        data-bs-target="#propertyModal">
+                                                    <div class="propertyCard" data-id="{{ $project->id }}">
                                                         <div class="imgBox">
                                                             <img src="{{ asset('/') }}frontend/assest/images/property-img.png"
                                                                 alt="property-img">
                                                             <div class="imgheader">
                                                                 <span>Best for Investment</span>
-                                                                <i class="fa-regular fa-heart heartIconFill"></i>
+                                                                <i data-id="{{ $project->id }}"
+                                                                    class="{{ $project->wishlistedByUsers->contains(auth()->id()) ? 'fa-solid' : 'fa-regular' }} fa-heart heartIconFill"></i>
                                                             </div>
                                                         </div>
                                                         <div class="priceBox">
@@ -350,7 +365,22 @@
                                                         <div class="addressBox">
                                                             <img src="{{ asset('/') }}frontend/assest/images/Home.png"
                                                                 alt="Home">
-                                                            <p>Lift, Gym, Park, Club House Lift, Gym, Park, Club House</p>
+                                                            <p>
+                                                                @php
+                                                                    $amenities_a = explode(',', $project->amenities);
+                                                                    $amenityNames = [];
+                                                                    foreach ($amenities_a as $amenityId) {
+                                                                        if (isset($amenities[$amenityId])) {
+                                                                            $amenityNames[] = $amenities[$amenityId];
+                                                                        }
+                                                                    }
+                                                                    $amenities_a = implode(
+                                                                        ', ',
+                                                                        array_slice($amenityNames, 0, 4),
+                                                                    );
+                                                                @endphp
+                                                                {{ $amenities_a }}
+                                                            </p>
                                                             <a href="javascript:void(0)">more</a>
                                                         </div>
                                                     </div>
@@ -395,11 +425,14 @@
                             <div class="modalTextBox">
                                 <div class="priceAndshare">
                                     <div class="price">
-                                        <h5>₹{{ $project->price_from }}L-{{ $project->price_to }}Cr</h5>
-                                        <h5>{{ $project->project_name }}</h5>
+                                        <h5 class="show_price_from_to"></h5>
+                                        <h5 class="show_project_name">{{ $project->project_name }}</h5>
                                     </div>
                                     <ul>
-                                        <li><a href="javascript:void(0)"><i class="fa-regular fa-heart"></i>Save</a>
+
+                                        <li><a href="javascript:void(0)"><i data-id="{{ $project->id }}"
+                                                    id="heartIconFill"
+                                                    class="fa-regular fa-heart heartIconFill"></i>Save</a>
                                         </li>
                                         <li><a href="javascript:void(0)"><i
                                                     class="fa-solid fa-arrow-up-from-bracket"></i>Share</a></li>
@@ -410,42 +443,34 @@
                                 <div class="locationProperty">
                                     <div class="homeBox comBox">
                                         <img src="{{ asset('/') }}frontend/assest/images/Home.png" alt="Home">
-                                        <p>{{ $project->custom_property_type }} |
-                                            {{ isset($project->floor_plans)? $project->floor_plans->map(function ($plan) {return $plan->carpet_area . ' Sqft';})->join(', '): '' }}
-                                            | {{ $project->location->location_name }}</p>
+                                        <p class="show_custom_property_type"></p>
+                                    </div>
+                                    <div class="location comBox">
+                                        <img src="{{ asset('/') }}frontend/assest/images/Location.png" alt="Location">
+                                        <p class="show_location"></p>
                                     </div>
                                 </div>
                                 <div class="discriptBox">
-                                    <p><strong>Description:</strong> {{ $project->description }}</p>
+                                    <p><strong>Description: </strong><span class="show_description"></span></p>
                                 </div>
-                                <div class="overViewBox">
-                                    <div class="overBox">
-                                        <span>Carpet Area</span>
-                                        <h6>{{ isset($project->floor_plans)? $project->floor_plans->map(function ($plan) {return $plan->carpet_area . ' Sqft';})->join(', '): '' }}
-                                        </h6>
-                                    </div>
+                                <div class="overViewBox" id="overViewBox">
                                     <div class="overBox">
                                         <span>Total Floors</span>
-                                        <h6>{{ isset($project->floor_plans) ? $project->floor_plans->count() : 0 }}
-                                            Floors</h6>
+                                        <h6 class="show_total_floors"></h6>
                                     </div>
                                     <div class="overBox">
                                         <span>Total Tower</span>
-                                        <h6>{{ $project->tower_count }}</h6>
+                                        <h6 class="show_total_tower"></h6>
                                     </div>
                                     <div class="overBox">
                                         <span>Age of Construction</span>
-                                        <h6>{{ $project->construction_status }}</h6>
+                                        <h6 class="show_age_of_construction"></h6>
                                     </div>
                                     <div class="overBox">
                                         <span>Property Type</span>
-                                        <h6>{{ $project->custom_property_type }}</h6>
+                                        <h6 class="show_property_type"></h6>
                                     </div>
-                                    <div class="overBox">
-                                        <span>Project Size</span>
-                                        <h6>{{ $project->building_count }} Buildings - {{ $project->unit_count }} units
-                                        </h6>
-                                    </div>
+
                                 </div>
                                 <div class="btn-container">
                                     <button class="btn btnWp"><img
@@ -475,6 +500,7 @@
         var priceUnit = @json($priceUnit);
         var assetUrl = "{{ asset('') }}";
         var propertySubTypes = @json($property_sub_types);
+        var singleProjectUrl = "{{ route('property.getSingleProjectData') }}";
     </script>
     <script>
         $(document).ready(function() {
@@ -495,12 +521,20 @@
             var isBestMatchLoading = false;
 
             function renderProject(project) {
+                //check if the project is already in the wishlist
+                var isWishlisted = project.wishlisted_by_users
+                    .some(function(user) {
+                        return user.id === auth().id;
+                    });
                 var html = '<div class="col-md-6">';
-                html += '<div class="propertyCard" data-bs-toggle="modal" data-bs-target="#propertyModal">';
+                html += '<div class="propertyCard" data-id="' + project.id +
+                    '">';
                 html += '<div class="imgBox">';
                 html += '<img src="' + assetUrl + 'frontend/assest/images/property-img.png" alt="property-img">';
                 html +=
-                    '<div class="imgheader"><span>Best for Investment</span><i class="fa-regular fa-heart heartIconFill"></i></div>';
+                    '<div class="imgheader"><span>Best for Investment</span><i data-id="' + project.id +
+                    '" class="' + (isWishlisted ? 'fa-solid' : 'fa-regular') +
+                    ' fa-heart heartIconFill"></i></div>';
                 html += '</div>';
                 html += '<div class="priceBox">';
                 html += '<div class="price"><h5>₹' + project.price_from + 'L-' + project.price_to + 'Cr</h5></div>';
@@ -570,7 +604,9 @@
                         if (response.status && response.data.data.length) {
                             var newProjects = response.data.data;
                             projects = projects.concat(newProjects);
-                            initMap();
+                            @if (getDeviceType() == 'desktop')
+                                initMap();
+                            @endif
                             newProjects.forEach(function(proj) {
                                 $('#pills-home .row').append(renderProject(proj));
                             });
@@ -648,22 +684,45 @@
                 });
             }
 
-            $('.tab-content').on('scroll', function() {
-                var container = $(this);
-                if ($('#pills-home').hasClass('active')) {
-                    if (container.scrollTop() + container.innerHeight() >= container[0].scrollHeight - 50) {
-                        loadMoreProjects();
+            @if (getDeviceType() == 'desktop')
+                $('.tab-content').on('scroll', function() {
+                    var container = $(this);
+                    if ($('#pills-home').hasClass('active')) {
+                        if (container.scrollTop() + container.innerHeight() >= container[0].scrollHeight -
+                            50) {
+                            loadMoreProjects();
+                        }
+                    } else if ($('#pills-profile').hasClass('active')) {
+                        if (container.scrollTop() + container.innerHeight() >= container[0].scrollHeight -
+                            50) {
+                            loadMoreAppraisal();
+                        }
+                    } else if ($('#pills-match').hasClass('active')) {
+                        if (container.scrollTop() + container.innerHeight() >= container[0].scrollHeight -
+                            50) {
+                            loadMoreBestMatch();
+                        }
                     }
-                } else if ($('#pills-profile').hasClass('active')) {
-                    if (container.scrollTop() + container.innerHeight() >= container[0].scrollHeight - 50) {
-                        loadMoreAppraisal();
+                });
+            @endif
+
+            @if (getDeviceType() == 'mobile')
+                $(window).on('scroll', function() {
+                    if ($('#pills-home').hasClass('active')) {
+                        if ($(window).scrollTop() + $(window).height() >= $(document).height() - 900) {
+                            loadMoreProjects();
+                        }
+                    } else if ($('#pills-profile').hasClass('active')) {
+                        if ($(window).scrollTop() + $(window).height() >= $(document).height() - 900) {
+                            loadMoreAppraisal();
+                        }
+                    } else if ($('#pills-match').hasClass('active')) {
+                        if ($(window).scrollTop() + $(window).height() >= $(document).height() - 900) {
+                            loadMoreBestMatch();
+                        }
                     }
-                } else if ($('#pills-match').hasClass('active')) {
-                    if (container.scrollTop() + container.innerHeight() >= container[0].scrollHeight - 50) {
-                        loadMoreBestMatch();
-                    }
-                }
-            });
+                });
+            @endif
 
             $('#applyFilter').click(function() {
                 page = 0;
@@ -674,5 +733,7 @@
         });
     </script>
     <script src="{{ $baseUrl }}/assest/js/pages/result-filter.js"></script>
-    <script src="{{ $baseUrl }}/assest/js/pages/map_view_filter_page.js"></script>
+    @if (getDeviceType() == 'desktop')
+        <script src="{{ $baseUrl }}/assest/js/pages/map_view_filter_page.js"></script>
+    @endif
 @endsection

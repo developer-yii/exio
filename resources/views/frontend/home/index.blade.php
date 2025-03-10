@@ -253,9 +253,11 @@
                             </div>
                         @endforeach
                     </div>
-                    <div class="exploreMore">
-                        <a class="btn btnExplore" id="exploreMoreDesktop" href="javascript:void(0)">Explore More</a>
-                    </div>
+                    @if ($top_properties->hasPages())
+                        <div class="exploreMore">
+                            <a class="btn btnExplore" id="exploreMoreDesktop" href="javascript:void(0)">Explore More</a>
+                        </div>
+                    @endif
                 </div>
             </div>
         </section>
@@ -618,7 +620,7 @@
             });
         });
     </script>
-    @if ($top_properties->count() > 0)
+    @if ($top_properties->count() > 0 && $top_properties->hasPages())
         <script>
             $(document).ready(function() {
                 let currentPage = 1;

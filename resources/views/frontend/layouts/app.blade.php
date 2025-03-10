@@ -1,5 +1,7 @@
 @php
     $baseUrl = asset('frontend') . '/';
+    $routeName = request()->route()->getName();
+    $showCityDropdown = in_array($routeName, ['property.result.filter']);
 @endphp
 <!DOCTYPE html>
 <html lang="en">
@@ -45,12 +47,14 @@
     <!-- App css -->
     <link rel="stylesheet" href="{{ $baseUrl }}assest/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
     <link rel="stylesheet" href="{{ $baseUrl }}assest/css/style.css" />
     <link rel="stylesheet" href="{{ $baseUrl }}assest/css/responsive.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css">
-    <link rel="stylesheet" href="{{$baseUrl}}assest/css/custom.css" />
+    <link rel="stylesheet" href="{{ $baseUrl }}assest/css/custom.css" />
 
     {{-- Extra css --}}
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
@@ -60,7 +64,7 @@
 
 <body class="block_model">
     <!-- header start -->
-    @include('frontend.layouts.header')
+    @include('frontend.layouts.header', ['showCityDropdown' => $showCityDropdown])
     <!-- header end -->
 
     @yield('content')
@@ -96,6 +100,8 @@
     <!-- jQuery UI -->
     <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
     {{-- <script src="assest/js/custom.js"></script> --}}
+
+    
 
     <script>
         var propertyLikeUrl = "{{ route('property.like-unlike') }}";
