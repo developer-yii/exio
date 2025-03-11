@@ -169,9 +169,20 @@ class Project extends Model
     {
         return $this->belongsTo(ProjectBadge::class, 'project_badge', 'id');
     }
-  
+
     public function downloadBrochures()
     {
         return $this->hasMany(DownloadBrochure::class);
     }
+
+    public function actualProgress()
+    {
+        return $this->hasMany(ActualProgress::class, 'project_id');
+    }
+
+    public function reraProgress()
+    {
+        return $this->hasMany(ReraProgress::class, 'project_id');
+    }
+
 }
