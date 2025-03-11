@@ -139,14 +139,14 @@
                                     <div class="comViewBox five">
                                         <p>Budget</p>
                                         <div class="range-slider">
-                                            <input type="range" min="{{ $minMaxPrice['min_price'] }}"
-                                                max="{{ $minMaxPrice['max_price'] }}"
-                                                value="{{ $minMaxPrice['min_price'] }}" id="slider-min" aria-valuemin="1"
-                                                aria-valuemax="100">
-                                            <input type="range" min="{{ $minMaxPrice['min_price'] }}"
-                                                max="{{ $minMaxPrice['max_price'] }}"
-                                                value="{{ $minMaxPrice['max_price'] }}" id="slider-max" aria-valuemin="1"
-                                                aria-valuemax="100">
+                                            <input type="range" min="{{ $minMaxPrice['min_price'] ?? '' }}"
+                                                max="{{ $minMaxPrice['max_price'] ?? '' }}"
+                                                value="{{ $minMaxPrice['min_price'] ?? '' }}" id="slider-min"
+                                                aria-valuemin="1" aria-valuemax="100">
+                                            <input type="range" min="{{ $minMaxPrice['min_price'] ?? '' }}"
+                                                max="{{ $minMaxPrice['max_price'] ?? '' }}"
+                                                value="{{ $minMaxPrice['max_price'] ?? '' }}" id="slider-max"
+                                                aria-valuemin="1" aria-valuemax="100">
                                         </div>
                                         <div class="selectArea">
                                             <div class="dropBox" id="slider-min-value">
