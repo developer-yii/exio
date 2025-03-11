@@ -6,6 +6,7 @@ use App\Models\Amenity;
 use App\Models\GeneralSetting;
 use Illuminate\Http\Request;
 use App\Models\Project;
+use Illuminate\Support\Facades\Auth;
 
 class PropertyFilterController extends Controller
 {
@@ -21,6 +22,10 @@ class PropertyFilterController extends Controller
         }
         if ($search) {
             $projects = $projects->where('project_name', 'like', '%' . $search . '%');
+        }
+
+        if (Auth::check()) {
+            $projects = $projects->with('wishlistedByUsers');
         }
 
         $projects = $projects->orderBy('created_at', 'desc')->isActive()->paginate(10);
@@ -47,7 +52,11 @@ class PropertyFilterController extends Controller
 
         $minMaxPrice = GeneralSetting::whereIn('key', ['min_price', 'max_price'])->get()->pluck('value', 'key')->toArray();
 
-        return view('frontend.property.result-filter', compact('projects', 'priceUnit', 'appraisal', 'bestMatch', 'propertyTypes', 'amenities', 'property_sub_types', 'bhks', 'minMaxPrice'));
+        $shortlistedCount = Project::with('wishlistedByUsers')->whereHas('wishlistedByUsers', function ($query) {
+            $query->where('user_id', auth()->id());
+        })->count();
+
+        return view('frontend.property.result-filter', compact('projects', 'priceUnit', 'appraisal', 'bestMatch', 'propertyTypes', 'amenities', 'property_sub_types', 'bhks', 'minMaxPrice', 'shortlistedCount'));
     }
 
     public function getProjectData(Request $request)
@@ -68,6 +77,9 @@ class PropertyFilterController extends Controller
             $projects = $projects->where('city_id', $city);
         }
 
+        if (Auth::check()) {
+            $projects = $projects->with('wishlistedByUsers');
+        }
 
         if ($property_type) {
             $projects = $projects->where(function ($query) use ($property_type) {
@@ -132,7 +144,14 @@ class PropertyFilterController extends Controller
     public function getAppraisalData(Request $request)
     {
         $perPage = $request->input('perPage', 10);
-        $appraisal = Project::with('projectImages', 'projectBadge', 'floorPlans', 'city', 'location')->where('appraisal_property', 'yes')->isActive()->paginate($perPage);
+        $appraisal = Project::with('projectImages', 'projectBadge', 'floorPlans', 'city', 'location')->where('appraisal_property', 'yes')->isActive();
+
+        if (Auth::check()) {
+            $appraisal = $appraisal->with('wishlistedByUsers');
+        }
+
+        $appraisal = $appraisal->paginate($perPage);
+
         return response()->json([
             'status' => true,
             'message' => 'Data fetched successfully',
@@ -143,11 +162,38 @@ class PropertyFilterController extends Controller
     public function getBestMatchData(Request $request)
     {
         $perPage = $request->input('perPage', 10);
-        $bestMatch = Project::with('projectImages', 'projectBadge', 'floorPlans', 'city', 'location')->isActive()->orderBy('exio_suggest_percentage', 'desc')->paginate($perPage);
+        $bestMatch = Project::with('projectImages', 'projectBadge', 'floorPlans', 'city', 'location')->isActive()->orderBy('exio_suggest_percentage', 'desc');
+
+        if (Auth::check()) {
+            $bestMatch = $bestMatch->with('wishlistedByUsers');
+        }
+
+        $bestMatch = $bestMatch->paginate($perPage);
+
         return response()->json([
             'status' => true,
             'message' => 'Data fetched successfully',
             'data' => $bestMatch
+        ]);
+    }
+
+    public function getSingleProjectData(Request $request)
+    {
+        $project = Project::with('projectImages', 'projectBadge', 'floorPlans', 'city', 'location', 'projectDetails');
+
+        if (Auth::check()) {
+            $project = $project->with('wishlistedByUsers');
+        }
+
+        $project = $project->find($request->input('id'));
+
+        $project->property_type = Project::$propertyType[$project->property_type];
+
+        $project->is_wishlisted = $project->wishlistedByUsers->contains(auth()->id());
+        return response()->json([
+            'status' => true,
+            'message' => 'Data fetched successfully',
+            'data' => $project
         ]);
     }
 }

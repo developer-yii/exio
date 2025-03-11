@@ -5,3 +5,7 @@
 .propertyCard .addressBox a {
     margin-left: 10px !important;
 }
+
+.propertyModal .modalTextBox .priceAndshare ul li a i.fa-solid.heartIconFill {
+    color: var(--red-color);
+}

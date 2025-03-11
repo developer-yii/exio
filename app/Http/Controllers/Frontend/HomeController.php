@@ -28,8 +28,7 @@ class HomeController extends Controller
             ->where('city_id', 1)
             ->where('status', 1)
             ->orderBy('exio_suggest_percentage', 'desc')
-            ->limit(6)
-            ->get();
+            ->paginate(6);
 
         $localities = Locality::where('status', 1)->get();
         $projects = Project::where('status', 1)->get();

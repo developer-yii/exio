@@ -70,6 +70,27 @@ $(document).ready(function () {
             $('#bhk-filter').addClass('d-none');
         }
     });
+
+    $(document).on('click', '.propertyCard', function () {
+        if ($(this).hasClass('isOnMap')) {
+            return;
+        }
+
+        let id = $(this).data('id');
+        $.ajax({
+            url: singleProjectUrl,
+            type: 'GET',
+            data: { id: id },
+            success: function (response) {
+                showPropertyDetails(response.data);
+                $('#propertyModal').modal('show');
+            }
+        });
+    });
+
+    $('#share_property').on('show.bs.modal', function (e) {
+        $('#propertyModal').modal('hide');
+    });
 });
 
 function loadMoreAmenities() {
@@ -86,4 +107,112 @@ function loadLessAmenities() {
     $('#lessAmenities').addClass('d-none');
     console.log($('.hidden-amenity'));
     $('.hidden-amenity').addClass('d-none');
+}
+
+function showPropertyDetails(project) {
+    console.log(project);
+    let whatsApp = $('#whatsapplink').data('whatsapp-number');
+
+    $('.show_price_from_to').text(
+        project.price_from && project.price_to
+            ? `₹${project.price_from}L - ${project.price_to}Cr`
+            : 'Unknown'
+    );
+
+    $('.show_project_name').text(project.project_name || 'Unknown');
+
+    $('.show_custom_property_type').text(project.custom_property_type || 'Unknown');
+
+    $('.show_location').text(
+        project.city?.city_name && project.location?.location_name
+            ? `${project.city.city_name}, ${project.location.location_name}`
+            : 'Unknown'
+    );
+
+    $('.show_description').text(
+        project.project_about
+            ? project.project_about.replace(/(<([^>]+)>)/gi, "").trim()
+            : 'No description available'
+    );
+
+    $('.show_total_floors').text(
+        project.total_floors
+            ? `${project.total_floors} Floors`
+            : 'Unknown'
+    );
+
+    $('.show_total_tower').text(project.total_tower || 'Unknown');
+
+    $('.show_age_of_construction').text(project.age_of_construction || 'Unknown');
+
+    $('.show_property_type').text(project.property_type || 'Unknown');
+
+    let html = '';
+    project.project_details.forEach(function (detail) {
+        html += `<div class="overBox">
+                    <span>${detail.name}</span>
+                    <h6 class="show_${detail.name}">${detail.value}</h6>
+                </div>`;
+    });
+
+    $('#overViewBox').append(html);
+
+    if (project.is_wishlisted) {
+        $('#heartIconFill').removeClass('fa-regular');
+        $('#heartIconFill').addClass('fa-solid');
+    } else {
+        $('#heartIconFill').removeClass('fa-solid');
+        $('#heartIconFill').addClass('fa-regular');
+    }
+    $('.moredetails').attr({
+        'href': propertyDetailsUrl.replace(':slug', project.slug),
+        'target': '_blank'
+    });
+
+    $('#whatsapplink').attr({
+        'href': `https://wa.me/${whatsApp}?text=${encodeURIComponent(propertyDetailsUrl.replace(':slug', project.slug))}`
+    });
+
+    updateShareLinks(propertyDetailsUrl.replace(':slug', project.slug));
+}
+
+function updateShareLinks(url) {
+    // Get current page URL
+    const currentPageURL = url;
+
+    const subject = encodeURIComponent("Check out this property!");
+    const body = encodeURIComponent("I found this property and thought you might be interested:\n\n" + currentPageURL);
+
+    document.getElementById('whatsapp-link').setAttribute('data-href', `https://api.whatsapp.com/send?text=${encodeURIComponent(currentPageURL)}`);
+    document.getElementById('facebook-link').setAttribute('data-href', `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentPageURL)}`);
+    document.getElementById('twitter-link').setAttribute('data-href', `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentPageURL)}`);
+    document.getElementById('linkedin-link').setAttribute('data-href', `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(currentPageURL)}`);
+    // document.getElementById('email-link').setAttribute('data-href', `mailto:?subject=${subject}&body=${body}`);
+    // document.getElementById('pinterest-link').href = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(currentPageURL)}`;
+
+    // Set the copy link value
+    document.getElementById('copy-link').value = currentPageURL;
+}
+
+$('body').on('click', '.social_media_share', function (event) {
+    var url = $(this).attr('data-href');
+    var left = (screen.width - 600) / 2;
+    var top = (screen.height - 400) / 2;
+    window.open(url, '_blank', 'width=600,height=400,left=' + left + ',top=' + top);
+});
+
+
+function copyToClipboard() {
+    var copyText = document.getElementById('copy-link');
+    copyText.removeAttribute("disabled");
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    document.execCommand('copy');
+    if (typeof toastr !== 'undefined') {
+        toastr.success('Link copied!');
+        copyText.setAttribute("disabled", "true");
+    } else {
+        alert('Link copied!');
+        copyText.setAttribute("disabled", "true");
+    }
 }
