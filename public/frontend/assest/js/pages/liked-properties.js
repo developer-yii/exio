@@ -32,7 +32,14 @@ $(document).ready(function () {
         setCookie("selectedProperties", JSON.stringify(selectedIds), 7); // Save for 7 days
     }
 
-    // Handle checkbox selection
+    // Handle Close Modal
+    function closeModal(){
+        $(".comparePorjectModal").removeClass("show");
+    }
+    $(".closeModal").click(function (event) {
+        closeModal();
+    });
+
     $(".compareBoxOpen").click(function (event) {
         let checkbox = $(this).find(".checkbox");
 
@@ -40,7 +47,25 @@ $(document).ready(function () {
             checkbox.prop("checked", !checkbox.prop("checked"));
         }
 
+        // Extract the data-type values of the selected checkboxes
         let selectedCheckboxes = $(".checkbox:checked");
+        let selectedTypes = [];
+        selectedCheckboxes.each(function () {
+            let propertyType = $(this).closest(".propertyCard").data("type");
+            if (propertyType) {
+                selectedTypes.push(propertyType.toLowerCase()); // Convert to lowercase for uniformity
+            }
+        });
+
+        if (selectedTypes.length === 2) {
+            let [type1, type2] = selectedTypes;
+
+            if ((type1 !== type2) && type1 !== "both" && type2 !== "both") {
+                checkbox.prop("checked", false); // Uncheck the latest selection
+                toastr.warning(`You cannot compare ${type1} property with ${type2} property`);
+            }
+        }
+
         if (selectedCheckboxes.length > 2) {
             checkbox.prop("checked", false);
             toastr.warning('You can compare a maximum of 2 properties');
@@ -71,12 +96,12 @@ $(document).ready(function () {
                         }
 
                     } else {
-                        $(".comparePorjectModal").removeClass("show");
+                        closeModal();
                     }
                 }
             });
         } else {
-            $(".comparePorjectModal").removeClass("show");
+            closeModal();
         }
     });
 
@@ -124,7 +149,7 @@ $(document).ready(function () {
 
         // Hide modal if empty
         if ($(".detailmainSec").length === 0) {
-            $(".comparePorjectModal").removeClass("show");
+            closeModal();
         }
     });
 

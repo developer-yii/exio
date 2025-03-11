@@ -3,10 +3,18 @@
 namespace App\Http\Controllers\Frondend;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActualProgress;
 use App\Models\Amenity;
+use App\Models\Builder;
+use App\Models\City;
 use App\Models\DownloadBrochure;
+use App\Models\Locality;
+use App\Models\Location;
 use App\Models\Project;
+use App\Models\PropertyComparison;
 use App\Models\PropertyWishlist;
+// use Barryvdh\DomPDF\PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -31,7 +39,7 @@ class PropertyController extends Controller
             $query->with('wishlistedByUsers');
         }
 
-        $project = $query->where('slug', $slug)->first();
+        $project = $query->where('slug', $slug)->where('status', 1)->first();
 
         // pr($project->toArray());
 
@@ -144,14 +152,13 @@ class PropertyController extends Controller
             'location',
             'projectDetails',
             'city'
-        ])->whereIn('id', $projectids)->paginate(9);
+        ])->whereIn('id', $projectids)->where('status', 1)->paginate(9);
 
         return view('frontend.property.liked-properties', compact('favourite_properties'));
     }
 
     public function compareProperty(Request $request)
     {
-
         if(!$request->ajax()){
             return response()->json(['status' => 400, 'message' => 'Invalid Request.', 'data' => []]);
         }
@@ -164,7 +171,7 @@ class PropertyController extends Controller
             'location',
             'projectDetails',
             'city'
-        ])->whereIn('id', $request->ids)->take(2)->get();
+        ])->whereIn('id', $request->ids)->where('status', 1)->take(2)->get();
 
         foreach($properties as $property){
             $property->possession_date = getFormatedDate($property->possession_by, 'M, Y');
@@ -202,45 +209,176 @@ class PropertyController extends Controller
             'localities',
             'localities.locality',
             'reraDetails'
-        ])->whereIn('id', $compareIds)->get();
+        ])->whereIn('id', $compareIds)->where('status', 1)->get();
 
         foreach($properties as $property){
             $amenityIds = explode(',', $property->amenities);
             $property->amenitiesList = Amenity::whereIn('id', $amenityIds)->get();
         }
 
+        if ($request->has('download') && $request->download == 'pdf') {
+            if (!auth()->check()) {
+                return redirect()->back()->with('error', 'Please login first to download the report.');
+            }
+
+            if (count($compareIds) >= 2) {
+                // Check if a record already exists for the user and same properties
+                $existingComparison = PropertyComparison::where('user_id', Auth::id())
+                    ->where(function ($query) use ($compareIds) {
+                        $query->where([
+                            ['property_id_1', $compareIds[0]],
+                            ['property_id_2', $compareIds[1]]
+                        ])->orWhere([
+                            ['property_id_1', $compareIds[1]],
+                            ['property_id_2', $compareIds[0]]
+                        ]);
+                    })
+                    ->first();
+
+                if ($existingComparison) {
+                    $existingComparison->touch();
+                } else {
+                    PropertyComparison::create([
+                        'user_id' => Auth::id(),
+                        'property_id_1' => $compareIds[0],
+                        'property_id_2' => $compareIds[1],
+                    ]);
+                }
+            }
+
+            $pdf = PDF::loadView('pdf.compare_report', compact('properties'))
+                ->setPaper('a4', 'portrait')
+                ->setOption('isPhpEnabled', true);
+
+            return $pdf->download('compare_report.pdf');
+            // return $pdf->stream('compare_report.pdf');
+        }
+
         return view('frontend.property.comparepage', compact('properties'));
     }
 
-    // public function comparePropertyPage(Request $request)
-    // {
-    //     $encodedCompareIds = request()->get('property');
-    //     $encodedArray = explode(',', $encodedCompareIds);
+    public function propertyInsights(Request $request)
+    {
+        $type = $request->query('type');
+        $id = $request->query('id');
+        $city = $request->query('city'); // Default to Ahmedabad if not provided
+        $search = $request->query('search');
 
-    //     $compareIds = array_map(function ($encodedId) {
-    //         return base64_decode($encodedId);
-    //     }, $encodedArray);
+        $perPageProperty = 9;
+        $page = $request->input('page', 1);
 
-    //     $propertyId1 = $compareIds[0] ?? null;
-    //     $propertyId2 = $compareIds[1] ?? null;
+        $properties = Project::with([
+            'projectImages' => function ($query) {
+                $query->where('is_cover', 0);
+            },
+            'builder',
+            'location',
+            'projectDetails',
+            'city',
+        ])->where('status', 1);
 
 
-    //     $properties = Project::with([
-    //         'projectImages',
-    //         'builder',
-    //         'projectDetails',
-    //         'masterPlans',
-    //         'floorPlans',
-    //         'localities',
-    //         'localities.locality',
-    //         'reraDetails'
-    //     ])->whereIn('id', $compareIds)->get();
+        if ($type && $id) {
+            if ($type === 'builder') {
+                $properties->where('builder_id', $id);
+            } elseif ($type === 'locality') {
+                $properties->where('location_id', $id);
+            } elseif ($type === 'project') {
+                $properties->where('id', $id);
+            }
+        }elseif ($search){
+            $properties->where(function ($query) use ($search) {
+                $query->where('project_name', 'LIKE', "%$search%")
+                    ->orWhereHas('location', function ($q) use ($search) {
+                        $q->where('location_name', 'LIKE', "%$search%");
+                    })
+                    ->orWhereHas('builder', function ($q) use ($search) {
+                        $q->where('builder_name', 'LIKE', "%$search%");
+                    });
+            });
 
-    //     foreach($properties as $property){
-    //         $amenityIds = explode(',', $property->amenities);
-    //         $property->amenitiesList = Amenity::whereIn('id', $amenityIds)->get();
-    //     }
+        }
 
-    //     return view('frontend.property.comparepage', compact('properties'));
-    // }
+        if (isset($city) && $city != 'All') {
+            $properties->whereHas('city', function ($query) use ($city) {
+                $query->where('city_name', $city);
+            });
+        }
+
+        $properties->orderByRaw("
+            COALESCE(
+                (SELECT updated_at
+                FROM actual_progress
+                WHERE actual_progress.project_id = projects.id
+                AND actual_progress.deleted_at IS NULL
+                ORDER BY updated_at DESC
+                LIMIT 1
+                ),
+                projects.updated_at
+            ) DESC
+        ");
+        $totalProperties = (clone $properties)->count();
+
+        $properties = $properties->paginate($perPageProperty);
+        if ($request->ajax()) {
+            return response()->json([
+                'properties' => view('frontend.property.partial_insights_property_list', compact('properties'))->render(),
+                'hasMore' => $properties->hasMorePages()
+            ]);
+        }
+
+        $cities = City::where('status', 1)->get();
+        $locations = Location::where('status', 1)->get();
+        $projects = Project::where('status', 1)->get();
+        $builders = Builder::where('status', 1)->get();
+
+        return view('frontend.property.insights', compact('properties', 'totalProperties', 'perPageProperty', 'cities', 'locations', 'projects', 'builders'));
+    }
+
+    public function insightDetails($slug){
+        $query = Project::with([
+            'builder',
+            'actualProgress' => function ($query) {
+                $query->orderBy('created_at', 'desc'); // Order actualProgress by created_at DESC
+            },
+            'actualProgress.images' // Load images within actualProgress
+        ]);
+
+        // Include wishlistedByUsers only if user is authenticated
+        if (Auth::check()) {
+            $query->with('wishlistedByUsers');
+        }
+
+        $project = $query->where('slug', $slug)->where('status', 1)->first();
+
+        if(!$project){
+            abort('404');
+        }
+
+        $progressStatus = ActualProgress::$status;
+
+        $actualProgressData = [];
+        $actualProgressData = $project->actualProgress->sortBy('created_at')->map(function ($progress) {
+            return [
+                'timeline' => (int) $progress->timeline,
+                'work_completed' => (int) $progress->work_completed
+            ];
+        })->values()->toArray();
+
+        $reraProgressData = $project->reraProgress->sortBy('created_at')->map(function ($progress) {
+            return [
+                'timeline' => (int) $progress->timeline,
+                'work_completed' => (int) $progress->work_completed
+            ];
+        })->values()->toArray();
+
+        // foreach ($project->actualProgress as $progress) {
+        //     $actualProgressData[] = [
+        //         'timeline' => (int) $progress->timeline,
+        //         'work_completed' => (int) $progress->work_completed
+        //     ];
+        // }
+        return view('frontend.property.insight-details', compact('project', 'progressStatus', 'actualProgressData', 'reraProgressData'));
+    }
+
 }

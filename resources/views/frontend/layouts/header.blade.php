@@ -74,7 +74,7 @@
                                     </li>
                                 @endif
                                 <li>
-                                    <a href="site_traking_listing.html">
+                                    <a href="{{ route('property.insights') }}">
                                         <img src="{{ $baseUrl }}assest/images/project.png" alt="project"> Project
                                         Insights
                                     </a>

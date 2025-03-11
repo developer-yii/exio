@@ -98,3 +98,43 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 });
+
+function updateShareLinks() {
+    // Get current page URL
+    const currentPageURL = window.location.href;
+
+    const subject = encodeURIComponent("Check out this property!");
+    const body = encodeURIComponent("I found this property and thought you might be interested:\n\n" + currentPageURL);
+
+    document.getElementById('whatsapp-link').setAttribute('data-href', `https://api.whatsapp.com/send?text=${encodeURIComponent(currentPageURL)}`);
+    document.getElementById('facebook-link').setAttribute('data-href', `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentPageURL)}`);
+    document.getElementById('twitter-link').setAttribute('data-href', `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentPageURL)}`);
+    document.getElementById('linkedin-link').setAttribute('data-href', `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(currentPageURL)}`);
+    // document.getElementById('email-link').setAttribute('data-href', `mailto:?subject=${subject}&body=${body}`);
+    // document.getElementById('pinterest-link').href = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(currentPageURL)}`;
+
+    // Set the copy link value
+    document.getElementById('copy-link').value = currentPageURL;
+}
+
+$('body').on('click','.social_media_share',function(event){
+    var url = $(this).attr('data-href');
+    var left = (screen.width - 600) / 2;
+    var top = (screen.height - 400) / 2;
+    window.open(url, '_blank', 'width=600,height=400,left=' + left + ',top=' + top);
+});
+
+function copyToClipboard() {
+    var copyText = document.getElementById('copy-link');
+    copyText.removeAttribute("disabled");
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    document.execCommand('copy');
+    if (typeof toastr !== 'undefined') {
+        toastr.success('Link copied!');
+        copyText.setAttribute("disabled", "true");
+    } else {
+        alert('Link copied!');
+        copyText.setAttribute("disabled", "true");
+    }
+}

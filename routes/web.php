@@ -63,6 +63,10 @@ Route::middleware(['auth', 'isUser'])->group(function () {
     });
 });
 
+Route::middleware(['auth', 'isUser'])->group(function () {
+    Route::get('/check-and-match-property/result', [CheckAndMatchPropertyController::class, 'checkAndMatchPropertyResult'])->name('front.check-and-match-property.result');
+});
+
 Route::group(['prefix' => 'property'], function () {
     Route::post('/download-brochure-form', [PropertyController::class, 'downloadBrochureForm'])->name('property.download-brochure-form');
     Route::get('/compare-property', [PropertyController::class, 'compareProperty'])->name('property.compare');
@@ -71,10 +75,11 @@ Route::group(['prefix' => 'property'], function () {
     Route::get('/result/filter/get-project-data', [PropertyFilterController::class, 'getProjectData'])->name('property.getProjectData');
     Route::get('/result/filter/get-appraisal-data', [PropertyFilterController::class, 'getAppraisalData'])->name('property.getAppraisalData');
     Route::get('/result/filter/get-best-match-data', [PropertyFilterController::class, 'getBestMatchData'])->name('property.getBestMatchData');
-});
 
-Route::middleware(['auth', 'isUser'])->group(function () {
-    Route::get('/check-and-match-property/result', [CheckAndMatchPropertyController::class, 'checkAndMatchPropertyResult'])->name('front.check-and-match-property.result');
+    // Route::get('/download-compare-report', [PropertyController::class, 'downloadCompareReport'])->name('compare.report.download');
+
+    Route::get('/insights', [PropertyController::class, 'propertyInsights'])->name('property.insights');
+    Route::get('/insight-details/{slug}', [PropertyController::class, 'insightDetails'])->name('property.insight-details');
     Route::get('/{slug}', [PropertyController::class, 'details'])->name('property.details');
 });
 

@@ -1,4 +1,83 @@
-@if($type == 'overview')
+@if($type == 'project-builder-section')
+    <div class="detailsTextSec">
+        @if(getDeviceType() == 'desktop')
+            <div class="siteDetails">
+                <div class="logoMain">
+                    <img src="{{ $project->builder->getBuilderLogoUrl() }}" loading="lazy">
+                </div>
+                <div class="textBox">
+                    <h5>{{ $project->project_name }}</h5>
+                    <span>By {{ $project->builder ? $project->builder->builder_name : '' }}</span>
+                    <div class="locationProperty">
+                        <div class="homeBox comBox">
+                            <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home" loading="lazy">
+                            <p>{{ $project->custom_property_type ?? '' }}</p>
+                        </div>
+                        <div class="location comBox">
+                            <img src="{{ $baseUrl }}assest/images/Location.png" alt="Location" loading="lazy">
+                            <p>{{ $project->location->location_name . ', ' . $project->city->city_name }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @else
+            <div class="mobile">
+                <div class="siteDetails">
+                    <div class="logoMain">
+                        <img src="{{ $project->builder->getBuilderLogoUrl() }}" loading="lazy">
+                    </div>
+                    <div class="textBox">
+                        <h5>{{ $project->project_name }}</h5>
+                        <span>By {{ $project->builder ? $project->builder->builder_name : '' }}</span>
+                    </div>
+                </div>
+                <div class="locationProperty">
+                    <div class="homeBox comBox">
+                        <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home" loading="lazy">
+                        <p>{{ $project->custom_property_type ?? '' }}</p>
+                    </div>
+                    <div class="location comBox">
+                        <img src="{{ $baseUrl }}assest/images/Location.png" alt="Location" loading="lazy">
+                        <p>{{ $project->location->location_name . ', ' . $project->city->city_name }}</p>
+                    </div>
+                </div>
+            </div>
+        @endif
+        <div class="priceShare">
+            <ul>
+                <li>
+                    <a href="javascript:void(0)" class="save-property" data-id="{{ $project->id }}">
+                        @if (Auth::user())
+                            <a href="javascript:void(0)" class="save-property"
+                                data-id="{{ $project->id }}">
+                                <i class="{{ $project->wishlistedByUsers->contains(auth()->id()) ? 'fa-solid' : 'fa-regular' }} fa-heart"></i>
+                                Save
+                            </a>
+                        @endif
+                    </a>
+                </li>
+
+                <li>
+                    <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#share_property"><i class="fa-solid fa-arrow-up-from-bracket"></i>Share
+                    </a>
+                </li>
+            </ul>
+            <h5><span>₹ {{ $project->price_from }} {{ formatPriceUnit($project->price_from_unit) }}</span>
+                - <span>₹ {{ $project->price_to }} {{ formatPriceUnit($project->price_to_unit) }}</span>
+            </h5>
+        </div>
+    </div>
+    <div class="endText">
+        <p>
+            <i class="fa-regular fa-calendar"></i> Possession by
+            {{ getFormatedDate($project->possession_by, 'M, Y') }}
+            <span class="line">|</span> RERA
+            No. {{ $project->rera_number }}
+        </p>
+    </div>
+@endif
+
+@if($type == 'overviewBox')
     <div id="overView">
         <div class="overViewBox">
             <div class="overBox">
@@ -97,32 +176,6 @@
     </div>
 @endif
 
-{{-- @if($type == "amenities")
-    @if($page == 'compare')
-        @foreach ($project->amenitiesList as $index => $amenity)
-            <div class="itemsBox {{ $index >= 23 ? 'd-none' : '' }}">
-                <div class="iconImg">
-                    <img src="{{ $baseUrl }}assest/images/circle_gray.png" alt="circle_gray"  loading="lazy">
-                </div>
-                <div class="iconText">
-                    <p>{{ $amenity->amenity_name }}</p>
-                </div>
-            </div>
-        @endforeach
-    @else
-        @foreach ($amenitiesList as $index => $amenity)
-            <div class="itemsBox {{ $index >= 23 ? 'd-none' : '' }}">
-                <div class="iconImg">
-                    <img src="{{ $amenity->getAmenityIconUrl() }}" alt="{{ $amenity->name }}" height="20" loading="lazy">
-                </div>
-                <div class="iconText">
-                    <p>{{ $amenity->amenity_name }}</p>
-                </div>
-            </div>
-        @endforeach
-    @endif
-@endif --}}
-
 @if($type == "amenities")
     @php
         $amenities = ($page ?? '') == 'compare' ? $project->amenitiesList : $amenitiesList;
@@ -132,10 +185,14 @@
     @foreach ($amenities as $index => $amenity)
         <div class="itemsBox {{ $index >= $showAmenities ? 'd-none' : '' }}">
             <div class="iconImg">
-                <img src="{{ $iconSrc ?? $amenity->getAmenityIconUrl() }}"
-                     alt="{{ $iconSrc ? 'circle_gray' : $amenity->name }}"
+                <img src="{{ $amenity->getAmenityIconUrl() }}"
+                     alt="{{ $amenity->name }}"
                      height="20"
                      loading="lazy">
+                {{-- <img src="{{ $iconSrc ?? $amenity->getAmenityIconUrl() }}"
+                     alt="{{ $iconSrc ? 'circle_gray' : $amenity->name }}"
+                     height="20"
+                     loading="lazy"> --}}
             </div>
             <div class="iconText">
                 <p>{{ $amenity->amenity_name }}</p>
@@ -189,11 +246,11 @@
     @foreach ($project->localities as $index => $locality)
         <div class="localityItem {{ $index >= 7 ? 'd-none' : '' }}">
             <div class="imgIcon">
-                @if($page == 'compare')
+                {{-- @if($page == 'compare')
                     <img src="{{ $baseUrl }}assest/images/circle_gray.png" alt="circle_gray"  loading="lazy">
                 @else
-                    <img src="{{ $locality->locality->getLocalityImageUrl() }}" loading="lazy">
-                @endif
+                @endif --}}
+                <img src="{{ $locality->locality->getLocalityImageUrl() }}" loading="lazy">
             </div>
             <div class="textBox">
                 <span>{{ $locality->locality->locality_name }}
@@ -287,4 +344,50 @@
             </div>
         </div>
     </a>
+@endif
+
+@if($type == 'stepimg')
+    <div class="stepimg">
+        @php
+            $images = $actualProgress->images; // Get images
+            $firstImage = $images->first(); // Get first image
+            $imageCount = $images->count(); // Get total image count
+        @endphp
+
+        <img src="{{ $firstImage->getProgressImageUrl() }}" alt="step-image" data-lightbox="step-{{ $actualProgress->id }}">
+
+        @if($imageCount > 1)
+            <div class="moreimg">
+                <a href="javascript:void(0)" class="open-lightbox" data-step-id="{{ $actualProgress->id }}">
+                    {{ $imageCount - 1 }}+
+                </a>
+            </div>
+
+            <!-- Hidden lightbox images -->
+            <div class="lightbox" id="lightbox-{{ $actualProgress->id }}">
+                @foreach($images as $image)
+                    <a href="{{ $image->getProgressImageUrl() }}" data-lightbox="step-{{ $actualProgress->id }}">
+                        {{-- <img src="{{ $image->getProgressImageUrl() }}" alt="step-image"> --}}
+                    </a>
+                @endforeach
+            </div>
+        @endif
+    </div>
+@endif
+
+@if($type == 'date-progressStatus')
+    <span> {{ getFormatedDate($actualProgress->date, 'jS F Y') }}</span>
+    <div class="checkImg">
+        @if($actualProgress->status)
+        <img src="{{ $baseUrl }}assest/images/check-green.png" alt="{{ $progressStatus[$actualProgress->status] }}">
+        @else
+        <img src="{{ $baseUrl }}assest/images/in-progress.png" alt="{{ $progressStatus[$actualProgress->status] }}">
+        @endif
+    </div>
+@endif
+@if($type == 'how-to-step')
+    <div class="howtoStep">
+        <h5>Step {{ count($project->actualProgress) - ($index) }}</h5>
+        <p>{!! $actualProgress->description !!}</p>
+    </div>
 @endif

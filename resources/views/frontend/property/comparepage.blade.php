@@ -146,40 +146,6 @@
                     <div class="detailSameBox">
                         <div class="borderBox">
                             @include('frontend.include.common-html-mobile-web', ['type' => 'overviewBox'])
-                            {{-- <div class="overViewBox">
-                                <div class="overBox">
-                                    <span>Carpet Area</span>
-                                    <h6>1361sqft</h6>
-                                </div>
-                                <div class="overBox">
-                                    <span>Total Floors</span>
-                                    <h6>14 Floors</h6>
-                                </div>
-                                <div class="overBox">
-                                    <span>Total Tower</span>
-                                    <h6>7</h6>
-                                </div>
-                                <div class="overBox">
-                                    <span>Age of Construction</span>
-                                    <h6>Under Construction</h6>
-                                </div>
-                                <div class="overBox">
-                                    <span>Property Type</span>
-                                    <h6>Residencial</h6>
-                                </div>
-                                <div class="overBox">
-                                    <span>Project Size</span>
-                                    <h6>2 Buildings - 87 units</h6>
-                                </div>
-                                <div class="overBox">
-                                    <span>Project Size</span>
-                                    <h6>2 Buildings - 87 units</h6>
-                                </div>
-                                <div class="overBox">
-                                    <span>Project Size</span>
-                                    <h6>2 Buildings - 87 units</h6>
-                                </div>
-                            </div> --}}
                         </div>
                     </div>
                 @endforeach
@@ -204,11 +170,11 @@
                                         <div class="textSlider">
                                             <div class="imgText">
                                                 <span>Carpet Area</span>
-                                                <h6>1361sqft</h6>
+                                                <h6>{{ $floorPlan->carpet_area }}sqft</h6>
                                             </div>
                                             <div class="imgText">
                                                 <span>Type</span>
-                                                <h6>2 BHK, 3BHK, 2 BHK, 3BHK</h6>
+                                                <h6>{{ $floorPlan->type }}</h6>
                                             </div>
                                         </div>
                                     </div>
@@ -258,7 +224,6 @@
                 @endforeach
             </div>
 
-
             <div class="compareComBox">
                 <div class="leftBoxSmall">
                     <div class="lableBox">
@@ -276,7 +241,8 @@
                 @endforeach
             </div>
             <div class="compareBtn">
-                <a href="" class="btn linkBtn">Download Compare Reports</a>
+                {{-- <a href="" class="btn linkBtn">Download Compare Reports</a> --}}
+                <a href="{{ request()->fullUrlWithQuery(['download' => 'pdf']) }}" class="btn linkBtn">Download Compare Reports</a>
             </div>
         </div>
     </div>

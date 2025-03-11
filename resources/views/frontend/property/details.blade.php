@@ -74,7 +74,8 @@
                             @endforeach
                         </div>
                     </div>
-                    <div class="detailsTextSec">
+                    @include('frontend.include.common-html-mobile-web', ['type' => 'project-builder-section'])
+                    {{-- <div class="detailsTextSec">
                         <div class="{{ getDeviceType() }}">
                             <div class="siteDetails">
                                 <div class="logoMain">
@@ -104,15 +105,16 @@
                                         @if (Auth::user())
                                             <a href="javascript:void(0)" class="save-property"
                                                 data-id="{{ $project->id }}">
-                                                <i
-                                                    class="{{ $project->wishlistedByUsers->contains(auth()->id()) ? 'fa-solid' : 'fa-regular' }} fa-heart"></i>
+                                                <i class="{{ $project->wishlistedByUsers->contains(auth()->id()) ? 'fa-solid' : 'fa-regular' }} fa-heart"></i>
                                                 Save
                                             </a>
                                         @endif
                                     </a>
                                 </li>
 
-                                <li><a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#share_property"><i class="fa-solid fa-arrow-up-from-bracket"></i>Share</a>
+                                <li>
+                                    <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#share_property"><i class="fa-solid fa-arrow-up-from-bracket"></i>Share
+                                    </a>
                                 </li>
                             </ul>
                             <h5><span>₹ {{ $project->price_from }} {{ formatPriceUnit($project->price_from_unit) }}</span>
@@ -121,12 +123,13 @@
                         </div>
                     </div>
                     <div class="endText">
-                        <p><i class="fa-regular fa-calendar"></i> Possession by
+                        <p>
+                            <i class="fa-regular fa-calendar"></i> Possession by
                             {{ getFormatedDate($project->possession_by, 'M, Y') }}
                             <span class="line">|</span> RERA
                             No. {{ $project->rera_number }}
                         </p>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
@@ -479,45 +482,7 @@
                             </div>
                         @endif
                     </div>
-
-                    <div class="col-lg-4">
-                        <div id="rightStickySection">
-                            <div class="StickyBox">
-                                <div class="topReportBtn">
-                                    <a href="javascript:void(0)">
-                                        <i class="bi bi-file-earmark"></i> Download Insight Report
-                                    </a>
-                                </div>
-                                <div class="insightReport">
-                                    <div class="reportTitle">
-                                        <img src="{{ $baseUrl }}assest/images/x-btn.png" alt="x-btn" loading="lazy">
-                                        <span>{{ $project->exio_suggest_percentage }}%</span>
-                                    </div>
-                                    <div class="ourReportdetail">
-                                        @foreach(['Amenities' => 'amenities_percentage', 'Project Plan' => 'project_plan_percentage', 'Locality' => 'locality_percentage', 'Return of Investment' => 'return_of_investment_percentage'] as $title => $field)
-                                            <div class="boxOne comBoxPersantage">
-                                                <div class="topBar">
-                                                    <h5>{{ $title }}</h5>
-                                                    <span>{{ $project->$field }}%</span>
-                                                </div>
-                                                <div class="barBox">
-                                                    <div class="progress">
-                                                        {!! renderProgressBar($project->$field) !!}
-                                                    </div>
-                                                    <p>It is a long established fact that a reader will be distracted by the
-                                                        readable content of a page when looking at its layout.</p>
-                                                </div>
-                                            </div>
-                                        @endforeach
-
-                                        <div class="contactBtn">
-                                            <a class="linkBtn" href="{{ route('contact-us') }}">Contact Exio Agent</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @include('frontend.include.exio-suggest')
                 </div>
             </div>
         </div>
@@ -623,43 +588,7 @@
     <!-- downloadBrochure Modal -->
 
     <!-- Share_property Modal -->
-    <div class="modal fade share_property" id="share_property" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <div class="titlebox">
-                        <p>Share Property</p>
-                    </div>
-                    <div class="iconBox">
-                        <ul>
-                            <li>
-                                <a href="javascript:void(0)" id="whatsapp-link" class="social_media_share"><i class="fa-brands fa-whatsapp"></i></a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)" id="facebook-link" class="social_media_share"><i class="fa-brands fa-facebook-f"></i></a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)" id="twitter-link" class="social_media_share"><i class="fa-brands fa-twitter"></i></a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)" id="linkedin-link" class="social_media_share"><i class="fa-brands fa-linkedin"></i></a>
-                            </li>
-                            {{-- <li>
-                                <a href="javascript:void(0)" id="email-link" class="social_media_share"><i class="fa-brands fa-email"></i></a>
-                            </li> --}}
-                        </ul>
-                    </div>
-                    <div class="input-group">
-                        <input type="text" id="copy-link" class="form-control" aria-describedby="basic-addon2" disabled>
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button" onClick="copyToClipboard()">Copy</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    @include('frontend.include.share_property_modal')
 
 @endsection
 @section('js')
