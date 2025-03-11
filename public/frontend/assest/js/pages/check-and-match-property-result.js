@@ -95,7 +95,7 @@ async function loadMarkers(projects) {
 
                 const infoWindowContent = `
                     <div class="map-info-window">
-                        <div class="propertyCard propertyCardMap">
+                        <div class="propertyCard propertyCardMap isOnMap">
                             <div class="owl-carousel owl-theme">
                                 ${location.project_images.map(image => `
                                 <div class="item">

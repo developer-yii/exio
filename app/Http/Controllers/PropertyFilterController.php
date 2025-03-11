@@ -52,7 +52,11 @@ class PropertyFilterController extends Controller
 
         $minMaxPrice = GeneralSetting::whereIn('key', ['min_price', 'max_price'])->get()->pluck('value', 'key')->toArray();
 
-        return view('frontend.property.result-filter', compact('projects', 'priceUnit', 'appraisal', 'bestMatch', 'propertyTypes', 'amenities', 'property_sub_types', 'bhks', 'minMaxPrice'));
+        $shortlistedCount = Project::with('wishlistedByUsers')->whereHas('wishlistedByUsers', function ($query) {
+            $query->where('user_id', auth()->id());
+        })->count();
+
+        return view('frontend.property.result-filter', compact('projects', 'priceUnit', 'appraisal', 'bestMatch', 'propertyTypes', 'amenities', 'property_sub_types', 'bhks', 'minMaxPrice', 'shortlistedCount'));
     }
 
     public function getProjectData(Request $request)

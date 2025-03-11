@@ -96,7 +96,7 @@ async function loadMarkers(projects) {
 
                 const infoWindowContent = `
                     <div class="map-info-window">
-                        <div class="propertyCard propertyCardMap">
+                        <div class="propertyCard propertyCardMap isOnMap">
                             <div class="owl-carousel owl-theme">
                                 ${location.project_images.map(image => `
                                 <div class="item">
@@ -126,8 +126,10 @@ async function loadMarkers(projects) {
                                     <span>${location.exio_suggest_percentage || 0}%</span>
                                 </div>
                                 <div class="clickTo">
-                                    <input type="checkbox" class="form-check-input checkbox" id="checkbox-signin" name="remember" autocomplete="off">
-                                    <label for="">Compare</label>
+                                    <a href="javascript:void(0)" class="compareBoxOpen">
+                                        <input type="checkbox" class="form-check-input checkbox" id="checkbox-signin" name="compare[]" autocomplete="off" value="${location.id}">
+                                        <label for="">Compare</label>
+                                    </a>
                                 </div>
                             </div>
                         </div>

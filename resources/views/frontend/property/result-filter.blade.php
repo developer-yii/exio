@@ -189,9 +189,9 @@
                                         </li>
                                     </ul>
                                     <div class="heartBox">
-                                        <a href="liked_properties.html">
+                                        <a href="{{ route('property.shortlisted') }}">
                                             <i class="fa-solid fa-heart"></i>
-                                            <span>3</span>
+                                            <span>{{ number_format($shortlistedCount) }}</span>
                                         </a>
                                     </div>
                                 </div>
@@ -434,7 +434,8 @@
                                                     id="heartIconFill"
                                                     class="fa-regular fa-heart heartIconFill"></i>Save</a>
                                         </li>
-                                        <li><a href="javascript:void(0)"><i
+                                        <li><a href="javascript:void(0)" data-bs-toggle="modal"
+                                                data-bs-target="#share_property"><i
                                                     class="fa-solid fa-arrow-up-from-bracket"></i>Share</a></li>
                                         <li><button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button></li>
@@ -473,11 +474,13 @@
 
                                 </div>
                                 <div class="btn-container">
-                                    <button class="btn btnWp"><img
+                                    <a class="btn btnWp" id="whatsapplink" target="_blank"
+                                        data-whatsapp-number="{{ getSettingFromDb('support_mobile') }}"><img
                                             src="{{ asset('/') }}frontend/assest/images/wpicon.png"
                                             alt="wpicon">Quick
-                                        Connect</button>
-                                    <a href="details_page.html" class="btn linkBtn">More Details</a>
+                                        Connect</a>
+                                    <a href="" class="btn linkBtn moredetails">More
+                                        Details</a>
                                 </div>
                             </div>
                         </div>
@@ -486,6 +489,54 @@
             </div>
         </div>
     </div>
+
+    <!-- Share_property Modal -->
+    <div class="modal fade share_property" id="share_property" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="titlebox">
+                        <p>Share Property</p>
+                    </div>
+                    <div class="iconBox">
+                        <ul>
+                            <li>
+                                <a href="javascript:void(0)" id="whatsapp-link" class="social_media_share"><i
+                                        class="fa-brands fa-whatsapp"></i></a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" id="facebook-link" class="social_media_share"><i
+                                        class="fa-brands fa-facebook-f"></i></a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" id="twitter-link" class="social_media_share"><i
+                                        class="fa-brands fa-twitter"></i></a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" id="linkedin-link" class="social_media_share"><i
+                                        class="fa-brands fa-linkedin"></i></a>
+                            </li>
+                            {{-- <li>
+                                    <a href="javascript:void(0)" id="email-link" class="social_media_share"><i class="fa-brands fa-email"></i></a>
+                                </li> --}}
+                        </ul>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="copy-link" class="form-control" aria-describedby="basic-addon2"
+                            disabled>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button"
+                                onClick="copyToClipboard()">Copy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @include('frontend.include.compare')
 @endsection
 
 @section('js')
@@ -501,6 +552,9 @@
         var assetUrl = "{{ asset('') }}";
         var propertySubTypes = @json($property_sub_types);
         var singleProjectUrl = "{{ route('property.getSingleProjectData') }}";
+        var propertyDetailsUrl = "{{ route('property.details', ['slug' => ':slug']) }}";
+        var getComparePropertyUrl = "{{ route('property.compare') }}";
+        var baseUrl = "{{ asset('/') }}frontend/";
     </script>
     <script>
         $(document).ready(function() {
@@ -521,10 +575,11 @@
             var isBestMatchLoading = false;
 
             function renderProject(project) {
+                let authId = @json(auth()->id());
                 //check if the project is already in the wishlist
                 var isWishlisted = project.wishlisted_by_users
                     .some(function(user) {
-                        return user.id === auth().id;
+                        return user.id === authId;
                     });
                 var html = '<div class="col-md-6">';
                 html += '<div class="propertyCard" data-id="' + project.id +
@@ -730,10 +785,32 @@
                 $('#pills-home .row').empty();
                 loadMoreProjects();
             });
+
+            $('.city_click_header').click(function() {
+                const id = $(this).data('id');
+                const name = $(this).data('name');
+                $('#city_header').val(id);
+                $('#city_header_name').text(name);
+                $('a.cityClick i').toggleClass('rotate');
+
+                page = 0;
+                lastPage = false;
+                $('#pills-home .row').empty();
+                loadMoreProjects();
+            });
+
+            $('#clear_search').click(function() {
+                page = 0;
+                lastPage = false;
+                $('#pills-home .row').empty();
+                loadMoreProjects();
+            });
         });
     </script>
     <script src="{{ $baseUrl }}/assest/js/pages/result-filter.js"></script>
     @if (getDeviceType() == 'desktop')
         <script src="{{ $baseUrl }}/assest/js/pages/map_view_filter_page.js"></script>
     @endif
+
+    <script src="{{ $baseUrl }}/assest/js/pages/compare.js"></script>
 @endsection
