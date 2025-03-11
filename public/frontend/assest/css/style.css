@@ -553,8 +553,9 @@ header .header-box .mobileIcon {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    color: #6A6A71;
-    font-size: 18px;
+    /* color: #6A6A71; */
+    color: #000;
+    font-size: 16px;
 }
 
 .filterSec .bannerFilterBox .cityFilter a.cityClick i {
@@ -580,6 +581,7 @@ header .header-box .mobileIcon {
     margin-top: 35px;
     border-radius: 5px;
     box-shadow: 0px 7px 25px #00000028;
+    z-index: 1;
 }
 
 .filterSec .bannerFilterBox .cityFilter ul.citySelect.show li a {
@@ -3018,7 +3020,8 @@ header.removeHeader.show {
 
 .compare_project .borderBox .amenitiesItem .itemsBox .iconImg {
     border-radius: 50%;
-    background-color: var(--gray-color);
+    /* background-color: var(--gray-color); */
+    background-color: var(--light-blue);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -3287,10 +3290,11 @@ header.removeHeader.show {
 }
 
 .left_traking_stepSec .stepallBox .stepText {
-    display: flex;
+    display: grid;
     align-items: center;
     gap: 30px;
     width: 90%;
+    grid-template-columns: 180px 50px 1fr;
 }
 
 .left_traking_stepSec .stepallBox .stepText .howtoStep h5 {
@@ -3304,7 +3308,6 @@ header.removeHeader.show {
 }
 
 .left_traking_stepSec .stepallBox .stepText span {
-    width: 350px;
     font-size: 16px;
     font-family: 'Inter-Regular';
     color: var(--heading-text);

@@ -34,6 +34,7 @@
                                 data-floors="{{ $property->total_floors ? $property->total_floors. ' Floors' : 'N/A' }}"
                                 data-towers="{{ $property->total_tower ?? 'N/A' }}"
                                 data-age="{{ getAgeOfConstruction($property->age_of_construction) }}"
+                                data-type="{{ $property->property_type }}"
                                 data-property-type="{{ getPropertyType($property->property_type) }}"
                                 data-description="{!! $property->project_about !!}"
                                 data-size="{{ json_encode($property->projectDetails->map(fn($detail) => ['name' => $detail->name, 'value' => $detail->value])) }}"
@@ -68,6 +69,7 @@
                                     <div class="homeBox comBox">
                                         <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home" loading="lazy">
                                         <p>{{ $property->custom_property_type ?? '' }}</p>
+                                        {{-- <p>{{ $property->property_type ?? '' }}</p> --}}
                                     </div>
                                     <div class="location comBox">
                                         <img src="{{ $baseUrl }}assest/images/Location.png" alt="Location" loading="lazy">
@@ -166,6 +168,9 @@
                     </div>
                     <div class="compareBtn">
                         <a href="javascript:void(0)" class="btn btnCompare cursor-default" disabled>Compare</a>
+                    </div>
+                    <div class="closeModal">
+                        <a href="javascript:void(0)"><img src="{{ $baseUrl }}assest/images/x-orange.png" alt="x-orange"></a>
                     </div>
                 </div>
             </div>
