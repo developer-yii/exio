@@ -198,15 +198,15 @@ $(".propertyCardModal").click(function (event) {
     // // Update modal content dynamically
     $("#coverImage").attr("src", image);
     $('#property_price').text(price);
-    $('#property_name').text(projectName);
-    $('#custom_type').text(customType);
-    $('#location').text(location);
+    $('#property_name').text(projectName).attr('title', projectName);
+    $('#custom_type').text(customType).attr('title', customType);
+    $('#location').text(location).attr('title', location);
     $('#carpet_area').text(area);
-    $('#total_floor').text(floors);
-    $('#total_tower').text(towers);
+    $('#total_floor').text(floors).attr('title', floors);
+    $('#total_tower').text(towers).attr('title', towers);
     $('#age_of_construction').text(age);
-    $('#property_type').text(propertyType);
-    $('#description').html(description);
+    $('#property_type').text(propertyType).attr('title', propertyType);
+    $('#description').html(description).attr('title', description);
     $(".heartIconFill").addClass(faClass);
     $(".heartIconFill").attr("data-id", id);
 
@@ -218,7 +218,7 @@ $(".propertyCardModal").click(function (event) {
             htmlContent += `
                 <div class="overBox">
                     <span>Project Size</span>
-                    <h6>${item.value}</h6>
+                    <h6 class="one-line-text" title="${item.value}">${item.value}</h6>
                 </div>
             `;
         });
