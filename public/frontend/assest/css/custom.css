@@ -61,12 +61,33 @@
     opacity: 0.2 !important; /* Add a translucent effect to indicate it's disabled */
 }
 
-.truncate-text {
+.one-line-text {
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1; /* Change this to 2 or more for multiple lines */
+    -webkit-line-clamp: 1;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: normal; /* Ensure it wraps properly */
-    max-width: 100%; /* Ensures it does not overflow the container */
+    white-space: normal;
+    max-width: 100%;
 }
+
+.two-line-text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    max-width: 100%;
+}
+
+.five-line-text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    max-width: 100%;
+}
+

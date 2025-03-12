@@ -17,7 +17,7 @@
                             <div class="priceAndshare">
                                 <div class="price">
                                     <h5 id="property_price"></h5>
-                                    <h5 id="property_name"></h5>
+                                    <h5 id="property_name" class="two-line-text"></h5>
                                 </div>
                                 <ul>
                                     <li><a href="javascript:void(0)"><i
@@ -32,16 +32,16 @@
                             <div class="locationProperty">
                                 <div class="homeBox comBox">
                                     <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home">
-                                    <p id="custom_type"></p>
+                                    <p id="custom_type" class="one-line-text"></p>
                                 </div>
                                 <div class="location comBox">
                                     <img src="{{ $baseUrl }}assest/images/Location.png" alt="Location">
-                                    <p id="location"></p>
+                                    <p id="location" class="one-line-text"></p>
                                 </div>
                             </div>
 
                             <div class="discriptBox">
-                                <p><strong>Description:</strong><span id="description"></span></p>
+                                <p><strong>Description:</strong><span id="description" class="five-line-text"></span></p>
                             </div>
                             <div class="overViewBox">
                                 <div class="overBox">
