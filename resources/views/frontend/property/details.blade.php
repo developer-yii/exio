@@ -33,7 +33,7 @@
                     <div class="imageGallery">
                         <div class="leftVideo">
                             <div class="videoCoverImage">
-                                <video no-controls id="myVideo">
+                                <video controls id="myVideo">
                                     <source src="{{ $project->getVideoUrl() }}">
                                 </video>
                                 <div class="playIcon" id="playIcon">
