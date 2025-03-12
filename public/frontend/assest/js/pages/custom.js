@@ -58,7 +58,8 @@ $(".more-locality").click(function (event) {
 });
 
 // $('.heartIconFill, .save-property').on('click', function (e) {
-$(document).on('click', '.heartIconFill, .save-property', function (e) {
+// $(document).on('click', '.heartIconFill, .save-property', function (e) {
+$('body').on('click', '.heartIconFill, .save-property', function (e) {
     e.preventDefault();
     e.stopPropagation();
 
@@ -75,6 +76,9 @@ $(document).on('click', '.heartIconFill, .save-property', function (e) {
                 heartIcon.removeClass('fa-solid').addClass('fa-regular');
             }
             // toastr.success(response.message);
+            // setTimeout(function () {
+            //     window.location.reload();
+            // }, 500);
         },
         error: function () {
             alert("Something went wrong. Please try again.");
@@ -163,7 +167,6 @@ function modelOpacityAdd(btnClass, model){
 function modelOpacityRemove(hideModalId, showModalId){
 
     $(document).on('#'+hideModalId).on('hidden.bs.modal', function () {
-        // $('body').addClass('modal-open');
         $('#'+showModalId).removeClass('disabled-modal');
     });
 }
@@ -249,9 +252,10 @@ $(".propertyCardModal").click(function (event) {
     }
 
     // Show the modal
-    if(!$(event.target).hasClass('checkbox') && !$(event.target).hasClass('compareBoxOpen'))
+    if(!$(event.target).hasClass('checkbox') && !$(event.target).hasClass('compareBoxOpen') && !$(event.target).hasClass('heartIconFill'))
     {
         $("#propertyModal").modal("show");
     }
+
 });
 
