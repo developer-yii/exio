@@ -7,7 +7,7 @@
 @endphp
 
 <div class="col-md-6">
-    <div class="propertyCard propertyCardModel cursor-pointer" data-id="{{ $project->id }}"
+    <div class="propertyCard propertyCardModal cursor-pointer" data-id="{{ $project->id }}"
         data-slug="{{ $project->slug }}" data-image="{{ $project->getCoverImageUrl() }}"
         data-project-name="{{ $project->project_name }}" data-builder-name="{{ $project->builder->builder_name }}"
         data-custom-type="{{ $project->custom_property_type ?? 'N/A' }}"
