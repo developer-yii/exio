@@ -157,6 +157,8 @@ function showPropertyDetails(project) {
 
     $('#overViewBox').append(html);
 
+    $('#heartIconFill').attr('data-id', project.id);
+
     if (project.is_wishlisted) {
         $('#heartIconFill').removeClass('fa-regular');
         $('#heartIconFill').addClass('fa-solid');
@@ -174,6 +176,18 @@ function showPropertyDetails(project) {
     });
 
     updateShareLinks(propertyDetailsUrl.replace(':slug', project.slug));
+
+    $('.show_video_url').attr('src', project.video || '');
+    let galleryHtml = '';
+    if (project.project_images && project.project_images.length > 0) {
+        project.project_images.forEach((image, index) => {
+            galleryHtml += `<div class="box comImg">
+                                <img src="${image.image}" alt="boxImg${index + 1}">
+                            </div>`;
+        });
+    }
+
+    $('.show_gallery_images').html(galleryHtml);
 }
 
 function updateShareLinks(url) {
