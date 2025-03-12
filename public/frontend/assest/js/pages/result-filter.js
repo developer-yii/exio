@@ -70,23 +70,6 @@ $(document).ready(function () {
             $('#bhk-filter').addClass('d-none');
         }
     });
-
-    $(document).on('click', '.propertyCard', function () {
-        if ($(this).hasClass('isOnMap')) {
-            return;
-        }
-
-        let id = $(this).data('id');
-        $.ajax({
-            url: singleProjectUrl,
-            type: 'GET',
-            data: { id: id },
-            success: function (response) {
-                showPropertyDetails(response.data);
-                $('#propertyModal').modal('show');
-            }
-        });
-    });
 });
 
 modelOpacityAdd('share_property', 'propertyModal');
@@ -106,87 +89,6 @@ function loadLessAmenities() {
     $('#lessAmenities').addClass('d-none');
     console.log($('.hidden-amenity'));
     $('.hidden-amenity').addClass('d-none');
-}
-
-function showPropertyDetails(project) {
-    console.log(project);
-    let whatsApp = $('#whatsapplink').data('whatsapp-number');
-
-    $('.show_price_from_to').text(
-        project.price_from && project.price_to
-            ? `₹${project.price_from}L - ${project.price_to}Cr`
-            : 'Unknown'
-    );
-
-    $('.show_project_name').text(project.project_name || 'Unknown');
-
-    $('.show_custom_property_type').text(project.custom_property_type || 'Unknown');
-
-    $('.show_location').text(
-        project.city?.city_name && project.location?.location_name
-            ? `${project.city.city_name}, ${project.location.location_name}`
-            : 'Unknown'
-    );
-
-    $('.show_description').text(
-        project.project_about
-            ? project.project_about.replace(/(<([^>]+)>)/gi, "").trim()
-            : 'No description available'
-    );
-
-    $('.show_total_floors').text(
-        project.total_floors
-            ? `${project.total_floors} Floors`
-            : 'Unknown'
-    );
-
-    $('.show_total_tower').text(project.total_tower || 'Unknown');
-
-    $('.show_age_of_construction').text(project.age_of_construction || 'Unknown');
-
-    $('.show_property_type').text(project.property_type || 'Unknown');
-
-    let html = '';
-    project.project_details.forEach(function (detail) {
-        html += `<div class="overBox">
-                    <span>${detail.name}</span>
-                    <h6 class="show_${detail.name}">${detail.value}</h6>
-                </div>`;
-    });
-
-    $('#overViewBox').append(html);
-
-    $('#heartIconFill').attr('data-id', project.id);
-
-    if (project.is_wishlisted) {
-        $('#heartIconFill').removeClass('fa-regular');
-        $('#heartIconFill').addClass('fa-solid');
-    } else {
-        $('#heartIconFill').removeClass('fa-solid');
-        $('#heartIconFill').addClass('fa-regular');
-    }
-    $('.moredetails').attr({
-        'href': propertyDetailsUrl.replace(':slug', project.slug),
-        'target': '_blank'
-    });
-
-    $('#whatsapplink').attr({
-        'href': `https://wa.me/${whatsApp}?text=${encodeURIComponent(propertyDetailsUrl.replace(':slug', project.slug))}`
-    });
-
-    updateShareLinks(propertyDetailsUrl.replace(':slug', project.slug));
-
-    $('.show_video_url').attr('src', project.video || '');
-    let galleryHtml = '';
-    if (project.project_images && project.project_images.length > 0) {
-        project.project_images.forEach((image, index) => {
-            galleryHtml += `<div class="box comImg">
-                                <img src="${image.image}" alt="boxImg${index + 1}">
-                            </div>`;
-        });
-    }
-
-    $('.show_gallery_images').html(galleryHtml);
 }
 
 // function updateShareLinks(url) {

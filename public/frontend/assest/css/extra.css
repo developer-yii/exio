@@ -1,11 +1,26 @@
-.propertyCard .addressBox p {
-    width: unset !important;
-}
-
 .propertyCard .addressBox a {
     margin-left: 10px !important;
 }
 
 .propertyModal .modalTextBox .priceAndshare ul li a i.fa-solid.heartIconFill {
     color: var(--red-color);
+}
+
+.propertyCard .addressBox p span {
+    color: var(--heading-text);
+    font-size: 18px;
+    font-weight: 400;
+    font-family: "Inter", serif;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    margin-bottom: 0;
+    width: 100%;
+    max-width: 320px;
+}
+
+.propertyCard .addressBox p {
+    width: unset !important;
 }

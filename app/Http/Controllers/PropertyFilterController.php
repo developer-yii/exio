@@ -15,7 +15,9 @@ class PropertyFilterController extends Controller
         $city = $request->input('city');
         $search = $request->input('search');
 
-        $projects = Project::with('projectImages', 'projectBadge', 'floorPlans', 'city', 'location');
+        $projects = projectQuery();
+
+        $projects = $projects->with('projectBadge', 'floorPlans');
 
         if ($city) {
             $projects = $projects->where('city_id', $city);

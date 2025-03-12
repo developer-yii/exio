@@ -200,63 +200,7 @@
                                         aria-labelledby="pills-home-tab">
                                         <div class="row">
                                             @foreach ($projects as $project)
-                                                <div class="col-md-6">
-                                                    <div class="propertyCard" data-id="{{ $project->id }}">
-                                                        <div class="imgBox">
-                                                            <img src="{{ asset('/') }}frontend/assest/images/property-img.png"
-                                                                alt="property-img">
-                                                            <div class="imgheader">
-                                                                <span>Best for Investment</span>
-                                                                <i data-id="{{ $project->id }}"
-                                                                    class="{{ $project->wishlistedByUsers->contains(auth()->id()) ? 'fa-solid' : 'fa-regular' }} fa-heart heartIconFill"></i>
-                                                            </div>
-                                                        </div>
-                                                        <div class="priceBox">
-                                                            <div class="price">
-                                                                <h5>₹{{ $project->price_from }}L-{{ $project->price_to }}Cr
-                                                                </h5>
-                                                            </div>
-                                                            <div class="boxLogo">
-                                                                <img src="{{ asset('/') }}frontend/assest/images/x-btn.png"
-                                                                    alt="x-btn">
-                                                                <span>{{ $project->exio_suggest_percentage }}%</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="propertyName">
-                                                            <h5>{{ $project->project_name }}</h5>
-                                                        </div>
-                                                        <div class="locationProperty">
-                                                            <div class="homeBox comBox">
-                                                                <img src="{{ asset('/') }}frontend/assest/images/Home.png"
-                                                                    alt="Home">
-                                                                <p>{{ $project->custom_property_type }} |
-                                                                    {{ isset($project->floor_plans)? $project->floor_plans->map(function ($plan) {return $plan->carpet_area . ' Sqft';})->join(', '): '' }}
-                                                                    | {{ $project->location->location_name }}</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="addressBox">
-                                                            <img src="{{ asset('/') }}frontend/assest/images/Home.png"
-                                                                alt="Home">
-                                                            <p>
-                                                                @php
-                                                                    $amenities_a = explode(',', $project->amenities);
-                                                                    $amenityNames = [];
-                                                                    foreach ($amenities_a as $amenityId) {
-                                                                        if (isset($amenities[$amenityId])) {
-                                                                            $amenityNames[] = $amenities[$amenityId];
-                                                                        }
-                                                                    }
-                                                                    $amenities_a = implode(
-                                                                        ', ',
-                                                                        array_slice($amenityNames, 0, 4),
-                                                                    );
-                                                                @endphp
-                                                                {{ $amenities_a }}
-                                                            </p>
-                                                            <a href="javascript:void(0)">more</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <x-property-card :project="$project" :amenities="$amenities" />
                                             @endforeach
                                         </div>
                                     </div>
@@ -264,63 +208,7 @@
                                         aria-labelledby="pills-profile-tab">
                                         <div class="row">
                                             @foreach ($appraisal as $project)
-                                                <div class="col-md-6">
-                                                    <div class="propertyCard" data-id="{{ $project->id }}">
-                                                        <div class="imgBox">
-                                                            <img src="{{ asset('/') }}frontend/assest/images/property-img.png"
-                                                                alt="property-img">
-                                                            <div class="imgheader">
-                                                                <span>Best for Investment</span>
-                                                                <i data-id="{{ $project->id }}"
-                                                                    class="{{ $project->wishlistedByUsers->contains(auth()->id()) ? 'fa-solid' : 'fa-regular' }} fa-heart heartIconFill"></i>
-                                                            </div>
-                                                        </div>
-                                                        <div class="priceBox">
-                                                            <div class="price">
-                                                                <h5>₹{{ $project->price_from }}L-{{ $project->price_to }}Cr
-                                                                </h5>
-                                                            </div>
-                                                            <div class="boxLogo">
-                                                                <img src="{{ asset('/') }}frontend/assest/images/x-btn.png"
-                                                                    alt="x-btn">
-                                                                <span>{{ $project->exio_suggest_percentage }}%</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="propertyName">
-                                                            <h5>{{ $project->project_name }}</h5>
-                                                        </div>
-                                                        <div class="locationProperty">
-                                                            <div class="homeBox comBox">
-                                                                <img src="{{ asset('/') }}frontend/assest/images/Home.png"
-                                                                    alt="Home">
-                                                                <p>{{ $project->custom_property_type }} |
-                                                                    {{ isset($project->floor_plans)? $project->floor_plans->map(function ($plan) {return $plan->carpet_area . ' Sqft';})->join(', '): '' }}
-                                                                    | {{ $project->location->location_name }}</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="addressBox">
-                                                            <img src="{{ asset('/') }}frontend/assest/images/Home.png"
-                                                                alt="Home">
-                                                            <p>
-                                                                @php
-                                                                    $amenities_a = explode(',', $project->amenities);
-                                                                    $amenityNames = [];
-                                                                    foreach ($amenities_a as $amenityId) {
-                                                                        if (isset($amenities[$amenityId])) {
-                                                                            $amenityNames[] = $amenities[$amenityId];
-                                                                        }
-                                                                    }
-                                                                    $amenities_a = implode(
-                                                                        ', ',
-                                                                        array_slice($amenityNames, 0, 4),
-                                                                    );
-                                                                @endphp
-                                                                {{ $amenities_a }}
-                                                            </p>
-                                                            <a href="javascript:void(0)">more</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <x-property-card :project="$project" :amenities="$amenities" />
                                             @endforeach
                                         </div>
                                     </div>
@@ -328,63 +216,7 @@
                                         aria-labelledby="pills-match-tab">
                                         <div class="row">
                                             @foreach ($bestMatch as $project)
-                                                <div class="col-md-6">
-                                                    <div class="propertyCard" data-id="{{ $project->id }}">
-                                                        <div class="imgBox">
-                                                            <img src="{{ asset('/') }}frontend/assest/images/property-img.png"
-                                                                alt="property-img">
-                                                            <div class="imgheader">
-                                                                <span>Best for Investment</span>
-                                                                <i data-id="{{ $project->id }}"
-                                                                    class="{{ $project->wishlistedByUsers->contains(auth()->id()) ? 'fa-solid' : 'fa-regular' }} fa-heart heartIconFill"></i>
-                                                            </div>
-                                                        </div>
-                                                        <div class="priceBox">
-                                                            <div class="price">
-                                                                <h5>₹{{ $project->price_from }}L-{{ $project->price_to }}Cr
-                                                                </h5>
-                                                            </div>
-                                                            <div class="boxLogo">
-                                                                <img src="{{ asset('/') }}frontend/assest/images/x-btn.png"
-                                                                    alt="x-btn">
-                                                                <span>{{ $project->exio_suggest_percentage }}%</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="propertyName">
-                                                            <h5>{{ $project->project_name }}</h5>
-                                                        </div>
-                                                        <div class="locationProperty">
-                                                            <div class="homeBox comBox">
-                                                                <img src="{{ asset('/') }}frontend/assest/images/Home.png"
-                                                                    alt="Home">
-                                                                <p>{{ $project->custom_property_type }} |
-                                                                    {{ isset($project->floor_plans)? $project->floor_plans->map(function ($plan) {return $plan->carpet_area . ' Sqft';})->join(', '): '' }}
-                                                                    | {{ $project->location->location_name }}</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="addressBox">
-                                                            <img src="{{ asset('/') }}frontend/assest/images/Home.png"
-                                                                alt="Home">
-                                                            <p>
-                                                                @php
-                                                                    $amenities_a = explode(',', $project->amenities);
-                                                                    $amenityNames = [];
-                                                                    foreach ($amenities_a as $amenityId) {
-                                                                        if (isset($amenities[$amenityId])) {
-                                                                            $amenityNames[] = $amenities[$amenityId];
-                                                                        }
-                                                                    }
-                                                                    $amenities_a = implode(
-                                                                        ', ',
-                                                                        array_slice($amenityNames, 0, 4),
-                                                                    );
-                                                                @endphp
-                                                                {{ $amenities_a }}
-                                                            </p>
-                                                            <a href="javascript:void(0)">more</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <x-property-card :project="$project" :amenities="$amenities" />
                                             @endforeach
                                         </div>
                                     </div>
@@ -558,6 +390,7 @@
         var getComparePropertyUrl = "{{ route('property.compare') }}";
         var comparePropertytUrl = "{{ route('property.comparepage') }}";
         var baseUrl = "{{ asset('/') }}frontend/";
+        var amenities = @json($amenities);
     </script>
     <script>
         $(document).ready(function() {
@@ -669,7 +502,8 @@
                                 initMap();
                             @endif
                             newProjects.forEach(function(proj) {
-                                $('#pills-home .row').append(renderProject(proj));
+                                $('#pills-home .row').append(renderPropertyCard(proj,
+                                    amenities));
                             });
                             if (response.data.current_page >= response.data.last_page) {
                                 lastPage = true;

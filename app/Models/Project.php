@@ -195,5 +195,8 @@ class Project extends Model
         return $this->hasMany(PropertyComparison::class, 'property_id_2');
     }
 
-
+    public function getProjectBadgeName()
+    {
+        return $this->projectBadge->name;
+    }
 }
