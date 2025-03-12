@@ -295,7 +295,6 @@ if (!function_exists('projectQuery')) {
             'projectDetails',
             'city'
         ])
-        // ->whereIn('id', $propertyIds)
         ->where('status', 1);
     }
 }

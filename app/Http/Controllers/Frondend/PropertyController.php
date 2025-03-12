@@ -144,7 +144,6 @@ class PropertyController extends Controller
 
         $loginUser = Auth::user();
         $projectids = PropertyWishlist::where('user_id', $loginUser->id)->pluck('project_id');
-        $favourite_properties = projectQuery($projectids)->paginate(2);
         $favourite_properties = projectQuery()->whereIn('id', $projectids)->paginate(9);
 
         return view('frontend.property.liked-properties', compact('favourite_properties'));

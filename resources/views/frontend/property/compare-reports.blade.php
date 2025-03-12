@@ -16,21 +16,25 @@
 
     <section class="compare_reports">
         <div class="container">
-            @foreach($compareReports as $report)
-                <div class="compare_reports_box">
-                    <div class="certificates_box">
-                        @include('frontend.property.partial_compare_section', ['property' => $report->propertyOne])
-                        <div class="compareVs">Vs</div>
-                        @include('frontend.property.partial_compare_section', ['property' => $report->propertyTwo])
+            @if($compareReports->count() > 0)
+                @foreach($compareReports as $report)
+                    <div class="compare_reports_box">
+                        <div class="certificates_box">
+                            @include('frontend.property.partial_compare_section', ['property' => $report->propertyOne])
+                            <div class="compareVs">Vs</div>
+                            @include('frontend.property.partial_compare_section', ['property' => $report->propertyTwo])
+                        </div>
+                        <div class="download_box">
+                            <a href="{{ route('property.compare-download', ['reportId' => $report->id]) }}"><img src="{{ $baseUrl }}assest/images/folder-download.png" alt="folder-download"><br>Download Again</a>
+                        </div>
                     </div>
-                    <div class="download_box">
-                        <a href="{{ route('property.compare-download', ['reportId' => $report->id]) }}"><img src="{{ $baseUrl }}assest/images/folder-download.png" alt="folder-download"><br>Download Again</a>
-                    </div>
-                </div>
-            @endforeach
+                @endforeach
 
-            @if ($compareReports->hasPages())
-                @include('frontend.include.pagination', ['propertyPages' => $compareReports])
+                @if ($compareReports->hasPages())
+                    @include('frontend.include.pagination', ['propertyPages' => $compareReports])
+                @endif
+            @else
+                <p>Compare property not found</p>
             @endif
             {{-- <div class="paginationBox">
                 <nav aria-label="Page navigation example">
