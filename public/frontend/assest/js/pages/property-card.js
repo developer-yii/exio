@@ -1,8 +1,10 @@
 $(document).ready(function () {
-    console.log('property-card');
+    initAmenityToggles();
 });
 
 function renderPropertyCard(project, amenities) {
+    console.log(project);
+    console.log(amenities);
     // Format price
     let priceFormatted = '₹' + project.price_from + formatPriceUnit(project.price_from_unit);
     if (project.price_from != project.price_to || project.price_from_unit != project.price_to_unit) {
@@ -22,12 +24,12 @@ function renderPropertyCard(project, amenities) {
     // Generate HTML
     return `
         <div class="col-md-6">
-            <div class="propertyCard propertyCardModel cursor-pointer"
+            <div class="propertyCard propertyCardModal cursor-pointer"
                 data-id="${project.id}"
                 data-slug="${project.slug}"
                 data-image="${project.getCoverImageUrl}"
                 data-project-name="${project.project_name}"
-                data-builder-name="${project.builder.builder_name}"
+                data-builder-name="${project.builder.builder_name || 'N/A'}"
                 data-custom-type="${project.custom_property_type || 'N/A'}"
                 data-location="${project.location.location_name}, ${project.city.city_name}"
                 data-price="${priceFormatted}"
@@ -38,9 +40,9 @@ function renderPropertyCard(project, amenities) {
                 data-type="${project.property_type}"
                 data-property-type="${getPropertyType(project.property_type)}"
                 data-description="${project.project_about}"
-                data-size='${JSON.stringify(project.projectDetails.map(detail => ({ name: detail.name, value: detail.value })))}'
-                data-multi-image='${JSON.stringify(project.projectImages.slice(0, 3).map(img => ({ imgurl: img.getProjectImageUrl })))}'
-                data-whatsapp-number="${getSettingFromDb('support_mobile')}"
+                data-size='${JSON.stringify(project.project_details.map(detail => ({ name: detail.name, value: detail.value })))}'
+                data-multi-image='${JSON.stringify(project.project_images.slice(0, 3).map(img => ({ imgurl: img.getProjectImageUrl })))}'
+                data-whatsapp-number="${getSettingFromDb}"
                 data-like-class="${project.is_wishlisted ? 'fa-solid' : 'fa-regular'}">
 
                 <div class="imgBox">
@@ -121,23 +123,14 @@ function initAmenityToggles() {
     });
 }
 
-function formatPriceUnit(unit) {
-    const units = {
-        'L': ' Lac',
-        'C': ' Cr',
-        'K': ' K'
-    };
-    return units[unit] || '';
-}
-
-function getPropertyType(type) {
-    const types = {
-        'residential': 'Residential',
-        'commercial': 'Commercial',
-    };
-    return types[type] || type;
+function formatPriceUnit(priceUnit) {
+    return priceUnit[priceUnit] || '';
 }
 
 function getAgeOfConstruction(age) {
-    return age || 'N/A';
+    return ageOfConstruction[age] || '';
+}
+
+function getPropertyType(propertyType) {
+    return propertyType[propertyType] || '';
 }
