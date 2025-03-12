@@ -205,8 +205,13 @@
                         <div>
                             <div style="display: table; width: 100%;">
                                 <div style="display: table-cell; vertical-align: middle; padding-right: 10px;">
-                                    <img src="{{ public_path('frontend/assest/images/ganesh-glory.png') }}"
-                                        alt="Property Logo"
+
+                                    @php
+                                        $builderLogo = $property->builder->builder_logo
+                                            ? storage_path("app/public/builder/logo/{$property->builder->builder_logo}")
+                                            : public_path('images/no_image_available.jpg');
+                                    @endphp
+                                    <img src="{{ $builderLogo }}"
                                         style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
                                 </div>
                                 <div style="display: table-cell; vertical-align: middle;">
@@ -227,8 +232,13 @@
                                         {{ $property->city->city_name }}</span></p>
                                 <p><strong>Possession By:</strong>
                                     {{ getFormatedDate($property->possession_by, 'M, Y') }}</p>
-                                <p><strong>Price Range:</strong> Rs. {{ $property->price_from }} - Rs.
-                                    {{ $property->price_to }}</p>
+                                <p><strong>Price :</strong>
+                                    Rs. {{ $property->price_from }} {{ formatPriceUnit($property->price_from_unit) }}
+                                    @if($property->price_from != $property->price_to || $property->price_from_unit != $property->price_to_unit)
+                                        - Rs. {{ $property->price_to }} {{ formatPriceUnit($property->price_to_unit) }}
+                                    @endif
+                                </p>
+
                             </div>
                         </div>
 

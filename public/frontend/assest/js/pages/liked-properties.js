@@ -215,6 +215,7 @@ $(document).ready(function () {
         }).remove();
         $(".multyimg").html("");
 
+        let id = $(this).data("id");
         let image = $(this).data("image");
         let projectName = $(this).data("project-name");
         let price = $(this).data("price");
@@ -227,6 +228,7 @@ $(document).ready(function () {
         let propertyType = $(this).data("property-type");
         let description = $(this).data("description");
         let whatsApp = $(this).data("whatsapp-number");
+        let faClass = $(this).data("like-class");
 
         // // Update modal content dynamically
         $("#coverImage").attr("src", image);
@@ -240,6 +242,8 @@ $(document).ready(function () {
         $('#age_of_construction').text(age);
         $('#property_type').text(propertyType);
         $('#description').html(description);
+        $(".heartIconFill").addClass(faClass);
+        $(".heartIconFill").attr("data-id", id);
 
         let sizeData = $(this).data("size");
         if (Array.isArray(sizeData) && sizeData.length > 0) {
@@ -273,8 +277,13 @@ $(document).ready(function () {
         let slug = $(this).data("slug");
         if (slug) {
             let propertyUrl = getPropertyDetailsUrl.replace("_slug_", slug);
-            $("#more-details").attr("href", propertyUrl);
+            $('#more-details').attr({
+                'href': propertyUrl,
+                'target': '_blank'
+            });
+
             $("#whatsapplink").attr("href", `https://wa.me/${whatsApp}?text=${encodeURIComponent(propertyUrl)}`);
+            updateShareLinks(propertyUrl);
         }
 
         // Show the modal
@@ -283,5 +292,8 @@ $(document).ready(function () {
             $("#propertyModal").modal("show");
         }
     });
+
+    modelOpacityAdd('share_property', 'propertyModal');
+    modelOpacityRemove('share_property', 'propertyModal');
 
 });

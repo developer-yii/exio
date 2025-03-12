@@ -201,4 +201,4 @@ function copyToClipboard() {
 }
 
 // Call the function to update share links when the page loads
-window.onload = updateShareLinks;
+// window.onload = updateShareLinks;

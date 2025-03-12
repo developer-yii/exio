@@ -102,12 +102,12 @@
                                         </a>
                                     </li>
                                 @endif
-                                <li>
-                                    <a href="{{ route('property.insights') }}">
-                                        <img src="{{ $baseUrl }}assest/images/project.png" alt="project"> Project
-                                        Insights
-                                    </a>
-                                </li>
+                                    <li>
+                                        <a href="{{ route('property.insights') }}">
+                                            <img src="{{ $baseUrl }}assest/images/project.png" alt="project"> Project
+                                            Insights
+                                        </a>
+                                    </li>
                                 @if (Auth::user())
                                     <li>
                                         <a href="{{ route('property.shortlisted') }}">
@@ -116,13 +116,19 @@
                                         </a>
                                     </li>
                                 @endif
+
                                 <li><a href="downloaded_certificates.html"><img
                                             src="{{ $baseUrl }}assest/images/report.png" alt="report">Downloaded
                                         Reports</a></li>
-                                <li><a href="compare_report.html"><img
-                                            src="{{ $baseUrl }}assest/images/compare.png" alt="compare">Compare
-                                        Reports</a>
-                                </li>
+
+                                @if (Auth::user())
+                                    <li>
+                                        <a href="{{ route('property.compare-report') }}">
+                                            <img src="{{ $baseUrl }}assest/images/compare.png" alt="compare">Compare
+                                            Reports
+                                        </a>
+                                    </li>
+                                @endif
                                 <li><a href="javascript:void(0)"><img src="{{ $baseUrl }}assest/images/assist.png"
                                             alt="assist">Property Assist</a>
                                 </li>

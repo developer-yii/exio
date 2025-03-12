@@ -62,8 +62,11 @@
                     </a>
                 </li>
             </ul>
-            <h5><span>₹ {{ $project->price_from }} {{ formatPriceUnit($project->price_from_unit) }}</span>
-                - <span>₹ {{ $project->price_to }} {{ formatPriceUnit($project->price_to_unit) }}</span>
+            <h5>
+                <span>₹ {{ $project->price_from }} {{ formatPriceUnit($project->price_from_unit) }}</span>
+                @if($project->price_from != $project->price_to || $project->price_from_unit != $project->price_to_unit)
+                    - <span>₹ {{ $project->price_to }} {{ formatPriceUnit($project->price_to_unit) }}</span>
+                @endif
             </h5>
         </div>
     </div>

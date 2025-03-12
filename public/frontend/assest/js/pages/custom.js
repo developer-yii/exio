@@ -57,7 +57,8 @@ $(".more-locality").click(function (event) {
     }
 });
 
-$('.heartIconFill, .save-property').on('click', function (e) {
+// $('.heartIconFill, .save-property').on('click', function (e) {
+$(document).on('click', '.heartIconFill, .save-property', function (e) {
     e.preventDefault();
     e.stopPropagation();
 
@@ -99,23 +100,37 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-function updateShareLinks() {
-    // Get current page URL
-    const currentPageURL = window.location.href;
 
+function updateShareLinks(url = window.location.href) {
+    const currentPageURL = url || window.location.href; // Ensures fallback to current URL
+
+    const encodedURL = encodeURIComponent(currentPageURL);
     const subject = encodeURIComponent("Check out this property!");
-    const body = encodeURIComponent("I found this property and thought you might be interested:\n\n" + currentPageURL);
+    const body = encodeURIComponent(`I found this property and thought you might be interested:\n\n${currentPageURL}`);
 
-    document.getElementById('whatsapp-link').setAttribute('data-href', `https://api.whatsapp.com/send?text=${encodeURIComponent(currentPageURL)}`);
-    document.getElementById('facebook-link').setAttribute('data-href', `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentPageURL)}`);
-    document.getElementById('twitter-link').setAttribute('data-href', `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentPageURL)}`);
-    document.getElementById('linkedin-link').setAttribute('data-href', `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(currentPageURL)}`);
-    // document.getElementById('email-link').setAttribute('data-href', `mailto:?subject=${subject}&body=${body}`);
-    // document.getElementById('pinterest-link').href = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(currentPageURL)}`;
+    const links = {
+        'whatsapp-link': `https://api.whatsapp.com/send?text=${encodedURL}`,
+        'facebook-link': `https://www.facebook.com/sharer/sharer.php?u=${encodedURL}`,
+        'twitter-link': `https://twitter.com/intent/tweet?url=${encodedURL}`,
+        'linkedin-link': `https://www.linkedin.com/sharing/share-offsite/?url=${encodedURL}`,
+        // 'email-link': `mailto:?subject=${subject}&body=${body}`,
+        // 'pinterest-link': `https://pinterest.com/pin/create/button/?url=${encodedURL}`,
+    };
 
-    // Set the copy link value
-    document.getElementById('copy-link').value = currentPageURL;
+    Object.keys(links).forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.setAttribute('data-href', links[id]);
+        }
+    });
+
+    // Set copy link value if the input exists
+    const copyInput = document.getElementById('copy-link');
+    if (copyInput) {
+        copyInput.value = currentPageURL;
+    }
 }
+
 
 $('body').on('click','.social_media_share',function(event){
     var url = $(this).attr('data-href');
@@ -138,3 +153,18 @@ function copyToClipboard() {
         copyText.setAttribute("disabled", "true");
     }
 }
+
+function modelOpacityAdd(btnClass, model){
+    $(document).on('click', '.'+btnClass, function () {
+        $('#'+model).addClass('disabled-modal');
+    });
+}
+
+function modelOpacityRemove(hideModalId, showModalId){
+
+    $(document).on('#'+hideModalId).on('hidden.bs.modal', function () {
+        // $('body').addClass('modal-open');
+        $('#'+showModalId).removeClass('disabled-modal');
+    });
+}
+

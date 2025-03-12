@@ -157,9 +157,7 @@
             <div class="site_traking_box">
                 @if ($totalProperties > 0)
                     <div class="row" id="propertyContainer">
-                        @include('frontend.property.partial_insights_property_list', [
-                            'properties' => $properties,
-                        ])
+                        @include('frontend.property.partial_insights_property_list', ['properties' => $properties])
                     </div>
                     @if ($totalProperties > $perPageProperty)
                         <div class="moreBtn">

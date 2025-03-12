@@ -71,6 +71,8 @@ Route::group(['prefix' => 'property'], function () {
     Route::post('/download-brochure-form', [PropertyController::class, 'downloadBrochureForm'])->name('property.download-brochure-form');
     Route::get('/compare-property', [PropertyController::class, 'compareProperty'])->name('property.compare');
     Route::get('/compare', [PropertyController::class, 'comparePropertyPage'])->name('property.comparepage');
+    Route::get('/compare-report', [PropertyController::class, 'compareReport'])->name('property.compare-report');
+    Route::get('/compare-download/{reportId}', [PropertyController::class, 'compareDownload'])->name('property.compare-download');
     Route::get('/result/filter', [PropertyFilterController::class, 'resultFilter'])->name('property.result.filter');
     Route::get('/result/filter/get-project-data', [PropertyFilterController::class, 'getProjectData'])->name('property.getProjectData');
     Route::get('/result/filter/get-appraisal-data', [PropertyFilterController::class, 'getAppraisalData'])->name('property.getAppraisalData');

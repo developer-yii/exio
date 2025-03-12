@@ -53,7 +53,7 @@ class PropertyController extends Controller
         $similarProperties = Project::with(['projectImages', 'location', 'wishlistedByUsers', 'location.city'])->where('city_id', $project->city_id)
             ->where('location_id', $project->location_id)
             ->where('property_type', $project->property_type)
-            // ->where('id', '!=', $project->id)
+            ->where('id', '!=', $project->id)
             ->where(function ($query) use ($project) {
                 $priceFrom = convertToLacs($project->price_from, $project->price_from_unit);
                 $priceTo = convertToLacs($project->price_to, $project->price_to_unit);
@@ -144,15 +144,8 @@ class PropertyController extends Controller
 
         $loginUser = Auth::user();
         $projectids = PropertyWishlist::where('user_id', $loginUser->id)->pluck('project_id');
-        $favourite_properties = Project::with([
-            'projectImages' => function ($query) {
-                $query->where('is_cover', 0);
-            },
-            'builder',
-            'location',
-            'projectDetails',
-            'city'
-        ])->whereIn('id', $projectids)->where('status', 1)->paginate(9);
+        $favourite_properties = projectQuery($projectids)->paginate(2);
+        $favourite_properties = projectQuery()->whereIn('id', $projectids)->paginate(9);
 
         return view('frontend.property.liked-properties', compact('favourite_properties'));
     }
@@ -163,20 +156,17 @@ class PropertyController extends Controller
             return response()->json(['status' => 400, 'message' => 'Invalid Request.', 'data' => []]);
         }
 
-        $properties = Project::with([
-            'projectImages' => function ($query) {
-                $query->where('is_cover', 0);
-            },
-            'builder',
-            'location',
-            'projectDetails',
-            'city'
-        ])->whereIn('id', $request->ids)->where('status', 1)->take(2)->get();
+        $properties = projectQuery()->whereIn('id', $request->ids)->take(2)->get();
 
         foreach($properties as $property){
             $property->possession_date = getFormatedDate($property->possession_by, 'M, Y');
             $property->cover_image = $property->getCoverImageUrl();
-            $property->price = "₹" . $property->price_from . formatPriceUnit($property->price_from_unit)  ." - ₹ " . $property->price_to . formatPriceUnit($property->price_to_unit) ;
+
+            $property->price = "₹" . $property->price_from . formatPriceUnit($property->price_from_unit);
+            if($property->price_from != $property->price_to || $property->price_from_unit != $property->price_to_unit){
+                $property->price .= " - ₹ " . $property->price_to . formatPriceUnit($property->price_to_unit);
+            }
+
             $property->truncatedPropertyType = truncateText($property->custom_property_type, 15);
             $property->location_city = $property->location->location_name .",". $property->city->city_name;
             $property->truncatedLocation = truncateText($property->location_city, 15);
@@ -193,28 +183,9 @@ class PropertyController extends Controller
 
     public function comparePropertyPage(Request $request)
     {
-        $encodedCompareIds = request()->get('property');
-        $encodedArray = explode(',', $encodedCompareIds);
-
-        $compareIds = array_map(function ($encodedId) {
-            return base64_decode($encodedId);
-        }, $encodedArray);
-
-        $properties = Project::with([
-            'projectImages',
-            'builder',
-            'projectDetails',
-            'masterPlans',
-            'floorPlans',
-            'localities',
-            'localities.locality',
-            'reraDetails'
-        ])->whereIn('id', $compareIds)->where('status', 1)->get();
-
-        foreach($properties as $property){
-            $amenityIds = explode(',', $property->amenities);
-            $property->amenitiesList = Amenity::whereIn('id', $amenityIds)->get();
-        }
+        $encodedCompareIds = $request->get('property');
+        $compareIds = array_map('base64_decode', explode(',', $encodedCompareIds));
+        $properties = getPropertiesWithDetails($compareIds);
 
         if ($request->has('download') && $request->download == 'pdf') {
             if (!auth()->check()) {
@@ -245,38 +216,34 @@ class PropertyController extends Controller
                     ]);
                 }
             }
-
-            $pdf = PDF::loadView('pdf.compare_report', compact('properties'))
-                ->setPaper('a4', 'portrait')
-                ->setOption('isPhpEnabled', true);
-
-            return $pdf->download('compare_report.pdf');
-            // return $pdf->stream('compare_report.pdf');
+            return generatePdf('pdf.compare_report', compact('properties'), 'compare_report.pdf');
         }
-
         return view('frontend.property.comparepage', compact('properties'));
+    }
+
+    public function compareDownload(Request $request, $reportId){
+        $report = propertyComparisonQuery()->findOrFail($reportId);
+        $properties = getPropertiesWithDetails([$report->property_id_1, $report->property_id_2]);
+
+        return generatePdf('pdf.compare_report', compact('properties'), 'compare_report.pdf');
+    }
+
+    public function compareReport(Request $request)
+    {
+        $compareReports = propertyComparisonQuery()->paginate(5);
+        return view('frontend.property.compare-reports', compact('compareReports'));
     }
 
     public function propertyInsights(Request $request)
     {
         $type = $request->query('type');
         $id = $request->query('id');
-        $city = $request->query('city'); // Default to Ahmedabad if not provided
+        $city = $request->query('city');
         $search = $request->query('search');
 
         $perPageProperty = 9;
         $page = $request->input('page', 1);
-
-        $properties = Project::with([
-            'projectImages' => function ($query) {
-                $query->where('is_cover', 0);
-            },
-            'builder',
-            'location',
-            'projectDetails',
-            'city',
-        ])->where('status', 1);
-
+        $properties = projectQuery();
 
         if ($type && $id) {
             if ($type === 'builder') {
@@ -296,7 +263,6 @@ class PropertyController extends Controller
                         $q->where('builder_name', 'LIKE', "%$search%");
                     });
             });
-
         }
 
         if (isset($city) && $city != 'All') {
@@ -371,13 +337,6 @@ class PropertyController extends Controller
                 'work_completed' => (int) $progress->work_completed
             ];
         })->values()->toArray();
-
-        // foreach ($project->actualProgress as $progress) {
-        //     $actualProgressData[] = [
-        //         'timeline' => (int) $progress->timeline,
-        //         'work_completed' => (int) $progress->work_completed
-        //     ];
-        // }
         return view('frontend.property.insight-details', compact('project', 'progressStatus', 'actualProgressData', 'reraProgressData'));
     }
 

@@ -51,3 +51,12 @@
 .detailmainSec .detailsTextSec .priceShare ul li a i.fa-solid.fa-heart {
     color: var(--red-color) !important;
 }
+
+.modalTextBox .priceAndshare ul li a i.fa-solid.fa-heart {
+    color: var(--red-color) !important;
+}
+
+.disabled-modal {
+    pointer-events: none; /* Disable all pointer events */
+    opacity: 0.2 !important; /* Add a translucent effect to indicate it's disabled */
+}

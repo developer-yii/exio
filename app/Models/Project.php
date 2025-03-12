@@ -185,4 +185,15 @@ class Project extends Model
         return $this->hasMany(ReraProgress::class, 'project_id');
     }
 
+    public function comparisonsAsPropertyOne()
+    {
+        return $this->hasMany(PropertyComparison::class, 'property_id_1');
+    }
+
+    public function comparisonsAsPropertyTwo()
+    {
+        return $this->hasMany(PropertyComparison::class, 'property_id_2');
+    }
+
+
 }
