@@ -50,11 +50,11 @@
                                 </div>
                                 <div class="overBox">
                                     <span>Total Floors</span>
-                                    <h6 id="total_floor"></h6>
+                                    <h6 id="total_floor" class="one-line-text"></h6>
                                 </div>
                                 <div class="overBox">
                                     <span>Total Tower</span>
-                                    <h6 id="total_tower"></h6>
+                                    <h6 id="total_tower" class="one-line-text"></h6>
                                 </div>
                                 <div class="overBox">
                                     <span>Age of Construction</span>

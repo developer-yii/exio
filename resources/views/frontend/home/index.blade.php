@@ -220,16 +220,19 @@
                                             @endif
                                         </div>
                                         <div class="propertyName">
-                                            <h5>{{ $property->project_name }}</h5>
+                                            <h5 class="two-line-text" title="{{ $property->project_name }}">{{ $property->project_name }}</h5>
                                         </div>
                                         <div class="locationProperty">
                                             <div class="homeBox comBox">
                                                 <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home">
-                                                <p>{{ $property->custom_property_type ?? '' }}</p>
+                                                <p class="one-line-text" title="{{ $property->custom_property_type ?? '' }}">
+                                                    {{ $property->custom_property_type ?? '' }}
+                                                </p>
                                             </div>
                                             <div class="location comBox">
                                                 <img src="{{ $baseUrl }}assest/images/Location.png" alt="Location">
-                                                <p>{{ $property->location->location_name . ', ' . $property->city->city_name }}
+                                                <p class="one-line-text" title="{{ $property->location->location_name . ', ' . $property->city->city_name }}">
+                                                    {{ $property->location->location_name . ', ' . $property->city->city_name }}
                                                 </p>
                                             </div>
                                         </div>
