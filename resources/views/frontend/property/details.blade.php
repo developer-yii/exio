@@ -436,27 +436,31 @@
                 <div class="title">
                     <h4>Similar Properties</h4>
                 </div>
-                @if (getDeviceType() == 'desktop')
-                    <div class="developersProprty webViewSection">
-                        <div class="row">
-                            @foreach ($similarProperties as $similarProperty)
-                                <div class="col-lg-4 col-md-6">
-                                    @include('frontend.include.common-html-mobile-web', ['type' => 'similar-property'])
-                                </div>
-                            @endforeach
+                @if($similarProperties->count() > 0 )
+                    @if (getDeviceType() == 'desktop')
+                        <div class="developersProprty webViewSection">
+                            <div class="row">
+                                @foreach ($similarProperties as $similarProperty)
+                                    <div class="col-lg-4 col-md-6">
+                                        @include('frontend.include.common-html-mobile-web', ['type' => 'similar-property'])
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
-                    </div>
-                @endif
-                @if (getDeviceType() == 'mobile')
-                    <div class="developersProprty mobileViewSection">
-                        <div class="owl-carousel owl-theme">
-                            @foreach ($similarProperties as $similarProperty)
-                                <div class="item">
-                                    @include('frontend.include.common-html-mobile-web', ['type' => 'similar-property'])
-                                </div>
-                            @endforeach
+                    @endif
+                    @if (getDeviceType() == 'mobile')
+                        <div class="developersProprty mobileViewSection">
+                            <div class="owl-carousel owl-theme">
+                                @foreach ($similarProperties as $similarProperty)
+                                    <div class="item">
+                                        @include('frontend.include.common-html-mobile-web', ['type' => 'similar-property'])
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
-                    </div>
+                    @endif
+                @else
+                    <p style="height: 100px; margin-top:10px;">Property not found</p>
                 @endif
             </div>
         </div>

@@ -367,13 +367,19 @@
                                         @php
                                             $imagePath = storage_path("app/public/floor_plan/2d_image/{$floorPlan['2d_image']}");
                                         @endphp
-                                        @if (file_exists($imagePath))
+                                        @if (!empty($floorPlan['2d_image']) && file_exists($imagePath) && !is_dir($imagePath))
+                                            <img src="data:image/png;base64,{{ base64_encode(file_get_contents($imagePath)) }}" alt="{{ $floorPlan['type'] }}">
+                                        @else
+                                            <img src="{{ public_path('images/no_image_available.jpg') }}" alt="No Image Available">
+                                        @endif
+
+                                        {{-- @if (file_exists($imagePath))
                                             <img src="data:image/png;base64,{{ base64_encode(file_get_contents($imagePath)) }}"
                                                 alt="{{ $floorPlan['type'] }}">
                                         @else
                                             <img src="{{ public_path('images/no_image_available.jpg') }}"
                                                 alt="No Image Available">
-                                        @endif
+                                        @endif --}}
                                     </div>
                                     <div class="textSlider" style="display: table; width: 100%;">
                                         <div class="imgText" style="display: table-cell; width: 50%;">
