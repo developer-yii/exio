@@ -76,4 +76,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Project::class, 'property_wishlists', 'user_id', 'project_id');
     }
+
+    public function propertyComparisons()
+    {
+        return $this->hasMany(PropertyComparison::class);
+    }
+
 }

@@ -2,7 +2,10 @@
 
 use App\Models\Amenity;
 use App\Models\Project;
+use App\Models\PropertyComparison;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -254,6 +257,67 @@ if (!function_exists('renderProgressBar')) {
                     aria-valuemax="100"
                     style="width:' . $percentage . '%">
                 </div>';
+    }
+}
+
+if (!function_exists('propertyComparisonQuery')) {
+    function propertyComparisonQuery()
+    {
+        $loginUserId = Auth::id();
+        return PropertyComparison::with(['propertyOne', 'propertyTwo'])
+            ->where('user_id', $loginUserId)
+            ->whereHas('propertyOne', fn($q) => $q->where('status', 1))
+            ->whereHas('propertyTwo', fn($q) => $q->where('status', 1));
+    }
+}
+
+if (!function_exists('generatePdf')) {
+    function generatePdf($view, $data = [], $fileName = 'document.pdf')
+    {
+        $pdf = PDF::loadView($view, $data)
+            ->setPaper('a4', 'portrait')
+            ->setOption('isPhpEnabled', true);
+
+        return $pdf->download($fileName);
+        // return $pdf->stream('compare_report.pdf');
+    }
+}
+
+if (!function_exists('projectQuery')) {
+    function projectQuery()
+    {
+        return Project::with([
+            'projectImages' => function ($query) {
+                $query->where('is_cover', 0);
+            },
+            'builder',
+            'location',
+            'projectDetails',
+            'city'
+        ])
+        // ->whereIn('id', $propertyIds)
+        ->where('status', 1);
+    }
+}
+if (!function_exists('getPropertiesWithDetails')) {
+    function getPropertiesWithDetails(array $propertyIds)
+    {
+        return Project::with([
+            'projectImages',
+            'builder',
+            'projectDetails',
+            'masterPlans',
+            'floorPlans',
+            'localities.locality',
+            'reraDetails'
+        ])
+        ->whereIn('id', $propertyIds)
+        ->where('status', 1)
+        ->get()
+        ->map(function ($property) {
+            $property->amenitiesList = Amenity::whereIn('id', explode(',', $property->amenities))->get();
+            return $property;
+        });
     }
 }
 

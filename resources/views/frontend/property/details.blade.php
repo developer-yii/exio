@@ -9,7 +9,7 @@
     {{-- @include('frontend.include.meta', ['title' => $metaTitle, 'description' => $metaDesc]) --}}
     @section('og_title', $metaTitle)
     @section('og_description', $metaDesc)
-    @section('og_image', asset($project->builder->getBuilderLogoUrl()))
+    @section('og_image', asset($project->getCoverImageUrl()))
     @section('og_url', url()->current())
 
 @endsection
@@ -75,61 +75,6 @@
                         </div>
                     </div>
                     @include('frontend.include.common-html-mobile-web', ['type' => 'project-builder-section'])
-                    {{-- <div class="detailsTextSec">
-                        <div class="{{ getDeviceType() }}">
-                            <div class="siteDetails">
-                                <div class="logoMain">
-                                    <img src="{{ $project->builder->getBuilderLogoUrl() }}" loading="lazy">
-                                </div>
-                                <div class="textBox">
-                                    <h5>{{ $project->project_name }}</h5>
-                                    <span>By {{ $project->builder ? $project->builder->builder_name : '' }}</span>
-                                    <div class="locationProperty">
-                                        <div class="homeBox comBox">
-                                            <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home" loading="lazy">
-                                            <p>{{ $project->custom_property_type ?? '' }}</p>
-                                        </div>
-                                        <div class="location comBox">
-                                            <img src="{{ $baseUrl }}assest/images/Location.png" alt="Location" loading="lazy">
-                                            <p>{{ $project->location->location_name . ', ' . $project->city->city_name }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="priceShare">
-                            <ul>
-                                <li>
-                                    <a href="javascript:void(0)" class="save-property" data-id="{{ $project->id }}">
-                                        @if (Auth::user())
-                                            <a href="javascript:void(0)" class="save-property"
-                                                data-id="{{ $project->id }}">
-                                                <i class="{{ $project->wishlistedByUsers->contains(auth()->id()) ? 'fa-solid' : 'fa-regular' }} fa-heart"></i>
-                                                Save
-                                            </a>
-                                        @endif
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#share_property"><i class="fa-solid fa-arrow-up-from-bracket"></i>Share
-                                    </a>
-                                </li>
-                            </ul>
-                            <h5><span>₹ {{ $project->price_from }} {{ formatPriceUnit($project->price_from_unit) }}</span>
-                                - <span>₹ {{ $project->price_to }} {{ formatPriceUnit($project->price_to_unit) }}</span>
-                            </h5>
-                        </div>
-                    </div>
-                    <div class="endText">
-                        <p>
-                            <i class="fa-regular fa-calendar"></i> Possession by
-                            {{ getFormatedDate($project->possession_by, 'M, Y') }}
-                            <span class="line">|</span> RERA
-                            No. {{ $project->rera_number }}
-                        </p>
-                    </div> --}}
                 </div>
             </div>
         </div>

@@ -37,6 +37,7 @@
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="628">
     <meta property="og:url" content="@yield('og_url')">
+    <meta property="og:type" content="@yield('og_type', 'website')">
 
     <!-- Twitter Card Metadata -->
     <meta name="twitter:card" content="summary_large_image">
@@ -101,7 +102,7 @@
     <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
     {{-- <script src="assest/js/custom.js"></script> --}}
 
-    
+
 
     <script>
         var propertyLikeUrl = "{{ route('property.like-unlike') }}";

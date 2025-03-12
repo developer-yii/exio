@@ -435,7 +435,7 @@
                                                     class="fa-regular fa-heart heartIconFill"></i>Save</a>
                                         </li>
                                         <li><a href="javascript:void(0)" data-bs-toggle="modal"
-                                                data-bs-target="#share_property"><i
+                                                data-bs-target="#share_property" class="share_property"><i
                                                     class="fa-solid fa-arrow-up-from-bracket"></i>Share</a></li>
                                         <li><button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button></li>
