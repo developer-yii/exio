@@ -49,8 +49,8 @@
                                     data-multi-image="{{ json_encode($property->projectImages->take(3)->map(fn($detail) => ['imgurl' => $detail->getProjectImageUrl()])) }}"
                                     data-whatsapp-number="{{ getSettingFromDb('support_mobile') }}"
                                     data-like-class = "{{ $property->wishlistedByUsers->contains(auth()->id()) ? 'fa-solid' : 'fa-regular' }}"
-
                                 >
+
                                     <div class="imgBox">
                                         <img src="{{ $property->getCoverImageUrl() }}" alt="{{ $property->project_name }}" loading="lazy">
                                         <div class="imgheader">
@@ -71,17 +71,21 @@
                                         </div>
                                     </div>
                                     <div class="propertyName">
-                                        <h5>{{ $property->project_name }}</h5>
+                                        <h5 class="truncate-text" title="{{ $property->project_name }}">{{ $property->project_name }}</h5>
                                     </div>
                                     <div class="locationProperty">
                                         <div class="homeBox comBox">
                                             <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home" loading="lazy">
-                                            <p>{{ $property->custom_property_type ?? '' }}</p>
-                                            {{-- <p>{{ $property->property_type ?? '' }}</p> --}}
+                                            <p class="truncate-text" title="{{ $property->custom_property_type ?? '' }}">
+                                                {{ $property->custom_property_type ?? '' }}
+                                            </p>
                                         </div>
                                         <div class="location comBox">
                                             <img src="{{ $baseUrl }}assest/images/Location.png" alt="Location" loading="lazy">
-                                            <p>{{ $property->location->location_name . ', ' . $property->city->city_name }}</p>
+                                            <p class="truncate-text"
+                                                title="{{ $property->location->location_name . ', ' . $property->city->city_name }}">
+                                                {{ $property->location->location_name . ', ' . $property->city->city_name }}
+                                            </p>
                                         </div>
                                     </div>
                                     <div class="addressBox">
