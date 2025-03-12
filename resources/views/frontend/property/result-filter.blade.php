@@ -406,9 +406,12 @@
                         <div class="col-lg-5">
                             <div class="modalgallery">
                                 <div class="top-img comImg">
-                                    <img src="{{ asset('/') }}frontend/assest/images/videoImg.png" alt="">
+                                    <video class="show_video_url" autoplay muted loop>
+                                        <source src="" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
                                 </div>
-                                <div class="multyimg">
+                                <div class="multyimg show_gallery_images">
                                     <div class="box comImg">
                                         <img src="{{ asset('/') }}frontend/assest/images/boxImg1.png" alt="boxImg1">
                                     </div>
@@ -426,12 +429,11 @@
                                 <div class="priceAndshare">
                                     <div class="price">
                                         <h5 class="show_price_from_to"></h5>
-                                        <h5 class="show_project_name">{{ $project->project_name }}</h5>
+                                        <h5 class="show_project_name"></h5>
                                     </div>
                                     <ul>
 
-                                        <li><a href="javascript:void(0)"><i data-id="{{ $project->id }}"
-                                                    id="heartIconFill"
+                                        <li><a href="javascript:void(0)"><i data-id="" id="heartIconFill"
                                                     class="fa-regular fa-heart heartIconFill"></i>Save</a>
                                         </li>
                                         <li><a href="javascript:void(0)" data-bs-toggle="modal"
@@ -554,6 +556,7 @@
         var singleProjectUrl = "{{ route('property.getSingleProjectData') }}";
         var propertyDetailsUrl = "{{ route('property.details', ['slug' => ':slug']) }}";
         var getComparePropertyUrl = "{{ route('property.compare') }}";
+        var comparePropertytUrl = "{{ route('property.comparepage') }}";
         var baseUrl = "{{ asset('/') }}frontend/";
     </script>
     <script>
@@ -658,6 +661,9 @@
                     success: function(response) {
                         if (response.status && response.data.data.length) {
                             var newProjects = response.data.data;
+                            if (page == 1) {
+                                projects = [];
+                            }
                             projects = projects.concat(newProjects);
                             @if (getDeviceType() == 'desktop')
                                 initMap();

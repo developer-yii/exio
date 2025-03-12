@@ -33,18 +33,8 @@ $(document).ready(function () {
         }
     }
 
-    // Function to update the cookie when properties are selected
-    function updateSelectedPropertiesCookie() {
-        let selectedIds = $(".checkbox:checked").map(function () {
-            return $(this).val();
-        }).get();
-
-        setCookie("selectedProperties", JSON.stringify(selectedIds), 7);
-        return selectedIds;
-    }
-
     // Function to fetch and update compare modal
-    function fetchCompareProperties(ids) {
+    function fetchCompareProperties(ids, displayOnly = false) {
         if (ids.length === 0) {
             $(".comparePorjectModal").removeClass("show");
             return;
@@ -57,7 +47,7 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (response) {
                 if (response.status) {
-                    updateCompareModal(response.data);
+                    updateCompareModal(response.data, displayOnly);
                     updateCompareButtonState(ids);
                 } else {
                     toastr.error(response.message || 'Failed to fetch property details');
@@ -80,14 +70,31 @@ $(document).ready(function () {
             checkbox.prop("checked", !checkbox.prop("checked"));
         }
 
-        let selectedCheckboxes = $(".checkbox:checked");
-        if (selectedCheckboxes.length > 2) {
+        let storedIds = getCookie("selectedProperties");
+        let idsArray = storedIds ? JSON.parse(storedIds) : [];
+
+        let propertyId = checkbox.val();
+        let index = idsArray.indexOf(propertyId);
+
+        if (checkbox.prop("checked") && index === -1) {
+            idsArray.push(propertyId);
+        } else if (!checkbox.prop("checked") && index !== -1) {
+            idsArray.splice(index, 1);
+        }
+
+        if (idsArray.length > 2) {
             checkbox.prop("checked", false);
+            idsArray = idsArray.filter(id => id !== propertyId);
             toastr.warning('You can compare a maximum of 2 properties');
         }
 
-        let selectedIds = updateSelectedPropertiesCookie();
-        fetchCompareProperties(selectedIds);
+        setCookie("selectedProperties", JSON.stringify(idsArray), 7);
+
+        $(".checkbox").each(function () {
+            $(this).prop("checked", idsArray.includes($(this).val()));
+        });
+
+        fetchCompareProperties(idsArray);
     });
 
     // Remove property from comparison
@@ -97,21 +104,32 @@ $(document).ready(function () {
         $(".detailmainSec[data-id='" + propertyId + "']").remove();
         $(".checkbox[value='" + propertyId + "']").prop("checked", false);
 
-        let selectedIds = updateSelectedPropertiesCookie();
-        updateCompareButtonState(selectedIds);
+        let storedIds = getCookie("selectedProperties");
+        if (storedIds) {
+            let idsArray = JSON.parse(storedIds);
+            let updatedIds = idsArray.filter(id => id != propertyId);
+            setCookie("selectedProperties", JSON.stringify(updatedIds), 7);
 
-        if ($(".detailmainSec").length === 0) {
-            $(".comparePorjectModal").removeClass("show");
+            updateCompareButtonState(updatedIds);
+
+            if (updatedIds.length === 0) {
+                $(".comparePorjectModal").removeClass("show");
+            } else {
+                fetchCompareProperties(updatedIds);
+            }
         }
     });
 
     // Update compare modal content
-    function updateCompareModal(properties) {
-        $(".comparePorjectModal").addClass("show");
+    function updateCompareModal(properties, displayOnly = false) {
+        if (!displayOnly) {
+            $(".comparePorjectModal").addClass("show");
+        }
+
         let modalContent = $(".comparePorjectCard");
         modalContent.empty();
 
-        if (!Array.isArray(properties) || properties.length === 0) {
+        if ((!Array.isArray(properties) || properties.length === 0) && !displayOnly) {
             $(".comparePorjectModal").removeClass("show");
             return;
         }
@@ -162,13 +180,20 @@ $(document).ready(function () {
     if (storedIds) {
         try {
             let idsArray = JSON.parse(storedIds);
-            idsArray.forEach(id => {
-                $(".checkbox[value='" + id + "']").prop("checked", true);
-            });
-            updateCompareButtonState(idsArray);
+            if (Array.isArray(idsArray) && idsArray.length > 0) {
+                idsArray.forEach(id => {
+                    $(".checkbox[value='" + id + "']").prop("checked", true);
+                });
+                updateCompareButtonState(idsArray);
+                fetchCompareProperties(idsArray, true);
+            }
         } catch (e) {
             console.error('Failed to parse stored properties:', e);
             setCookie("selectedProperties", "[]", 7);
         }
     }
+
+    $(document).on("click", ".closeModal", function () {
+        $(".comparePorjectModal").removeClass("show");
+    });
 });

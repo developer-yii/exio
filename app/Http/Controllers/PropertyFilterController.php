@@ -101,7 +101,6 @@ class PropertyFilterController extends Controller
 
 
         if ($amenities) {
-            $amenities = explode(',', $amenities);
             foreach ($amenities as $amenity) {
                 $projects = $projects->whereRaw('FIND_IN_SET(?, amenities)', [$amenity]);
             }
@@ -187,7 +186,14 @@ class PropertyFilterController extends Controller
 
         $project = $project->find($request->input('id'));
 
+        $project->video = asset('storage/project/videos') . '/' . $project->video;
+
         $project->property_type = Project::$propertyType[$project->property_type];
+
+        $project->project_images = $project->projectImages->map(function ($image) {
+            $image->image = asset('storage/project_images') . '/' . $image->image;
+            return $image;
+        });
 
         $project->is_wishlisted = $project->wishlistedByUsers->contains(auth()->id());
         return response()->json([

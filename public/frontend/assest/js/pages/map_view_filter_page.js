@@ -7,7 +7,6 @@ projects = projects.data;
 
 async function initMap() {
     try {
-        // Load the required libraries from Google Maps
         const { Map } = await google.maps.importLibrary("maps");
         const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
         map = new Map(document.getElementById("map"), {
