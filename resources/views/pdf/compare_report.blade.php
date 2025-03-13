@@ -301,34 +301,29 @@
                 @foreach ($properties as $property)
                     <td>
                         <div style="background-color: #EEF6FF;border-radius: 5px; padding: 5px; margin-bottom: 3px;">
-                            <p style="margin-bottom: 0; line-height: 0.5;">Total Floors
-                            <p>
+                            <p style="margin-bottom: 0; line-height: 0.5;">Total Floors<p>
                             <div style="margin-top: -10px; font-size: 15px; font-weight: 600;">
                                 {{ $property->total_floors }} Floors</div>
                         </div>
                         <div style="background-color: #EEF6FF;border-radius: 5px; padding: 5px; margin-bottom: 3px;">
-                            <p style="margin-bottom: 0; line-height: 0.5;">Total Tower
-                            <p>
+                            <p style="margin-bottom: 0; line-height: 0.5;">Total Tower<p>
                             <div style="margin-top: -10px; font-size: 15px; font-weight: 600;">
                                 {{ $property->total_tower }} Tower</div>
                         </div>
                         <div style="background-color: #EEF6FF;border-radius: 5px; padding: 5px; margin-bottom: 3px;">
-                            <p style="margin-bottom: 0; line-height: 0.5;">Age of Construction
-                            <p>
+                            <p style="margin-bottom: 0; line-height: 0.5;">Age of Construction<p>
                             <div style="margin-top: -10px; font-size: 15px; font-weight: 600;">
                                 {{ getAgeOfConstruction($property->age_of_construction) }}</div>
                         </div>
                         <div style="background-color: #EEF6FF;border-radius: 5px; padding: 5px; margin-bottom: 3px;">
-                            <p style="margin-bottom: 0; line-height: 0.5;">Property Type
-                            <p>
+                            <p style="margin-bottom: 0; line-height: 0.5;">Property Type<p>
                             <div style="margin-top: -10px; font-size: 15px; font-weight: 600;">
                                 {{ getPropertyType($property->property_type) }}</div>
                         </div>
                         @foreach ($property->projectDetails as $projectDetail)
                             <div
                                 style="background-color: #EEF6FF;border-radius: 5px; padding: 5px; margin-bottom: 3px;">
-                                <p style="margin-bottom: 0; line-height: 0.5;">{{ $projectDetail->name }}
-                                <p>
+                                <p style="margin-bottom: 0;">{{ $projectDetail->name }}<p>
                                 <div style="margin-top: -10px; font-size: 15px; font-weight: 600;">
                                     {{ $projectDetail->value }}</div>
                             </div>
@@ -372,14 +367,6 @@
                                         @else
                                             <img src="{{ public_path('images/no_image_available.jpg') }}" alt="No Image Available">
                                         @endif
-
-                                        {{-- @if (file_exists($imagePath))
-                                            <img src="data:image/png;base64,{{ base64_encode(file_get_contents($imagePath)) }}"
-                                                alt="{{ $floorPlan['type'] }}">
-                                        @else
-                                            <img src="{{ public_path('images/no_image_available.jpg') }}"
-                                                alt="No Image Available">
-                                        @endif --}}
                                     </div>
                                     <div class="textSlider" style="display: table; width: 100%;">
                                         <div class="imgText" style="display: table-cell; width: 50%;">

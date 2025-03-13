@@ -29,25 +29,7 @@
                         <div class="borderBox">
                             @if(getDeviceType() == 'desktop')
                                 <div class="desktop">
-                                    <div class="siteDetails">
-                                        <div class="logoMain">
-                                            <img src="{{ $project->builder->getBuilderLogoUrl() }}" loading="lazy" alt="{{ $project->builder->builder_name }}" title="{{ $project->builder->builder_name }}">
-                                        </div>
-                                        <div class="textBox">
-                                            <h5>{{ $project->project_name }}</h5>
-                                            <span>By {{ $project->builder->builder_name }}</span>
-                                            <div class="locationProperty">
-                                                <div class="homeBox comBox">
-                                                    <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home">
-                                                    <p>{{ $project->custom_property_type ?? '' }}</p>
-                                                </div>
-                                                <div class="location comBox">
-                                                    <img src="{{ $baseUrl }}assest/images/Location.png" alt="Location">
-                                                    <p>{{ $project->location->location_name . ', ' . $project->city->city_name }}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    @include('frontend.property.partial_compare_section_mobile', ['property' => $project])
                                 </div>
                             @endif
 
@@ -58,18 +40,18 @@
                                             <img src="{{ $project->builder->getBuilderLogoUrl() }}" loading="lazy" alt="{{ $project->builder->builder_name }}" title="{{ $project->builder->builder_name }}">
                                         </div>
                                         <div class="textBox">
-                                            <h5>{{ $project->project_name }}</h5>
+                                            <h5  class="one-line-text" title="{{ $project->project_name }}">{{ $project->project_name }}</h5>
                                             <span>By {{ $project->builder->builder_name }}</span>
                                         </div>
                                     </div>
                                     <div class="locationProperty">
                                         <div class="homeBox comBox">
                                             <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home">
-                                            <p>{{ $project->custom_property_type ?? '' }}</p>
+                                            <p class="one-line-text" title="{{ $project->custom_property_type ?? '' }}">{{ $project->custom_property_type ?? '' }}</p>
                                         </div>
                                         <div class="location comBox">
                                             <img src="{{ $baseUrl }}assest/images/Location.png" alt="Location">
-                                            <p>{{ $project->location->location_name . ', ' . $project->city->city_name }}</p>
+                                            <p class="one-line-text" title="{{ $project->location->location_name . ', ' . $project->city->city_name }}">{{ $project->location->location_name . ', ' . $project->city->city_name }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -77,7 +59,9 @@
                             <div class="priceBox">
                                 <p><i class="fa-regular fa-calendar"></i> Possession by {{ getFormatedDate($project->possession_by, 'M, Y') }}</p>
                                 <h5><span>₹ {{ $project->price_from }} {{ formatPriceUnit($project->price_from_unit) }}</span>
-                                    - <span>₹ {{ $project->price_to }} {{ formatPriceUnit($project->price_to_unit) }}</span>
+                                    @if(hasDifferentPrices($project))
+                                        - <span>₹ {{ $project->price_to }} {{ formatPriceUnit($project->price_to_unit) }}</span>
+                                    @endif
                                 </h5>
                             </div>
                         </div>

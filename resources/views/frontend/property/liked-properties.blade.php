@@ -24,7 +24,7 @@
                             @php
                                 $priceFormatted = "₹" . $property->price_from . formatPriceUnit($property->price_from_unit);
 
-                                if ($property->price_from != $property->price_to || $property->price_from_unit != $property->price_to_unit) {
+                                if (hasDifferentPrices($property)) {
                                     $priceFormatted .= " - " . $property->price_to . formatPriceUnit($property->price_to_unit);
                                 }
                             @endphp
@@ -112,19 +112,7 @@
                     <p>Property not found</p>
                 @endif
             </div>
-            <div class="comparePorjectModal">
-                <div class="compareMain">
-                    <div class="comparePorjectCard">
-                       {{-- compare property details here --}}
-                    </div>
-                    <div class="compareBtn">
-                        <a href="javascript:void(0)" class="btn btnCompare cursor-default" disabled>Compare</a>
-                    </div>
-                    <div class="closeModal">
-                        <a href="javascript:void(0)"><img src="{{ $baseUrl }}assest/images/x-orange.png" alt="x-orange"></a>
-                    </div>
-                </div>
-            </div>
+            @include('frontend.include.compare')
         </div>
      </section>
     <!-- compare project section -->
@@ -147,4 +135,5 @@
         var comparePropertytUrl = "{{ route('property.comparepage') }}";
     </script>
     <script src="{{ frontendPageJsLink('liked-properties.js') }}"></script>
+    {{-- <script src="{{ $baseUrl }}/assest/js/pages/compare.js"></script> --}}
 @endsection

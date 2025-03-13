@@ -278,8 +278,8 @@ if (!function_exists('generatePdf')) {
             ->setPaper('a4', 'portrait')
             ->setOption('isPhpEnabled', true);
 
-        return $pdf->download($fileName);
-        // return $pdf->stream('compare_report.pdf');
+        // return $pdf->download($fileName);
+        return $pdf->stream('compare_report.pdf');
     }
 }
 
@@ -298,6 +298,7 @@ if (!function_exists('projectQuery')) {
         ->where('status', 1);
     }
 }
+
 if (!function_exists('getPropertiesWithDetails')) {
     function getPropertiesWithDetails(array $propertyIds)
     {
@@ -317,6 +318,12 @@ if (!function_exists('getPropertiesWithDetails')) {
             $property->amenitiesList = Amenity::whereIn('id', explode(',', $property->amenities))->get();
             return $property;
         });
+    }
+}
+
+if (!function_exists('hasDifferentPrices')) {
+    function hasDifferentPrices($property) {
+        return $property->price_from != $property->price_to || $property->price_from_unit != $property->price_to_unit;
     }
 }
 

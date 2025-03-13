@@ -143,7 +143,6 @@
                             </ul>
                         </div>
                         <div class="searchIcon">
-                            {{-- <a href="" class="btn btnIcon"><i class="bi bi-search"></i></a> --}}
                             <a href="javascript:void(0)" class="btn btnIcon searchBtn"><i class="bi bi-search"></i></a>
                         </div>
                     </div>
