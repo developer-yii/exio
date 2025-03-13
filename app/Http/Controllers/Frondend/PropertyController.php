@@ -51,28 +51,28 @@ class PropertyController extends Controller
         $amenitiesList = Amenity::whereIn('id', $amenityIds)->get();
 
         $similarProperties = Project::with(['projectImages', 'location', 'wishlistedByUsers', 'location.city'])->where('city_id', $project->city_id)
-            ->where('location_id', $project->location_id)
-            ->where('property_type', $project->property_type)
-            ->where('id', '!=', $project->id)
-            ->where(function ($query) use ($project) {
-                $priceFrom = convertToLacs($project->price_from, $project->price_from_unit);
-                $priceTo = convertToLacs($project->price_to, $project->price_to_unit);
-                $tolerance = 0.1; // 10% flexibility
+            // ->where('location_id', $project->location_id)
+            // ->where('property_type', $project->property_type)
+            // ->where('id', '!=', $project->id)
+            // ->where(function ($query) use ($project) {
+            //     $priceFrom = convertToLacs($project->price_from, $project->price_from_unit);
+            //     $priceTo = convertToLacs($project->price_to, $project->price_to_unit);
+            //     $tolerance = 0.1; // 10% flexibility
 
-                // Calculate min and max price range with tolerance
-                $minFromPrice = $priceFrom - ($priceFrom * $tolerance);
-                $maxFromPrice = $priceFrom + ($priceFrom * $tolerance);
-                $minToPrice = $priceTo - ($priceTo * $tolerance);
-                $maxToPrice = $priceTo + ($priceTo * $tolerance);
+            //     // Calculate min and max price range with tolerance
+            //     $minFromPrice = $priceFrom - ($priceFrom * $tolerance);
+            //     $maxFromPrice = $priceFrom + ($priceFrom * $tolerance);
+            //     $minToPrice = $priceTo - ($priceTo * $tolerance);
+            //     $maxToPrice = $priceTo + ($priceTo * $tolerance);
 
-                $query->where(function ($q) use ($minFromPrice, $maxFromPrice, $minToPrice, $maxToPrice) {
-                    $q->whereRaw("
-                        (IF(price_from_unit = 'crores', price_from * 100, price_from) BETWEEN ? AND ?)
-                        OR
-                        (IF(price_to_unit = 'crores', price_to * 100, price_to) BETWEEN ? AND ?)
-                    ", [$minFromPrice, $maxFromPrice, $minToPrice, $maxToPrice]);
-                });
-            })
+            //     $query->where(function ($q) use ($minFromPrice, $maxFromPrice, $minToPrice, $maxToPrice) {
+            //         $q->whereRaw("
+            //             (IF(price_from_unit = 'crores', price_from * 100, price_from) BETWEEN ? AND ?)
+            //             OR
+            //             (IF(price_to_unit = 'crores', price_to * 100, price_to) BETWEEN ? AND ?)
+            //         ", [$minFromPrice, $maxFromPrice, $minToPrice, $maxToPrice]);
+            //     });
+            // })
             ->take(3)
             ->get();
 
@@ -166,9 +166,9 @@ class PropertyController extends Controller
                 $property->price .= " - ₹ " . $property->price_to . formatPriceUnit($property->price_to_unit);
             }
 
-            $property->truncatedPropertyType = truncateText($property->custom_property_type, 15);
+            // $property->truncatedPropertyType = truncateText($property->custom_property_type, 15);
             $property->location_city = $property->location->location_name .",". $property->city->city_name;
-            $property->truncatedLocation = truncateText($property->location_city, 15);
+            // $property->truncatedLocation = truncateText($property->location_city, 15);
 
         }
 

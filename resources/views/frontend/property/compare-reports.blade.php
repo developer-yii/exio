@@ -36,41 +36,7 @@
             @else
                 <p>Compare property not found</p>
             @endif
-            {{-- <div class="paginationBox">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        <!-- First Page Arrow (Disabled) -->
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" aria-label="First">
-                                <span aria-hidden="true">«</span>
-                            </a>
-                        </li>
-                        <!-- Previous Page Arrow (Disabled) -->
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" aria-label="Previous">
-                                <span aria-hidden="true">‹</span>
-                            </a>
-                        </li>
-                        <!-- Page Numbers -->
-                        <li class="page-item"><a class="page-link active" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><span class="page-link">...</span></li>
-                        <!-- Next Page Arrow -->
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
-                                <span aria-hidden="true">›</span>
-                            </a>
-                        </li>
-                        <!-- Last Page Arrow -->
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Last">
-                                <span aria-hidden="true">»</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div> --}}
+
         </div>
     </section>
 

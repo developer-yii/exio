@@ -85,11 +85,11 @@
         <div class="overViewBox">
             <div class="overBox">
                 <span>Total Floors</span>
-                <h6>{{ $project->total_floors }} Floors</h6>
+                <h6 class="one-line-text" title="{{ $project->total_floors }}">{{ $project->total_floors }} Floors</h6>
             </div>
             <div class="overBox">
                 <span>Total Tower</span>
-                <h6>{{ $project->total_tower }}</h6>
+                <h6 class="one-line-text" title="{{ $project->total_tower }}">{{ $project->total_tower }}</h6>
             </div>
             <div class="overBox">
                 <span>Age of Construction</span>
@@ -101,8 +101,8 @@
             </div>
             @foreach ($project->projectDetails as $projectDetail)
                 <div class="overBox">
-                    <span>{{ $projectDetail->name }}</span>
-                    <h6>{{ $projectDetail->value }}</h6>
+                    <span class="one-line-text" title="{{ $projectDetail->name }}">{{ $projectDetail->name }}</span>
+                    <h6 class="one-line-text" title="{{ $projectDetail->value }}">{{ $projectDetail->value }}</h6>
                 </div>
             @endforeach
           </div>
@@ -319,7 +319,10 @@
             </div>
             <div class="priceBox">
                 <div class="price">
-                    <h5>₹{{ $similarProperty->price_from }}{{ formatPriceUnit($similarProperty->price_from_unit) }}-{{ $similarProperty->price_to }}{{ formatPriceUnit($similarProperty->price_to_unit) }}
+                    <h5>₹{{ $similarProperty->price_from }}{{ formatPriceUnit($similarProperty->price_from_unit) }}
+                        @if(hasDifferentPrices($similarProperty))
+                            -{{ $similarProperty->price_to }}{{ formatPriceUnit($similarProperty->price_to_unit) }}
+                        @endif
                     </h5>
                 </div>
                 <div class="boxLogo">
@@ -328,16 +331,16 @@
                 </div>
             </div>
             <div class="propertyName">
-                <h5>{{ $similarProperty->project_name }}</h5>
+                <h5 class="one-line-text" title="{{ $similarProperty->project_name }}">{{ $similarProperty->project_name }}</h5>
             </div>
             <div class="locationProperty">
                 <div class="homeBox comBox">
                     <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home" loading="lazy">
-                    <p>{{ $similarProperty->custom_property_type ?? '' }}</p>
+                    <p class="one-line-text" title="{{ $similarProperty->custom_property_type ?? '' }}">{{ $similarProperty->custom_property_type ?? '' }}</p>
                 </div>
                 <div class="location comBox">
                     <img src="{{ $baseUrl }}assest/images/Location.png" alt="Location" loading="lazy">
-                    <p>{{ $similarProperty->location->location_name . ', ' . $similarProperty->city->city_name }}</p>
+                    <p class="one-line-text" title="{{ $similarProperty->location->location_name . ', ' . $similarProperty->city->city_name }}">{{ $similarProperty->location->location_name . ', ' . $similarProperty->city->city_name }}</p>
                 </div>
             </div>
             <div class="addressBox">

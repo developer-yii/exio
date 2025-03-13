@@ -41,6 +41,7 @@ $(document).ready(function () {
     });
 
     $(".compareBoxOpen").click(function (event) {
+
         let checkbox = $(this).find(".checkbox");
 
         if (!$(event.target).hasClass('checkbox')) {
@@ -72,6 +73,7 @@ $(document).ready(function () {
         }
 
         updateSelectedPropertiesCookie(); // Save to cookie
+        // let ids = getCookie("selectedProperties");
 
         let ids = $(".checkbox:checked").map(function () {
             return $(this).val();
@@ -173,16 +175,16 @@ $(document).ready(function () {
                                 <img src="${property.cover_image}" alt="${property.project_name}">
                             </div>
                             <div class="textBox">
-                                <h5>${property.project_name}</h5>
+                                <h5 class="two-line-text" title="${property.project_name}">${property.project_name}</h5>
                                 <span>By ${property.builder.builder_name}</span>
                                 <div class="locationProperty">
                                     <div class="homeBox comBox">
                                         <img src="${baseUrl}assest/images/Home.png" alt="Home">
-                                        <p title="${property.custom_property_type}">${property.truncatedPropertyType}</p>
+                                         <p class="one-line-text" title="${property.custom_property_type ?? ''}">${property.custom_property_type ?? ''}</p>
                                     </div>
                                     <div class="location comBox">
                                         <img src="${baseUrl}assest/images/Location.png" alt="Location">
-                                        <p title="${property.location_city}">${property.truncatedLocation}</p>
+                                        <p class="one-line-text" title="${property.location_city}">${property.location_city}</p>
                                     </div>
                                 </div>
                             </div>
