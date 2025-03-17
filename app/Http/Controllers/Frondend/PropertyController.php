@@ -8,6 +8,7 @@ use App\Models\Amenity;
 use App\Models\Builder;
 use App\Models\City;
 use App\Models\DownloadBrochure;
+use App\Models\InsightsReportDownload;
 use App\Models\Locality;
 use App\Models\Location;
 use App\Models\Project;
@@ -15,14 +16,18 @@ use App\Models\PropertyComparison;
 use App\Models\PropertyWishlist;
 // use Barryvdh\DomPDF\PDF;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+
 
 class PropertyController extends Controller
 {
-    public function details($slug){
+    public function details(Request $request, $slug){
         $query = Project::with([
             'projectImages',
             'builder',
@@ -51,28 +56,28 @@ class PropertyController extends Controller
         $amenitiesList = Amenity::whereIn('id', $amenityIds)->get();
 
         $similarProperties = Project::with(['projectImages', 'location', 'wishlistedByUsers', 'location.city'])->where('city_id', $project->city_id)
-            // ->where('location_id', $project->location_id)
-            // ->where('property_type', $project->property_type)
-            // ->where('id', '!=', $project->id)
-            // ->where(function ($query) use ($project) {
-            //     $priceFrom = convertToLacs($project->price_from, $project->price_from_unit);
-            //     $priceTo = convertToLacs($project->price_to, $project->price_to_unit);
-            //     $tolerance = 0.1; // 10% flexibility
+            ->where('location_id', $project->location_id)
+            ->where('property_type', $project->property_type)
+            ->where('id', '!=', $project->id)
+            ->where(function ($query) use ($project) {
+                $priceFrom = convertToLacs($project->price_from, $project->price_from_unit);
+                $priceTo = convertToLacs($project->price_to, $project->price_to_unit);
+                $tolerance = 0.1; // 10% flexibility
 
-            //     // Calculate min and max price range with tolerance
-            //     $minFromPrice = $priceFrom - ($priceFrom * $tolerance);
-            //     $maxFromPrice = $priceFrom + ($priceFrom * $tolerance);
-            //     $minToPrice = $priceTo - ($priceTo * $tolerance);
-            //     $maxToPrice = $priceTo + ($priceTo * $tolerance);
+                // Calculate min and max price range with tolerance
+                $minFromPrice = $priceFrom - ($priceFrom * $tolerance);
+                $maxFromPrice = $priceFrom + ($priceFrom * $tolerance);
+                $minToPrice = $priceTo - ($priceTo * $tolerance);
+                $maxToPrice = $priceTo + ($priceTo * $tolerance);
 
-            //     $query->where(function ($q) use ($minFromPrice, $maxFromPrice, $minToPrice, $maxToPrice) {
-            //         $q->whereRaw("
-            //             (IF(price_from_unit = 'crores', price_from * 100, price_from) BETWEEN ? AND ?)
-            //             OR
-            //             (IF(price_to_unit = 'crores', price_to * 100, price_to) BETWEEN ? AND ?)
-            //         ", [$minFromPrice, $maxFromPrice, $minToPrice, $maxToPrice]);
-            //     });
-            // })
+                $query->where(function ($q) use ($minFromPrice, $maxFromPrice, $minToPrice, $maxToPrice) {
+                    $q->whereRaw("
+                        (IF(price_from_unit = 'crores', price_from * 100, price_from) BETWEEN ? AND ?)
+                        OR
+                        (IF(price_to_unit = 'crores', price_to * 100, price_to) BETWEEN ? AND ?)
+                    ", [$minFromPrice, $maxFromPrice, $minToPrice, $maxToPrice]);
+                });
+            })
             ->take(3)
             ->get();
 
@@ -339,4 +344,41 @@ class PropertyController extends Controller
         return view('frontend.property.insight-details', compact('project', 'progressStatus', 'actualProgressData', 'reraProgressData'));
     }
 
+    public function downloadInsightsReport(Request $request)
+    {
+        if (!auth()->check()) {
+            return response()->json(['message' => 'Please login first to download the report.'], 401);
+        }
+
+        $project = Project::findOrFail($request->id);
+        $filePath = storage_path("app/public/project/insights-reports/{$project->insights_report_file}");
+
+        if (!file_exists($filePath)) {
+            return response()->json(['message' => 'File not found.'], 404);
+        }
+
+        $existingDownload = InsightsReportDownload::where('user_id', Auth::id())
+            ->where('property_id', $request->id)
+            ->whereDate('created_at', Carbon::today())
+            ->exists();
+
+        if (!$existingDownload) {
+            InsightsReportDownload::create([
+                'user_id' => Auth::id(),
+                'property_id' => $request->id,
+            ]);
+        }
+
+        return Response::download($filePath);
+    }
+
+    public function insightsReports(Request $request){
+        $insightsReports = InsightsReportDownload::select('property_id')
+            ->with('property', 'property.builder', 'property.location', 'property.city')
+            ->where('user_id', Auth::id())
+            ->groupBy('property_id')
+            ->paginate(10);
+
+        return view('frontend.property.insights-reports', compact('insightsReports'));
+    }
 }

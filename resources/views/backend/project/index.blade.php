@@ -80,6 +80,7 @@
         var detailUrl = "{{ route('admin.project.detail') }}";
         var deleteUrl = "{{ route('admin.project.delete') }}";
         var addUpdateUrl = "{{ route('admin.project.addupdate') }}";
+        var isSuperAdmin = "{{ isSuperAdmin() }}";
     </script>
 @endsection
 

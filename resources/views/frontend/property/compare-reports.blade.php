@@ -42,7 +42,4 @@
 
     <!-- compare project section -->
 @endsection
-@section('js')
-
-@endsection
 

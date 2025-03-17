@@ -3,6 +3,7 @@
 use App\Models\Amenity;
 use App\Models\Project;
 use App\Models\PropertyComparison;
+use App\Models\Setting;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -82,7 +83,7 @@ if (!function_exists('isActiveRoute')) {
 if (!function_exists('isSuperAdmin')) {
     function isSuperAdmin()
     {
-        return (auth()->check() && auth()->user()->role_type) ? true : false;
+        return (auth()->check() && auth()->user()->role_type == 1) ? true : false;
     }
 }
 if (! function_exists('getSettingFromDb')) {
@@ -278,8 +279,8 @@ if (!function_exists('generatePdf')) {
             ->setPaper('a4', 'portrait')
             ->setOption('isPhpEnabled', true);
 
-        // return $pdf->download($fileName);
-        return $pdf->stream('compare_report.pdf');
+        return $pdf->download($fileName);
+        // return $pdf->stream('compare_report.pdf');
     }
 }
 
@@ -327,8 +328,23 @@ if (!function_exists('hasDifferentPrices')) {
     }
 }
 
+if (!function_exists('getCheckAndMatchVideoPath')) {
+    function getCheckAndMatchVideoPath($video)
+    {
+        // $video = Setting::where('setting_key', 'check_match_video')->value('setting_value');
+        if (!$video) {
+            return "";
+        }
 
+        $videoPath = "public/check-match-property-video/" . $video;
 
+        if (Storage::disk('local')->exists($videoPath)) {
+            return asset('storage/check-match-property-video/' . $video);
+        }
+
+        return "";
+    }
+}
 
 
 

@@ -92,10 +92,17 @@ $(document).ready(function () {
                     $(modalId + ' .modal-title span').html('Edit');
                     $(formId + ' .add_required').hide();
                     $(formId)[0].reset();
-
+                    if (result.data.setting_key === 'check_match_video') {
+                        $(formId).find('.video').closest('.col-md-12').removeClass('d-none');
+                        $(formId).find('.setting_value').closest('.col-md-12').addClass('d-none');
+                    } else {
+                        $(formId).find('.setting_value').closest('.col-md-12').removeClass('d-none');
+                        $(formId).find('.video').closest('.col-md-12').addClass('d-none');
+                    }
                     $(modalId).modal('show');
 
                     $(formId).find('#id').val(id);
+                    $(formId).find('#setting_key').val(result.data.setting_key);
                     $(formId).find('.setting_label').val(result.data.setting_label);
                     $(formId).find('.description').val(result.data.description);
                     $(formId).find('.setting_value').val(result.data.setting_value);

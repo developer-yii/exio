@@ -6,7 +6,7 @@
                     <img src="{{ $project->builder->getBuilderLogoUrl() }}" loading="lazy">
                 </div>
                 <div class="textBox">
-                    <h5>{{ $project->project_name }}</h5>
+                    <h5 class="projectTitle" data-title='{{ $project->project_name }}'>{{ $project->project_name }}</h5>
                     <span>By {{ $project->builder ? $project->builder->builder_name : '' }}</span>
                     <div class="locationProperty">
                         <div class="homeBox comBox">
@@ -27,7 +27,7 @@
                         <img src="{{ $project->builder->getBuilderLogoUrl() }}" loading="lazy">
                     </div>
                     <div class="textBox">
-                        <h5>{{ $project->project_name }}</h5>
+                        <h5 class="projectTitle" data-title='{{ $project->project_name }}'>{{ $project->project_name }}</h5>
                         <span>By {{ $project->builder ? $project->builder->builder_name : '' }}</span>
                     </div>
                 </div>
@@ -44,24 +44,7 @@
             </div>
         @endif
         <div class="priceShare">
-            <ul>
-                <li>
-                    <a href="javascript:void(0)" class="save-property" data-id="{{ $project->id }}">
-                        @if (Auth::user())
-                            <a href="javascript:void(0)" class="save-property"
-                                data-id="{{ $project->id }}">
-                                <i class="{{ $project->wishlistedByUsers->contains(auth()->id()) ? 'fa-solid' : 'fa-regular' }} fa-heart"></i>
-                                Save
-                            </a>
-                        @endif
-                    </a>
-                </li>
-
-                <li>
-                    <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#share_property"><i class="fa-solid fa-arrow-up-from-bracket"></i>Share
-                    </a>
-                </li>
-            </ul>
+            @include('frontend.include.save_share_button', ['project' => $project])
             <h5>
                 <span>₹ {{ $project->price_from }} {{ formatPriceUnit($project->price_from_unit) }}</span>
                 @if($project->price_from != $project->price_to || $project->price_from_unit != $project->price_to_unit)
@@ -74,8 +57,8 @@
         <p>
             <i class="fa-regular fa-calendar"></i> Possession by
             {{ getFormatedDate($project->possession_by, 'M, Y') }}
-            <span class="line">|</span> RERA
-            No. {{ $project->rera_number }}
+            <span class="line">|</span>
+            RERA No. {{ $project->rera_number }}
         </p>
     </div>
 @endif

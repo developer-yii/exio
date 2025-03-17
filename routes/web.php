@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\SocialController;
+use App\Http\Controllers\Frontend\SubscriptionController;
 use App\Http\Controllers\PropertyFilterController;
 use Illuminate\Support\Facades\Auth;
 
@@ -46,14 +47,14 @@ Route::middleware('guest')->group(function () {
     Route::post('register', [AuthController::class, 'register'])->name('register.post');
     Route::get('/verify-account/{token}', [AuthController::class, 'verifyAccount'])->name('verify-account');
     Route::post('/resend/mail', [AuthController::class, 'resendVerificationMail'])->name('resendverificationmail');
-
-    Route::get('terms-and-condition', [PageController::class, 'termsCondition'])->name('terms-condition');
-    Route::get('privacy-policy', [PageController::class, 'privacyPolicy'])->name('privacy-policy');
-    Route::get('about-us', [PageController::class, 'aboutUs'])->name('about-us');
-
-    Route::get('contact-us', [ContactController::class, 'index'])->name('contact-us');
-    Route::post('contact-us/submit', [ContactController::class, 'submit'])->name('contact.submit');
 });
+
+Route::get('terms-and-condition', [PageController::class, 'termsCondition'])->name('terms-condition');
+Route::get('privacy-policy', [PageController::class, 'privacyPolicy'])->name('privacy-policy');
+Route::get('about-us', [PageController::class, 'aboutUs'])->name('about-us');
+Route::get('contact-us', [ContactController::class, 'index'])->name('contact-us');
+Route::post('contact-us/submit', [ContactController::class, 'submit'])->name('contact.submit');
+Route::post('/subscribe', [SubscriptionController::class, 'store'])->name('subscribe');
 
 Route::middleware(['auth', 'isUser'])->group(function () {
     Route::group(['prefix' => 'property'], function () {
@@ -79,6 +80,9 @@ Route::group(['prefix' => 'property'], function () {
     Route::get('/result/filter/get-best-match-data', [PropertyFilterController::class, 'getBestMatchData'])->name('property.getBestMatchData');
     Route::get('/result/filter/get-single-project-data', [PropertyFilterController::class, 'getSingleProjectData'])->name('property.getSingleProjectData');
     // Route::get('/download-compare-report', [PropertyController::class, 'downloadCompareReport'])->name('compare.report.download');
+
+    Route::post('/download-insights-report', [PropertyController::class, 'downloadInsightsReport'])->name('property.download-insights-report');
+    Route::get('/insights-report', [PropertyController::class, 'insightsReports'])->name('property.insights-report');
 
     Route::get('/insights', [PropertyController::class, 'propertyInsights'])->name('property.insights');
     Route::get('/insight-details/{slug}', [PropertyController::class, 'insightDetails'])->name('property.insight-details');

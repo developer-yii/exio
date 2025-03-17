@@ -106,6 +106,8 @@
 
     <script>
         var propertyLikeUrl = "{{ route('property.like-unlike') }}";
+        var subscribeUrl = "{{ route('subscribe') }}";
+        var downloadInsightsRrportUrl = "{{ route('property.download-insights-report') }}";
         $(document).ready(function() {
             $.ajaxSetup({
                 headers: {

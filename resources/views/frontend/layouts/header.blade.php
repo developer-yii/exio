@@ -111,15 +111,16 @@
                                 @if (Auth::user())
                                     <li>
                                         <a href="{{ route('property.shortlisted') }}">
-                                            <img src="{{ $baseUrl }}assest/images/shortlist.png"
-                                                alt="shortlist">Shortlisted Properties
+                                            <img src="{{ $baseUrl }}assest/images/shortlist.png" alt="shortlist">Shortlisted Properties
                                         </a>
                                     </li>
                                 @endif
 
-                                <li><a href="downloaded_certificates.html"><img
-                                            src="{{ $baseUrl }}assest/images/report.png" alt="report">Downloaded
-                                        Reports</a></li>
+                                <li>
+                                    <a href="{{ route('property.insights-report') }}">
+                                        <img src="{{ $baseUrl }}assest/images/report.png" alt="report">Downloaded Reports
+                                    </a>
+                                </li>
 
                                 @if (Auth::user())
                                     <li>

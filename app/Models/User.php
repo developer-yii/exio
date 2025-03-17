@@ -18,6 +18,7 @@ class User extends Authenticatable
 
     const ADMIN = 1;
     const USER = 2;
+    const EMPLOYEE = 3;
 
     public static $status = [
         1 => 'Active',
@@ -25,8 +26,9 @@ class User extends Authenticatable
     ];
 
     public static $role = [
-        1 => 'Super Admin',
+        1 => 'Admin',
         2 => 'User',
+        3 => 'Employee',
     ];
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
@@ -80,6 +82,11 @@ class User extends Authenticatable
     public function propertyComparisons()
     {
         return $this->hasMany(PropertyComparison::class);
+    }
+
+    public function insightsReports()
+    {
+        return $this->hasMany(InsightsReportDownload::class, 'user_id');
     }
 
 }

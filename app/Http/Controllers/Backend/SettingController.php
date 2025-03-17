@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Yajra\DataTables\Facades\DataTables;
 
 use App\Models\Setting;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class SettingController extends Controller
@@ -76,11 +77,21 @@ class SettingController extends Controller
                 'max:100',
                 Rule::unique('settings', 'setting_label')->ignore($request->id)->whereNull('deleted_at')
             ],
-            'setting_value' => 'required|string|max:500',
             'description' => 'required|string|max:500',
         ];
 
-        $validator = Validator::make($request->all(), $rules);
+        if ($request->setting_key === 'check_match_video') {
+            $rules['video'] = 'required|file|mimes:mp4,mov,avi|max:10240'; // Video required, max size 10MB
+        } else {
+            $rules['setting_value'] = 'required|string|max:500'; // Text value required
+        }
+
+        $messages = [
+            'video.max' => 'The video file must not be larger than 10MB.',
+            'video.mimes' => 'Only MP4, MOV, and AVI formats are allowed for the video.',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
 
         if ($validator->fails()) {
             return response()->json(['status' => false, 'errors' => $validator->errors()]);
@@ -93,12 +104,30 @@ class SettingController extends Controller
         }
 
         $isDefault = (isset($model->id) && $model->is_default == 1) ? true : false;
+
         if (!$isDefault) {
             $model->setting_key = Str::slug(strtolower($request->setting_label));
             $model->setting_label = $request->setting_label;
         }
+
+        if ($request->setting_key === 'check_match_video') {
+            if ($request->hasFile('video')) {
+                if ($model->setting_value) {
+                    if (Storage::exists('public/check-match-property-video/' . $model->setting_value)) {
+                        Storage::delete('public/check-match-property-video/' . $model->setting_value);
+                    }
+                }
+                $file = $request->file('video');
+                $filename = time() . '_' . Str::random(20) . '.' . $file->getClientOriginalExtension();
+                $file->storeAs('public/check-match-property-video', $filename);
+                $model->setting_value = $filename;
+            }
+        }else{
+            $model->setting_value = $request->setting_value;
+        }
+
+
         $model->description = $request->description;
-        $model->setting_value = $request->setting_value;
         $model->updated_by = auth()->id();
         if (!$isUpdate) {
             $model->created_by = auth()->id();

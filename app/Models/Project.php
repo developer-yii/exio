@@ -165,6 +165,18 @@ class Project extends Model
         return asset('images/no_image_available.jpg');
     }
 
+    public function getInsightReportPdfUrl()
+    {
+        $insights_report_file = $this->insights_report_file;
+        if ($insights_report_file) {
+            $filePath = "public/project/insights-reports/{$insights_report_file}";  // Updated path based on type
+            if (Storage::disk('local')->exists($filePath)) {
+                return asset('storage/project/insights-reports/' . $insights_report_file);  // Correct URL structure
+            }
+        }
+        return '';
+    }
+
     public function projectBadge()
     {
         return $this->belongsTo(ProjectBadge::class, 'project_badge', 'id');
@@ -195,5 +207,9 @@ class Project extends Model
         return $this->hasMany(PropertyComparison::class, 'property_id_2');
     }
 
+    public function insightsReports()
+    {
+        return $this->hasMany(InsightsReportDownload::class, 'property_id');
+    }
 
 }
