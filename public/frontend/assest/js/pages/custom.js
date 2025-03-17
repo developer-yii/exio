@@ -14,7 +14,7 @@ $('.togglePassword').on('click', function () {
 
     $(this).toggleClass('bi-eye-slash bi-eye-fill');
 });
-$("input[name='password'], input[name='password_confirmation']").keypress(function(e) {
+$("input[name='password'], input[name='password_confirmation']").keypress(function (e) {
     if (e.which === 32) {
         return false;
     }
@@ -63,6 +63,11 @@ $('body').on('click', '.heartIconFill, .save-property', function (e) {
     e.preventDefault();
     e.stopPropagation();
 
+    if (!isUserLoggedIn) {
+        window.location.href = '/login';
+        return;
+    }
+
     let propertyId = $(this).data('id'); // Get property ID from data-id
     let heartIcon = $(this).find('i').length ? $(this).find('i') : $(this);
     $.ajax({
@@ -86,9 +91,9 @@ $('body').on('click', '.heartIconFill, .save-property', function (e) {
     });
 });
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".showMoreLocality").forEach(button => {
-        button.addEventListener("click", function() {
+        button.addEventListener("click", function () {
             const localityWrapper = this.closest(".localityItem").parentElement; // Find the parent container
             localityWrapper.querySelectorAll(".localityItem.d-none").forEach(el => el.classList.remove("d-none"));
             this.closest(".localityItem").style.display = "none"; // Hide the clicked "More" button
@@ -96,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     document.querySelectorAll(".showMoreAmenity").forEach(button => {
-        button.addEventListener("click", function() {
+        button.addEventListener("click", function () {
             const amenityWrapper = this.closest(".more").parentElement; // Find the parent container
             amenityWrapper.querySelectorAll(".itemsBox.d-none").forEach(el => el.classList.remove("d-none"));
             this.closest(".more").style.display = "none"; // Hide the clicked "More" button
@@ -136,7 +141,7 @@ function updateShareLinks(url = window.location.href) {
 }
 
 
-$('body').on('click','.social_media_share',function(event){
+$('body').on('click', '.social_media_share', function (event) {
     var url = $(this).attr('data-href');
     var left = (screen.width - 600) / 2;
     var top = (screen.height - 400) / 2;
@@ -158,20 +163,20 @@ function copyToClipboard() {
     }
 }
 
-function modelOpacityAdd(btnClass, model){
-    $(document).on('click', '.'+btnClass, function () {
-        $('#'+model).addClass('disabled-modal');
+function modelOpacityAdd(btnClass, model) {
+    $(document).on('click', '.' + btnClass, function () {
+        $('#' + model).addClass('disabled-modal');
     });
 }
 
-function modelOpacityRemove(hideModalId, showModalId){
+function modelOpacityRemove(hideModalId, showModalId) {
 
-    $(document).on('#'+hideModalId).on('hidden.bs.modal', function () {
-        $('#'+showModalId).removeClass('disabled-modal');
+    $(document).on('#' + hideModalId).on('hidden.bs.modal', function () {
+        $('#' + showModalId).removeClass('disabled-modal');
     });
 }
 
-$(".propertyCardModal").click(function (event) {
+$('body').on('click', '.propertyCardModal', function (event) {
     $("#coverImage").attr("src", ""); // Clear image
     $('#property_price, #property_name, #custom_type, #location, #carpet_area, #total_floor, #total_tower, #age_of_construction, #property_type, #description').text("");
 
@@ -239,24 +244,25 @@ $(".propertyCardModal").click(function (event) {
         });
         $(".multyimg").append(htmlContent);
     }
+  
+    $(document).ready(function () {
+        let slug = $(this).data("slug");
+        if (slug) {
+            let propertyUrl = getPropertyDetailsUrl.replace("_slug_", slug);
+            $('#more-details').attr({
+                'href': propertyUrl,
+                'target': '_blank'
+            });
 
-    let slug = $(this).data("slug");
-    if (slug) {
-        let propertyUrl = getPropertyDetailsUrl.replace("_slug_", slug);
-        $('#more-details').attr({
-            'href': propertyUrl,
-            'target': '_blank'
-        });
-
-        $("#whatsapplink").attr("href", `https://wa.me/${whatsApp}?text=${encodeURIComponent(propertyUrl)}`);
-
-        metaUpdate(projectName, projectName, image, url)
-        updateShareLinks(propertyUrl);
-    }
+            $("#whatsapplink").attr("href", `https://wa.me/${whatsApp}?text=${encodeURIComponent(propertyUrl)}`);
+          
+            metaUpdate(projectName, projectName, image, url);
+            updateShareLinks(propertyUrl);
+        }
+    });
 
     // Show the modal
-    if(!$(event.target).hasClass('checkbox') && !$(event.target).hasClass('compareBoxOpen') && !$(event.target).hasClass('heartIconFill'))
-    {
+    if (!$(event.target).hasClass('checkbox') && !$(event.target).hasClass('compareBoxOpen') && !$(event.target).hasClass('heartIconFill')) {
         $("#propertyModal").modal("show");
     }
 
