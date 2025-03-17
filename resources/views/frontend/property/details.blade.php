@@ -3,6 +3,7 @@
     $metaTitle = "Exio | " . $project->project_name;
     $metaDesc = $project->project_name. " by " . $project->builder->builder_name;
 @endphp
+@extends('frontend.layouts.app')
 
 @section('title', 'Property Details')
 @section('meta_details')
@@ -14,7 +15,6 @@
 
 @endsection
 
-@extends('frontend.layouts.app')
 @section('content')
     <!-- details banner -->
     <section class="detail_Sec">
@@ -23,8 +23,8 @@
                 <div class="menuBread">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                            <li class="breadcrumb-item" aria-current="page">Listing</li>
+                            <li class="breadcrumb-item"><a href="{{ route('front.home') }}">Home</a></li>
+                            <li class="breadcrumb-item" aria-current="page"><a href="{{ route('property.result.filter') }}">Listing</a></li>
                             <li class="breadcrumb-item" aria-current="page">{{ $project->project_name }}</li>
                         </ol>
                     </nav>

@@ -6,7 +6,7 @@
                     <img src="{{ $project->builder->getBuilderLogoUrl() }}" loading="lazy">
                 </div>
                 <div class="textBox">
-                    <h5>{{ $project->project_name }}</h5>
+                    <h5 class="projectTitle" data-title='{{ $project->project_name }}'>{{ $project->project_name }}</h5>
                     <span>By {{ $project->builder ? $project->builder->builder_name : '' }}</span>
                     <div class="locationProperty">
                         <div class="homeBox comBox">
@@ -27,7 +27,7 @@
                         <img src="{{ $project->builder->getBuilderLogoUrl() }}" loading="lazy">
                     </div>
                     <div class="textBox">
-                        <h5>{{ $project->project_name }}</h5>
+                        <h5 class="projectTitle" data-title='{{ $project->project_name }}'>{{ $project->project_name }}</h5>
                         <span>By {{ $project->builder ? $project->builder->builder_name : '' }}</span>
                     </div>
                 </div>
@@ -44,24 +44,7 @@
             </div>
         @endif
         <div class="priceShare">
-            <ul>
-                <li>
-                    <a href="javascript:void(0)" class="save-property" data-id="{{ $project->id }}">
-                        @if (Auth::user())
-                            <a href="javascript:void(0)" class="save-property"
-                                data-id="{{ $project->id }}">
-                                <i class="{{ $project->wishlistedByUsers->contains(auth()->id()) ? 'fa-solid' : 'fa-regular' }} fa-heart"></i>
-                                Save
-                            </a>
-                        @endif
-                    </a>
-                </li>
-
-                <li>
-                    <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#share_property"><i class="fa-solid fa-arrow-up-from-bracket"></i>Share
-                    </a>
-                </li>
-            </ul>
+            @include('frontend.include.save_share_button', ['project' => $project])
             <h5>
                 <span>₹ {{ $project->price_from }} {{ formatPriceUnit($project->price_from_unit) }}</span>
                 @if($project->price_from != $project->price_to || $project->price_from_unit != $project->price_to_unit)
@@ -74,8 +57,8 @@
         <p>
             <i class="fa-regular fa-calendar"></i> Possession by
             {{ getFormatedDate($project->possession_by, 'M, Y') }}
-            <span class="line">|</span> RERA
-            No. {{ $project->rera_number }}
+            <span class="line">|</span>
+            RERA No. {{ $project->rera_number }}
         </p>
     </div>
 @endif
@@ -85,11 +68,11 @@
         <div class="overViewBox">
             <div class="overBox">
                 <span>Total Floors</span>
-                <h6>{{ $project->total_floors }} Floors</h6>
+                <h6 class="one-line-text" title="{{ $project->total_floors }}">{{ $project->total_floors }} Floors</h6>
             </div>
             <div class="overBox">
                 <span>Total Tower</span>
-                <h6>{{ $project->total_tower }}</h6>
+                <h6 class="one-line-text" title="{{ $project->total_tower }}">{{ $project->total_tower }}</h6>
             </div>
             <div class="overBox">
                 <span>Age of Construction</span>
@@ -101,8 +84,8 @@
             </div>
             @foreach ($project->projectDetails as $projectDetail)
                 <div class="overBox">
-                    <span>{{ $projectDetail->name }}</span>
-                    <h6>{{ $projectDetail->value }}</h6>
+                    <span class="one-line-text" title="{{ $projectDetail->name }}">{{ $projectDetail->name }}</span>
+                    <h6 class="one-line-text" title="{{ $projectDetail->value }}">{{ $projectDetail->value }}</h6>
                 </div>
             @endforeach
           </div>
@@ -319,7 +302,10 @@
             </div>
             <div class="priceBox">
                 <div class="price">
-                    <h5>₹{{ $similarProperty->price_from }}{{ formatPriceUnit($similarProperty->price_from_unit) }}-{{ $similarProperty->price_to }}{{ formatPriceUnit($similarProperty->price_to_unit) }}
+                    <h5>₹{{ $similarProperty->price_from }}{{ formatPriceUnit($similarProperty->price_from_unit) }}
+                        @if(hasDifferentPrices($similarProperty))
+                            -{{ $similarProperty->price_to }}{{ formatPriceUnit($similarProperty->price_to_unit) }}
+                        @endif
                     </h5>
                 </div>
                 <div class="boxLogo">
@@ -328,16 +314,16 @@
                 </div>
             </div>
             <div class="propertyName">
-                <h5>{{ $similarProperty->project_name }}</h5>
+                <h5 class="one-line-text" title="{{ $similarProperty->project_name }}">{{ $similarProperty->project_name }}</h5>
             </div>
             <div class="locationProperty">
                 <div class="homeBox comBox">
                     <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home" loading="lazy">
-                    <p>{{ $similarProperty->custom_property_type ?? '' }}</p>
+                    <p class="one-line-text" title="{{ $similarProperty->custom_property_type ?? '' }}">{{ $similarProperty->custom_property_type ?? '' }}</p>
                 </div>
                 <div class="location comBox">
                     <img src="{{ $baseUrl }}assest/images/Location.png" alt="Location" loading="lazy">
-                    <p>{{ $similarProperty->location->location_name . ', ' . $similarProperty->city->city_name }}</p>
+                    <p class="one-line-text" title="{{ $similarProperty->location->location_name . ', ' . $similarProperty->city->city_name }}">{{ $similarProperty->location->location_name . ', ' . $similarProperty->city->city_name }}</p>
                 </div>
             </div>
             <div class="addressBox">

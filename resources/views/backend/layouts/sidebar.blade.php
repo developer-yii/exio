@@ -33,12 +33,14 @@
                 </a>
             </li>
 
-            <li class="side-nav-item {{ isActiveRouteMain('users') }}">
-                <a href="{{ route('admin.user') }}" class="side-nav-link {{ isActiveRoute(['users']) }}">
-                    <i class="uil-users-alt"></i>
-                    <span> Users </span>
-                </a>
-            </li>
+            @if(isSuperAdmin())
+                <li class="side-nav-item {{ isActiveRouteMain('users') }}">
+                    <a href="{{ route('admin.user') }}" class="side-nav-link {{ isActiveRoute(['users']) }}">
+                        <i class="uil-users-alt"></i>
+                        <span> Users </span>
+                    </a>
+                </li>
+            @endif
 
             <li class="side-nav-item {{ isActiveRouteMain('builder') }}">
                 <a href="{{ route('admin.builder') }}" class="side-nav-link {{ isActiveRoute(['builders']) }}">
@@ -54,85 +56,101 @@
                 </a>
             </li>
 
-            <li class="side-nav-item {{ isActiveRouteMain('amenity') }}">
-                <a href="{{ route('admin.amenity') }}" class="side-nav-link {{ isActiveRoute(['amenity']) }}">
-                    <i class="uil-cog"></i>
-                    <span> Amenities </span>
-                </a>
-            </li>
+            @if(isSuperAdmin())
+                <li class="side-nav-item {{ isActiveRouteMain('amenity') }}">
+                    <a href="{{ route('admin.amenity') }}" class="side-nav-link {{ isActiveRoute(['amenity']) }}">
+                        <i class="uil-cog"></i>
+                        <span> Amenities </span>
+                    </a>
+                </li>
 
-            <li class="side-nav-item {{ isActiveRouteMain('locality') }}">
-                <a href="{{ route('admin.locality') }}" class="side-nav-link {{ isActiveRoute(['locality']) }}">
-                    <i class="uil-map"></i>
-                    <span> Localities </span>
-                </a>
-            </li>
+                <li class="side-nav-item {{ isActiveRouteMain('locality') }}">
+                    <a href="{{ route('admin.locality') }}" class="side-nav-link {{ isActiveRoute(['locality']) }}">
+                        <i class="uil-map"></i>
+                        <span> Localities </span>
+                    </a>
+                </li>
 
-            <li class="side-nav-item {{ isActiveRouteMain('locality') }}">
-                <a href="{{ route('admin.download-brochure') }}" class="side-nav-link {{ isActiveRoute(['locality']) }}">
-                    <i class="uil-file"></i>
-                    <span> Brochure Data </span>
-                </a>
-            </li>
+                <li class="side-nav-item {{ isActiveRouteMain('download-brochure') }}">
+                    <a href="{{ route('admin.download-brochure') }}" class="side-nav-link {{ isActiveRoute(['download-brochure']) }}">
+                        <i class="uil-file"></i>
+                        <span> Brochure Data </span>
+                    </a>
+                </li>
 
-            <li class="side-nav-item {{ isActiveRouteMain(['faqs']) }}">
-                <a data-bs-toggle="collapse" href="#faqs_menu" aria-expanded="false" aria-controls="faqs_menu"
-                    class="side-nav-link collapsed">
-                    <i class="uil-copy-alt"></i>
-                    <span> CMS Pages </span>
-                    <span class="menu-arrow"></span>
-                </a>
-                <div class="collapse" id="faqs_menu" style="">
-                    <ul class="side-nav-second-level">
-                        <li>
-                            <a class="{{ isActiveRoute(['news']) }}" href="{{ route('admin.news') }}">News</a>
-                        </li>
-                        <li>
-                            <a class="{{ isActiveRoute(['faq']) }}" href="{{ route('admin.faq') }}">FAQs</a>
-                        </li>
-                        <li>
-                            <a class="{{ isActiveRoute(['page']) }}"
-                                href="{{ route('admin.page', ['terms-condition']) }}">Terms and Conditions</a>
-                        </li>
-                        <li>
-                            <a class="{{ isActiveRoute(['page']) }}"
-                                href="{{ route('admin.page', ['privacy-policy']) }}">Privacy Policy</a>
-                        </li>
-                        <li>
-                            <a class="{{ isActiveRoute(['page']) }}"
-                                href="{{ route('admin.page', ['about-us']) }}">About Us</a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
+                <li class="side-nav-item {{ isActiveRouteMain('insight-reports') }}">
+                    <a href="{{ route('admin.insight-reports') }}" class="side-nav-link {{ isActiveRoute(['insight-reports']) }}">
+                        <i class="uil-file"></i>
+                        <span> Insights Reports Data </span>
+                    </a>
+                </li>
 
-            <li class="side-nav-item {{ isActiveRouteMain(['setting', 'city', 'location']) }}">
-                <a data-bs-toggle="collapse" href="#setting_menu" aria-expanded="false" aria-controls="setting_menu"
-                    class="side-nav-link collapsed">
-                    <i class="mdi mdi-cog"></i>
-                    <span> Settings </span>
-                    <span class="menu-arrow"></span>
-                </a>
-                <div class="collapse" id="setting_menu" style="">
-                    <ul class="side-nav-second-level">
-                        <li>
-                            <a class="{{ isActiveRoute(['setting']) }}" href="{{ route('admin.setting') }}">General
-                                Settings</a>
-                        </li>
-                        <li>
-                            <a class="{{ isActiveRoute(['city']) }}" href="{{ route('admin.city') }}">Cities</a>
-                        </li>
-                        <li>
-                            <a class="{{ isActiveRoute(['location']) }}"
-                                href="{{ route('admin.location') }}">Locations</a>
-                        </li>
-                        <li>
-                            <a class="{{ isActiveRoute(['project-badge']) }}"
-                                href="{{ route('admin.project-badge') }}">Project Badges</a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
+                <li class="side-nav-item {{ isActiveRouteMain('subscriber') }}">
+                    <a href="{{ route('admin.subscriber') }}" class="side-nav-link {{ isActiveRoute(['subscriber']) }}">
+                        <i class="uil-bell"></i>
+                        <span> Subscribers </span>
+                    </a>
+                </li>
+
+                <li class="side-nav-item {{ isActiveRouteMain(['faqs']) }}">
+                    <a data-bs-toggle="collapse" href="#faqs_menu" aria-expanded="false" aria-controls="faqs_menu"
+                        class="side-nav-link collapsed">
+                        <i class="uil-copy-alt"></i>
+                        <span> CMS Pages </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="faqs_menu" style="">
+                        <ul class="side-nav-second-level">
+                            <li>
+                                <a class="{{ isActiveRoute(['news']) }}" href="{{ route('admin.news') }}">News</a>
+                            </li>
+                            <li>
+                                <a class="{{ isActiveRoute(['faq']) }}" href="{{ route('admin.faq') }}">FAQs</a>
+                            </li>
+                            <li>
+                                <a class="{{ isActiveRoute(['page']) }}"
+                                    href="{{ route('admin.page', ['terms-condition']) }}">Terms and Conditions</a>
+                            </li>
+                            <li>
+                                <a class="{{ isActiveRoute(['page']) }}"
+                                    href="{{ route('admin.page', ['privacy-policy']) }}">Privacy Policy</a>
+                            </li>
+                            <li>
+                                <a class="{{ isActiveRoute(['page']) }}"
+                                    href="{{ route('admin.page', ['about-us']) }}">About Us</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="side-nav-item {{ isActiveRouteMain(['setting', 'city', 'location']) }}">
+                    <a data-bs-toggle="collapse" href="#setting_menu" aria-expanded="false" aria-controls="setting_menu"
+                        class="side-nav-link collapsed">
+                        <i class="mdi mdi-cog"></i>
+                        <span> Settings </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="setting_menu" style="">
+                        <ul class="side-nav-second-level">
+                            <li>
+                                <a class="{{ isActiveRoute(['setting']) }}" href="{{ route('admin.setting') }}">General
+                                    Settings</a>
+                            </li>
+                            <li>
+                                <a class="{{ isActiveRoute(['city']) }}" href="{{ route('admin.city') }}">Cities</a>
+                            </li>
+                            <li>
+                                <a class="{{ isActiveRoute(['location']) }}"
+                                    href="{{ route('admin.location') }}">Locations</a>
+                            </li>
+                            <li>
+                                <a class="{{ isActiveRoute(['project-badge']) }}"
+                                    href="{{ route('admin.project-badge') }}">Project Badges</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            @endif
         </ul>
 
         <!-- End Sidebar -->

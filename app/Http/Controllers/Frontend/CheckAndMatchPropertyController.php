@@ -7,7 +7,9 @@ use App\Models\Amenity;
 use App\Models\City;
 use App\Models\Location;
 use App\Models\Project;
+use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class CheckAndMatchPropertyController extends Controller
 {
@@ -36,7 +38,9 @@ class CheckAndMatchPropertyController extends Controller
         $cities = City::isActive()->pluck('city_name', 'id');
         $areas = Location::isActive()->pluck('location_name', 'id');
 
-        return view('frontend.check-and-match-property.index', compact('propertyTypes', 'sqftOptions', 'cities', 'areas', 'budgets'));
+        $checkandmatch = Setting::where('setting_key', 'check_match_video')->first();
+
+        return view('frontend.check-and-match-property.index', compact('propertyTypes', 'sqftOptions', 'cities', 'areas', 'budgets', 'checkandmatch'));
     }
 
     public function checkAndMatchPropertySubmit(Request $request)

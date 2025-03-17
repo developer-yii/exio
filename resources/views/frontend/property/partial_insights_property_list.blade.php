@@ -13,7 +13,10 @@
                 </div>
                 <div class="priceBox">
                     <div class="price">
-                        <h5>₹{{ $property->price_from }}{{ formatPriceUnit($property->price_from_unit) }}-{{ $property->price_to }}{{ formatPriceUnit($property->price_to_unit) }}
+                        <h5>₹{{ $property->price_from }}{{ formatPriceUnit($property->price_from_unit) }}
+                            @if (hasDifferentPrices($property))
+                                -{{ $property->price_to }}{{ formatPriceUnit($property->price_to_unit) }}
+                            @endif
                         </h5>
                     </div>
                     <div class="boxLogo">
@@ -22,16 +25,16 @@
                     </div>
                 </div>
                 <div class="propertyName">
-                    <h5>{{ $property->project_name }}</h5>
+                    <h5 class="one-line-text" title="{{ $property->project_name }}">{{ $property->project_name }}</h5>
                 </div>
                 <div class="locationProperty">
                     <div class="homeBox comBox">
                         <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home" loading="lazy">
-                        <p>{{ $property->custom_property_type ?? '' }}</p>
+                        <p class="one-line-text" title="{{ $property->custom_property_type ?? '' }}">{{ $property->custom_property_type ?? '' }}</p>
                     </div>
                     <div class="location comBox">
                         <img src="{{ $baseUrl }}assest/images/Location.png" alt="Location" loading="lazy">
-                        <p>{{ $property->location->location_name . ', ' . $property->city->city_name }}</p>
+                        <p class="one-line-text" title="{{ $property->location->location_name . ', ' . $property->city->city_name }}">{{ $property->location->location_name . ', ' . $property->city->city_name }}</p>
                     </div>
                 </div>
             </div>

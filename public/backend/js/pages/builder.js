@@ -389,10 +389,12 @@ $(document).ready(function () {
                             ' <a href="javascript:void(0)" data-id="' +
                             contactId +
                             '" class="btn-sm btn-info edit-record"><i class="uil-edit-alt"></i></a>';
-                        actions +=
-                            ' <a href="javascript:void(0)" data-id="' +
-                            contactId +
-                            '" class="btn-sm btn-danger delete-record"><i class="uil-trash-alt"></i></a>';
+                        if (isSuperAdmin) {
+                            actions +=
+                                ' <a href="javascript:void(0)" data-id="' +
+                                contactId +
+                                '" class="btn-sm btn-danger delete-record"><i class="uil-trash-alt"></i></a>';
+                        }
                         return actions;
                     }
 

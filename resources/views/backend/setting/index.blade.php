@@ -49,6 +49,7 @@
                     </div>
                     <div class="modal-body m-1">
                         <input type="hidden" name="id" id="id" class="id">
+                        <input type="hidden" name="setting_key" id="setting_key" class="setting_key">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group mb-3">
@@ -57,10 +58,17 @@
                                     <span class="error"></span>
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-12 d-none">
                                 <div class="form-group mb-3">
                                     <label for="setting_value" class="form-label">Value<span class="text-danger add_edit_required">*</span></label>
                                     <input type="text" name="setting_value" class="form-control setting_value" value="">
+                                    <span class="error"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-12 d-none">
+                                <div class="form-group mb-3">
+                                    <label for="video" class="form-label">Video<span class="text-danger add_edit_required">*</span></label>
+                                    <input type="file" name="video" class="form-control video" value="">
                                     <span class="error"></span>
                                 </div>
                             </div>

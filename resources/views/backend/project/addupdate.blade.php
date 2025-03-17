@@ -858,6 +858,70 @@
                     </div>
                 </div>
 
+                <!-- Insights Report Pdf -->
+                <div class="card border-1">
+                    <div class="card-header" id="headingInsightsReport">
+                        <h5 class="m-0">
+                            <a class="custom-accordion-title collapsed d-block pt-2 pb-2" data-bs-toggle="collapse"
+                                href="#collapseInsightsReport" aria-expanded="false"
+                                aria-controls="collapseInsightsReport">
+                                Insights Report Pdf
+                            </a>
+                        </h5>
+                    </div>
+
+                    <div id="collapseInsightsReport" class="collapse" aria-labelledby="headingInsightsReport"
+                        data-bs-parent="#projectAccordion">
+                        <div class="card-body">
+                            <!-- Insights Report Pdf Section -->
+                            <div class="row">
+                                <div class="col-md-6">
+
+                                    <!-- Document File -->
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Upload Insights Report PDF</label>
+                                        <div class="row">
+                                            <div class="col-md-9">
+                                                <input type="file" class="form-control insights_report_file"
+                                                    name="insights_report_file" accept=".pdf" data-toggle="tooltip"
+                                                    data-placement="top" title="Upload Insights Report PDF">
+                                                <div class="form-text">Allowed formats: PDF</div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                @if (isset($model->insights_report_file) && !empty($model->insights_report_file))
+                                                    <a href="{{ asset('storage/project/insights-reports/' . $model->insights_report_file) }}"
+                                                        class="btn btn-info w-100"
+                                                        download="{{ $model->insights_report_file }}">
+                                                        <i class="uil uil-download-alt"></i> View
+                                                    </a>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <span class="error"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Preview Section -->
+                                <div class="col-md-6">
+                                    {{-- <div class="document-preview-container text-center">
+                                        @if (isset($model->property_document) && !empty($model->property_document))
+                                            <div class="pdf-preview">
+                                                <i class="uil uil-file-alt text-muted" style="font-size: 48px;"></i>
+                                                <p class="mt-2 mb-0">{{ $model->property_document }}</p>
+                                            </div>
+                                        @else
+                                            <div class="no-preview text-muted">
+                                                <i class="uil uil-file-upload-alt" style="font-size: 48px;"></i>
+                                                <p class="mt-2 mb-0">No document uploaded</p>
+                                            </div>
+                                        @endif
+                                    </div> --}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row my-4">
                     <div class="col-12 text-end">
                         <button type="submit" class="btn btn-success" id="addorUpdateBtn">Save</button>

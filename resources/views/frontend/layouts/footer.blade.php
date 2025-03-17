@@ -58,10 +58,13 @@
               <p>EXIO is a forward-thinking real estate firm dedicated to transforming spaces into dream homes. With a
                 commitment to quality and innovation, we provide personalized services to help you find the perfect
                 property that suits your lifestyle.</p>
-              <div class="searcFt">
-                <input type="text" placeholder="Enter your email">
-                <button class="btn btnSend"><i class="bi bi-send"></i></button>
-              </div>
+                <form id="subscribe">
+                  @csrf
+                  <div class="searcFt">
+                    <input type="text" placeholder="Enter your email" name='email' id="email">
+                    <button class="btn btnSend" type="submit"><i class="bi bi-send"></i></button>
+                  </div>
+                </form>
             </div>
           </div>
         </div>

@@ -207,6 +207,7 @@
         var deleteUrl = "{{ route('admin.builder.delete') }}";
         var addUpdateUrl = "{{ route('admin.builder.addupdate') }}";
         var uploadImageUrl = "{{ route('admin.ckeditor.image.upload') }}";
+        var isSuperAdmin = "{{ isSuperAdmin() }}";
     </script>
 @endsection
 

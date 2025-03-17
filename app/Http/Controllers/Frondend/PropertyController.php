@@ -8,6 +8,7 @@ use App\Models\Amenity;
 use App\Models\Builder;
 use App\Models\City;
 use App\Models\DownloadBrochure;
+use App\Models\InsightsReportDownload;
 use App\Models\Locality;
 use App\Models\Location;
 use App\Models\Project;
@@ -15,14 +16,18 @@ use App\Models\PropertyComparison;
 use App\Models\PropertyWishlist;
 // use Barryvdh\DomPDF\PDF;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+
 
 class PropertyController extends Controller
 {
-    public function details($slug){
+    public function details(Request $request, $slug){
         $query = Project::with([
             'projectImages',
             'builder',
@@ -166,9 +171,9 @@ class PropertyController extends Controller
                 $property->price .= " - ₹ " . $property->price_to . formatPriceUnit($property->price_to_unit);
             }
 
-            $property->truncatedPropertyType = truncateText($property->custom_property_type, 15);
+            // $property->truncatedPropertyType = truncateText($property->custom_property_type, 15);
             $property->location_city = $property->location->location_name .",". $property->city->city_name;
-            $property->truncatedLocation = truncateText($property->location_city, 15);
+            // $property->truncatedLocation = truncateText($property->location_city, 15);
 
         }
 
@@ -339,4 +344,41 @@ class PropertyController extends Controller
         return view('frontend.property.insight-details', compact('project', 'progressStatus', 'actualProgressData', 'reraProgressData'));
     }
 
+    public function downloadInsightsReport(Request $request)
+    {
+        if (!auth()->check()) {
+            return response()->json(['message' => 'Please login first to download the report.'], 401);
+        }
+
+        $project = Project::findOrFail($request->id);
+        $filePath = storage_path("app/public/project/insights-reports/{$project->insights_report_file}");
+
+        if (!file_exists($filePath)) {
+            return response()->json(['message' => 'File not found.'], 404);
+        }
+
+        $existingDownload = InsightsReportDownload::where('user_id', Auth::id())
+            ->where('property_id', $request->id)
+            ->whereDate('created_at', Carbon::today())
+            ->exists();
+
+        if (!$existingDownload) {
+            InsightsReportDownload::create([
+                'user_id' => Auth::id(),
+                'property_id' => $request->id,
+            ]);
+        }
+
+        return Response::download($filePath);
+    }
+
+    public function insightsReports(Request $request){
+        $insightsReports = InsightsReportDownload::select('property_id')
+            ->with('property', 'property.builder', 'property.location', 'property.city')
+            ->where('user_id', Auth::id())
+            ->groupBy('property_id')
+            ->paginate(10);
+
+        return view('frontend.property.insights-reports', compact('insightsReports'));
+    }
 }

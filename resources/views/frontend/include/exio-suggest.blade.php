@@ -1,11 +1,13 @@
 <div class="col-lg-4">
     <div id="rightStickySection">
         <div class="StickyBox">
-            <div class="topReportBtn">
-                <a href="javascript:void(0)">
-                    <i class="bi bi-file-earmark"></i> Download Insight Report
-                </a>
-            </div>
+            @if($project->insights_report_file)
+                <div class="topReportBtn">
+                    <a href="javascript:void(0)" class="downloadInsightReportPdf" data-id="{{ $project->id }}">
+                        <i class="bi bi-file-earmark"></i> Download Insight Report
+                    </a>
+                </div>
+            @endif
             <div class="insightReport">
                 <div class="reportTitle">
                     <img src="{{ $baseUrl }}assest/images/x-btn.png" alt="x-btn" loading="lazy">

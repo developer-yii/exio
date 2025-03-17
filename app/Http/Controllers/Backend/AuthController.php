@@ -28,7 +28,8 @@ class AuthController extends Controller
             'email.exists' => "This email does not exist.",
         );
         $this->validate($request, [
-            'email' => "required|exists:users,email,status,1,role_type," . User::ADMIN,
+            // 'email' => "required|exists:users,email,status,1,role_type," . User::ADMIN,
+            'email' => "required|exists:users,email,status,1",
             'password' => 'required',
         ], $messages);
 
@@ -38,7 +39,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $email)
             ->where('status', User::ACTIVE)
-            ->where('role_type', User::ADMIN)
+            ->whereIn('role_type', [1,3])
             ->first();
 
         if (isset($user->id) && $user->id) {

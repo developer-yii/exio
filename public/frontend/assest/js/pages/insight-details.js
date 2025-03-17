@@ -54,6 +54,17 @@ new Chart(ctx, {
       padding: { top: 20 }
     },
     plugins: {
+      tooltip: {
+        callbacks: {
+          title: (tooltipItems) => {
+            const value = tooltipItems[0].raw.x;
+            return formatTimeline(value);
+          },
+          label: (tooltipItem) => {
+            return `Work Completed: ${tooltipItem.raw.y}%`;
+          }
+        }
+      },
       legend: {
         display: true,
         position: 'bottom',
