@@ -2,6 +2,7 @@
     $baseUrl = asset('frontend') . '/';
 @endphp
 @extends('frontend.layouts.app')
+@section('title', 'Check and match property')
 
 @section('content')
     <!-- Start check property section -->
