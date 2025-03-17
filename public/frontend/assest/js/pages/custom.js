@@ -244,7 +244,7 @@ $('body').on('click', '.propertyCardModal', function (event) {
         });
         $(".multyimg").append(htmlContent);
     }
-  
+
     $(document).ready(function () {
         let slug = $(this).data("slug");
         if (slug) {
@@ -255,7 +255,7 @@ $('body').on('click', '.propertyCardModal', function (event) {
             });
 
             $("#whatsapplink").attr("href", `https://wa.me/${whatsApp}?text=${encodeURIComponent(propertyUrl)}`);
-          
+
             metaUpdate(projectName, projectName, image, url);
             updateShareLinks(propertyUrl);
         }
@@ -306,14 +306,14 @@ $('#subscribe').submit(function (event) {
     });
 });
 
-$('.downloadInsightReportPdf').click(function (event){
+$('.downloadInsightReportPdf').click(function (event) {
     event.preventDefault();
     let id = $(this).data("id");
     $.ajax({
 
         type: "POST",
         url: downloadInsightsRrportUrl,
-        data: { id : id},
+        data: { id: id },
         xhrFields: {
             responseType: 'blob' // Handle binary data
         },
@@ -321,7 +321,7 @@ $('.downloadInsightReportPdf').click(function (event){
             let blob = new Blob([data], { type: xhr.getResponseHeader('Content-Type') });
             let link = document.createElement('a');
             link.href = window.URL.createObjectURL(blob);
-            link.download = $.trim($('.projectTitle').data('title'))+" Insight Report.pdf";
+            link.download = $.trim($('.projectTitle').data('title')) + " Insight Report.pdf";
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -343,7 +343,7 @@ $('.downloadInsightReportPdf').click(function (event){
     });
 });
 
-function metaUpdate(title, desc, image, url){
+function metaUpdate(title, desc, image, url) {
     document.querySelector('meta[property="og:title"]').setAttribute("content", title);
     document.querySelector('meta[property="og:description"]').setAttribute("content", desc);
     document.querySelector('meta[property="og:image"]').setAttribute("content", image);
