@@ -74,7 +74,7 @@ async function loadMarkers(projects) {
                     title: location.project_name,
                 });
 
-                let priceFormatted = '₹' + project.price_from + formatPriceUnit(project.price_from_unit);
+                let priceFormatted = '₹' + location.price_from + formatPriceUnit(location.price_from_unit);
                 if (location.price_from != location.price_to || location.price_from_unit != location.price_to_unit) {
                     priceFormatted += ' - ' + location.price_to + formatPriceUnit(location.price_to_unit);
                 }
