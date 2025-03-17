@@ -63,6 +63,11 @@ $('body').on('click', '.heartIconFill, .save-property', function (e) {
     e.preventDefault();
     e.stopPropagation();
 
+    if (!isUserLoggedIn) {
+        window.location.href = '/login';
+        return;
+    }
+
     let propertyId = $(this).data('id'); // Get property ID from data-id
     let heartIcon = $(this).find('i').length ? $(this).find('i') : $(this);
     $.ajax({
@@ -171,7 +176,7 @@ function modelOpacityRemove(hideModalId, showModalId) {
     });
 }
 
-$(".propertyCardModal").click(function (event) {
+$('body').on('click', '.propertyCardModal', function (event) {
     $("#coverImage").attr("src", ""); // Clear image
     $('#property_price, #property_name, #custom_type, #location, #carpet_area, #total_floor, #total_tower, #age_of_construction, #property_type, #description').text("");
 

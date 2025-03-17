@@ -83,7 +83,7 @@
                                         </div>
                                     </div>
                                     <div class="comViewBox second">
-                                        <p>It's a...</p>
+                                        <p class="d-none show-sub-type">It's a...</p>
                                         <div class="feetSelectBox" id="property-sub-type">
 
                                         </div>
@@ -262,9 +262,10 @@
         var getComparePropertyUrl = "{{ route('property.compare') }}";
         var comparePropertytUrl = "{{ route('property.comparepage') }}";
         var baseUrl = "{{ $baseUrl }}";
+        var projectImageUrl = "{{ asset('/') }}storage/project_images/";
         var amenities = @json($amenities);
         var deviceType = "{{ getDeviceType() }}";
-        var authId = "{{ auth()->user()->id }}";
+        var authId = "{{ auth()->user()->id ?? '' }}";
 
         var allProjectsUrl = "{{ route('property.getProjectData') }}";
         var allAppraisalUrl = "{{ route('property.getAppraisalData') }}";

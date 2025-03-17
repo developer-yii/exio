@@ -4,6 +4,14 @@
 
     if ($showCityDropdown) {
         $defaultCity = 'Ahmedabad';
+        $inputCity = request('city') ?? 1;
+        $req_city = request('city');
+        if ($req_city) {
+            $city = City::find($req_city);
+            if ($city) {
+                $defaultCity = $city->city_name;
+            }
+        }
         $cities = City::where('status', 1)->get();
     }
 @endphp
@@ -21,7 +29,8 @@
                         <div class="cityDropDown moblieHide">
                             <ul>
                                 <li>
-                                    <input type="hidden" name="city_header" id="city_header" value="1" />
+                                    <input type="hidden" name="city_header" id="city_header"
+                                        value="{{ $inputCity }}" />
                                     <a class="cityClick" href="javascript:void(0)"><span
                                             id="city_header_name">{{ $defaultCity }}</span> <i
                                             class="fa-solid fa-chevron-down rotate"></i></a>
@@ -102,12 +111,12 @@
                                         </a>
                                     </li>
                                 @endif
-                                    <li>
-                                        <a href="{{ route('property.insights') }}">
-                                            <img src="{{ $baseUrl }}assest/images/project.png" alt="project"> Project
-                                            Insights
-                                        </a>
-                                    </li>
+                                <li>
+                                    <a href="{{ route('property.insights') }}">
+                                        <img src="{{ $baseUrl }}assest/images/project.png" alt="project"> Project
+                                        Insights
+                                    </a>
+                                </li>
                                 @if (Auth::user())
                                     <li>
                                         <a href="{{ route('property.shortlisted') }}">
@@ -124,7 +133,8 @@
                                 @if (Auth::user())
                                     <li>
                                         <a href="{{ route('property.compare-report') }}">
-                                            <img src="{{ $baseUrl }}assest/images/compare.png" alt="compare">Compare
+                                            <img src="{{ $baseUrl }}assest/images/compare.png"
+                                                alt="compare">Compare
                                             Reports
                                         </a>
                                     </li>

@@ -10,7 +10,7 @@ async function initMap() {
         const { Map } = await google.maps.importLibrary("maps");
         const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
         map = new Map(document.getElementById("map"), {
-            zoom: 7,
+            zoom: 12,
             center: { lat: -28.024, lng: 140.887 },
             mapId: "DEMO_MAP_ID",
             mapTypeControl: false,
@@ -76,21 +76,9 @@ async function loadMarkers(projects) {
                     title: location.project_name,
                 });
 
-                let priceRange;
-                let priceFromUnit = priceUnit[location.price_from_unit];
-                let priceToUnit = priceUnit[location.price_to_unit];
-                if (location.price_from && location.price_to) {
-                    if (priceFromUnit === 'L' && priceToUnit === 'Cr') {
-                        priceRange = `₹${location.price_from}L-${location.price_to}Cr`;
-                    } else if (priceFromUnit === 'L') {
-                        priceRange = `₹${location.price_from}L-${location.price_to}L`;
-                    } else {
-                        priceRange = `₹${location.price_from}Cr-${location.price_to}Cr`;
-                    }
-                } else if (location.price_from) {
-                    priceRange = `₹${location.price_from}${priceFromUnit}`;
-                } else {
-                    priceRange = 'Price on request';
+                let priceFormatted = '₹' + location.price_from + formatPriceUnit(location.price_from_unit);
+                if (location.price_from != location.price_to || location.price_from_unit != location.price_to_unit) {
+                    priceFormatted += ' - ' + location.price_to + formatPriceUnit(location.price_to_unit);
                 }
 
                 const infoWindowContent = `
@@ -110,7 +98,7 @@ async function loadMarkers(projects) {
                             </div>
                             <div class="priceBox">
                                 <div class="price">
-                                    <h5>${priceRange}</h5>
+                                    <h5>${priceFormatted}</h5>
                                 </div>
                             </div>
                             <div class="propertyName">
@@ -127,7 +115,7 @@ async function loadMarkers(projects) {
                                 <div class="clickTo">
                                     <a href="javascript:void(0)" class="compareBoxOpen">
                                         <input type="checkbox" class="form-check-input checkbox" id="checkbox-signin" name="compare[]" autocomplete="off" value="${location.id}">
-                                        <label for="">Compare</label>
+                                        <label for="checkbox-signin">Compare</label>
                                     </a>
                                 </div>
                             </div>
@@ -168,8 +156,8 @@ async function loadMarkers(projects) {
                         });
                     }, 100);
 
-                    map.panTo(marker.position);
-                    map.setZoom(10);
+                    // map.panTo(marker.position);
+                    // map.setZoom(4);
                 });
 
                 return marker;
@@ -209,4 +197,8 @@ function createImagePin(imageUrl) {
              alt="Location marker">
     `;
     return pin;
+}
+
+function formatPriceUnit(priceUnit_query) {
+    return priceUnit[priceUnit_query] || '';
 }

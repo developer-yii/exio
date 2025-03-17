@@ -81,7 +81,7 @@ function loadMoreProjects() {
     let bhk = $('[name="bhk[]"]:checked').map(function () {
         return $(this).val();
     }).get();
-    let amenities = $('[name="amenities[]"]:checked').map(function () {
+    let amenities_filter = $('[name="amenities[]"]:checked').map(function () {
         return $(this).val();
     }).get();
     let minPrice = $('#slider-min').val();
@@ -97,7 +97,7 @@ function loadMoreProjects() {
             property_type: propertyType,
             property_sub_types: subTypes_o,
             bhk: bhk,
-            amenities: amenities,
+            amenities: amenities_filter,
             minPrice: minPrice,
             maxPrice: maxPrice
         },
@@ -143,7 +143,7 @@ function loadMoreAppraisal() {
             if (response.status && response.data.data.length) {
                 var newProjects = response.data.data;
                 newProjects.forEach(function (proj) {
-                    $('#pills-profile .row').append(renderProject(proj));
+                    $('#pills-profile .row').append(renderPropertyCard(proj, amenities));
                 });
                 if (response.data.current_page >= response.data.last_page) {
                     appraisalLastPage = true;
@@ -173,7 +173,7 @@ function loadMoreBestMatch() {
             if (response.status && response.data.data.length) {
                 var newProjects = response.data.data;
                 newProjects.forEach(function (proj) {
-                    $('#pills-match .row').append(renderProject(proj));
+                    $('#pills-match .row').append(renderPropertyCard(proj, amenities));
                 });
                 if (response.data.current_page >= response.data.last_page) {
                     bestMatchLastPage = true;
@@ -187,49 +187,4 @@ function loadMoreBestMatch() {
             isBestMatchLoading = false;
         }
     });
-}
-
-function renderProject(project) {
-    var isWishlisted = project.wishlisted_by_users
-        .some(function (user) {
-            return user.id === authId;
-        });
-    var html = '<div class="col-md-6">';
-    html += '<div class="propertyCard" data-id="' + project.id +
-        '">';
-    html += '<div class="imgBox">';
-    html += '<img src="' + assetUrl + 'frontend/assest/images/property-img.png" alt="property-img">';
-    html +=
-        '<div class="imgheader"><span>Best for Investment</span><i data-id="' + project.id +
-        '" class="' + (isWishlisted ? 'fa-solid' : 'fa-regular') +
-        ' fa-heart heartIconFill"></i></div>';
-    html += '</div>';
-    html += '<div class="priceBox">';
-    html += '<div class="price"><h5>₹' + project.price_from + 'L-' + project.price_to + 'Cr</h5></div>';
-    html += '<div class="boxLogo"><img src="' + assetUrl +
-        'frontend/assest/images/x-btn.png" alt="x-btn"><span>' + (project.exio_suggest_percentage ||
-            0) + '%</span></div>';
-    html += '</div>';
-    html += '<div class="propertyName"><h5>' + project.project_name + '</h5></div>';
-    html += '<div class="locationProperty">';
-    html += '<div class="homeBox comBox">';
-    html += '<img src="' + assetUrl + 'frontend/assest/images/Home.png" alt="Home">';
-    var floorPlans = "";
-    if (project.floor_plans && project.floor_plans.length) {
-        floorPlans = project.floor_plans.map(function (plan) {
-            return plan.carpet_area + " Sqft";
-        }).join(", ");
-    }
-    html += '<p>' + (project.custom_property_type || '') + ' | ' + floorPlans + ' | ' + (project
-        .location ? project.location.location_name : '') + '</p>';
-    html += '</div>';
-    html += '</div>';
-    html += '<div class="addressBox">';
-    html += '<img src="' + assetUrl + 'frontend/assest/images/Home.png" alt="Home">';
-    html += '<p>Lift, Gym, Park, Club House Lift, Gym, Park, Club House</p>';
-    html += '<a href="javascript:void(0)">more</a>';
-    html += '</div>';
-    html += '</div>';
-    html += '</div>';
-    return html;
 }

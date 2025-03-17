@@ -91,6 +91,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
 
+    <script type="text/javascript">
+        var isUserLoggedIn = @json(Auth::check());
+    </script>
+
     <script src="{{ frontendPageJsLink('custom.js') }}"></script>
 
     {{-- Extra Js --}}

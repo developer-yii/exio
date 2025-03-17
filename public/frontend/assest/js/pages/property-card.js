@@ -3,8 +3,8 @@ $(document).ready(function () {
 });
 
 function renderPropertyCard(project, amenities) {
-    console.log(project);
-    console.log(amenities);
+    // console.log(project);
+    // console.log(amenities);
     // Format price
     let priceFormatted = '₹' + project.price_from + formatPriceUnit(project.price_from_unit);
     if (project.price_from != project.price_to || project.price_from_unit != project.price_to_unit) {
@@ -27,7 +27,7 @@ function renderPropertyCard(project, amenities) {
             <div class="propertyCard propertyCardModal cursor-pointer"
                 data-id="${project.id}"
                 data-slug="${project.slug}"
-                data-image="${project.getCoverImageUrl}"
+                data-image="${projectImageUrl}${project.cover_image}"
                 data-project-name="${project.project_name}"
                 data-builder-name="${project.builder.builder_name || 'N/A'}"
                 data-custom-type="${project.custom_property_type || 'N/A'}"
@@ -46,7 +46,7 @@ function renderPropertyCard(project, amenities) {
                 data-like-class="${project.is_wishlisted ? 'fa-solid' : 'fa-regular'}">
 
                 <div class="imgBox">
-                    <img src="${project.getCoverImageUrl}" alt="property-img">
+                    <img src="${projectImageUrl}${project.cover_image}" alt="property-img">
                     <div class="imgheader">
                         ${project.projectBadge ?
             `<span>${project.projectBadge.name}</span>` :
@@ -62,7 +62,7 @@ function renderPropertyCard(project, amenities) {
                         <h5>${priceFormatted}</h5>
                     </div>
                     <div class="boxLogo">
-                        <img src="${baseUrl}frontend/assest/images/x-btn.png" alt="x-btn">
+                        <img src="${baseUrl}/assest/images/x-btn.png" alt="x-btn">
                         <span>${project.exio_suggest_percentage}%</span>
                     </div>
                 </div>
@@ -74,21 +74,21 @@ function renderPropertyCard(project, amenities) {
                 <div class="locationProperty">
                     ${project.custom_property_type ? `
                         <div class="homeBox comBox">
-                            <img src="${baseUrl}frontend/assest/images/Home.png" alt="Home">
+                            <img src="${baseUrl}/assest/images/Home.png" alt="Home">
                             <p>${project.custom_property_type}</p>
                         </div>
                     ` : ''}
 
                     ${(project.location.location_name || project.city.city_name) ? `
                         <div class="location comBox">
-                            <img src="${baseUrl}frontend/assest/images/Location.png" alt="Location">
+                            <img src="${baseUrl}/assest/images/Location.png" alt="Location">
                             <p>${project.location.location_name}${project.location.location_name && project.city.city_name ? ', ' : ''}${project.city.city_name}</p>
                         </div>
                     ` : ''}
                 </div>
 
                 <div class="addressBox">
-                    <img src="${baseUrl}frontend/assest/images/Home.png" alt="Home">
+                    <img src="${baseUrl}/assest/images/Home.png" alt="Home">
                     <p class="amenityText d-flex">
                         ${amenityList.length ? `
                             <span class="amenity-text">${displayText}</span>
@@ -106,25 +106,28 @@ function renderPropertyCard(project, amenities) {
 
 function initAmenityToggles() {
     document.querySelectorAll('.addressBox .toggle-amenities').forEach(function (link) {
-        link.addEventListener('click', function () {
+        link.addEventListener('click', function (event) {
+            event.stopPropagation();
             var addressBox = this.closest('.addressBox');
             var amenityText = addressBox.querySelector('.amenity-text');
             var moreAmenities = addressBox.querySelector('.more-amenities');
             var isExpanded = this.textContent === 'less';
 
             if (isExpanded) {
-                amenityText.textContent = moreAmenities.textContent.substring(0, 20) + '...';
+                amenityText.style.display = 'block';
+                moreAmenities.style.display = 'none';
                 this.textContent = 'more';
             } else {
-                amenityText.textContent = moreAmenities.textContent;
+                amenityText.style.display = 'none';
+                moreAmenities.style.display = 'block';
                 this.textContent = 'less';
             }
         });
     });
 }
 
-function formatPriceUnit(priceUnit) {
-    return priceUnit[priceUnit] || '';
+function formatPriceUnit(priceUnit_query) {
+    return priceUnit[priceUnit_query] || '';
 }
 
 function getAgeOfConstruction(age) {

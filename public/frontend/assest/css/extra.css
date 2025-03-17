@@ -24,3 +24,17 @@
 .propertyCard .addressBox p {
     width: unset !important;
 }
+
+.gm-style .gm-style-iw-d {
+    padding: 0 !important;
+    overflow: scroll !important;
+    scrollbar-width: none;
+}
+
+.propertyCard .imgBox img {
+    object-fit: contain;
+}
+
+.propertyCard.propertyCardMap .addressBoxMap .clickTo label {
+    color: #000 !important;
+}

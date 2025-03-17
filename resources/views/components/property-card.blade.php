@@ -94,25 +94,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.addressBox .toggle-amenities').forEach(function(link) {
-            link.addEventListener('click', function() {
-                var addressBox = this.closest('.addressBox');
-                var amenityText = addressBox.querySelector('.amenity-text');
-                var moreAmenities = addressBox.querySelector('.more-amenities');
-                var isExpanded = this.textContent === 'less';
-
-                if (isExpanded) {
-                    amenityText.textContent = moreAmenities.textContent.substring(0, 20) +
-                        '...';
-                    this.textContent = 'more';
-                } else {
-                    amenityText.textContent = moreAmenities.textContent;
-                    this.textContent = 'less';
-                }
-            });
-        });
-    });
-</script>

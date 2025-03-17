@@ -13,7 +13,10 @@ $(document).ready(function () {
                         </label>
                     </div>`;
     }
-    $('#property-sub-type').html(htmlsub);
+    if (htmlsub) {
+        $('#property-sub-type').html(htmlsub);
+        $('.show-sub-type').removeClass('d-none');
+    }
 
     $('#slider-min-value').text(sliderMin);
     $('#slider-max-value').text(sliderMax);
@@ -48,7 +51,10 @@ $(document).ready(function () {
                         </label>
                     </div>`;
         }
-        $('#property-sub-type').html(html);
+        if (html) {
+            $('#property-sub-type').html(html);
+            $('.show-sub-type').removeClass('d-none');
+        }
 
         $('#bhk-filter').addClass('d-none');
     });

@@ -73,7 +73,9 @@ class PropertyFilterController extends Controller
         $minPrice = $request->input('minPrice');
         $maxPrice = $request->input('maxPrice');
 
-        $projects = Project::with('projectImages', 'projectBadge', 'floorPlans', 'city', 'location');
+        $projects = projectQuery();
+
+        $projects = $projects->with('projectBadge', 'floorPlans');
 
         if ($city) {
             $projects = $projects->where('city_id', $city);
@@ -145,7 +147,9 @@ class PropertyFilterController extends Controller
     public function getAppraisalData(Request $request)
     {
         $perPage = $request->input('perPage', 10);
-        $appraisal = Project::with('projectImages', 'projectBadge', 'floorPlans', 'city', 'location')->where('appraisal_property', 'yes')->isActive();
+        $appraisal = projectQuery();
+
+        $appraisal = $appraisal->with('projectBadge', 'floorPlans')->where('appraisal_property', 'yes');
 
         if (Auth::check()) {
             $appraisal = $appraisal->with('wishlistedByUsers');
@@ -163,7 +167,9 @@ class PropertyFilterController extends Controller
     public function getBestMatchData(Request $request)
     {
         $perPage = $request->input('perPage', 10);
-        $bestMatch = Project::with('projectImages', 'projectBadge', 'floorPlans', 'city', 'location')->isActive()->orderBy('exio_suggest_percentage', 'desc');
+        $bestMatch = projectQuery();
+
+        $bestMatch = $bestMatch->with('projectBadge', 'floorPlans')->isActive()->orderBy('exio_suggest_percentage', 'desc');
 
         if (Auth::check()) {
             $bestMatch = $bestMatch->with('wishlistedByUsers');
@@ -180,7 +186,9 @@ class PropertyFilterController extends Controller
 
     public function getSingleProjectData(Request $request)
     {
-        $project = Project::with('projectImages', 'projectBadge', 'floorPlans', 'city', 'location', 'projectDetails');
+        $project = projectQuery();
+
+        $project = $project->with('projectBadge', 'floorPlans');
 
         if (Auth::check()) {
             $project = $project->with('wishlistedByUsers');
