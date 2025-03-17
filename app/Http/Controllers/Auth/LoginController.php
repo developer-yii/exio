@@ -68,24 +68,24 @@ class LoginController extends Controller
         $credentials['password'] = $request->password;
         if (isset($get_user) && $get_user != NULL) {
 
-            if (($get_user->user_type == '1') || ($get_user->user_type == '2')) {
+            if (($get_user->user_type == '1') || ($get_user->user_type == '3')) {
                 if (Auth::attempt($credentials)) {
                     return redirect()->intended(route('admin.home'));
                 } else {
                     return redirect('login')->withErrors(['password' => 'The Password is wrong.'])->withInput();
                 }
             }
-            if ($get_user->user_type == '3' && $get_user->is_active == '1' && $get_user->email_verified_at != null) {
+            if ($get_user->user_type == '2' && $get_user->is_active == '1' && $get_user->email_verified_at != null) {
                 if (Auth::attempt($credentials)){
                     return redirect()->intended(route('customer.home'));
                 } else {
                     return redirect('login')->withErrors(['password' => 'The Password is wrong.'])->withInput();
                 }
             }
-            if ($get_user->user_type == '3' && $get_user->email_verified_at == null) {
+            if ($get_user->user_type == '2' && $get_user->email_verified_at == null) {
                 return redirect('login')->withErrors(['approve' => 'Please verify email first.'])->withInput();
             }
-            if ($get_user->user_type == '3' && $get_user->email_verified_at != null && $get_user->is_active == '0') {
+            if ($get_user->user_type == '2' && $get_user->email_verified_at != null && $get_user->is_active == '0') {
                 return redirect('login')->withErrors(['approve' => 'Your account is not activated'])->withInput();
             }
         } else {

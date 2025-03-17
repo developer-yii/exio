@@ -114,6 +114,7 @@ $(document).ready(function () {
                     $(formId).find("#id").val(id);
                     $(formId).find(".name").val(result.data.name);
                     $(formId).find(".email").val(result.data.email);
+                    $(formId).find(".user_type").val(result.data.role_type);
                     $(formId).find(".mobile").val(result.data.mobile);
                     $(formId).find(".status").val(result.data.status);
                 } else {
@@ -256,6 +257,7 @@ $(document).ready(function () {
                     return full["mobile"];
                 },
             },
+            { name: "role_type", data: "user_role"},
             {
                 name: "status",
                 data: "status_text",

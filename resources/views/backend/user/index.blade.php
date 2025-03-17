@@ -49,6 +49,7 @@
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Mobile</th>
+                                <th>Role</th>
                                 <th>Status</th>
                                 <th>Created at</th>
                                 <th>Actions</th>
@@ -93,6 +94,21 @@
                                     <label for="email" class="form-label">Email<span
                                             class="text-danger add_edit_required">*</span></label>
                                     <input type="text" name="email" class="form-control email" value="">
+                                    <span class="error"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="user_type" class="form-label">User Type<span
+                                            class="text-danger add_edit_required">*</span></label>
+                                    <select class="form-control user_type" name="user_type">
+                                        <option value=""> Select User Type</option>
+
+                                        @foreach ($roles as $role_id => $role_name)
+                                            <option value="{{ $role_id }}">{{ $role_name }}</option>
+                                        @endforeach
+
+                                    </select>
                                     <span class="error"></span>
                                 </div>
                             </div>

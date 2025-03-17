@@ -174,6 +174,11 @@ class BuilderController extends Controller
 
     public function delete(Request $request)
     {
+        if(!isSuperAdmin()){
+            $result = ['status' => false, 'message' => 'You do not have permission to delete this builder.'];
+            return response()->json($result);
+        }
+
         $model = Builder::where('id', $request->id)->first();
         if ($model && $model->delete()) {
             $result = ['status' => true, 'message' => 'Record deleted successfully'];

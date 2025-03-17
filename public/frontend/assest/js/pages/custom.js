@@ -194,6 +194,7 @@ $(".propertyCardModal").click(function (event) {
     let description = $(this).data("description");
     let whatsApp = $(this).data("whatsapp-number");
     let faClass = $(this).data("like-class");
+    let url = $(this).data("url");
 
     // // Update modal content dynamically
     $("#coverImage").attr("src", image);
@@ -248,6 +249,8 @@ $(".propertyCardModal").click(function (event) {
         });
 
         $("#whatsapplink").attr("href", `https://wa.me/${whatsApp}?text=${encodeURIComponent(propertyUrl)}`);
+
+        metaUpdate(projectName, projectName, image, url)
         updateShareLinks(propertyUrl);
     }
 
@@ -258,4 +261,91 @@ $(".propertyCardModal").click(function (event) {
     }
 
 });
+
+$('#subscribe').submit(function (event) {
+    event.preventDefault();
+    $('.error').html("");
+
+
+    let form = $(this); // Reference to the form
+    const $submitButton = form.find('button[type="submit"]');
+    let formData = form.serialize(); // Serialize form data
+
+    $.ajax({
+
+        type: "POST",
+        url: subscribeUrl,
+        data: formData,
+        beforeSend: function () {
+            $submitButton.prop('disabled', true);
+        },
+        success: function (result) {
+            $submitButton.prop('disabled', false);
+            form[0].reset();
+            toastr.success(result.message);
+
+        },
+        error: function (xhr) {
+            $submitButton.prop('disabled', false);
+
+            if (xhr.status === 422) { // Laravel validation error
+                let errors = xhr.responseJSON.errors;
+                $.each(errors, function (key, messages) {
+                    toastr.error(messages[0]); // Show the first error message for each field
+                });
+            } else {
+                toastr.error('Something went wrong!');
+            }
+        }
+    });
+});
+
+$('.downloadInsightReportPdf').click(function (event){
+    event.preventDefault();
+    let id = $(this).data("id");
+    $.ajax({
+
+        type: "POST",
+        url: downloadInsightsRrportUrl,
+        data: { id : id},
+        xhrFields: {
+            responseType: 'blob' // Handle binary data
+        },
+        success: function (data, status, xhr) {
+            let blob = new Blob([data], { type: xhr.getResponseHeader('Content-Type') });
+            let link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = $.trim($('.projectTitle').data('title'))+" Insight Report.pdf";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        },
+        error: function (xhr) {
+            if (xhr.status === 404) {
+                toastr.error('File not found.');
+            } else if (xhr.status === 401) {
+                toastr.error('Please login first to download the report.');
+            } else if (xhr.status === 422) {
+                let errors = xhr.responseJSON.errors;
+                $.each(errors, function (key, messages) {
+                    toastr.error(messages[0]);
+                });
+            } else {
+                toastr.error('Something went wrong!');
+            }
+        }
+    });
+});
+
+function metaUpdate(title, desc, image, url){
+    document.querySelector('meta[property="og:title"]').setAttribute("content", title);
+    document.querySelector('meta[property="og:description"]').setAttribute("content", desc);
+    document.querySelector('meta[property="og:image"]').setAttribute("content", image);
+    document.querySelector('meta[property="og:url"]').setAttribute("content", url);
+
+    document.querySelector('meta[name="twitter:title"]').setAttribute("content", title);
+    document.querySelector('meta[name="twitter:description"]').setAttribute("content", desc);
+    document.querySelector('meta[name="twitter:image"]').setAttribute("content", image);
+
+}
 

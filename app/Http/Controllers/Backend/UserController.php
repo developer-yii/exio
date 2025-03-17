@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -25,18 +26,24 @@ class UserController extends Controller
     public function index()
     {
         $status = User::$status;
-        return view('backend.user.index', compact('status'));
+        $roles = User::$role;
+        return view('backend.user.index', compact('status', 'roles'));
     }
 
     public function get(Request $request)
     {
         $statusLabels = User::$status;
+        $roleLabels = User::$role;
 
-        $sqlQuery = User::where('users.role_type', User::USER);
+        // $sqlQuery = User::where('users.role_type', User::USER);
+        $sqlQuery = User::where('id', '!=', Auth::id());
 
         return DataTables::eloquent($sqlQuery)
             ->editColumn('created_at', function ($row) {
                 return $row->created_at->format('d.m.Y');
+            })
+            ->addColumn('user_role', function ($row) use ($roleLabels) {
+                return $roleLabels[$row->role_type] ?? "";
             })
             ->addColumn('status_text', function ($row) use ($statusLabels) {
                 return $statusLabels[$row->status] ?? "";
@@ -83,6 +90,8 @@ class UserController extends Controller
             'mobile' => 'nullable|bail|string|regex:/^([0-9\s\-\+\(\)]*)$/|min:9|max:13',
             'name' => 'required|string|max:100',
             'password' => $isUpdate ? 'nullable|same:confirm_password|min:8' : 'required|same:confirm_password|min:8',
+            'confirm_password' => $isUpdate ? 'nullable' : 'required',
+            'user_type' => 'required',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -101,7 +110,8 @@ class UserController extends Controller
         $model->email = $request->email;
         $model->mobile =  $request->filled('mobile') ? str_replace(' ', '', trim($request->mobile)) : null;
         $model->status = $request->boolean('status', false);
-        $model->role_type = User::USER;
+        // $model->role_type = User::USER;
+        $model->role_type = $request->user_type;
 
         if ($request->filled('password')) {
             $model->password = Hash::make($request->password);

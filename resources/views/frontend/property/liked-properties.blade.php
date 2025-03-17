@@ -49,6 +49,7 @@
                                     data-multi-image="{{ json_encode($property->projectImages->take(3)->map(fn($detail) => ['imgurl' => $detail->getProjectImageUrl()])) }}"
                                     data-whatsapp-number="{{ getSettingFromDb('support_mobile') }}"
                                     data-like-class = "{{ $property->wishlistedByUsers->contains(auth()->id()) ? 'fa-solid' : 'fa-regular' }}"
+                                    data-url="{{ route('property.details', $property->slug ?? '#') }}"
                                 >
 
                                     <div class="imgBox">

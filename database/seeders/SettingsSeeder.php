@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Setting;
+use Carbon\Carbon;
 
 class SettingsSeeder extends Seeder
 {
@@ -49,17 +50,23 @@ class SettingsSeeder extends Seeder
                 'description' => 'Support phone number.',
                 'is_default' => 1
             ],
+            [
+                'setting_key' => 'check_match_video',
+                'setting_label' => 'Check & Match Video',
+                'setting_value' => '',
+                'description' => 'Check & Match Video',
+                'is_default' => 1
+            ],
         ];
 
         foreach ($settings as $setting) {
             Setting::updateOrInsert(
                 ['setting_key' => $setting['setting_key']],
-                $setting
+                array_merge($setting, [
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ])
             );
         }
-
-        // foreach ($settings as $setting) {
-        //     Setting::create($setting);
-        // }
     }
 }

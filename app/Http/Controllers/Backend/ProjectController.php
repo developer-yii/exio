@@ -276,6 +276,19 @@ class ProjectController extends Controller
             $model->property_document_title = $request->property_document_title;
         }
 
+        if ($request->hasFile('insights_report_file')) {
+            if (isset($model->insights_report_file) && !empty($model->insights_report_file) && Storage::exists('public/project/insights-reports/' . $model->insights_report_file)) {
+                Storage::delete('public/project/insights-reports/' . $model->insights_report_file);
+            }
+
+            $file = $request->file('insights_report_file');
+            $fileName = time() . '_' . Str::random(20) . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/project/insights-reports', $fileName);
+
+            $model->insights_report_file = $fileName;
+
+        }
+
         if ($request->hasFile('video')) {
             if (isset($model->video) && !empty($model->video) && Storage::exists('public/project/videos/' . $model->video)) {
                 Storage::delete('public/project/videos/' . $model->video);
@@ -542,6 +555,13 @@ class ProjectController extends Controller
 
     public function delete(Request $request)
     {
+        if(!isSuperAdmin()){
+            return response()->json([
+                'status' => false,
+                'message' => 'You do not have permission to delete this project.'
+            ], 403);
+        }
+
         $model = Project::where('id', $request->id)->first();
         if ($model && $model->delete()) {
             $result = ['status' => true, 'message' => 'Record deleted successfully'];

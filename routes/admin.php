@@ -18,11 +18,13 @@ use App\Http\Controllers\Backend\CommonController;
 use App\Http\Controllers\Backend\BuilderController;
 use App\Http\Controllers\Backend\CmsPagesController;
 use App\Http\Controllers\Backend\DownloadBrochureDataController;
+use App\Http\Controllers\Backend\InsightReportDataController;
 use App\Http\Controllers\Backend\LocalityController;
 use App\Http\Controllers\Backend\NewsController;
 use App\Http\Controllers\Backend\ProjectController;
 use App\Http\Controllers\Backend\ReraProgressController;
 use App\Http\Controllers\Backend\ProjectBadgeController;
+use App\Http\Controllers\Backend\SubscriberController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/', function () {
@@ -39,19 +41,50 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('reset', [ForgotPasswordController::class, 'reset'])->name('password.reset.post');
     });
 
-    Route::middleware(['auth', 'isAdmin'])->group(function () {
+    Route::middleware(['auth', 'adminOrEmployee'])->group(function () {
         Route::post('logout', [AuthController::class, 'logout'])->name('logout');
-        Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])->name('password.confirm');
-        Route::post('confirm-password', [ConfirmablePasswordController::class, 'store'])->name('password.confirm.post');
-
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-        Route::post('/upload-image', [DashboardController::class, 'ckEditorimageUpload'])->name('ckeditor.image.upload');
 
         Route::group(['prefix' => 'profile'], function () {
             Route::get('/', [UserController::class, 'profile'])->name('profile');
             Route::post('/profileupdate', [UserController::class, 'profileupdate'])->name('profile.profileupdate');
             Route::post('/updatepassword', [UserController::class, 'updatepassword'])->name('profile.updatepassword');
         });
+
+        Route::group(['prefix' => 'builders'], function () {
+            Route::get('/', [BuilderController::class, 'index'])->name('builder');
+            Route::get('/get', [BuilderController::class, 'get'])->name('builder.list');
+            Route::get('/detail', [BuilderController::class, 'detail'])->name('builder.detail');
+            Route::post('/delete', [BuilderController::class, 'delete'])->name('builder.delete');
+            Route::post('/addupdate', [BuilderController::class, 'addupdate'])->name('builder.addupdate');
+        });
+
+        Route::group(['prefix' => 'projects'], function () {
+            Route::get('/', [ProjectController::class, 'index'])->name('project');
+            Route::get('/get', [ProjectController::class, 'get'])->name('project.list');
+            Route::get('/detail', [ProjectController::class, 'detail'])->name('project.detail');
+            Route::post('/delete', [ProjectController::class, 'delete'])->name('project.delete');
+            Route::post('/addupdate', [ProjectController::class, 'addupdate'])->name('project.addupdate');
+            Route::get('/add', [ProjectController::class, 'add'])->name('project.add');
+            Route::get('/edit/{id}', [ProjectController::class, 'edit'])->name('project.edit');
+            Route::get('/get-property-sub-types', [ProjectController::class, 'getPropertySubTypes'])->name('project.get-property-sub-types');
+            Route::get('/{id}', [ProjectController::class, 'view'])->name('project.view');
+        });
+    });
+
+    Route::middleware(['auth', 'isAdmin'])->group(function () {
+        // Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+        Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])->name('password.confirm');
+        Route::post('confirm-password', [ConfirmablePasswordController::class, 'store'])->name('password.confirm.post');
+
+        // Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::post('/upload-image', [DashboardController::class, 'ckEditorimageUpload'])->name('ckeditor.image.upload');
+
+        // Route::group(['prefix' => 'profile'], function () {
+        //     Route::get('/', [UserController::class, 'profile'])->name('profile');
+        //     Route::post('/profileupdate', [UserController::class, 'profileupdate'])->name('profile.profileupdate');
+        //     Route::post('/updatepassword', [UserController::class, 'updatepassword'])->name('profile.updatepassword');
+        // });
 
         Route::group(['prefix' => 'users'], function () {
             Route::get('/', [UserController::class, 'index'])->name('user');
@@ -104,13 +137,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/cities', [CommonController::class, 'getAllCities'])->name('common.cities.all');
         });
 
-        Route::group(['prefix' => 'builders'], function () {
-            Route::get('/', [BuilderController::class, 'index'])->name('builder');
-            Route::get('/get', [BuilderController::class, 'get'])->name('builder.list');
-            Route::get('/detail', [BuilderController::class, 'detail'])->name('builder.detail');
-            Route::post('/delete', [BuilderController::class, 'delete'])->name('builder.delete');
-            Route::post('/addupdate', [BuilderController::class, 'addupdate'])->name('builder.addupdate');
-        });
+        // Route::group(['prefix' => 'builders'], function () {
+        //     Route::get('/', [BuilderController::class, 'index'])->name('builder');
+        //     Route::get('/get', [BuilderController::class, 'get'])->name('builder.list');
+        //     Route::get('/detail', [BuilderController::class, 'detail'])->name('builder.detail');
+        //     Route::post('/delete', [BuilderController::class, 'delete'])->name('builder.delete');
+        //     Route::post('/addupdate', [BuilderController::class, 'addupdate'])->name('builder.addupdate');
+        // });
 
         Route::group(['prefix' => 'amenities'], function () {
             Route::get('/', [AmenityController::class, 'index'])->name('amenity');
@@ -128,17 +161,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/addupdate', [LocalityController::class, 'addupdate'])->name('locality.addupdate');
         });
 
-        Route::group(['prefix' => 'projects'], function () {
-            Route::get('/', [ProjectController::class, 'index'])->name('project');
-            Route::get('/get', [ProjectController::class, 'get'])->name('project.list');
-            Route::get('/detail', [ProjectController::class, 'detail'])->name('project.detail');
-            Route::post('/delete', [ProjectController::class, 'delete'])->name('project.delete');
-            Route::post('/addupdate', [ProjectController::class, 'addupdate'])->name('project.addupdate');
-            Route::get('/add', [ProjectController::class, 'add'])->name('project.add');
-            Route::get('/edit/{id}', [ProjectController::class, 'edit'])->name('project.edit');
-            Route::get('/get-property-sub-types', [ProjectController::class, 'getPropertySubTypes'])->name('project.get-property-sub-types');
-            Route::get('/{id}', [ProjectController::class, 'view'])->name('project.view');
-        });
+        // Route::group(['prefix' => 'projects'], function () {
+        //     Route::get('/', [ProjectController::class, 'index'])->name('project');
+        //     Route::get('/get', [ProjectController::class, 'get'])->name('project.list');
+        //     Route::get('/detail', [ProjectController::class, 'detail'])->name('project.detail');
+        //     Route::post('/delete', [ProjectController::class, 'delete'])->name('project.delete');
+        //     Route::post('/addupdate', [ProjectController::class, 'addupdate'])->name('project.addupdate');
+        //     Route::get('/add', [ProjectController::class, 'add'])->name('project.add');
+        //     Route::get('/edit/{id}', [ProjectController::class, 'edit'])->name('project.edit');
+        //     Route::get('/get-property-sub-types', [ProjectController::class, 'getPropertySubTypes'])->name('project.get-property-sub-types');
+        //     Route::get('/{id}', [ProjectController::class, 'view'])->name('project.view');
+        // });
 
         Route::group(['prefix' => 'rera-progress'], function () {
             Route::get('/get', [ReraProgressController::class, 'get'])->name('rera_progress.list');
@@ -173,9 +206,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/delete', [ProjectBadgeController::class, 'delete'])->name('project-badge.delete');
             Route::post('/addupdate', [ProjectBadgeController::class, 'addupdate'])->name('project-badge.addupdate');
         });
+
         Route::group(['prefix' => 'download-brochure'], function () {
             Route::get('/', [DownloadBrochureDataController::class, 'index'])->name('download-brochure');
             Route::get('/get', [DownloadBrochureDataController::class, 'get'])->name('download-brochure.list');
+        });
+
+        Route::group(['prefix' => 'insight-reports'], function () {
+            Route::get('/', [InsightReportDataController::class, 'index'])->name('insight-reports');
+            Route::get('/get', [InsightReportDataController::class, 'get'])->name('insight-reports.list');
+        });
+
+        Route::group(['prefix' => 'subscriber'], function () {
+            Route::get('/', [SubscriberController::class, 'index'])->name('subscriber');
+            Route::get('/get', [SubscriberController::class, 'get'])->name('subscriber.list');
         });
     });
 });

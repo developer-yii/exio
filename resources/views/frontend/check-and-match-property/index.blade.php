@@ -12,7 +12,11 @@
                     <div class="leftVideoSec">
                         <div class="videoCoverImage">
                             <video autoplay muted loop>
-                                <source src="{{ $baseUrl }}assest/images/video1.mp4">
+                                @if(getCheckAndMatchVideoPath($checkandmatch->setting_value))
+                                    <source src="{{ getCheckAndMatchVideoPath($checkandmatch->setting_value) }}">
+                                @else
+                                    <source src="{{ $baseUrl }}assest/images/video1.mp4">
+                                @endif
                             </video>
                         </div>
                     </div>
@@ -27,7 +31,7 @@
                                 <img src="{{ $baseUrl }}assest/images/logo-img.png" alt="">
                                 <h4>Bot</h4>
                             </div>
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                            <p>{{ $checkandmatch->description ?? '' }}</p>
                             <a data-bs-toggle="modal" data-bs-target="#lookingProperty" href="javascript:void(0)"
                                 class="btn linkBtn">Start Check & Match Property</a>
                         </div>
