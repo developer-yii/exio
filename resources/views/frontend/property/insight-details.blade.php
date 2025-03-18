@@ -5,6 +5,13 @@
 @endphp
 
 @section('title', $metaTitle)
+{{-- @section('meta_details') --}}
+    @section('og_title', $metaTitle)
+    @section('og_description', $metaDesc)
+    @section('og_image', asset($project->getCoverImageUrl()))
+    @section('og_url', url()->current())
+{{-- @endsection --}}
+
 @extends('frontend.layouts.app')
 @section('content')
     <!-- compare project section -->

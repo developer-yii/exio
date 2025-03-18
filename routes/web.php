@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\Frondend\ContactController;
-use App\Http\Controllers\Frondend\PropertyController;
+use App\Http\Controllers\Frontend\ContactController;
+use App\Http\Controllers\Frontend\PropertyController;
 use App\Http\Controllers\Frontend\AuthController;
 use App\Http\Controllers\Frontend\CheckAndMatchPropertyController;
 use App\Http\Controllers\Frontend\CityController;
+use App\Http\Controllers\Frontend\ForumController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\PageController;
@@ -87,6 +88,13 @@ Route::group(['prefix' => 'property'], function () {
     Route::get('/insights', [PropertyController::class, 'propertyInsights'])->name('property.insights');
     Route::get('/insight-details/{slug}', [PropertyController::class, 'insightDetails'])->name('property.insight-details');
     Route::get('/{slug}', [PropertyController::class, 'details'])->name('property.details');
+});
+
+Route::group(['prefix' => 'forum'], function () {
+    Route::get('/', [ForumController::class, 'forumList'])->name('forum');
+    Route::get('/details/{id}', [ForumController::class, 'forumDetails'])->name('forum-details');
+    Route::post('question/submit', [ForumController::class, 'questionSubmit'])->name('question.submit');
+    Route::post('answer/submit', [ForumController::class, 'answerSubmit'])->name('answer.submit');
 });
 
 Route::middleware(['auth'])->group(function () {

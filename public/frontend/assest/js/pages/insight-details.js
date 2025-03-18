@@ -72,8 +72,8 @@ new Chart(ctx, {
           usePointStyle: true,
           pointStyle: 'circle',
           font: { size: 12 },
-          boxWidth: 20,
-          boxHeight: 20
+          boxWidth: 8,
+          boxHeight: 8
         }
       }
     },
@@ -146,4 +146,4 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 // Call the function to update share links when the page loads
-window.onload = updateShareLinks;
+// window.onload = updateShareLinks;

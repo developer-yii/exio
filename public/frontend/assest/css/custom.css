@@ -81,6 +81,17 @@
     max-width: 100%;
 }
 
+.four-line-text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4; /* Limit to 4 lines */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    max-width: 100%;
+    position: relative;
+}
+
 .five-line-text {
     display: -webkit-box;
     -webkit-box-orient: vertical;
