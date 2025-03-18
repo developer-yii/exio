@@ -148,11 +148,11 @@ $(document).ready(function () {
                                 <div class="locationProperty">
                                     <div class="homeBox comBox">
                                         <img src="${baseUrl}assest/images/Home.png" alt="Home">
-                                        <p title="${property.custom_property_type}">${property.truncatedPropertyType}</p>
+                                        <p class="one-line-text" title="${property.custom_property_type ?? ''}">${property.custom_property_type ?? ''}</p>
                                     </div>
                                     <div class="location comBox">
                                         <img src="${baseUrl}assest/images/Location.png" alt="Location">
-                                        <p title="${property.location_city}">${property.truncatedLocation}</p>
+                                        <p class="one-line-text" title="${property.location_city}">${property.location_city}</p>
                                     </div>
                                 </div>
                             </div>
@@ -180,6 +180,7 @@ $(document).ready(function () {
     if (storedIds) {
         try {
             let idsArray = JSON.parse(storedIds);
+
             if (Array.isArray(idsArray) && idsArray.length > 0) {
                 idsArray.forEach(id => {
                     $(".checkbox[value='" + id + "']").prop("checked", true);

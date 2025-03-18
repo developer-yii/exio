@@ -69,6 +69,13 @@ Route::middleware(['auth', 'isUser'])->group(function () {
     Route::get('/check-and-match-property/result', [CheckAndMatchPropertyController::class, 'checkAndMatchPropertyResult'])->name('front.check-and-match-property.result');
 });
 
+Route::group(['prefix' => 'forum'], function () {
+    Route::get('/', [ForumController::class, 'forumList'])->name('forum');
+    Route::get('/details/{id}', [ForumController::class, 'forumDetails'])->name('forum-details');
+    Route::post('question/submit', [ForumController::class, 'questionSubmit'])->name('question.submit');
+    Route::post('answer/submit', [ForumController::class, 'answerSubmit'])->name('answer.submit');
+});
+
 Route::group(['prefix' => 'property'], function () {
     Route::post('/download-brochure-form', [PropertyController::class, 'downloadBrochureForm'])->name('property.download-brochure-form');
     Route::get('/compare-property', [PropertyController::class, 'compareProperty'])->name('property.compare');
@@ -88,13 +95,6 @@ Route::group(['prefix' => 'property'], function () {
     Route::get('/insights', [PropertyController::class, 'propertyInsights'])->name('property.insights');
     Route::get('/insight-details/{slug}', [PropertyController::class, 'insightDetails'])->name('property.insight-details');
     Route::get('/{slug}', [PropertyController::class, 'details'])->name('property.details');
-});
-
-Route::group(['prefix' => 'forum'], function () {
-    Route::get('/', [ForumController::class, 'forumList'])->name('forum');
-    Route::get('/details/{id}', [ForumController::class, 'forumDetails'])->name('forum-details');
-    Route::post('question/submit', [ForumController::class, 'questionSubmit'])->name('question.submit');
-    Route::post('answer/submit', [ForumController::class, 'answerSubmit'])->name('answer.submit');
 });
 
 Route::middleware(['auth'])->group(function () {

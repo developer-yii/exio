@@ -90,7 +90,7 @@ async function loadMarkers(projects) {
                                     <div class="imgBox">
                                         <img src="${assetUrl}storage/project_images/${image.image}" alt="${location.project_name}">
                                         <div class="imgheader">
-                                            ${location.project_badge ? `<span>${location.project_badge.name}</span>` : ''}
+                                            ${location.project_badge ? `<span>${location.project_badge.name}</span>` : '<span style="opacity: 0 !important;""></span>'}
                                             <i class="fa-regular fa-heart heartIconFill"></i>
                                         </div>
                                     </div>
