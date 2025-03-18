@@ -44,7 +44,8 @@
                                     data-age="{{ getAgeOfConstruction($property->age_of_construction) }}"
                                     data-type="{{ $property->property_type }}"
                                     data-property-type="{{ getPropertyType($property->property_type) }}"
-                                    data-description="{!! $property->project_about !!}"
+                                    {{-- data-description="{!! $property->project_about !!}" --}}
+                                    data-description="{{ htmlentities($property->project_about, ENT_QUOTES, 'UTF-8') }}"
                                     data-size="{{ json_encode($property->projectDetails->map(fn($detail) => ['name' => $detail->name, 'value' => $detail->value])) }}"
                                     data-multi-image="{{ json_encode($property->projectImages->take(3)->map(fn($detail) => ['imgurl' => $detail->getProjectImageUrl()])) }}"
                                     data-whatsapp-number="{{ getSettingFromDb('support_mobile') }}"

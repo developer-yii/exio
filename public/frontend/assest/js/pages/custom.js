@@ -112,7 +112,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function updateShareLinks(url = window.location.href) {
     const currentPageURL = url || window.location.href; // Ensures fallback to current URL
-
     const encodedURL = encodeURIComponent(currentPageURL);
     const subject = encodeURIComponent("Check out this property!");
     const body = encodeURIComponent(`I found this property and thought you might be interested:\n\n${currentPageURL}`);
@@ -212,7 +211,14 @@ $('body').on('click', '.propertyCardModal', function (event) {
     $('#total_tower').text(towers).attr('title', towers);
     $('#age_of_construction').text(age);
     $('#property_type').text(propertyType).attr('title', propertyType);
-    $('#description').html(description).attr('title', description);
+    // $('#description').html(description).attr('title', description);
+    // $('#description').text(description).attr('title', description);
+    let decodedDescription = $("<textarea/>").html(description).text();
+
+    $('#description')
+        .html(decodedDescription) // Display HTML content
+        .attr('title', $("<div/>").html(decodedDescription).text()); // Set plain text for tooltip
+
     $(".heartIconFill").addClass(faClass);
     $(".heartIconFill").attr("data-id", id);
 
@@ -245,21 +251,18 @@ $('body').on('click', '.propertyCardModal', function (event) {
         $(".multyimg").append(htmlContent);
     }
 
-    $(document).ready(function () {
-        let slug = $(this).data("slug");
-        if (slug) {
-            let propertyUrl = getPropertyDetailsUrl.replace("_slug_", slug);
-            $('#more-details').attr({
-                'href': propertyUrl,
-                'target': '_blank'
-            });
+    let slug = $(this).data("slug");
+    if (slug) {
+        let propertyUrl = getPropertyDetailsUrl.replace("_slug_", slug);
+        $('#more-details').attr({
+            'href': propertyUrl,
+            'target': '_blank'
+        });
 
-            $("#whatsapplink").attr("href", `https://wa.me/${whatsApp}?text=${encodeURIComponent(propertyUrl)}`);
-
-            metaUpdate(projectName, projectName, image, url);
-            updateShareLinks(propertyUrl);
-        }
-    });
+        $("#whatsapplink").attr("href", `https://wa.me/${whatsApp}?text=${encodeURIComponent(propertyUrl)}`);
+        metaUpdate(projectName, projectName, image, url);
+        updateShareLinks(propertyUrl);
+    }
 
     // Show the modal
     if (!$(event.target).hasClass('checkbox') && !$(event.target).hasClass('compareBoxOpen') && !$(event.target).hasClass('heartIconFill')) {
@@ -353,4 +356,3 @@ function metaUpdate(title, desc, image, url) {
     document.querySelector('meta[name="twitter:description"]').setAttribute("content", desc);
     document.querySelector('meta[name="twitter:image"]').setAttribute("content", image);
 }
-

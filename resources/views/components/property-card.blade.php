@@ -15,8 +15,11 @@
         data-price="{{ $priceFormatted }}" data-area="{{ $project->carpet_area ?? 'N/A' }} sqft"
         data-floors="{{ $project->total_floors ? $project->total_floors . ' Floors' : 'N/A' }}"
         data-towers="{{ $project->total_tower ?? 'N/A' }}"
-        data-age="{{ getAgeOfConstruction($project->age_of_construction) }}" data-type="{{ $project->property_type }}"
-        data-property-type="{{ getPropertyType($project->property_type) }}" data-description="{!! $project->project_about !!}"
+        data-age="{{ getAgeOfConstruction($project->age_of_construction) }}"
+        data-type="{{ $project->property_type }}"
+        data-property-type="{{ getPropertyType($project->property_type) }}"
+        {{-- data-description="{{ htmlspecialchars($project->project_about, ENT_QUOTES, 'UTF-8') }}" --}}
+        data-description="{{ htmlentities($project->project_about, ENT_QUOTES, 'UTF-8') }}"
         data-size="{{ json_encode($project->projectDetails->map(fn($detail) => ['name' => $detail->name, 'value' => $detail->value])) }}"
         data-multi-image="{{ json_encode($project->projectImages->take(3)->map(fn($detail) => ['imgurl' => $detail->getProjectImageUrl()])) }}"
         data-whatsapp-number="{{ getSettingFromDb('support_mobile') }}"
