@@ -48,3 +48,5 @@ $(document).ready(function () {
         });
     });
 });
+
+clearErrorOnInput('#contactform');

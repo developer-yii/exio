@@ -48,7 +48,7 @@
                                 <a href="javascript:void(0)" class="first-menu">All Projects</a>
                                 <ul class="projectDropDown">
                                     <li>
-                                        <a href="{{ route('property.result.filter') }}">
+                                        <a href="{{ route('property.result.filter', ['type' => 'high-demand']) }}">
                                             <div class="imgBox">
                                                 <img src="{{ $baseUrl }}assest/images/demand.png" alt="demand">
                                             </div>
@@ -59,7 +59,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="javascript:void(0)">
+                                        <a href="{{ route('property.result.filter', ['type' => 'just-launch']) }}">
                                             <div class="imgBox">
                                                 <img src="{{ $baseUrl }}assest/images/launched.png" alt="launched">
                                             </div>
@@ -70,7 +70,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="javascript:void(0)">
+                                        <a href="{{ route('property.result.filter', ['type' => 'rating']) }}">
                                             <div class="imgBox">
                                                 <img src="{{ $baseUrl }}assest/images/rating.png" alt="rating">
                                             </div>
@@ -97,60 +97,38 @@
                             <a href="javascript:void(0)" class="user-menu"><i class="fa-solid fa-user"></i></a>
                             <ul class="userDropDown">
                                 @if (Auth::user())
-                                    <li onclick="location.href='{{ route('login') }}'" class="cursor-pointer">
-                                            <img src="{{ $baseUrl }}assest/images/login.png"
-                                                alt="login">Profile({{ Auth::user()->name }})
-
+                                    <li class="cursor-pointer">
+                                        <img src="{{ $baseUrl }}assest/images/login.png" alt="login">Profile({{ Auth::user()->name }})
                                     </li>
                                 @else
-                                    <li>
-                                        <a href="{{ route('login') }}">
-                                            <img src="{{ $baseUrl }}assest/images/login.png" alt="login">Login
-                                        </a>
+                                    <li onclick="location.href='{{ route('login') }}'" style="cursor: pointer;">
+                                        <img src="{{ $baseUrl }}assest/images/login.png" alt="login">Login
                                     </li>
                                 @endif
                                     <li onclick="location.href='{{ route('property.insights') }}'" style="cursor: pointer;">
-                                        <a href="{{ route('property.insights') }}">
-                                            <img src="{{ $baseUrl }}assest/images/project.png" alt="project"> Project
-                                            Insights
-                                        </a>
+                                        <img src="{{ $baseUrl }}assest/images/project.png" alt="project"> Project
+                                        Insights
                                     </li>
                                 @if (Auth::user())
-                                    <li>
-                                        <a href="{{ route('property.shortlisted') }}">
-                                            <img src="{{ $baseUrl }}assest/images/shortlist.png" alt="shortlist">Shortlisted Properties
-                                        </a>
+                                    <li onclick="location.href='{{ route('property.shortlisted') }}'" style="cursor: pointer;">
+                                        <img src="{{ $baseUrl }}assest/images/shortlist.png" alt="shortlist">Shortlisted Properties
                                     </li>
 
-                                    <li>
-                                        <a href="{{ route('property.insights-report') }}">
-                                            <img src="{{ $baseUrl }}assest/images/report.png" alt="report">Downloaded Reports
-                                        </a>
+                                    <li onclick="location.href='{{ route('property.insights-report') }}'" style="cursor: pointer;">
+                                        <img src="{{ $baseUrl }}assest/images/report.png" alt="report">Downloaded Reports
                                     </li>
 
-                                    <li>
-                                        <a href="{{ route('property.compare-report') }}">
-                                            <img src="{{ $baseUrl }}assest/images/compare.png" alt="compare">Compare
-                                            Reports
-                                        </a>
+                                    <li onclick="location.href='{{ route('property.compare-report') }}'" style="cursor: pointer;">
+                                        <img src="{{ $baseUrl }}assest/images/compare.png" alt="compare">Compare Reports
                                     </li>
                                 @endif
 
-                                {{-- <li><a href="javascript:void(0)"><img src="{{ $baseUrl }}assest/images/assist.png"
-                                            alt="assist">Property Assist</a>
-                                </li> --}}
-                                <li>
-                                    <a href="{{ route('contact-us') }}">
-                                        <img src="{{ $baseUrl }}assest/images/contact.png" alt="contact">Contact
-                                        Us
-                                    </a>
+                                <li onclick="location.href='{{ route('contact-us') }}'" style="cursor: pointer;">
+                                    <img src="{{ $baseUrl }}assest/images/contact.png" alt="contact">Contact Us
                                 </li>
                                 @if (Auth::user())
-                                    <li>
-                                        <a href="javascript:void(0)"
-                                            onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-                                            <img src="{{ $baseUrl }}assest/images/contact.png"
-                                                alt="contact">Logout</a>
+                                    <li onclick="event.preventDefault();document.getElementById('logout-form').submit();" style="cursor: pointer;">
+                                        <img src="{{ $baseUrl }}assest/images/contact.png" alt="contact">Logout
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST"
                                             class="app-display-none">
                                             @csrf

@@ -371,7 +371,7 @@ header .header-box .main-nav ul li ul.projectDropDown li:hover {
     background-color: #EEF6FF;
 }
 
-header .header-box .main-nav ul li ul.userDropDown.show li a {
+header .header-box .main-nav ul li ul.userDropDown.show li {
     font-size: 15px;
     font-weight: 500;
     font-family: 'Inter-Medium';
@@ -379,7 +379,7 @@ header .header-box .main-nav ul li ul.userDropDown.show li a {
     font-family: "Inter", serif;
 }
 
-header .header-box .main-nav ul li ul.userDropDown.show li a img {
+header .header-box .main-nav ul li ul.userDropDown.show li img {
     margin-right: 15px;
     width: 100%;
     max-width: 24px;
@@ -766,6 +766,9 @@ header .header-box .mobileIcon {
 
 .bestProperty .locationProperty .comBox {
     width: calc(50% - 10px);
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .bestProperty .locationProperty .comBox img {
@@ -1845,7 +1848,7 @@ body.matchProperty {
 
 .detailmainSec .imageGallery .rightImg {
     display: flex;
-    align-items: center;
+    /* align-items: center; */
     gap: 15px;
     flex-wrap: wrap;
 }
@@ -1884,7 +1887,7 @@ body.matchProperty {
 
 .detailmainSec .detailsTextSec {
     display: flex;
-    align-items: center;
+    align-items: start;
     justify-content: space-between;
     margin-top: 20px;
 }
@@ -1893,6 +1896,7 @@ body.matchProperty {
     display: flex;
     align-items: center;
     gap: 20px;
+    width: 85%;
 }
 
 .detailmainSec .detailsTextSec .siteDetails.siteDetailsMobile {
@@ -4783,3 +4787,196 @@ textarea.inputClass {
     padding: 0 !important;
     overflow: hidden !important;
 }
+
+/* ------- forum sec css -------- */
+
+.bannerSky .forumBoxSky {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.bannerSky .forumText h4 {
+    margin-bottom: 0;
+}
+
+.bannerSky .askQuestion a {
+    font-size: 24px;
+    color: #111116;
+    font-weight: 600;
+    font-family: "Inter", serif;
+    border: 1px solid #DE773E;
+    border-radius: 5px;
+    padding: 10px 20px;
+    background-color: #FFFFFF;
+}
+
+.leftQueBox .topSearch {
+    position: relative;
+    margin-bottom: 55px;
+}
+
+.leftQueBox .topSearch input {
+    width: 100%;
+    border: 1px solid var(--blue-color);
+    border-radius: 5px;
+    box-shadow: none;
+    outline: none;
+    padding: 5px 40px 5px 15px;
+    min-height: 45px;
+}
+
+.leftQueBox .topSearch input::placeholder {
+    font-size: 16px;
+    color: var(--gray-color);
+    font-weight: 400;
+}
+
+.leftQueBox .topSearch i {
+    /* position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%); */
+    color: var(--blue-color);
+    font-size: 22px;
+}
+
+.leftQueBox .searchBtn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+    background: transparent;
+    height: 30px !important;
+    width: 30px !important;
+    font-size: 0;
+    outline: none;
+    border: none;
+}
+
+.forumBoxMain .comQuebox {
+    border: 1px solid #CDCDD3;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.forumBoxMain .comQuebox:not(:last-child) {
+    margin-bottom: 15px;
+}
+
+.forumBoxMain .comQuebox span {
+    font-size: 16px;
+    /* margin-bottom: 10px; */
+    color: #005395;
+    font-weight: 700;
+    font-family: "Inter", serif;
+}
+
+.forumBoxMain .comQuebox h5 a {
+    color: #111116;
+}
+
+.forumBoxMain .comQuebox p {
+    color: #6A6A71;
+    font-size: 16px;
+    font-weight: 400;
+    font-family: "Inter", serif;
+    margin-bottom: 10px;
+}
+
+.forumBoxMain .comQuebox .moreBtn {
+    font-weight: 500;
+    font-family: "Inter", serif;
+    color: #6A6A71;
+}
+
+.forumBoxMain .comQuebox .answerMore {
+    font-size: 16px;
+    color: #005395;
+    font-weight: 500;
+    font-family: "Inter", serif;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.forumBoxMain .comQuebox .btnAnsAdd {
+    box-shadow: none;
+    outline: none;
+    padding: 8px 20px;
+    border: 1px solid #005395;
+    border-radius: 5px;
+    font-weight: 500;
+    font-family: "Inter", serif;
+    color: #111116;
+    font-size: 18px;
+}
+
+.rightQueBox .comQuebox h5 {
+    font-size: 20px;
+}
+
+.rightQueBox .forumBoxMain .comQuebox {
+    padding: 20px 15px;
+}
+
+.rightQueBox .topText {
+    margin-bottom: 55px;
+}
+
+.rightQueBox .topText h4 {
+    margin-bottom: 0;
+}
+
+.askModal .modal-body {
+    padding: 50px 20px 20px;
+    position: relative;
+}
+
+.askModal .modal-content {
+    border: 1px solid #005395;
+}
+
+.askModal .modal-body .btn-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    box-shadow: none;
+    outline: none;
+    background-size: 14px;
+}
+
+.askModal .enterQue textarea {
+    min-height: 100px;
+    resize: none;
+    width: 100%;
+    border: 1px solid var(--blue-color);
+    border-radius: 5px;
+    box-shadow: none;
+    outline: none;
+    padding: 10px;
+}
+
+.askModal .modal-footer {
+    border-top: 0;
+    padding-top: 0;
+}
+
+.askModal .modal-footer .btn-secondary {
+    background-color: #FFFFFF;
+    color: #111116;
+    border: 1px solid #111116;
+    box-shadow: none;
+}
+
+.askModal .modal-footer .btn-primary {
+    border: 1px solid #DE773E;
+    background-color: #FFFFFF;
+    color: #111116;
+    box-shadow: none;
+}
+
+
+/* ------- forum sec css end -------- */

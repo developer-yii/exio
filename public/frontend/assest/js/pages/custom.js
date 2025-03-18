@@ -346,6 +346,5 @@ function metaUpdate(title, desc, image, url){
     document.querySelector('meta[name="twitter:title"]').setAttribute("content", title);
     document.querySelector('meta[name="twitter:description"]').setAttribute("content", desc);
     document.querySelector('meta[name="twitter:image"]').setAttribute("content", image);
-
 }
 

@@ -6,14 +6,14 @@
 @extends('frontend.layouts.app')
 
 @section('title', 'Property Details')
-@section('meta_details')
-    {{-- @include('frontend.include.meta', ['title' => $metaTitle, 'description' => $metaDesc]) --}}
+{{-- @section('meta_details')
+    @include('frontend.include.meta', ['title' => $metaTitle, 'description' => $metaDesc])
+@endsection --}}
     @section('og_title', $metaTitle)
     @section('og_description', $metaDesc)
     @section('og_image', asset($project->getCoverImageUrl()))
     @section('og_url', url()->current())
 
-@endsection
 
 @section('content')
     <!-- details banner -->

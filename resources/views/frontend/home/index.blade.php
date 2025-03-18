@@ -183,7 +183,7 @@
                             <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
                                 been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
                                 galley of type and scrambled it to make a type specimen book.</p>
-                            <a class="linkBtn" href="javascript:void(0)">Start Discuss</a>
+                            <a class="linkBtn" href="{{ route('forum') }}">Start Discuss</a>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -208,7 +208,7 @@
                     <div class="row">
                         @foreach ($top_properties as $property)
                             <div class="col-xl-4 col-md-6">
-                                <a href="{{ route('property.details', [$property->slug]) }}">
+                                <a href="{{ route('property.details', [$property->slug]) }}" style="width: 100%;">
                                     <div class="propertySec">
                                         <div class="imgBox">
                                             @if ($property->cover_image)
@@ -220,7 +220,7 @@
                                             @endif
                                         </div>
                                         <div class="propertyName">
-                                            <h5 class="two-line-text" title="{{ $property->project_name }}">{{ $property->project_name }}</h5>
+                                            <h5 class="one-line-text" title="{{ $property->project_name }}">{{ $property->project_name }}</h5>
                                         </div>
                                         <div class="locationProperty">
                                             <div class="homeBox comBox">
@@ -276,7 +276,7 @@
                     <div class="owl-carousel owl-theme">
                         @foreach ($top_properties as $property)
                             <div class="item">
-                                <a href="{{ route('property.details', [$property->slug]) }}">
+                                <a href="{{ route('property.details', [$property->slug]) }}" style="width: 100%;">
                                     <div class="propertySec">
                                         <div class="imgBox">
                                             @if ($property->cover_image)
