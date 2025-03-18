@@ -1,5 +1,5 @@
 @php
-    $baseUrl = asset('frontend/');
+    $baseUrl = asset('/') . 'frontend/';
 @endphp
 @extends('frontend.layouts.app')
 
@@ -37,6 +37,7 @@
             v: "weekly"
         });
     </script>
+    <link rel="stylesheet" href="{{ asset('frontend/assest/css/extra.css') }}">
 @endsection
 
 @section('content')
@@ -91,15 +92,25 @@
     </section>
 @endsection
 
+@section('modal')
+    <!-- compare project section -->
+    @include('frontend.include.compare')
+    <!-- compare project section -->
+@endsection
+
 @section('js')
     <script>
         var projects = {!! json_encode($projects) !!};
         var map_pin = "{{ asset('frontend/assest/images/map-pin.png') }}";
         var priceUnit = @json($priceUnit);
         var assetUrl = "{{ asset('') }}";
+        var getComparePropertyUrl = "{{ route('property.compare') }}";
+        var comparePropertytUrl = "{{ route('property.comparepage') }}";
+        var baseUrl = "{{ $baseUrl }}";
     </script>
     <script src="{{ $baseUrl }}/assest/js/pages/check-and-match-property-result.js"></script>
     <script src="{{ $baseUrl }}/assest/js/owl.carousel.js"></script>
+    <script src="{{ frontendPageJsLink('compare.js') }}"></script>
     <script>
         $('.propertyCardMap .owl-carousel').owlCarousel({
             loop: true,
