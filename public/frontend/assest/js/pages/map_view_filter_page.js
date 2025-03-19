@@ -59,6 +59,9 @@ async function loadMarkers(projects) {
                 const lat = parseFloat(location.latitude);
                 const lng = parseFloat(location.longitude);
 
+                const isWishlistedByUser = Array.isArray(location.wishlisted_by_users) &&
+                    location.wishlisted_by_users.some(user => user.id == authId);
+
                 if (isNaN(lat) || isNaN(lng)) {
                     return null;
                 }
@@ -91,7 +94,7 @@ async function loadMarkers(projects) {
                                         <img src="${assetUrl}storage/project_images/${image.image}" alt="${location.project_name}">
                                         <div class="imgheader">
                                             ${location.project_badge ? `<span>${location.project_badge.name}</span>` : '<span style="opacity: 0 !important;""></span>'}
-                                            <i class="fa-regular fa-heart heartIconFill"></i>
+                                            <i class="${isWishlistedByUser ? 'fa-solid' : 'fa-regular'} fa-heart heartIconFill" data-id="${location.id}"></i>
                                         </div>
                                     </div>
                                 </div>`).join('')}
@@ -102,10 +105,12 @@ async function loadMarkers(projects) {
                                 </div>
                             </div>
                             <div class="propertyName">
-                                <h5>${location.project_name}</h5>
+                                <h5 class="one-line-text" title="${location.project_name}">${location.project_name}</h5>
                             </div>
                             <div class="locationProperty">
-                                <p>${location.custom_property_type || ''} | ${location.floor_plans.map(plan => plan.carpet_area).join(', ') + ' Sqft' || ''} | ${location.location.location_name || ''}</p>
+                                <p class="one-line-text" title="${location.custom_property_type || ''} | ${location.floor_plans.map(plan => plan.carpet_area).join(', ') + ' Sqft' || ''} | ${location.location.location_name || ''}">
+                                    ${location.custom_property_type || ''} | ${location.floor_plans.map(plan => plan.carpet_area).join(', ') + ' Sqft' || ''} | ${location.location.location_name || ''}
+                                </p>
                             </div>
                             <div class="addressBoxMap">
                                 <div class="boxLogo">

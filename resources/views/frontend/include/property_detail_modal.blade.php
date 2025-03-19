@@ -45,10 +45,6 @@
                             </div>
                             <div class="overViewBox">
                                 <div class="overBox">
-                                    <span>Carpet Area</span>
-                                    <h6 id="carpet_area"></h6>
-                                </div>
-                                <div class="overBox">
                                     <span>Total Floors</span>
                                     <h6 id="total_floor" class="one-line-text"></h6>
                                 </div>

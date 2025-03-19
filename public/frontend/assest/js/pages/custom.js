@@ -31,7 +31,8 @@ $(".addressBox").each(function () {
     }
 });
 
-$(".more-locality").click(function (event) {
+// $(".more-locality").click(function (event) {
+$(document).on("click", ".more-locality", function (event) {
     event.preventDefault(); // Prevent redirection
     event.stopPropagation();
 
@@ -108,7 +109,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
-
 
 function updateShareLinks(url = window.location.href) {
     const currentPageURL = url || window.location.href; // Ensures fallback to current URL
@@ -190,7 +190,6 @@ $('body').on('click', '.propertyCardModal', function (event) {
     let price = $(this).data("price");
     let customType = $(this).data("custom-type");
     let location = $(this).data("location");
-    let area = $(this).data("area");
     let floors = $(this).data("floors");
     let towers = $(this).data("towers");
     let age = $(this).data("age");
@@ -206,7 +205,6 @@ $('body').on('click', '.propertyCardModal', function (event) {
     $('#property_name').text(projectName).attr('title', projectName);
     $('#custom_type').text(customType).attr('title', customType);
     $('#location').text(location).attr('title', location);
-    $('#carpet_area').text(area);
     $('#total_floor').text(floors).attr('title', floors);
     $('#total_tower').text(towers).attr('title', towers);
     $('#age_of_construction').text(age);
@@ -265,7 +263,7 @@ $('body').on('click', '.propertyCardModal', function (event) {
     }
 
     // Show the modal
-    if (!$(event.target).hasClass('checkbox') && !$(event.target).hasClass('compareBoxOpen') && !$(event.target).hasClass('heartIconFill')) {
+    if (!$(event.target).hasClass('checkbox') && !$(event.target).hasClass('compareBoxOpen') && !$(event.target).hasClass('heartIconFill') && !$(event.target).hasClass('more-locality')) {
         $("#propertyModal").modal("show");
     }
 
@@ -356,3 +354,47 @@ function metaUpdate(title, desc, image, url) {
     document.querySelector('meta[name="twitter:description"]').setAttribute("content", desc);
     document.querySelector('meta[name="twitter:image"]').setAttribute("content", image);
 }
+
+function htmlentities(str) {
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+}
+
+function getAmenitiesList(amenities, allAmenities) {
+    if (!amenities || typeof allAmenities !== 'object') {
+        console.error("Invalid amenities data:", allAmenities);
+        return '';
+    }
+
+    // Convert object to array [{ id: key, amenity_name: value }]
+    const amenitiesArray = Object.entries(allAmenities).map(([id, name]) => ({
+        id: id,
+        amenity_name: name
+    }));
+
+    const amenityIds = amenities.split(',').map(id => id.trim());
+
+    const filteredAmenities = amenitiesArray
+        .filter(amenity => amenityIds.includes(String(amenity.id)))
+        .map(amenity => amenity.amenity_name);
+
+    return filteredAmenities.join(', ');
+}
+
+
+
+// function getAmenitiesList(amenities, allAmenities) {
+//     if (!amenities) {
+//         return '';
+//     }
+
+//     const amenityIds = amenities.split(',').map(id => id.trim()); // Convert CSV string to array
+
+//     const filteredAmenities = allAmenities
+//         .filter(amenity => amenityIds.includes(String(amenity.id))) // Match IDs
+//         .map(amenity => amenity.amenity_name); // Extract names
+
+//     return filteredAmenities.join(', ');
+// }
+

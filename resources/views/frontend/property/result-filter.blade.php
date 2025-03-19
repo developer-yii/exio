@@ -284,7 +284,7 @@
         var isBestMatchLoading = false;
 
         var ageOfConstruction = @json(Project::$ageOfConstruction);
-        var propertyType = @json(Project::$propertyType);
+        var propertyTypeData = @json(Project::$propertyType);
         var getSettingFromDb = "{{ getSettingFromDb('support_mobile') }}";
         var priceUnit = @json($priceUnit);
     </script>

@@ -1,10 +1,6 @@
-$(document).ready(function () {
-    initAmenityToggles();
-});
 
 function renderPropertyCard(project, amenities) {
-    // console.log(project);
-    // console.log(amenities);
+
     // Format price
     let priceFormatted = '₹' + project.price_from + formatPriceUnit(project.price_from_unit);
     if (project.price_from != project.price_to || project.price_from_unit != project.price_to_unit) {
@@ -33,15 +29,15 @@ function renderPropertyCard(project, amenities) {
                 data-custom-type="${project.custom_property_type || 'N/A'}"
                 data-location="${project.location.location_name}, ${project.city.city_name}"
                 data-price="${priceFormatted}"
-                data-area="${project.carpet_area || 'N/A'} sqft"
                 data-floors="${project.total_floors ? project.total_floors + ' Floors' : 'N/A'}"
                 data-towers="${project.total_tower || 'N/A'}"
                 data-age="${getAgeOfConstruction(project.age_of_construction)}"
                 data-type="${project.property_type}"
                 data-property-type="${getPropertyType(project.property_type)}"
-                data-description="${project.project_about}"
+                data-description="${project.formatted_description}"
                 data-size='${JSON.stringify(project.project_details.map(detail => ({ name: detail.name, value: detail.value })))}'
-                data-multi-image='${JSON.stringify(project.project_images.slice(0, 3).map(img => ({ imgurl: img.getProjectImageUrl })))}'
+                data-multi-image='${JSON.stringify(project.project_images.slice(0, 3).map(img => ({ imgurl: `${projectImageUrl}${img.image}` })))}'
+
                 data-whatsapp-number="${getSettingFromDb}"
                 data-like-class="${project.is_wishlisted ? 'fa-solid' : 'fa-regular'}">
 
@@ -68,62 +64,35 @@ function renderPropertyCard(project, amenities) {
                 </div>
 
                 <div class="propertyName">
-                    <h5>${project.project_name}</h5>
+                    <h5 class="one-line-text" title="${project.project_name}">${project.project_name}</h5>
                 </div>
 
                 <div class="locationProperty">
                     ${project.custom_property_type ? `
                         <div class="homeBox comBox">
                             <img src="${baseUrl}/assest/images/Home.png" alt="Home">
-                            <p>${project.custom_property_type}</p>
+                            <p class="one-line-text" title="${project.custom_property_type}">${project.custom_property_type}</p>
                         </div>
                     ` : ''}
 
                     ${(project.location.location_name || project.city.city_name) ? `
                         <div class="location comBox">
                             <img src="${baseUrl}/assest/images/Location.png" alt="Location">
-                            <p>${project.location.location_name}${project.location.location_name && project.city.city_name ? ', ' : ''}${project.city.city_name}</p>
+                            <p class="one-line-text" title="${project.location.location_name}${project.location.location_name && project.city.city_name ? ', ' : ''}${project.city.city_name}">
+                                ${project.location.location_name}${project.location.location_name && project.city.city_name ? ', ' : ''}${project.city.city_name}
+                            </p>
                         </div>
                     ` : ''}
                 </div>
 
                 <div class="addressBox">
-                    <img src="${baseUrl}/assest/images/Home.png" alt="Home">
-                    <p class="amenityText d-flex">
-                        ${amenityList.length ? `
-                            <span class="amenity-text">${displayText}</span>
-                            ${hasMore ? `
-                                <span class="more-amenities" style="display: none;">${amenityListString}</span>
-                                <a href="javascript:void(0)" class="toggle-amenities">more</a>
-                            ` : ''}
-                        ` : '-'}
-                    </p>
+                    <img src="${baseUrl}/assest/images/Home.png" alt="Home" loading="lazy">
+                    <p>${ getAmenitiesList(project.amenities, amenities)}</p>
+                    <span class="more-locality">more</span>
                 </div>
             </div>
         </div>
     `;
-}
-
-function initAmenityToggles() {
-    document.querySelectorAll('.addressBox .toggle-amenities').forEach(function (link) {
-        link.addEventListener('click', function (event) {
-            event.stopPropagation();
-            var addressBox = this.closest('.addressBox');
-            var amenityText = addressBox.querySelector('.amenity-text');
-            var moreAmenities = addressBox.querySelector('.more-amenities');
-            var isExpanded = this.textContent === 'less';
-
-            if (isExpanded) {
-                amenityText.style.display = 'block';
-                moreAmenities.style.display = 'none';
-                this.textContent = 'more';
-            } else {
-                amenityText.style.display = 'none';
-                moreAmenities.style.display = 'block';
-                this.textContent = 'less';
-            }
-        });
-    });
 }
 
 function formatPriceUnit(priceUnit_query) {
@@ -135,5 +104,5 @@ function getAgeOfConstruction(age) {
 }
 
 function getPropertyType(propertyType) {
-    return propertyType[propertyType] || '';
+    return propertyTypeData[propertyType] || '';
 }

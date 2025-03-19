@@ -346,5 +346,10 @@ if (!function_exists('getCheckAndMatchVideoPath')) {
     }
 }
 
-
+if (!function_exists('formattedProjectAbout')) {
+    function formattedProjectAbout($about)
+    {
+        return htmlentities($about, ENT_QUOTES, 'UTF-8');
+    }
+}
 

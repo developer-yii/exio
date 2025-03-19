@@ -103,7 +103,6 @@ class PropertyFilterController extends Controller
             }
         }
 
-
         if ($amenities) {
             foreach ($amenities as $amenity) {
                 $projects = $projects->whereRaw('FIND_IN_SET(?, amenities)', [$amenity]);
@@ -137,6 +136,12 @@ class PropertyFilterController extends Controller
         }
 
         $projects = $projects->isActive()->paginate($perPage);
+
+        foreach ($projects as $project) {
+            $project->formatted_description = formattedProjectAbout($project->project_about);
+            $project->is_wishlisted = $project->wishlistedByUsers->contains(auth()->id());
+        }
+
         return response()->json([
             'status' => true,
             'message' => 'Data fetched successfully',
