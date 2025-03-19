@@ -31,8 +31,8 @@ $(".addressBox").each(function () {
     }
 });
 
-// $(".more-locality").click(function (event) {
-$(document).on("click", ".more-locality", function (event) {
+$(".more-locality").click(function (event) {
+// $(document).on("click", ".more-locality", function (event) {
     event.preventDefault(); // Prevent redirection
     event.stopPropagation();
 
@@ -363,8 +363,8 @@ function htmlentities(str) {
 
 function getAmenitiesList(amenities, allAmenities) {
     if (!amenities || typeof allAmenities !== 'object') {
-        console.error("Invalid amenities data:", allAmenities);
-        return '';
+        // console.error("Invalid amenities data:", allAmenities);
+        return '-';
     }
 
     // Convert object to array [{ id: key, amenity_name: value }]
@@ -382,19 +382,16 @@ function getAmenitiesList(amenities, allAmenities) {
     return filteredAmenities.join(', ');
 }
 
+function formatBudget(amount) {
+    amount = parseFloat(amount); // Convert to float
+
+    if (amount >= 10000000) {
+        return parseFloat((amount / 10000000).toFixed(2)) + " Cr"; // Convert to Crores
+    } else if (amount >= 100000) {
+        return parseFloat((amount / 100000).toFixed(2)) + " L"; // Convert to Lakhs
+    }
+    return amount.toLocaleString(); // Default formatting for smaller values
+}
 
 
-// function getAmenitiesList(amenities, allAmenities) {
-//     if (!amenities) {
-//         return '';
-//     }
-
-//     const amenityIds = amenities.split(',').map(id => id.trim()); // Convert CSV string to array
-
-//     const filteredAmenities = allAmenities
-//         .filter(amenity => amenityIds.includes(String(amenity.id))) // Match IDs
-//         .map(amenity => amenity.amenity_name); // Extract names
-
-//     return filteredAmenities.join(', ');
-// }
 

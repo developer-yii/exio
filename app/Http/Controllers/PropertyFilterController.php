@@ -73,8 +73,10 @@ class PropertyFilterController extends Controller
         $minPrice = $request->input('minPrice');
         $maxPrice = $request->input('maxPrice');
 
-        $projects = projectQuery();
+        $minPrice = round($minPrice / 100000, 2);
+        $maxPrice = round($maxPrice / 100000, 2);
 
+        $projects = projectQuery();
         $projects = $projects->with('projectBadge', 'floorPlans');
 
         if ($city) {

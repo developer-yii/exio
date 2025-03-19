@@ -55,13 +55,14 @@ class PropertyController extends Controller
         $amenityIds = explode(',', $project->amenities);
         $amenitiesList = Amenity::whereIn('id', $amenityIds)->get();
 
-        $similarProperties = Project::with(['projectImages', 'location', 'wishlistedByUsers', 'location.city'])->where('city_id', $project->city_id)
+        $similarProperties = Project::with(['projectImages', 'location', 'wishlistedByUsers', 'location.city'])
+            ->where('city_id', $project->city_id)
             ->where('location_id', $project->location_id)
             ->where('property_type', $project->property_type)
             ->where('id', '!=', $project->id)
             ->where(function ($query) use ($project) {
-                $priceFrom = convertToLacs($project->price_from, $project->price_from_unit);
-                $priceTo = convertToLacs($project->price_to, $project->price_to_unit);
+                $priceFrom = convertCrToL($project->price_from, $project->price_from_unit);
+                $priceTo = convertCrToL($project->price_to, $project->price_to_unit);
                 $tolerance = 0.1; // 10% flexibility
 
                 // Calculate min and max price range with tolerance
@@ -166,9 +167,9 @@ class PropertyController extends Controller
             $property->possession_date = getFormatedDate($property->possession_by, 'M, Y');
             $property->cover_image = $property->getCoverImageUrl();
 
-            $property->price = "₹" . $property->price_from . formatPriceUnit($property->price_from_unit);
+            $property->price = "₹" . formatPriceUnit($property->price_from, $property->price_from_unit);
             if($property->price_from != $property->price_to || $property->price_from_unit != $property->price_to_unit){
-                $property->price .= " - ₹ " . $property->price_to . formatPriceUnit($property->price_to_unit);
+                $property->price .= " - ₹ " . formatPriceUnit($property->price_to, $property->price_to_unit);
             }
 
             // $property->truncatedPropertyType = truncateText($property->custom_property_type, 15);

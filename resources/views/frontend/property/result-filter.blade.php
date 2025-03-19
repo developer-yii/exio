@@ -143,11 +143,11 @@
                                             <input type="range" min="{{ $minMaxPrice['min_price'] ?? '' }}"
                                                 max="{{ $minMaxPrice['max_price'] ?? '' }}"
                                                 value="{{ $minMaxPrice['min_price'] ?? '' }}" id="slider-min"
-                                                aria-valuemin="1" aria-valuemax="100">
+                                                aria-valuemin="1" aria-valuemax="100" data-display="{{ formatBudget($minMaxPrice['min_price']) }}">
                                             <input type="range" min="{{ $minMaxPrice['min_price'] ?? '' }}"
                                                 max="{{ $minMaxPrice['max_price'] ?? '' }}"
                                                 value="{{ $minMaxPrice['max_price'] ?? '' }}" id="slider-max"
-                                                aria-valuemin="1" aria-valuemax="100">
+                                                aria-valuemin="1" aria-valuemax="100"  data-display="{{ formatBudget($minMaxPrice['max_price']) }}">
                                         </div>
                                         <div class="selectArea">
                                             <div class="dropBox" id="slider-min-value">
@@ -158,6 +158,28 @@
                                             </div>
                                         </div>
                                     </div>
+                                    {{-- <div class="comViewBox five">
+                                        <p>Budget</p>
+                                        <div class="range-slider">
+                                            <input type="range" min="{{ $minMaxPrice['min_price'] ?? '' }}"
+                                                max="{{ $minMaxPrice['max_price'] ?? '' }}"
+                                                value="{{ $minMaxPrice['min_price'] ?? '' }}" id="slider-min"
+                                                aria-valuemin="1" aria-valuemax="100" data-display="{{ formatBudget($minMaxPrice['min_price']) }}">
+                                            <input type="range" min="{{ $minMaxPrice['min_price'] ?? '' }}"
+                                                max="{{ $minMaxPrice['max_price'] ?? '' }}"
+                                                value="{{ $minMaxPrice['max_price'] ?? '' }}" id="slider-max"
+                                                aria-valuemin="1" aria-valuemax="100"  data-display="{{ formatBudget($minMaxPrice['max_price']) }}">
+                                        </div>
+                                        <div class="selectArea">
+                                            <div class="dropBox" id="slider-min-value">
+                                                1
+                                            </div>
+                                            <div class="dropBox text-end" id="slider-max-value">
+                                                100
+                                            </div>
+                                        </div>
+                                    </div> --}}
+
                                     <div class="comViewBox">
                                         <a class="btn linkBtn btnFull" id="applyFilter">Apply</a>
                                     </div>

@@ -2,9 +2,9 @@
 function renderPropertyCard(project, amenities) {
 
     // Format price
-    let priceFormatted = '₹' + project.price_from + formatPriceUnit(project.price_from_unit);
+    let priceFormatted = '₹' + formatPriceUnit(project.price_from, project.price_from_unit, false);
     if (project.price_from != project.price_to || project.price_from_unit != project.price_to_unit) {
-        priceFormatted += ' - ' + project.price_to + formatPriceUnit(project.price_to_unit);
+        priceFormatted += '-' + formatPriceUnit(project.price_to, project.price_to_unit, false);
     }
 
     // Format amenities
@@ -87,16 +87,19 @@ function renderPropertyCard(project, amenities) {
 
                 <div class="addressBox">
                     <img src="${baseUrl}/assest/images/Home.png" alt="Home" loading="lazy">
-                    <p>${ getAmenitiesList(project.amenities, amenities)}</p>
-                    <span class="more-locality">more</span>
+                    <p class="one-line-text" title="${ getAmenitiesList(project.amenities, amenities)}">${ getAmenitiesList(project.amenities, amenities)}</p>
                 </div>
             </div>
         </div>
     `;
 }
 
-function formatPriceUnit(priceUnit_query) {
-    return priceUnit[priceUnit_query] || '';
+function formatPriceUnit(price, unit, space = true) {
+    price = parseFloat(price);
+    const priceValue = parseFloat(price);
+    const priceSymbol = priceUnit[unit] || unit; // Fallback to unit if not found
+
+    return space ? `${priceValue} ${priceSymbol}` : `${priceValue}${priceSymbol}`;
 }
 
 function getAgeOfConstruction(age) {

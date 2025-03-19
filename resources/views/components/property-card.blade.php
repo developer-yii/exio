@@ -1,8 +1,8 @@
 @php
-    $priceFormatted = '₹' . $project->price_from . formatPriceUnit($project->price_from_unit);
+    $priceFormatted = '₹' . formatPriceUnit($project->price_from, $project->price_from_unit, false);
 
     if ($project->price_from != $project->price_to || $project->price_from_unit != $project->price_to_unit) {
-        $priceFormatted .= ' - ' . $project->price_to . formatPriceUnit($project->price_to_unit);
+        $priceFormatted .= '-' . formatPriceUnit($project->price_to, $project->price_to_unit, false);
     }
 @endphp
 
@@ -68,36 +68,11 @@
                 </div>
             @endif
         </div>
-        {{-- <div class="addressBox">
-            <img src="{{ asset('/') }}frontend/assest/images/Home.png" alt="Home">
-            @php
-                $maxChars = 20;
-                $amenityList = collect(explode(',', $project->amenities))
-                    ->filter()
-                    ->map(fn($id) => $amenities[$id] ?? null)
-                    ->filter()
-                    ->values();
-
-                $amenityListString = $amenityList->implode(', ');
-                $hasMore = strlen($amenityListString) > $maxChars;
-                $displayText = $hasMore ? substr($amenityListString, 0, $maxChars) . '...' : $amenityListString;
-            @endphp
-            <p class="amenityText d-flex">
-                @if ($amenityList->isNotEmpty())
-                    <span class="amenity-text">{{ $displayText }}</span>
-                    @if ($hasMore)
-                        <span class="more-amenities" style="display: none;">{{ $amenityListString }}</span>
-                        <a href="javascript:void(0)" class="toggle-amenities">more</a>
-                    @endif
-                @else
-                    -
-                @endif
-            </p>
-        </div> --}}
         <div class="addressBox">
             <img src="{{ asset('/') }}frontend/assest/images/Home.png" alt="Home" loading="lazy">
-            <p>{{ getAmenitiesList($project->amenities) }}</p>
-            <span class="more-locality">more</span>
+            <p class="one-line-text" title="{{ $project->amenities ? getAmenitiesList($project->amenities) : '-' }}">
+                {{ $project->amenities ? getAmenitiesList($project->amenities) : '-' }}
+            </p>
         </div>
     </div>
 </div>

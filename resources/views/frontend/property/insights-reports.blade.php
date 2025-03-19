@@ -67,9 +67,9 @@
                                         @include('frontend.include.save_share_button', ['project' => $property])
 
                                         <h5>
-                                            <span>₹ {{ $property->price_from ?? 'N/A' }} {{ formatPriceUnit($property->price_from_unit ?? '') }}</span>
+                                            <span>₹ {{ formatPriceUnit($property->price_from, $property->price_from_unit) }}</span>
                                             @if(($property->price_from ?? '') !== ($property->price_to ?? '') || ($property->price_from_unit ?? '') !== ($property->price_to_unit ?? ''))
-                                                - <span>₹ {{ $property->price_to ?? 'N/A' }} {{ formatPriceUnit($property->price_to_unit ?? '') }}</span>
+                                                - <span>₹ {{ formatPriceUnit($property->price_to, $property->price_to_unit) }}</span>
                                             @endif
                                         </h5>
                                     </div>

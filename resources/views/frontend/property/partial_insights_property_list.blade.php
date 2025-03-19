@@ -13,9 +13,9 @@
                 </div>
                 <div class="priceBox">
                     <div class="price">
-                        <h5>₹{{ $property->price_from }}{{ formatPriceUnit($property->price_from_unit) }}
+                        <h5>₹{{ formatPriceUnit($property->price_from, $property->price_from_unit) }}
                             @if (hasDifferentPrices($property))
-                                -{{ $property->price_to }}{{ formatPriceUnit($property->price_to_unit) }}
+                                -{{ formatPriceUnit($property->price_to, $property->price_to_unit) }}
                             @endif
                         </h5>
                     </div>

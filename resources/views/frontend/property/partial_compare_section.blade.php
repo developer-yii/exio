@@ -9,9 +9,9 @@
         <div class="innerPriceBox">
             <div class="priceShare">
                 <h5>
-                    <span>₹ {{ $property->price_from }} {{ formatPriceUnit($property->price_from_unit) }}</span>
+                    <span>₹ {{ formatPriceUnit($property->price_from, $property->price_from_unit) }}</span>
                     @if(hasDifferentPrices($property))
-                        - <span>₹ {{ $property->price_to }} {{ formatPriceUnit($property->price_to_unit) }}</span>
+                        - <span>₹ {{ formatPriceUnit($property->price_to, $property->price_to_unit) }}</span>
                     @endif
                 </h5>
             </div>
