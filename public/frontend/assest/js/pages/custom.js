@@ -227,7 +227,7 @@ $('body').on('click', '.propertyCardModal', function (event) {
         sizeData.forEach(item => {
             htmlContent += `
                 <div class="overBox">
-                    <span>Project Size</span>
+                    <span class="one-line-text" title="${item.name}">${item.name}</span>
                     <h6 class="one-line-text" title="${item.value}">${item.value}</h6>
                 </div>
             `;
