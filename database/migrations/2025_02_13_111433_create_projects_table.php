@@ -22,9 +22,9 @@ return new class extends Migration
             $table->string('property_sub_types')->nullable();
             $table->date('possession_by')->nullable();
             $table->string('rera_number')->nullable();
-            $table->integer('price_from')->nullable();
+            $table->decimal('price_from', 8, 2)->nullable();
             $table->string('price_from_unit')->nullable();
-            $table->integer('price_to')->nullable();
+            $table->decimal('price_to', 8, 2)->nullable();
             $table->string('price_to_unit')->nullable();
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();

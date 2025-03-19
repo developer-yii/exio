@@ -233,9 +233,9 @@
                                 <p><strong>Possession By:</strong>
                                     {{ getFormatedDate($property->possession_by, 'M, Y') }}</p>
                                 <p><strong>Price :</strong>
-                                    Rs. {{ $property->price_from }} {{ formatPriceUnit($property->price_from_unit) }}
+                                    Rs. {{ formatPriceUnit($property->price_from, $property->price_from_unit) }}
                                     @if($property->price_from != $property->price_to || $property->price_from_unit != $property->price_to_unit)
-                                        - Rs. {{ $property->price_to }} {{ formatPriceUnit($property->price_to_unit) }}
+                                        - Rs. {{ formatPriceUnit($property->price_to, $property->price_to_unit) }}
                                     @endif
                                 </p>
 

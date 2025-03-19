@@ -22,10 +22,9 @@
                     <div class="row">
                         @foreach($favourite_properties as $property)
                             @php
-                                $priceFormatted = "₹" . $property->price_from . formatPriceUnit($property->price_from_unit);
-
+                                $priceFormatted = "₹" . formatPriceUnit($property->price_from, $property->price_from_unit, false);
                                 if (hasDifferentPrices($property)) {
-                                    $priceFormatted .= " - " . $property->price_to . formatPriceUnit($property->price_to_unit);
+                                    $priceFormatted .= "-" . formatPriceUnit($property->price_to,$property->price_to_unit, false);
                                 }
                             @endphp
                             <div class="col-md-6 col-xl-4">
@@ -90,7 +89,7 @@
                                     </div>
                                     <div class="addressBox">
                                         <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home" loading="lazy">
-                                        <p>{{ getAmenitiesList($property->amenities) }}</p>
+                                        <p>{{ $property->amenities ? getAmenitiesList($property->amenities) : '-' }}</p>
                                         <span class="more-locality">more</span>
                                     </div>
                                     <div class="addtocompareBtn">

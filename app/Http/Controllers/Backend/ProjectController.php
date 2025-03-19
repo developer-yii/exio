@@ -525,6 +525,7 @@ class ProjectController extends Controller
                 ProjectImage::whereIn('id', $idsToDelete)->delete();
             }
 
+            setMinMaxPrice();
             $message = $isUpdate ? 'Data updated successfully' : 'Data added successfully';
             return response()->json(['status' => true, 'message' => $message]);
         }

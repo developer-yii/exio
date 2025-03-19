@@ -58,9 +58,9 @@
                             @endif
                             <div class="priceBox">
                                 <p><i class="fa-regular fa-calendar"></i> Possession by {{ getFormatedDate($project->possession_by, 'M, Y') }}</p>
-                                <h5><span>₹ {{ $project->price_from }} {{ formatPriceUnit($project->price_from_unit) }}</span>
+                                <h5><span>₹ {{ formatPriceUnit($project->price_from, $project->price_from_unit) }}</span>
                                     @if(hasDifferentPrices($project))
-                                        - <span>₹ {{ $project->price_to }} {{ formatPriceUnit($project->price_to_unit) }}</span>
+                                        - <span>₹  {{ formatPriceUnit($project->price_to,$project->price_to_unit) }}</span>
                                     @endif
                                 </h5>
                             </div>

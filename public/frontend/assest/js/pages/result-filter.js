@@ -1,6 +1,10 @@
 $(document).ready(function () {
-    let sliderMin = $('#slider-min').val();
     let sliderMax = $('#slider-max').val();
+    let sliderMin = $('#slider-min').val();
+
+    // let sliderMaxDis = $('#slider-max').data('display');
+    // let sliderMinDis = $('#slider-min').data('display');
+
     let propertyType = $('[name="property_type"]:checked').val();
     let subTypes_o = propertySubTypes[propertyType];
 
@@ -18,8 +22,8 @@ $(document).ready(function () {
         $('.show-sub-type').removeClass('d-none');
     }
 
-    $('#slider-min-value').text(sliderMin);
-    $('#slider-max-value').text(sliderMax);
+    $('#slider-min-value').text(formatBudget(sliderMin));
+    $('#slider-max-value').text(formatBudget(sliderMax));
 
     $('#moreAmenities').click(function () {
         loadMoreAmenities();
@@ -31,12 +35,12 @@ $(document).ready(function () {
 
     $('#slider-min').on('input', function () {
         let min = $(this).val();
-        $('#slider-min-value').text(min);
+        $('#slider-min-value').text(formatBudget(min));
     });
 
     $('#slider-max').on('input', function () {
         let max = $(this).val();
-        $('#slider-max-value').text(max);
+        $('#slider-max-value').text(formatBudget(max));
     });
 
     $('[name="property_type"]').change(function () {

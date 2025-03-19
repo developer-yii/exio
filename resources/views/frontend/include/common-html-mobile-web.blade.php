@@ -46,9 +46,9 @@
         <div class="priceShare">
             @include('frontend.include.save_share_button', ['project' => $project])
             <h5>
-                <span>₹ {{ $project->price_from }} {{ formatPriceUnit($project->price_from_unit) }}</span>
+                <span>₹ {{ formatPriceUnit($project->price_from, $project->price_from_unit) }}</span>
                 @if($project->price_from != $project->price_to || $project->price_from_unit != $project->price_to_unit)
-                    - <span>₹ {{ $project->price_to }} {{ formatPriceUnit($project->price_to_unit) }}</span>
+                    - <span>₹ {{ formatPriceUnit($project->price_to, $project->price_to_unit) }}</span>
                 @endif
             </h5>
         </div>
@@ -302,9 +302,9 @@
             </div>
             <div class="priceBox">
                 <div class="price">
-                    <h5>₹{{ $similarProperty->price_from }}{{ formatPriceUnit($similarProperty->price_from_unit) }}
+                    <h5>₹{{ formatPriceUnit($similarProperty->price_from, $similarProperty->price_from_unit) }}
                         @if(hasDifferentPrices($similarProperty))
-                            -{{ $similarProperty->price_to }}{{ formatPriceUnit($similarProperty->price_to_unit) }}
+                            -{{ formatPriceUnit($similarProperty->price_to,$similarProperty->price_to_unit) }}
                         @endif
                     </h5>
                 </div>
@@ -328,7 +328,7 @@
             </div>
             <div class="addressBox">
                 <img src="{{ $baseUrl }}assest/images/Home.png" alt="Home" loading="lazy">
-                <p>{{ getAmenitiesList($similarProperty->amenities) }}</p>
+                <p>{{ $similarProperty->amenities ? getAmenitiesList($similarProperty->amenities) : '-' }}</p>
                 <span class="more-locality">more</span>
             </div>
         </div>

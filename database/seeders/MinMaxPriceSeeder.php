@@ -14,8 +14,8 @@ class MinMaxPriceSeeder extends Seeder
     public function run(): void
     {
         $minMaxPrice = [
-            'min' => 1,
-            'max' => 10000,
+            'min' => 100000,
+            'max' => 1000000,
         ];
 
         GeneralSetting::updateOrCreate([

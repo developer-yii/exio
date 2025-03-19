@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Amenity;
+use App\Models\GeneralSetting;
 use App\Models\Project;
 use App\Models\PropertyComparison;
 use App\Models\Setting;
@@ -176,9 +177,16 @@ if (!function_exists('getDeviceType')) {
 }
 
 if (!function_exists('formatPriceUnit')) {
-    function formatPriceUnit($price_unit) {
-        $price_unit =  Project::$priceUnit[$price_unit];
-        return $price_unit;
+    function formatPriceUnit($price, $unit, $space = true) {
+
+        $price = ((float)$price);
+        $price_unit =  Project::$priceUnit[$unit];
+
+        if($space){
+            return $price . " " . $price_unit;
+        }else{
+            return $price . $price_unit;
+        }
     }
 }
 
@@ -216,8 +224,8 @@ if (!function_exists('getProgressBarColorClass')) {
     }
 }
 
-if (!function_exists('convertToLacs')) {
-    function convertToLacs($price, $unit)
+if (!function_exists('convertCrToL')) {
+    function convertCrToL($price, $unit)
     {
         if ($unit == 'crores') {
             return $price * 100; // 1 Crore = 100 Lacs
@@ -352,4 +360,54 @@ if (!function_exists('formattedProjectAbout')) {
         return htmlentities($about, ENT_QUOTES, 'UTF-8');
     }
 }
+
+if (!function_exists('setMinMaxPrice')) {
+    function setMinMaxPrice()
+    {
+        $projects = Project::select('price_from', 'price_from_unit', 'price_to', 'price_to_unit')->get();
+
+        $minPrice = null;
+        $maxPrice = null;
+
+        foreach ($projects as $project) {
+            $fromPrice = convertToLacs($project->price_from, $project->price_from_unit);
+            $toPrice = convertToLacs($project->price_to, $project->price_to_unit);
+
+            if ($fromPrice !== null) {
+                $minPrice = is_null($minPrice) ? $fromPrice : min($minPrice, $fromPrice);
+            }
+            if ($toPrice !== null) {
+                $maxPrice = is_null($maxPrice) ? $toPrice : max($maxPrice, $toPrice);
+            }
+        }
+
+        if (!is_null($minPrice)) {
+            GeneralSetting::where('key', 'min_price')->update(['value' => $minPrice]);
+        }
+        if (!is_null($maxPrice)) {
+            GeneralSetting::where('key', 'max_price')->update(['value' => $maxPrice]);
+        }
+    }
+}
+
+if (!function_exists('convertToLacs')) {
+    function convertToLacs($price, $unit)
+    {
+        if ($unit == 'crores') {
+            $price = $price * 100; // 1 Crore = 100 Lacs
+        }
+        return $price * 100000; // Already in Lacs
+    }
+}
+
+function formatBudget($amount) {
+    if ($amount >= 10000000) {
+        return round($amount / 10000000, 2) . "Cr"; // Convert to Crores
+    } elseif ($amount >= 100000) {
+        return round($amount / 100000, 2) . "L"; // Convert to Lakhs
+    }
+    return number_format($amount); // Default formatting for smaller values
+}
+
+
 
