@@ -12,14 +12,13 @@
         data-project-name="{{ $project->project_name }}" data-builder-name="{{ $project->builder->builder_name }}"
         data-custom-type="{{ $project->custom_property_type ?? 'N/A' }}"
         data-location="{{ $project->location->location_name }}, {{ $project->city->city_name }}"
-        data-price="{{ $priceFormatted }}" data-area="{{ $project->carpet_area ?? 'N/A' }} sqft"
+        data-price="{{ $priceFormatted }}"
         data-floors="{{ $project->total_floors ? $project->total_floors . ' Floors' : 'N/A' }}"
         data-towers="{{ $project->total_tower ?? 'N/A' }}"
         data-age="{{ getAgeOfConstruction($project->age_of_construction) }}"
         data-type="{{ $project->property_type }}"
         data-property-type="{{ getPropertyType($project->property_type) }}"
-        {{-- data-description="{{ htmlspecialchars($project->project_about, ENT_QUOTES, 'UTF-8') }}" --}}
-        data-description="{{ htmlentities($project->project_about, ENT_QUOTES, 'UTF-8') }}"
+        data-description="{{ formattedProjectAbout($project->project_about) }}"
         data-size="{{ json_encode($project->projectDetails->map(fn($detail) => ['name' => $detail->name, 'value' => $detail->value])) }}"
         data-multi-image="{{ json_encode($project->projectImages->take(3)->map(fn($detail) => ['imgurl' => $detail->getProjectImageUrl()])) }}"
         data-whatsapp-number="{{ getSettingFromDb('support_mobile') }}"
@@ -47,19 +46,19 @@
             </div>
         </div>
         <div class="propertyName">
-            <h5>{{ $project->project_name }}</h5>
+            <h5 class="one-line-text" title="{{ $project->project_name }}">{{ $project->project_name }}</h5>
         </div>
         <div class="locationProperty">
             @if ($project->custom_property_type)
                 <div class="homeBox comBox">
                     <img src="{{ asset('/') }}frontend/assest/images/Home.png" alt="Home">
-                    <p>{{ $project->custom_property_type }}</p>
+                    <p class="one-line-text" title="{{ $project->custom_property_type }}">{{ $project->custom_property_type }}</p>
                 </div>
             @endif
             @if ($project->location->location_name || $project->city->city_name)
                 <div class="location comBox">
                     <img src="{{ asset('/') }}frontend/assest/images/Location.png" alt="Location">
-                    <p>
+                    <p class="one-line-text" title="{{ $project->location->location_name . ', ' . $project->city->city_name }}">
                         @if ($project->location->location_name || $project->city->city_name)
                             {{ $project->location->location_name }}{{ $project->location->location_name && $project->city->city_name ? ', ' : '' }}{{ $project->city->city_name }}
                         @else
@@ -69,7 +68,7 @@
                 </div>
             @endif
         </div>
-        <div class="addressBox">
+        {{-- <div class="addressBox">
             <img src="{{ asset('/') }}frontend/assest/images/Home.png" alt="Home">
             @php
                 $maxChars = 20;
@@ -94,6 +93,11 @@
                     -
                 @endif
             </p>
+        </div> --}}
+        <div class="addressBox">
+            <img src="{{ asset('/') }}frontend/assest/images/Home.png" alt="Home" loading="lazy">
+            <p>{{ getAmenitiesList($project->amenities) }}</p>
+            <span class="more-locality">more</span>
         </div>
     </div>
 </div>
