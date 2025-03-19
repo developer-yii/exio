@@ -74,14 +74,14 @@
                 <li class="side-nav-item {{ isActiveRouteMain('download-brochure') }}">
                     <a href="{{ route('admin.download-brochure') }}" class="side-nav-link {{ isActiveRoute(['download-brochure']) }}">
                         <i class="uil-file"></i>
-                        <span> Brochure Data </span>
+                        <span> Brochure Download </span>
                     </a>
                 </li>
 
                 <li class="side-nav-item {{ isActiveRouteMain('insight-reports') }}">
                     <a href="{{ route('admin.insight-reports') }}" class="side-nav-link {{ isActiveRoute(['insight-reports']) }}">
                         <i class="uil-file"></i>
-                        <span> Insights Reports Data </span>
+                        <span> Insights Reports Download </span>
                     </a>
                 </li>
 

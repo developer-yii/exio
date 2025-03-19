@@ -28,7 +28,7 @@
                     @endphp
 
                     <div class="downloaded_certificates_box"
-                        data-slug="{{$property->slug}}"
+                        data-slug="{{ $property->slug ?? '#' }}"
                         data-description="Explore {{ $property->project_name ?? 'Insight Reports' }} in {{ $location }}, {{ $city }}"
                         data-image="{{ $property->getCoverImageUrl() }}"
                         data-url="{{ route('property.details', $property->slug ?? '#') }}"
