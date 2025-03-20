@@ -63,7 +63,12 @@
     @yield('css')
 </head>
 
-<body class="block_model">
+<body>
+    <div class="siteLoader" id="siteLoader" style="display: none;">
+        <section class="loaderSec">
+            <span class="loader-11"></span>
+        </section>
+    </div>
     <!-- header start -->
     @include('frontend.layouts.header', ['showCityDropdown' => $showCityDropdown])
     <!-- header end -->
@@ -75,7 +80,7 @@
         $dontShowFooter = in_array(request()->route()->getName(), [
             'front.check-and-match-property.result',
             'front.check-and-match-property',
-            'property.result.filter'
+            // 'property.result.filter'
         ]);
     @endphp
 
