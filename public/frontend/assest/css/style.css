@@ -1707,11 +1707,12 @@ body.matchProperty {
 
 .propertyCard .priceBox .boxLogo img {
     width: 100%;
-    max-width: 110px;
+    max-width: 100px;
 }
 
 .propertyCard .priceBox .price h5 {
     margin-bottom: 0;
+    font-size: 20px;
 }
 
 .propertyCard .priceBox .boxLogo span {
