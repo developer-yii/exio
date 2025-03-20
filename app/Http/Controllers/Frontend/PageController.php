@@ -19,8 +19,9 @@ class PageController extends Controller
     }
 
     public function aboutUs(){
-        $page = CmsPages::where('page_name', 'about-us')->first();
-        return view('frontend.pages.about-us', compact('page'));
+        // $page = CmsPages::where('page_name', 'about-us')->first();
+        // return view('frontend.pages.about-us', compact('page'));
+        return view('frontend.pages.about-us');
     }
 
 }

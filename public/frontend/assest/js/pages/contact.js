@@ -8,20 +8,11 @@ $(document).ready(function () {
             type: 'POST',
             data: $('#contactform').serialize(),
             dataType: 'json',
-            // beforeSend: function () {
-            //     $($this).find('button[type="submit"]').prop('disabled', true);
-            // },
             beforeSend: function(){
-                $('.block_model').block({
-                    message: '<h3>Please Wait...</h3>',
-                    css: {
-                        border: '1px solid #fff'
-                    }
-                });
+                $("#siteLoader").fadeIn();
             },
             success: function (response) {
-                // $($this).find('button[type="submit"]').prop('disabled', false);
-                $('.block_model').unblock();
+                $("#siteLoader").fadeOut();
                 if (response.status == true) {
                     toastr.success(response.message);
                     window.location.reload();
@@ -41,7 +32,7 @@ $(document).ready(function () {
                 }
             },
             error: function (error) {
-                $('.block_model').unblock();
+                $("#siteLoader").fadeOut();
                 $($this).find('button[type="submit"]').prop('disabled', false);
                 alert('Something went wrong!', 'error');
             }
