@@ -418,7 +418,7 @@
                                     <p>Years of Successful Experience</p>
                                 </div>
                             </div>
-                            <a class="btn btnExplore" href="javascript:void(0)">Explore More</a>
+                            <a class="btn btnExplore" href="{{ route('about-us') }}">Explore More</a>
                         </div>
                     </div>
                 </div>

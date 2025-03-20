@@ -75,6 +75,7 @@
         $dontShowFooter = in_array(request()->route()->getName(), [
             'front.check-and-match-property.result',
             'front.check-and-match-property',
+            'property.result.filter'
         ]);
     @endphp
 
