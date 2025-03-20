@@ -145,7 +145,7 @@
                                 <!-- Project About -->
                                 <div class="col-md-12">
                                     <div class="form-group mb-3">
-                                        <label for="project_about" class="form-label">Project About</label>
+                                        <label for="project_about" class="form-label">Project About*</label>
                                         {{-- <div id="project_about" style="height: 100px;">
                                             @if (isset($model->id) && !empty($model->project_about))
                                                 {!! $model->project_about !!}
@@ -153,8 +153,8 @@
                                         </div> --}}
                                         <textarea name="project_about" class="form-control project_about" id="project_about">
                                             @if (isset($model->id))
-{!! $model->project_about !!}
-@endif
+                                                {!! $model->project_about !!}
+                                            @endif
                                         </textarea>
                                         <span class="error"></span>
                                     </div>
@@ -163,7 +163,7 @@
                                 <!-- City -->
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
-                                        <label for="city_id" class="form-label">City</label>
+                                        <label for="city_id" class="form-label">City*</label>
                                         <select id="city_id" class="form-control form-select city_id" name="city_id">
                                             <option value="">Select City</option>
                                             @foreach ($city as $key => $value)
@@ -180,7 +180,7 @@
                                 <!-- Area -->
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
-                                        <label for="area_id" class="form-label">Area</label>
+                                        <label for="area_id" class="form-label">Area*</label>
                                         <select id="area_id" class="form-control form-select area_id" name="area_id">
                                             <option value="">Select Area</option>
                                             @foreach ($area as $key => $value)
@@ -197,7 +197,7 @@
                                 <!-- Builder -->
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
-                                        <label for="builder_id" class="form-label">Builder</label>
+                                        <label for="builder_id" class="form-label">Builder*</label>
                                         <select id="builder_id" class="form-control form-select builder_id"
                                             name="builder_id">
                                             <option value="">Select Builder</option>
@@ -215,7 +215,7 @@
                                 <!-- Property Type -->
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
-                                        <label class="form-label">Property Type</label>
+                                        <label class="form-label">Property Type*</label>
                                         <div id="property_type">
                                             @foreach ($propertyTypes as $key => $value)
                                                 <div class="form-check form-check-inline">
@@ -234,7 +234,7 @@
                                 <!-- Property Sub Types -->
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
-                                        <label for="property_sub_types" class="form-label">Property Sub Types</label>
+                                        <label for="property_sub_types" class="form-label">Property Sub Types*</label>
                                         <select id="property_sub_types"
                                             class="form-control form-select property_sub_types" name="property_sub_types">
                                             <option value="">Select Property Sub Type</option>
@@ -246,7 +246,7 @@
                                 <!-- Custom Property Type -->
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
-                                        <label for="custom_property_type" class="form-label">Custom Property Type</label>
+                                        <label for="custom_property_type" class="form-label">Custom Property Type*</label>
                                         <input type="text" name="custom_property_type"
                                             class="form-control custom_property_type"
                                             value="{{ isset($model->custom_property_type) ? $model->custom_property_type : '' }}">
@@ -257,7 +257,7 @@
                                 <!-- Possession By -->
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
-                                        <label for="possession_by" class="form-label">Possession By</label>
+                                        <label for="possession_by" class="form-label">Possession By*</label>
                                         <input type="month" name="possession_by" class="form-control possession_by"
                                             value="{{ isset($model->possession_by) ? date('Y-m', strtotime($model->possession_by)) : '' }}">
                                         <span class="error"></span>
@@ -267,7 +267,7 @@
                                 <!-- RERA Number -->
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
-                                        <label for="rera_number" class="form-label">RERA Number</label>
+                                        <label for="rera_number" class="form-label">RERA Number*</label>
                                         <input type="text" name="rera_number" class="form-control rera_number"
                                             value="{{ isset($model->rera_number) ? $model->rera_number : '' }}">
                                         <span class="error"></span>
@@ -277,7 +277,7 @@
                                 <!-- Price From -->
                                 <div class="col-md-6">
                                     <div class="form-group mb-3 row">
-                                        <label for="price_from" class="form-label">Price From</label>
+                                        <label for="price_from" class="form-label">Price From*</label>
                                         <div class="col-md-10">
                                             <input type="text" name="price_from" class="form-control price_from"
                                                 min="0"
@@ -302,7 +302,7 @@
                                 <!-- Price To -->
                                 <div class="col-md-6">
                                     <div class="form-group mb-3 row">
-                                        <label for="price_to" class="form-label">Price To</label>
+                                        <label for="price_to" class="form-label">Price To*</label>
                                         <div class="col-md-10">
                                             <input type="text" name="price_to" class="form-control price_to"
                                                 min="0"
@@ -327,7 +327,7 @@
                                 <!-- Total Floors -->
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
-                                        <label for="total_floors" class="form-label">Total Floors</label>
+                                        <label for="total_floors" class="form-label">Total Floors*</label>
                                         <input type="text" name="total_floors" class="form-control total_floors"
                                             min="0"
                                             value="{{ isset($model->total_floors) ? $model->total_floors : '' }}">
@@ -338,7 +338,7 @@
                                 <!-- Total Tower -->
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
-                                        <label for="total_tower" class="form-label">Total Tower</label>
+                                        <label for="total_tower" class="form-label">Total Tower*</label>
                                         <input type="text" name="total_tower" class="form-control total_tower"
                                             min="0"
                                             value="{{ isset($model->total_tower) ? $model->total_tower : '' }}">
@@ -349,7 +349,7 @@
                                 <!-- Age Of Construction -->
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
-                                        <label for="age_of_construction" class="form-label">Age Of Construction</label>
+                                        <label for="age_of_construction" class="form-label">Age Of Construction*</label>
                                         <select id="age_of_construction"
                                             class="form-control form-select age_of_construction"
                                             name="age_of_construction">
@@ -370,7 +370,7 @@
                                 <!-- Project Status -->
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
-                                        <label for="project_status" class="form-label">Project Status</label>
+                                        <label for="project_status" class="form-label">Project Status*</label>
                                         <select id="project_status" class="form-control form-select project_status"
                                             name="project_status">
                                             <option value="">Select Project Status</option>
@@ -390,7 +390,7 @@
                                 <!-- Project Video -->
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
-                                        <label for="video" class="form-label d-block">Project Video</label>
+                                        <label for="video" class="form-label d-block">Project Video*</label>
                                         <input type="file" name="video" id="video" class="form-control video"
                                             accept="video/*">
                                         <span class="error"></span>
@@ -400,7 +400,7 @@
                                 <!-- Appraisal Property -->
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
-                                        <label class="form-label">Appraisal Property</label>
+                                        <label class="form-label">Appraisal Property*</label>
                                         <div>
                                             @if (isset($appraisalProperty))
                                                 @foreach ($appraisalProperty as $key => $value)

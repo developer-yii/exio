@@ -22,7 +22,7 @@
                   <a href="{{route('front.home')}}" class="active">Home</a>
                 </li>
                 <li>
-                  <a href="{{route('about-us')}}">About Us</a>
+                  <a href="{{ route('about-us') }}">About Us</a>
                 </li>
                 <li>
                   <a href="#">News</a>
