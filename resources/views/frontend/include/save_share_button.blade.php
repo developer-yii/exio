@@ -1,14 +1,19 @@
 <ul>
     <li>
-        <a href="javascript:void(0)" class="save-property" data-id="{{ $project->id }}">
-            @if (Auth::user())
-                <a href="javascript:void(0)" class="save-property"
-                    data-id="{{ $project->id }}">
-                    <i class="{{ $project->wishlistedByUsers->contains(auth()->id()) ? 'fa-solid' : 'fa-regular' }} fa-heart"></i>
-                    Save
-                </a>
-            @endif
-        </a>
+        {{-- <a href="javascript:void(0)" class="save-property" data-id="{{ $project->id }}">
+            <i class="{{ $project->wishlistedByUsers->contains(auth()->id()) ? 'fa-solid' : 'fa-regular' }} fa-heart"></i>
+                Save
+        </a> --}}
+        @if(auth()->check())
+            <a href="javascript:void(0)" class="save-property" data-id="{{ $project->id }}">
+                <i class="{{ $project->wishlistedByUsers->contains(auth()->id()) ? 'fa-solid' : 'fa-regular' }} fa-heart"></i>
+                Save
+            </a>
+        @else
+            <a href="javascript:void(0)" class="show-login-toastr">
+                <i class="fa-regular fa-heart"></i> Save
+            </a>
+        @endif
     </li>
 
     <li>

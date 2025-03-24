@@ -1,3 +1,34 @@
+$('.cityClickHeader').click(function (e) {
+    e.stopPropagation();
+    $('.city-select-header').toggleClass('show');
+    // $('a.cityClickHeader i').toggleClass('rotate');
+    // $('.projectDropDown').removeClass('show');
+    // $('.userDropDown').removeClass('show');
+});
+
+ $('.cityClickHome').click(function (e) {
+    e.stopPropagation();
+    $('.citySelectHome').toggleClass('show');
+    $('a.cityClickHome i').toggleClass('rotate');
+    $('.projectDropDown').removeClass('show');
+    $('.userDropDown').removeClass('show');
+});
+
+// loadProperty();
+
+$('.city_click_header').click(function () {
+    const id = $(this).data('id');
+    const name = $(this).data('name');
+    $('#city_header').val(id);
+    $('#city_header_name').text(name);
+    $('#city_name_home').text(name);
+    $('#city_home').val(id);
+    $('#city_best_property_title').text(`Best Property in ${name}`);
+    // $('a.cityClick i').toggleClass('rotate');
+    $('.propertyList').empty(); // Clear existing properties
+    loadProperty();
+});
+
 function clearErrorOnInput(containerSelector) {
     $(containerSelector).on('keyup change', 'input, textarea, select, option', function () {
         if ($.trim($(this).val()) && $(this).val().length > 0) {
@@ -60,12 +91,12 @@ $(".more-locality").click(function (event) {
 
 // $('.heartIconFill, .save-property').on('click', function (e) {
 // $(document).on('click', '.heartIconFill, .save-property', function (e) {
-$('body').on('click', '.heartIconFill, .save-property', function (e) {
+$('body').on('click', '.heartIconFill, .save-property, .show-login-toastr', function (e) {
     e.preventDefault();
     e.stopPropagation();
 
     if (!isUserLoggedIn) {
-        window.location.href = '/login';
+        toastr.error('Please log in first to save this property!');
         return;
     }
 
@@ -269,6 +300,31 @@ $('body').on('click', '.propertyCardModal', function (event) {
 
 });
 
+$('#propertyModal').on('hidden.bs.modal', function () {
+    $("#coverImage").attr("src", ""); // Clear image
+    $('#property_price, #property_name, #custom_type, #location, #carpet_area, #total_floor, #total_tower, #age_of_construction, #property_type, #description').text("");
+
+    // $(".overViewBox").html(""); // Clear Project Size and Overview Data
+    console.log($(".overViewBox").length); // Should be > 0
+    $(".overViewBox").html(""); // Clear content
+
+    // setTimeout(() => {
+    //     $(".overViewBox").html("");
+    // }, 100);
+
+    $(".multyimg").html(""); // Clear Multiple Images
+
+    $(".heartIconFill").removeClass().addClass("heartIconFill"); // Reset Favorite Icon
+    $(".heartIconFill").attr("data-id", ""); // Clear data-id
+
+    $('#more-details').attr('href', '#'); // Reset More Details link
+    $("#whatsapplink").attr("href", "#"); // Reset WhatsApp link
+
+    metaUpdate("", "", "", ""); // Reset Meta Tags
+    updateShareLinks(""); // Reset Social Sharing Links
+});
+
+
 $('#subscribe').submit(function (event) {
     event.preventDefault();
     $('.error').html("");
@@ -393,5 +449,12 @@ function formatBudget(amount) {
     return amount.toLocaleString(); // Default formatting for smaller values
 }
 
+function getFormattedPrice(priceFrom, priceFromUnit, priceTo, priceToUnit) {
+    let priceFormatted = '₹' + formatPriceUnit(priceFrom, priceFromUnit, false);
 
+    if (priceFrom !== priceTo || priceFromUnit !== priceToUnit) {
+        priceFormatted += '-' + formatPriceUnit(priceTo, priceToUnit, false);
+    }
 
+    return priceFormatted;
+}

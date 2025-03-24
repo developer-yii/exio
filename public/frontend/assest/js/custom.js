@@ -39,13 +39,13 @@ $(document).ready(function () {
         $('.userDropDown').removeClass('show');
     });
 
-    $('.cityClick').click(function (e) {
-        e.stopPropagation();
-        $('.citySelect').toggleClass('show');
-        $('a.cityClick i').toggleClass('rotate');
-        $('.projectDropDown').removeClass('show');
-        $('.userDropDown').removeClass('show');
-    });
+    // $('.cityClick').click(function (e) {
+    //     e.stopPropagation();
+    //     $('.citySelect').toggleClass('show');
+    //     $('a.cityClick i').toggleClass('rotate');
+    //     $('.projectDropDown').removeClass('show');
+    //     $('.userDropDown').removeClass('show');
+    // });
 
     $(document).click(function () {
         $('.userDropDown').removeClass('show');
@@ -134,7 +134,6 @@ $(document).ready(function () {
         $('.img_view_section img').attr('src', src);
         $('#imageModal').modal('show');
     });
-
 
 });
 

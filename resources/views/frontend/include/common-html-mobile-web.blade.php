@@ -46,10 +46,7 @@
         <div class="priceShare">
             @include('frontend.include.save_share_button', ['project' => $project])
             <h5>
-                <span>₹ {{ formatPriceUnit($project->price_from, $project->price_from_unit) }}</span>
-                @if($project->price_from != $project->price_to || $project->price_from_unit != $project->price_to_unit)
-                    - <span>₹ {{ formatPriceUnit($project->price_to, $project->price_to_unit) }}</span>
-                @endif
+                {!! formatPriceRange($project->price_from, $project->price_from_unit, $project->price_to, $project->price_to_unit) !!}
             </h5>
         </div>
     </div>
@@ -110,14 +107,14 @@
     <div class="tab-content" id="nav-tabContent">
         <div class="tab-pane fade show active" id="nav2d" role="tabpanel" aria-labelledby="nav-tab-2d" tabindex="0">
             <div class="innerViewBox">
-                <div class="masterImg">
+                <div class="masterImg cursor-pointer">
                     <img id="masterImg2D" src="" alt="master-img" loading="lazy">
                 </div>
             </div>
         </div>
         <div class="tab-pane fade" id="nav3d" role="tabpanel" aria-labelledby="nav-tab-3d" tabindex="0">
             <div class="innerViewBox">
-                <div class="masterImg">
+                <div class="masterImg cursor-pointer">
                     <img id="masterImg3D" src="" alt="master-img" loading="lazy">
                 </div>
             </div>
@@ -140,16 +137,17 @@
                 <div class="sliderImgSec">
                     <div class="owl-carousel owl-theme">
                         @foreach ($project->floorPlans as $floorPlan)
-                            <div class="item">
-                                <div class="imgBox">
-                                    <img src="{{ $floorPlan->$method() }}" alt="{{ $floorPlan->type }}" loading="lazy">
+                            <div class="item cursor-pointer">
+                                <div class="imgBoxFloorPlan">
+                                    <a href="{{ $floorPlan->$method() }}" data-fancybox="floorplan{{$key}}">
+                                        <img src="{{ $floorPlan->$method() }}" alt="{{ $floorPlan->type }}" loading="lazy">
+                                    </a>
                                 </div>
                                 <div class="textSlider">
                                     @foreach (['Carpet Area' => $floorPlan->carpet_area . ' sqft', 'Type' => $floorPlan->type] as $label => $value)
                                         <div class="imgText">
                                             <span>{{ $label }}</span>
-                                            <h6>{{ $value }}
-                                            </h6>
+                                            <h6>{{ $value }}</h6>
                                         </div>
                                     @endforeach
                                 </div>
@@ -175,10 +173,6 @@
                      alt="{{ $amenity->name }}"
                      height="20"
                      loading="lazy">
-                {{-- <img src="{{ $iconSrc ?? $amenity->getAmenityIconUrl() }}"
-                     alt="{{ $iconSrc ? 'circle_gray' : $amenity->name }}"
-                     height="20"
-                     loading="lazy"> --}}
             </div>
             <div class="iconText">
                 <p>{{ $amenity->amenity_name }}</p>
@@ -204,7 +198,6 @@
         </div>
     @endif
 @endif
-
 
 {{-- @if($type == "amenities-more-button")
     $amenities = ($page ?? '') == 'compare' ? $project->amenitiesList : $amenitiesList;
@@ -295,17 +288,16 @@
                 <div class="imgheader">
                     <span>Best for Investment</span>
                     @if (Auth::check())
-                        <i class="{{ $similarProperty->wishlistedByUsers->contains(auth()->id()) ? 'fa-solid' : 'fa-regular' }} fa-heart heartIconFill"
-                            data-id="{{ $similarProperty->id }}"></i>
+                        <i class="{{ $similarProperty->wishlistedByUsers->contains(auth()->id()) ? 'fa-solid' : 'fa-regular' }} fa-heart heartIconFill" data-id="{{ $similarProperty->id }}"></i>
+                    @else
+                        <i class="fa-regular fa-heart show-login-toastr"></i>
                     @endif
                 </div>
             </div>
             <div class="priceBox">
                 <div class="price">
-                    <h5>₹{{ formatPriceUnit($similarProperty->price_from, $similarProperty->price_from_unit) }}
-                        @if(hasDifferentPrices($similarProperty))
-                            -{{ formatPriceUnit($similarProperty->price_to,$similarProperty->price_to_unit) }}
-                        @endif
+                    <h5>
+                        {!! formatPriceRangeSingleSign($project->price_from, $project->price_from_unit, $project->price_to, $project->price_to_unit) !!}
                     </h5>
                 </div>
                 <div class="boxLogo">
@@ -380,3 +372,53 @@
         <p>{!! $actualProgress->description !!}</p>
     </div>
 @endif
+
+@if($type == 'best-property-title')
+<div class="sectionTitleBox">
+    <h3 id="city_best_property_title">Best Property in Ahmedabad</h3>
+</div>
+@endif
+
+@if($type == 'search-key')
+    <div class="search-key d-none">
+        <ul>
+            @if ($locations->count() > 0)
+                <h6>Locality</h6>
+                @foreach ($locations as $location)
+                    <li style="display: none;">
+                        <a href="javascript:void(0)" data-type="locality"
+                            data-id="{{ $location->id }}"
+                            data-name="{{ $location->location_name }}">
+                            {{ $location->location_name }}
+                        </a>
+                    </li>
+                @endforeach
+            @endif
+            @if ($projects->count() > 0)
+                <h6>Project</h6>
+                @foreach ($projects as $project)
+                    <li style="display: none;">
+                        <a href="javascript:void(0)" data-type="project"
+                            data-id="{{ $project->id }}"
+                            data-name="{{ $project->project_name }}">
+                            {{ $project->project_name }}
+                        </a>
+                    </li>
+                @endforeach
+            @endif
+            @if ($builders->count() > 0)
+                <h6>Builder</h6>
+                @foreach ($builders as $builder)
+                    <li style="display: none;">
+                        <a href="javascript:void(0)" data-type="builder"
+                            data-id="{{ $builder->id }}"
+                            data-name="{{ $builder->builder_name }}">
+                            {{ $builder->builder_name }}
+                        </a>
+                    </li>
+                @endforeach
+            @endif
+        </ul>
+    </div>
+@endif
+

@@ -14,7 +14,6 @@
     @section('og_image', asset($project->getCoverImageUrl()))
     @section('og_url', url()->current())
 
-
 @section('content')
     <!-- details banner -->
     <section class="detail_Sec">
@@ -33,7 +32,7 @@
                     <div class="imageGallery">
                         <div class="leftVideo">
                             <div class="videoCoverImage">
-                                <video controls id="myVideo">
+                                <video no-controls id="myVideo">
                                     <source src="{{ $project->getVideoUrl() }}">
                                 </video>
                                 <div class="playIcon" id="playIcon">
@@ -90,8 +89,12 @@
                         <li><a class="active" href="#overView">Overview</a></li>
                         <li><a href="#master_plan">Master Plan</a></li>
                         <li><a href="#floor_paln">Floor Plan</a></li>
-                        <li><a href="#amenites">Amenities</a></li>
-                        <li><a href="#propert_document">Brochure</a></li>
+                        @if(count($amenitiesList) > 0)
+                            <li><a href="#amenites">Amenities</a></li>
+                        @endif
+                        @if($project->property_document)
+                            <li><a href="#propert_document">Brochure</a></li>
+                        @endif
                         <li><a href="#locality">Locality</a></li>
                         <li><a href="#documents">Documents</a></li>
                         <li><a href="#map_view">Map</a></li>
@@ -124,10 +127,11 @@
                                                 <div class="viewText">
                                                     <ul id="masterPlanList" data-section="web">
                                                         @foreach ($project->masterPlans as $index => $masterPlan)
-                                                            <li class="{{ $index === 0 ? 'active' : '' }}"
+                                                            <li class="cursor-pointer {{ $index === 0 ? 'active' : '' }}"
                                                                 data-index="{{ $index }}"
                                                                 data-2dImage="{{ $masterPlan->get2DImageUrl() }}"
-                                                                data-3dImage="{{ $masterPlan->get3DImageUrl() }}">
+                                                                data-3dImage="{{ $masterPlan->get3DImageUrl() }}"
+                                                            >
                                                                 <h6>{{ $masterPlan->name }}</h6>
                                                             </li>
                                                         @endforeach
@@ -156,25 +160,29 @@
                                     </div>
                                 </div>
 
-                                <div id="amenites">
-                                    <div class="amenitesBox">
-                                        <div class="title">
-                                            <h5>Amenities</h5>
-                                            <p>Total {{ count($amenitiesList) }}+ Amenities</p>
-                                        </div>
-                                        <div class="amenitiesItem">
-                                            @include('frontend.include.common-html-mobile-web', ['type' => 'amenities', 'page' => 'project-detail', 'showAmenities' => 23])
-                                            @include('frontend.include.common-html-mobile-web', ['type' => 'amenities-more-button', 'page' => 'project-detail', 'showAmenities' => 23])
+                                @if(count($amenitiesList) > 0)
+                                    <div id="amenites">
+                                        <div class="amenitesBox">
+                                            <div class="title">
+                                                <h5>Amenities</h5>
+                                                <p>Total {{ count($amenitiesList) }}+ Amenities</p>
+                                            </div>
+                                            <div class="amenitiesItem">
+                                                @include('frontend.include.common-html-mobile-web', ['type' => 'amenities', 'page' => 'project-detail', 'showAmenities' => 23])
+                                                @include('frontend.include.common-html-mobile-web', ['type' => 'amenities-more-button', 'page' => 'project-detail', 'showAmenities' => 23])
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                @endif
 
-                                <div id="propert_document">
-                                    <div class="title">
-                                        <h5>Property Documents</h5>
+                                @if($project->property_document)
+                                    <div id="propert_document">
+                                        <div class="title">
+                                            <h5>Property Documents</h5>
+                                        </div>
+                                        @include('frontend.include.common-html-mobile-web', ['type' => 'download-brochure'])
                                     </div>
-                                    @include('frontend.include.common-html-mobile-web', ['type' => 'download-brochure'])
-                                </div>
+                                @endif
 
                                 <div id="locality">
                                     <div class="title">
@@ -311,47 +319,51 @@
                                     </div>
 
                                     {{-- amenities --}}
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="flush-headingFour">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseFour">
-                                                Amenities
-                                            </button>
-                                        </h2>
-                                        <div id="flush-collapseFour" class="accordion-collapse collapse"
-                                            aria-labelledby="flush-headingFour" data-bs-parent="#accordionFlushExample">
-                                            <div class="accordion-body">
-                                                <div id="amenites">
-                                                    <div class="amenitesBox">
-                                                        <div class="title">
-                                                            <p>Total {{ count($amenitiesList) }}+ Amenities</p>
+                                    @if(count($amenitiesList) > 0)
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="flush-headingFour">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseFour">
+                                                    Amenities
+                                                </button>
+                                            </h2>
+                                            <div id="flush-collapseFour" class="accordion-collapse collapse"
+                                                aria-labelledby="flush-headingFour" data-bs-parent="#accordionFlushExample">
+                                                <div class="accordion-body">
+                                                    <div id="amenites">
+                                                        <div class="amenitesBox">
+                                                            <div class="title">
+                                                                <p>Total {{ count($amenitiesList) }}+ Amenities</p>
+                                                            </div>
+                                                            <div class="amenitiesItem">
+                                                                @include('frontend.include.common-html-mobile-web', ['type' => 'amenities', 'page' => 'project-detail', 'showAmenities' => 23])
+                                                            </div>
+                                                                @include('frontend.include.common-html-mobile-web', ['type' => 'amenities-more-button', 'page' => 'project-detail', 'showAmenities' => 23])
                                                         </div>
-                                                        <div class="amenitiesItem">
-                                                            @include('frontend.include.common-html-mobile-web', ['type' => 'amenities', 'page' => 'project-detail', 'showAmenities' => 23])
-                                                        </div>
-                                                            @include('frontend.include.common-html-mobile-web', ['type' => 'amenities-more-button', 'page' => 'project-detail', 'showAmenities' => 23])
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    @endif
 
                                     {{-- Property Documents --}}
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="flush-headingFive">
-                                            <button class="accordion-button collapsed" type="button"
-                                                data-bs-toggle="collapse" data-bs-target="#flush-collapseFive"
-                                                aria-expanded="false" aria-controls="flush-collapseFive">
-                                                Brochure
-                                            </button>
-                                        </h2>
-                                        <div id="flush-collapseFive" class="accordion-collapse collapse" aria-labelledby="flush-headingFive" data-bs-parent="#accordionFlushExample">
-                                            <div class="accordion-body">
-                                                <div id="propert_document">
-                                                    @include('frontend.include.common-html-mobile-web', ['type' => 'download-brochure'])
+                                    @if($project->property_document)
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="flush-headingFive">
+                                                <button class="accordion-button collapsed" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#flush-collapseFive"
+                                                    aria-expanded="false" aria-controls="flush-collapseFive">
+                                                    Brochure
+                                                </button>
+                                            </h2>
+                                            <div id="flush-collapseFive" class="accordion-collapse collapse" aria-labelledby="flush-headingFive" data-bs-parent="#accordionFlushExample">
+                                                <div class="accordion-body">
+                                                    <div id="propert_document">
+                                                        @include('frontend.include.common-html-mobile-web', ['type' => 'download-brochure'])
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    @endif
 
                                     {{-- Locality --}}
                                     <div class="accordion-item">
@@ -503,7 +515,7 @@
                         </div>
                     </div>
                     <div class="brochureBox">
-                        <p>Please share below details,</p>
+                        <p>Please share below details</p>
                         <form id="downloadBrochureForm">
                             @csrf
                             <div class="form-group">
@@ -512,17 +524,17 @@
                             </div>
                             <div class="form-group">
                                 <label class="labelClass" for="">Full Name<span>*</span></label>
-                                <input class="inputClass" type="text" name="name" id="name" placeholder="Mike Jhone">
+                                <input class="inputClass name" type="text" name="name" id="name" placeholder="John Deo">
                                 <span class="error"></span>
                             </div>
                             <div class="form-group">
                                 <label class="labelClass" for="">Phone Number<span>*</span></label>
-                                <input class="inputClass" type="number"  name="phone_number" id="phone_number" placeholder="+91 98989 89898">
+                                <input class="inputClass phone_number" type="number" name="phone_number" id="phone_number" placeholder="98989 89898">
                                 <span class="error"></span>
                             </div>
                             <div class="form-group">
                                 <label class="labelClass" for="">Email Address<span>*</span></label>
-                                <input class="inputClass" type="text"  name="email" id="email" placeholder="Mikejhone1469@gmail.com">
+                                <input class="inputClass email" type="text" name="email" placeholder="johndeo@gmail.com">
                                 <span class="error"></span>
                             </div>
                             <div class="btnDown">

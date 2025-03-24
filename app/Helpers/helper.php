@@ -409,5 +409,28 @@ function formatBudget($amount) {
     return number_format($amount); // Default formatting for smaller values
 }
 
+if (!function_exists('formatPriceRange')) {
+    function formatPriceRange($priceFrom, $priceFromUnit, $priceTo, $priceToUnit) {
+        $formattedPrice = '₹ ' . formatPriceUnit($priceFrom, $priceFromUnit);
+
+        if ($priceFrom != $priceTo || $priceFromUnit != $priceToUnit) {
+            $formattedPrice .= ' - ₹ ' . formatPriceUnit($priceTo, $priceToUnit);
+        }
+
+        return $formattedPrice;
+    }
+}
+
+if (!function_exists('formatPriceRangeSingleSign')) {
+    function formatPriceRangeSingleSign($priceFrom, $priceFromUnit, $priceTo, $priceToUnit) {
+        $formattedPrice = '₹' . formatPriceUnit($priceFrom, $priceFromUnit, false);
+
+        if ($priceFrom != $priceTo || $priceFromUnit != $priceToUnit) {
+            $formattedPrice .= '-' . formatPriceUnit($priceTo, $priceToUnit, false);
+        }
+
+        return $formattedPrice;
+    }
+}
 
 

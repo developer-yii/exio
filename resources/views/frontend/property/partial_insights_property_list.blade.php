@@ -13,11 +13,7 @@
                 </div>
                 <div class="priceBox">
                     <div class="price">
-                        <h5>₹{{ formatPriceUnit($property->price_from, $property->price_from_unit) }}
-                            @if (hasDifferentPrices($property))
-                                -{{ formatPriceUnit($property->price_to, $property->price_to_unit) }}
-                            @endif
-                        </h5>
+                        <h5 class="one-line-text" title="{{ $property->project_name }}">{{ $property->project_name }}</h5>
                     </div>
                     <div class="boxLogo">
                         <img src="{{ $baseUrl }}assest/images/x-btn.png" alt="x-btn" loading="lazy">
@@ -25,7 +21,8 @@
                     </div>
                 </div>
                 <div class="propertyName">
-                    <h5 class="one-line-text" title="{{ $property->project_name }}">{{ $property->project_name }}</h5>
+                    <h5 class="one-line-text" title="{{ $property->builder->builder_name }}">
+                        By {{ $property->builder->builder_name }}</h5>
                 </div>
                 <div class="locationProperty">
                     <div class="homeBox comBox">

@@ -9,10 +9,7 @@
         <div class="innerPriceBox">
             <div class="priceShare">
                 <h5>
-                    <span>₹ {{ formatPriceUnit($property->price_from, $property->price_from_unit) }}</span>
-                    @if(hasDifferentPrices($property))
-                        - <span>₹ {{ formatPriceUnit($property->price_to, $property->price_to_unit) }}</span>
-                    @endif
+                    {!! formatPriceRange($property->price_from, $property->price_from_unit, $property->price_to, $property->price_to_unit) !!}
                 </h5>
             </div>
             <div class="boxLogo">

@@ -62,7 +62,7 @@ $(document).ready(function () {
                         first_input = "";
                         $.each(response.errors, function (key) {
                             if (first_input == "") first_input = key;
-                            $('#' + key).closest('.form-group').find('.error').html(response.errors[key]);
+                            $('.' + key).closest('.form-group').find('.error').html(response.errors[key]);
                         });
                         $('#downloadBrochureForm').find("." + first_input).focus();
                     }
@@ -135,7 +135,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 });
-
 
 $('.sliderImgSec .owl-carousel').owlCarousel({
     loop:false,

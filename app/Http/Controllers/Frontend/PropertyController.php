@@ -167,10 +167,7 @@ class PropertyController extends Controller
             $property->possession_date = getFormatedDate($property->possession_by, 'M, Y');
             $property->cover_image = $property->getCoverImageUrl();
 
-            $property->price = "₹" . formatPriceUnit($property->price_from, $property->price_from_unit);
-            if($property->price_from != $property->price_to || $property->price_from_unit != $property->price_to_unit){
-                $property->price .= " - ₹ " . formatPriceUnit($property->price_to, $property->price_to_unit);
-            }
+            $property->price = formatPriceRange($property->price_from, $property->price_from_unit, $property->price_to, $property->price_to_unit);
 
             // $property->truncatedPropertyType = truncateText($property->custom_property_type, 15);
             $property->location_city = $property->location->location_name .",". $property->city->city_name;

@@ -29,11 +29,11 @@
                         <div class="cityDropDown moblieHide">
                             <ul>
                                 <li>
-                                    <input type="hidden" name="city_header" id="city_header"
-                                        value="{{ $inputCity }}" />
-                                    <a class="cityClick" href="javascript:void(0)"><span
-                                            id="city_header_name">{{ $defaultCity }}</span> <i
-                                            class="fa-solid fa-chevron-down rotate"></i></a>
+                                    <input type="hidden" name="city_header" id="city_header" value="{{ $inputCity }}" />
+                                    <a class="cityClick cityClickHeader" href="javascript:void(0)">
+                                        <span id="city_header_name">{{ $defaultCity }}</span>
+                                        <i class="fa-solid fa-chevron-down rotate"></i>
+                                    </a>
                                     <ul class="citySelect city-select-header">
                                         @foreach ($cities as $city)
                                             <li>
@@ -107,37 +107,56 @@
                             <ul class="userDropDown">
                                 @if (Auth::user())
                                     <li class="cursor-pointer">
-                                        <img src="{{ $baseUrl }}assest/images/login.png" alt="login">Profile({{ Auth::user()->name }})
+                                        <a href="" class="full-li-cover">
+                                            <img src="{{ $baseUrl }}assest/images/login.png" alt="login">Profile({{ Auth::user()->name }})
+                                        </a>
                                     </li>
                                 @else
-                                    <li onclick="location.href='{{ route('login') }}'" style="cursor: pointer;">
-                                        <img src="{{ $baseUrl }}assest/images/login.png" alt="login">Login
+                                    <li class="cursor-pointer">
+                                        <a href="{{ route('login') }}" class="full-li-cover">
+                                            <img src="{{ $baseUrl }}assest/images/login.png" alt="login">Login
+                                        </a>
                                     </li>
                                 @endif
-                                    <li onclick="location.href='{{ route('property.insights') }}'" style="cursor: pointer;">
+                                    {{-- <li onclick="location.href='{{ route('property.insights') }}'" style="cursor: pointer;">
                                         <img src="{{ $baseUrl }}assest/images/project.png" alt="project"> Project
                                         Insights
+                                    </li> --}}
+                                    <li class="cursor-pointer">
+                                        <a href="{{ route('property.insights') }}" class="full-li-cover">
+                                            <img src="{{ $baseUrl }}assest/images/project.png" alt="project"> Project Insights
+                                        </a>
                                     </li>
                                 @if (Auth::user())
-                                    <li onclick="location.href='{{ route('property.shortlisted') }}'" style="cursor: pointer;">
-                                        <img src="{{ $baseUrl }}assest/images/shortlist.png" alt="shortlist">Shortlisted Properties
+                                    <li class="cursor-pointer">
+                                        <a href="{{ route('property.shortlisted') }}" class="full-li-cover">
+                                            <img src="{{ $baseUrl }}assest/images/shortlist.png" alt="shortlist">Shortlisted Properties
+                                        </a>
                                     </li>
 
-                                    <li onclick="location.href='{{ route('property.insights-report') }}'" style="cursor: pointer;">
-                                        <img src="{{ $baseUrl }}assest/images/report.png" alt="report">Downloaded Reports
+                                    <li class="cursor-pointer">
+                                        <a href="{{ route('property.insights-report') }}" class="full-li-cover">
+                                            <img src="{{ $baseUrl }}assest/images/report.png" alt="report">Downloaded Reports
+                                        </a>
                                     </li>
 
-                                    <li onclick="location.href='{{ route('property.compare-report') }}'" style="cursor: pointer;">
-                                        <img src="{{ $baseUrl }}assest/images/compare.png" alt="compare">Compare Reports
+                                    <li class="cursor-pointer">
+                                        <a href="{{ route('property.compare-report') }}" class="full-li-cover">
+                                            <img src="{{ $baseUrl }}assest/images/compare.png" alt="compare">Compare Reports
+                                        </a>
                                     </li>
                                 @endif
 
-                                <li onclick="location.href='{{ route('contact-us') }}'" style="cursor: pointer;">
-                                    <img src="{{ $baseUrl }}assest/images/contact.png" alt="contact">Contact Us
+                                <li class="cursor-pointer">
+                                    <a href="{{ route('contact-us') }}" class="full-li-cover">
+                                        <img src="{{ $baseUrl }}assest/images/contact.png" alt="contact">Contact Us
+                                    </a>
                                 </li>
                                 @if (Auth::user())
-                                    <li onclick="event.preventDefault();document.getElementById('logout-form').submit();" style="cursor: pointer;">
-                                        <img src="{{ $baseUrl }}assest/images/contact.png" alt="contact">Logout
+                                    <li class="cursor-pointer">
+                                        <a onclick="event.preventDefault();document.getElementById('logout-form').submit();" class="full-li-cover">
+                                            <img src="{{ $baseUrl }}assest/images/contact.png" alt="contact">Logout
+                                        </a>
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST"
                                             class="app-display-none">
                                             @csrf
