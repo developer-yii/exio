@@ -14,6 +14,7 @@ class PropertyFilterController extends Controller
     {
         $city = $request->input('city');
         $search = $request->input('search');
+        
 
         $projects = projectQuery();
 
