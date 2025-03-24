@@ -1,9 +1,5 @@
 @php
-    $priceFormatted = '₹' . formatPriceUnit($project->price_from, $project->price_from_unit, false);
-
-    if ($project->price_from != $project->price_to || $project->price_from_unit != $project->price_to_unit) {
-        $priceFormatted .= '-' . formatPriceUnit($project->price_to, $project->price_to_unit, false);
-    }
+    $priceFormatted = formatPriceRangeSingleSign($project->price_from, $project->price_from_unit, $project->price_to, $project->price_to_unit);
 @endphp
 
 <div class="col-md-6">
@@ -32,8 +28,13 @@
                 @else
                     <span style="opacity: 0 !important;"></span>
                 @endif
-                <i data-id="{{ $project->id }}"
-                    class="{{ $project->wishlistedByUsers->contains(auth()->id()) ? 'fa-solid' : 'fa-regular' }} fa-heart heartIconFill"></i>
+
+                @if (Auth::check())
+                    <i data-id="{{ $project->id }}" class="{{ $project->wishlistedByUsers->contains(auth()->id()) ? 'fa-solid' : 'fa-regular' }} fa-heart heartIconFill"></i>
+                @else
+                    <i class="fa-regular fa-heart show-login-toastr"></i>
+                @endif
+
             </div>
         </div>
         <div class="priceBox">

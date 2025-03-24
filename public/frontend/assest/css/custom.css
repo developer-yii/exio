@@ -44,6 +44,10 @@
     cursor: default !important;
   }
 
+  .cursor-pointer{
+    cursor: pointer !important;
+  }
+
   .site_traking_box .row a {
     width: 100%;
 }
@@ -102,3 +106,63 @@
     max-width: 100%;
 }
 
+#master_plan .tabBox .viewText li {
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#master_plan .tabBox .viewText li.active {
+    background: #eef6ff;
+}
+
+#master_plan .tabBox .viewText li:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+#master_plan .tabBox .viewText li h6 {
+    margin-bottom: 0;
+}
+
+.site_traking_listng .propertyCard .propertyName h5 {
+    color: #6A6A71;
+    font-weight: 500 !important;
+    font-size: 16px;
+}
+
+.site_traking_listng .propertyCard .priceBox .price {
+    width: calc(50%);
+}
+
+.site_traking_listng .propertyCard .priceBox {
+    margin-bottom: 10px;
+}
+
+.propertyCard .locationProperty .comBox {
+    width: calc(50%);
+}
+
+.propertyCard .locationProperty .comBox img {
+    width: 100%;
+    max-width: 30px;
+    margin-right: 5px;
+}
+
+.modalTextBox .locationProperty .comBox {
+    width: calc(50%);
+}
+
+.not-found{
+    font-size : 24px; font-weight:500;
+}
+
+.full-li-cover{
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+}
+
+.row.propertyList a {
+    width: 100%;
+}

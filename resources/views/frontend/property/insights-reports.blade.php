@@ -67,10 +67,7 @@
                                         @include('frontend.include.save_share_button', ['project' => $property])
 
                                         <h5>
-                                            <span>₹ {{ formatPriceUnit($property->price_from, $property->price_from_unit) }}</span>
-                                            @if(($property->price_from ?? '') !== ($property->price_to ?? '') || ($property->price_from_unit ?? '') !== ($property->price_to_unit ?? ''))
-                                                - <span>₹ {{ formatPriceUnit($property->price_to, $property->price_to_unit) }}</span>
-                                            @endif
+                                            {!! formatPriceRange($property->price_from, $property->price_from_unit, $property->price_to, $property->price_to_unit) !!}
                                         </h5>
                                     </div>
                                 </div>

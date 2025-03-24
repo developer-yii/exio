@@ -222,37 +222,25 @@
                                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
                                         aria-labelledby="pills-home-tab">
                                         <div class="row">
-                                            @if($projects->count() > 0)
-                                                @foreach ($projects as $project)
-                                                    <x-property-card :project="$project" :amenities="$amenities" />
-                                                @endforeach
-                                            @else
-                                                <p class="not-found">No property found</p>
-                                            @endif
+                                            @foreach ($projects as $project)
+                                                <x-property-card :project="$project" :amenities="$amenities" />
+                                            @endforeach
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="pills-profile" role="tabpanel"
                                         aria-labelledby="pills-profile-tab">
                                         <div class="row">
-                                            @if($appraisal->count() > 0)
-                                                @foreach ($appraisal as $project)
-                                                    <x-property-card :project="$project" :amenities="$amenities" />
-                                                @endforeach
-                                            @else
-                                                <p class="not-found">No property found</p>
-                                            @endif
+                                            @foreach ($appraisal as $project)
+                                                <x-property-card :project="$project" :amenities="$amenities" />
+                                            @endforeach
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="pills-match" role="tabpanel"
                                         aria-labelledby="pills-match-tab">
                                         <div class="row">
-                                            @if($bestMatch->count() > 0)
-                                                @foreach ($bestMatch as $project)
-                                                    <x-property-card :project="$project" :amenities="$amenities" />
-                                                @endforeach
-                                            @else
-                                                <p class="not-found">No property found</p>
-                                            @endif
+                                            @foreach ($bestMatch as $project)
+                                                <x-property-card :project="$project" :amenities="$amenities" />
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>

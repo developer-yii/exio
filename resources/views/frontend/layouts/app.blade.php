@@ -1,7 +1,8 @@
 @php
     $baseUrl = asset('frontend') . '/';
     $routeName = request()->route()->getName();
-    $showCityDropdown = in_array($routeName, ['property.result.filter']);
+    $showCityDropdown = in_array($routeName, ['property.result.filter', 'front.home']);
+    $bodyClass = $routeName == 'property.result.filter' ? 'matchProperty' : '';
 @endphp
 <!DOCTYPE html>
 <html lang="en">
@@ -63,7 +64,7 @@
     @yield('css')
 </head>
 
-<body>
+<body class="{{ $bodyClass }}">
     <div class="siteLoader" id="siteLoader" style="display: none;">
         <section class="loaderSec">
             <span class="loader-11"></span>
@@ -80,7 +81,7 @@
         $dontShowFooter = in_array(request()->route()->getName(), [
             'front.check-and-match-property.result',
             'front.check-and-match-property',
-            // 'property.result.filter'
+            'property.result.filter'
         ]);
     @endphp
 
@@ -111,8 +112,6 @@
     <!-- jQuery UI -->
     <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
     {{-- <script src="assest/js/custom.js"></script> --}}
-
-
 
     <script>
         var propertyLikeUrl = "{{ route('property.like-unlike') }}";

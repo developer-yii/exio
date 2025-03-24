@@ -22,10 +22,7 @@
                     <div class="row">
                         @foreach($favourite_properties as $property)
                             @php
-                                $priceFormatted = "₹" . formatPriceUnit($property->price_from, $property->price_from_unit, false);
-                                if (hasDifferentPrices($property)) {
-                                    $priceFormatted .= "-" . formatPriceUnit($property->price_to,$property->price_to_unit, false);
-                                }
+                                $priceFormatted = formatPriceRangeSingleSign($property->price_from, $property->price_from_unit, $property->price_to, $property->price_to_unit);
                             @endphp
                             <div class="col-md-6 col-xl-4">
                                 <div class="propertyCard cursor-pointer propertyCardModal"
@@ -43,7 +40,7 @@
                                     data-type="{{ $property->property_type }}"
                                     data-property-type="{{ getPropertyType($property->property_type) }}"
                                     data-description="{{ formattedProjectAbout($property->project_about) }}"
-                                    data-size="{{ json_encode($property->projectDetails->map(fn($detail) => ['name' => $detail->name, 'value' => $detail->value])) }}"
+                                    data-size="{{ json_encode($property->projectDetails->take(2)->map(fn($detail) => ['name' => $detail->name, 'value' => $detail->value])) }}"
                                     data-multi-image="{{ json_encode($property->projectImages->take(3)->map(fn($detail) => ['imgurl' => $detail->getProjectImageUrl()])) }}"
                                     data-whatsapp-number="{{ getSettingFromDb('support_mobile') }}"
                                     data-like-class = "{{ $property->wishlistedByUsers->contains(auth()->id()) ? 'fa-solid' : 'fa-regular' }}"
@@ -53,7 +50,11 @@
                                     <div class="imgBox">
                                         <img src="{{ $property->getCoverImageUrl() }}" alt="{{ $property->project_name }}" loading="lazy">
                                         <div class="imgheader">
-                                            <span>Best for Investment</span>
+                                            @if ($property->projectBadge)
+                                                <span>{{ $property->getProjectBadgeName() }}</span>
+                                            @else
+                                                <span style="opacity: 0 !important;"></span>
+                                            @endif
                                             @if (Auth::check())
                                                 <i class="{{ $property->wishlistedByUsers->contains(auth()->id()) ? 'fa-solid' : 'fa-regular' }} fa-heart heartIconFill" data-id="{{ $property->id }}"></i>
                                             @endif

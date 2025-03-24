@@ -1,11 +1,12 @@
 
 function renderPropertyCard(project, amenities) {
 
-    // Format price
-    let priceFormatted = '₹' + formatPriceUnit(project.price_from, project.price_from_unit, false);
-    if (project.price_from != project.price_to || project.price_from_unit != project.price_to_unit) {
-        priceFormatted += '-' + formatPriceUnit(project.price_to, project.price_to_unit, false);
-    }
+    let priceFormatted = getFormattedPrice(
+        project.price_from,
+        project.price_from_unit,
+        project.price_to,
+        project.price_to_unit
+    );
 
     // Format amenities
     const maxChars = 20;

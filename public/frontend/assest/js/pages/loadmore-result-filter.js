@@ -102,6 +102,10 @@ function loadMoreProjects() {
             maxPrice: maxPrice
         },
         success: function (response) {
+
+            if(response.data.data.length == 0 && page < 2){
+                $('#pills-home .row').html('<p class="not-found">No property found</p>');
+            }
             if (response.status && response.data.data.length) {
                 var newProjects = response.data.data;
                 if (page == 1) {
@@ -111,14 +115,17 @@ function loadMoreProjects() {
                 if (deviceType == 'desktop') {
                     initMap();
                 }
+
                 newProjects.forEach(function (proj) {
                     $('#pills-home .row').append(renderPropertyCard(proj,
                         amenities));
                 });
+
                 if (response.data.current_page >= response.data.last_page) {
                     lastPage = true;
                 }
             } else {
+                // $('#pills-home .row').html('<p class="not-found">No property found</p>');
                 lastPage = true;
             }
         },

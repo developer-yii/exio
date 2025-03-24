@@ -2,9 +2,6 @@ $(document).ready(function () {
     let sliderMax = $('#slider-max').val();
     let sliderMin = $('#slider-min').val();
 
-    // let sliderMaxDis = $('#slider-max').data('display');
-    // let sliderMinDis = $('#slider-min').data('display');
-
     let propertyType = $('[name="property_type"]:checked').val();
     let subTypes_o = propertySubTypes[propertyType];
 
@@ -86,18 +83,18 @@ modelOpacityAdd('share_property', 'propertyModal');
 modelOpacityRemove('share_property', 'propertyModal');
 
 function loadMoreAmenities() {
-    console.log('loadMoreAmenities');
+    // console.log('loadMoreAmenities');
     $('#moreAmenities').addClass('d-none');
     $('#lessAmenities').removeClass('d-none');
-    console.log($('.hidden-amenity'));
+    // console.log($('.hidden-amenity'));
     $('.hidden-amenity').removeClass('d-none');
 }
 
 function loadLessAmenities() {
-    console.log('loadLessAmenities');
+    // console.log('loadLessAmenities');
     $('#moreAmenities').removeClass('d-none');
     $('#lessAmenities').addClass('d-none');
-    console.log($('.hidden-amenity'));
+    // console.log($('.hidden-amenity'));
     $('.hidden-amenity').addClass('d-none');
 }
 
