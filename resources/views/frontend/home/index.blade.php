@@ -455,8 +455,7 @@
     var lastPageReached = false;
 
     var currentPage = 1;
-    var isLoading = false;
-    var getPropertyByCityUrl = "{{ route('front.home.getProjects') }}";
+    var isLoading = false;    
     var getPropertyDetailsUrl = "{{ route('property.details', ["_slug_"]) }}";
 </script>
 <script src="{{ frontendPageJsLink('home.js') }}"></script>

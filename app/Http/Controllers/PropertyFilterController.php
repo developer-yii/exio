@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Amenity;
+use App\Models\Builder;
 use App\Models\GeneralSetting;
+use App\Models\Location;
 use Illuminate\Http\Request;
 use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +16,6 @@ class PropertyFilterController extends Controller
     {
         $city = $request->input('city');
         $search = $request->input('search');
-        
 
         $projects = projectQuery();
 
@@ -59,7 +60,12 @@ class PropertyFilterController extends Controller
             $query->where('user_id', auth()->id());
         })->count();
 
-        return view('frontend.property.result-filter', compact('projects', 'priceUnit', 'appraisal', 'bestMatch', 'propertyTypes', 'amenities', 'property_sub_types', 'bhks', 'minMaxPrice', 'shortlistedCount'));
+        // for search box
+        $sLocations = Location::where('status', 1)->get();
+        $sProjects = Project::where('status', 1)->get();
+        $sBuilders = Builder::where('status', 1)->get();
+
+        return view('frontend.property.result-filter', compact('sLocations', 'sProjects', 'sBuilders', 'projects', 'priceUnit', 'appraisal', 'bestMatch', 'propertyTypes', 'amenities', 'property_sub_types', 'bhks', 'minMaxPrice', 'shortlistedCount'));
     }
 
     public function getProjectData(Request $request)

@@ -102,8 +102,6 @@
         var isUserLoggedIn = @json(Auth::check());
     </script>
 
-    <script src="{{ frontendPageJsLink('custom.js') }}"></script>
-
     {{-- Extra Js --}}
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
@@ -117,6 +115,8 @@
         var propertyLikeUrl = "{{ route('property.like-unlike') }}";
         var subscribeUrl = "{{ route('subscribe') }}";
         var downloadInsightsRrportUrl = "{{ route('property.download-insights-report') }}";
+        var getPropertyByCityUrl = "{{ route('front.home.getProjects') }}";
+        
         $(document).ready(function() {
             $.ajaxSetup({
                 headers: {
@@ -126,6 +126,8 @@
         });
     </script>
 
+    <script src="{{ frontendPageJsLink('custom.js') }}"></script>
+        
     @yield('modal')
     @yield('js')
     @if (session('success'))

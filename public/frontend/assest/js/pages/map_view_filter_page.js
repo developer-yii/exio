@@ -173,6 +173,35 @@ async function loadMarkers(projects) {
 
         mc = new markerClusterer.MarkerClusterer({ markers, map });
 
+        // if (markers.length > 0) {            
+        //     const firstMarker = markers[0];
+        
+        //     google.maps.event.addListenerOnce(map, "idle", function () {
+        //         setTimeout(() => {
+        //             google.maps.event.trigger(firstMarker, "click");
+        //         }, 500); // Delay added to ensure markers are fully rendered
+        //     });
+        // }
+        
+
+        if (markers.length > 0) {
+            google.maps.event.addListenerOnce(map, "idle", function () {
+                // setTimeout(() => {
+                    // Find the middle index
+                    const middleIndex = Math.floor(markers.length / 2);
+        
+                    // Get the middle marker
+                    const middleMarker = markers[middleIndex];
+        
+                    // If a valid marker exists, trigger a click event
+                    if (middleMarker) {
+                        google.maps.event.trigger(middleMarker, "click");
+                    }
+                // }, 500); // Small delay ensures markers are fully rendered
+            });
+        }
+        
+
         // Fit bounds code...
         const bounds = new google.maps.LatLngBounds();
         markers.forEach((marker) => {
