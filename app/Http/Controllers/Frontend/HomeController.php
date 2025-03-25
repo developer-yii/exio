@@ -32,13 +32,18 @@ class HomeController extends Controller
             ->paginate(6);
 
         // $localities = Locality::where('status', 1)->get();
-        $locations = Location::where('status', 1)->get();
-        $projects = Project::where('status', 1)->get();
-        $builders = Builder::where('status', 1)->get();
+        // $locations = Location::where('status', 1)->get();
+        // $projects = Project::where('status', 1)->get();
+        // $builders = Builder::where('status', 1)->get();
+
+        // for search box
+        $sLocations = Location::where('status', 1)->get();
+        $sProjects = Project::where('status', 1)->get();
+        $sBuilders = Builder::where('status', 1)->get();
 
         $news = News::where('status', 1)->orderBy('created_at', 'desc')->limit(8)->get();
 
-        return view('frontend.home.index', compact('cities', 'faqs', 'top_properties', 'news', 'locations', 'projects', 'builders'));
+        return view('frontend.home.index', compact('cities', 'faqs', 'top_properties', 'news', 'sLocations', 'sProjects', 'sBuilders'));
     }
 
     public function getProjects(Request $request)

@@ -47,12 +47,38 @@
             <div class="checkPropertyBox">
                 <div class="main_property">
                     <div class="left_propertyBox">
+                       
                         <div class="topFilterBar">
-                            <div class="searchBar">
-                                <input type="search" name="filter_search" id="filter_search" value="{{ request('search') }}"
-                                    placeholder="Locality, Landmark, Project, or Builder">
-                                <a href="javascript:void(0)" id="clear_search"><i
-                                        class="fa-solid fa-magnifying-glass"></i></a>
+
+                            <!-- <div class="searchBox searchKeyup">
+                                <p>Search</p>
+                                <input type="search" class="clickList" placeholder="Locality, Project, or Builder" autocomplete="off">
+                                @include('frontend.include.common-html-mobile-web', ['type' => 'search-key'])
+                            </div>
+                            <div class="searchIcon">
+                                <a href="javascript:void(0)" id="search_btn_desktop" class="btn btnIcon desktop-search"><i
+                                        class="bi bi-search"></i></a>
+                            </div>
+
+                            <div class="filterBox">
+                                <a href="javascript:void(0)"><i class="bi bi-funnel"></i></a>
+                            </div> -->
+
+                            <!-- <div class="searchBox searchKeyup">
+                                <p>Search</p>
+                                <input type="search" class="clickList" placeholder="Locality, Project, or Builder" autocomplete="off">
+                                @include('frontend.include.common-html-mobile-web', ['type' => 'search-key'])
+                            </div>
+                            <div class="searchIcon">
+                                <a href="javascript:void(0)" id="search_btn_desktop" class="btn btnIcon desktop-search"><i
+                                        class="bi bi-search"></i></a>
+                            </div> -->
+
+                            <div class="searchBar searchKeyup">
+                                <input type="search" class="clickList" placeholder="Locality, Project, or Builder" autocomplete="off">
+                                @include('frontend.include.common-html-mobile-web', ['type' => 'search-key'])
+                               
+                                <i class="fa-solid fa-magnifying-glass"></i>
                             </div>
                             <div class="filterBox">
                                 <a href="javascript:void(0)"><i class="bi bi-funnel"></i></a>

@@ -380,11 +380,11 @@
 @endif
 
 @if($type == 'search-key')
-    <div class="search-key d-none">
+    <div class="search-key d-none">        
         <ul>
-            @if ($locations->count() > 0)
+            @if ($sLocations->count() > 0)
                 <h6>Locality</h6>
-                @foreach ($locations as $location)
+                @foreach ($sLocations as $location)
                     <li style="display: none;">
                         <a href="javascript:void(0)" data-type="locality"
                             data-id="{{ $location->id }}"
@@ -394,9 +394,9 @@
                     </li>
                 @endforeach
             @endif
-            @if ($projects->count() > 0)
+            @if ($sProjects->count() > 0)
                 <h6>Project</h6>
-                @foreach ($projects as $project)
+                @foreach ($sProjects as $project)
                     <li style="display: none;">
                         <a href="javascript:void(0)" data-type="project"
                             data-id="{{ $project->id }}"
@@ -406,9 +406,9 @@
                     </li>
                 @endforeach
             @endif
-            @if ($builders->count() > 0)
+            @if ($sBuilders->count() > 0)
                 <h6>Builder</h6>
-                @foreach ($builders as $builder)
+                @foreach ($sBuilders as $builder)
                     <li style="display: none;">
                         <a href="javascript:void(0)" data-type="builder"
                             data-id="{{ $builder->id }}"

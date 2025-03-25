@@ -739,6 +739,10 @@ header .header-box .mobileIcon {
     box-shadow: 0px 5px 20px #00000026 !important;
 }
 
+.searchBar.searchKeyup .search-key {
+    top: 50px;
+}
+
 .searchKeyup .search-key ul:not(:last-child) {
     margin-bottom: 15px;
 }
@@ -1809,9 +1813,9 @@ body.matchProperty {
 }
 
 .propertyCard .locationProperty {
-    display: flex;
+    /* display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 10px; */
     padding: 10px 0;
     border-top: 1px solid var(--orange-color);
     border-bottom: 1px solid var(--orange-color);

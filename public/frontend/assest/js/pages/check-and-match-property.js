@@ -165,4 +165,22 @@ $(document).ready(function () {
         $budgetsModal.modal("hide");
         $amenitiesModal.modal("show");
     });
+    
 });
+
+$(document).on('change', '#city', function() {
+    var cityId = $(this).val(); // Get the selected city ID
+    var areas = $(this).find('option:selected').data('areas'); // Get areas related to the selected city
+    console.log(areas);
+    
+    // Clear the area dropdown
+    $('#location').empty().append('<option value="">Select Area</option>');
+    
+    // If areas exist for the selected city, populate the location dropdown
+    if (areas && areas.length > 0) {
+        areas.forEach(function(area) {
+            $('#location').append('<option value="' + area.id + '">' + area.name + '</option>');
+        });
+    }
+});
+

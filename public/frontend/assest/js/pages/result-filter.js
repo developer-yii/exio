@@ -138,3 +138,110 @@ function loadLessAmenities() {
 //         copyText.setAttribute("disabled", "true");
 //     }
 // }
+
+
+$('.clickList').on('input', function() {    
+    if ($(this).val() === '') {
+        $('.search-key').addClass('d-none');
+    }
+});
+
+
+$(".clickList").on("keyup", function() {
+    handleSearch($(this), '.searchKeyup');
+});
+
+function handleSearch($input, parentClass) {
+    var value = $input.val().toLowerCase();
+    var $searchKey = $input.closest(parentClass).find('.search-key');
+
+    if (value === "") {
+        $searchKey.addClass('d-none');
+        $searchKey.find('li, h6').show();
+    } else {
+        $searchKey.removeClass('d-none');
+        $searchKey.find('li').each(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+        $searchKey.find('h6').each(function() {
+            var $heading = $(this);
+            var $lis = $heading.nextUntil('h6', 'li');
+            if ($lis.filter(':visible').length === 0) {
+                $heading.hide();
+            } else {
+                $heading.show();
+            }
+        });
+        if ($searchKey.find('li:visible').length === 0) {
+            $searchKey.addClass('d-none');
+        }
+    }
+}
+
+$('.search-key a').click(function() {
+    const type = $(this).data('type');
+    const id = $(this).data('id');
+    const name = $(this).data('name');
+    const isMobile = $(this).closest('.mobileFilterHero').length > 0;
+
+    if (isMobile) {
+        $('.clickListMobile').val(name);
+    } else {
+        $('.clickList').val(name);
+    }
+
+    $(this).closest('.search-key').addClass('d-none');
+});
+
+// $('.filter_search').on('input', function() {    
+//     if ($(this).val() === '') {
+//         $('.search-key').addClass('d-none');
+//     }
+// });
+
+// $(".filter_search").on("keyup", function() {
+//     handleSearch($(this), '.searchBar');
+// });
+
+// function handleSearch($input, parentClass) {
+//     var value = $input.val().toLowerCase();
+//     var $searchKey = $input.closest(parentClass).find('.search-key');
+
+//     if (value === "") {
+//         $searchKey.addClass('d-none');
+//         $searchKey.find('li, h6').show();
+//     } else {
+//         $searchKey.removeClass('d-none');
+//         $searchKey.find('li').each(function() {
+//             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+//         });
+//         $searchKey.find('h6').each(function() {
+//             var $heading = $(this);
+//             var $lis = $heading.nextUntil('h6', 'li');
+//             if ($lis.filter(':visible').length === 0) {
+//                 $heading.hide();
+//             } else {
+//                 $heading.show();
+//             }
+//         });
+//         if ($searchKey.find('li:visible').length === 0) {
+//             $searchKey.addClass('d-none');
+//         }
+//     }
+// }
+
+// $('.search-key a').click(function() {
+//     // const type = $(this).data('type');
+//     // const id = $(this).data('id');
+//     const name = $(this).data('name');
+//     // const isMobile = $(this).closest('.mobileFilterHero').length > 0;
+
+//     // if (isMobile) {
+//     //     $('.clickListMobile').val(name);
+//     // } 
+//     // else {
+//         $('.filter_search').val(name);
+//     // }
+
+//     $(this).closest('.search-key').addClass('d-none');
+// });
