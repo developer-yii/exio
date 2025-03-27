@@ -15,7 +15,7 @@
         $cities = City::where('status', 1)->get();
     }
 @endphp
-<header class="{{ $showCityDropdown ? 'headerInner' : '' }}">
+<header class="{{ $showCityDropdown ? 'headerInner' : '' }} {{ $headerClass }}">
     <div class="header-part">
         <div class="container">
             <div class="header-box">

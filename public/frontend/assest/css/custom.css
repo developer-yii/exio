@@ -137,9 +137,9 @@
     margin-bottom: 10px;
 }
 
-.propertyCard .locationProperty .comBox {
+/* .propertyCard .locationProperty .comBox {
     width: calc(50%);
-}
+} */
 
 .propertyCard .locationProperty .comBox img {
     width: 100%;
@@ -151,6 +151,17 @@
     width: calc(50%);
 }
 
+.modalTextBox .locationProperty .comBox img{
+    margin-right: 5px;
+}
+
+.detailmainSec .detailsTextSec .siteDetails .textBox .comBox img {
+    margin-right: 5px;
+}
+
+.compare_project .siteDetails .textBox .comBox img {
+    margin-right: 5px;
+}
 .not-found{
     font-size : 24px; font-weight:500;
 }
@@ -166,3 +177,4 @@
 .row.propertyList a {
     width: 100%;
 }
+

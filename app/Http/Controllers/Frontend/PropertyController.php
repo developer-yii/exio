@@ -55,32 +55,61 @@ class PropertyController extends Controller
         $amenityIds = explode(',', $project->amenities);
         $amenitiesList = Amenity::whereIn('id', $amenityIds)->get();
 
+        // $similarProperties = Project::with(['projectImages', 'location', 'wishlistedByUsers', 'location.city'])
+        //     ->where('id', '!=', $project->id)
+        //     ->where('city_id', $project->city_id)
+        //     ->where('location_id', $project->location_id)
+        //     ->where('property_type', $project->property_type)            
+        //     ->where(function ($query) use ($project) {
+        //         $priceFrom = convertCrToL($project->price_from, $project->price_from_unit);
+        //         $priceTo = convertCrToL($project->price_to, $project->price_to_unit);
+        //         $tolerance = 0.1; // 10% flexibility
+
+        //         // Calculate min and max price range with tolerance
+        //         $minFromPrice = $priceFrom - ($priceFrom * $tolerance);
+        //         $maxFromPrice = $priceFrom + ($priceFrom * $tolerance);
+        //         $minToPrice = $priceTo - ($priceTo * $tolerance);
+        //         $maxToPrice = $priceTo + ($priceTo * $tolerance);
+
+        //         $query->where(function ($q) use ($minFromPrice, $maxFromPrice, $minToPrice, $maxToPrice) {
+        //             $q->whereRaw("
+        //                 (IF(price_from_unit = 'crores', price_from * 100, price_from) BETWEEN ? AND ?)
+        //                 OR
+        //                 (IF(price_to_unit = 'crores', price_to * 100, price_to) BETWEEN ? AND ?)
+        //             ", [$minFromPrice, $maxFromPrice, $minToPrice, $maxToPrice]);
+        //         });
+        //     })
+        //     ->take(3)
+        //     ->get();
+
         $similarProperties = Project::with(['projectImages', 'location', 'wishlistedByUsers', 'location.city'])
-            ->where('city_id', $project->city_id)
-            ->where('location_id', $project->location_id)
-            ->where('property_type', $project->property_type)
-            ->where('id', '!=', $project->id)
-            ->where(function ($query) use ($project) {
-                $priceFrom = convertCrToL($project->price_from, $project->price_from_unit);
-                $priceTo = convertCrToL($project->price_to, $project->price_to_unit);
-                $tolerance = 0.1; // 10% flexibility
+    ->where('id', '!=', $project->id)
+    ->where('city_id', $project->city_id)
+    ->where(function ($query) use ($project) {
+        $query->orWhere('location_id', $project->location_id)
+              ->orWhere('property_type', $project->property_type);
+    })
+    ->where(function ($query) use ($project) {
+        $priceFrom = convertCrToL($project->price_from, $project->price_from_unit);
+        $priceTo = convertCrToL($project->price_to, $project->price_to_unit);
+        $tolerance = 0.1; // 10% flexibility
 
-                // Calculate min and max price range with tolerance
-                $minFromPrice = $priceFrom - ($priceFrom * $tolerance);
-                $maxFromPrice = $priceFrom + ($priceFrom * $tolerance);
-                $minToPrice = $priceTo - ($priceTo * $tolerance);
-                $maxToPrice = $priceTo + ($priceTo * $tolerance);
+        $minFromPrice = $priceFrom - ($priceFrom * $tolerance);
+        $maxFromPrice = $priceFrom + ($priceFrom * $tolerance);
+        $minToPrice = $priceTo - ($priceTo * $tolerance);
+        $maxToPrice = $priceTo + ($priceTo * $tolerance);
 
-                $query->where(function ($q) use ($minFromPrice, $maxFromPrice, $minToPrice, $maxToPrice) {
-                    $q->whereRaw("
-                        (IF(price_from_unit = 'crores', price_from * 100, price_from) BETWEEN ? AND ?)
-                        OR
-                        (IF(price_to_unit = 'crores', price_to * 100, price_to) BETWEEN ? AND ?)
-                    ", [$minFromPrice, $maxFromPrice, $minToPrice, $maxToPrice]);
-                });
-            })
-            ->take(3)
-            ->get();
+        $query->where(function ($q) use ($minFromPrice, $maxFromPrice, $minToPrice, $maxToPrice) {
+            $q->whereRaw("
+                (IF(price_from_unit = 'crores', price_from * 100, price_from) BETWEEN ? AND ?)
+                OR
+                (IF(price_to_unit = 'crores', price_to * 100, price_to) BETWEEN ? AND ?)
+            ", [$minFromPrice, $maxFromPrice, $minToPrice, $maxToPrice]);
+        });
+    })
+    ->take(3)
+    ->get();
+
 
         return view('frontend.property.details', compact('project', 'amenitiesList', 'similarProperties'));
     }
@@ -134,15 +163,29 @@ class PropertyController extends Controller
 
         if($favourite_property){
             $favourite_property->delete();
-            $result = ['status' => 'disliked', 'message' => 'Property removed successfully from whishlist.'];
+            $status = 'disliked';
+            $message = 'Property removed from wishlist.';
+            // $result = ['status' => 'disliked', 'message' => 'Property removed successfully from whishlist.'];
         }else{
             $favourite_property = PropertyWishlist::create([
                 'project_id' => $request->property_id,
                 'user_id' => $loginUser->id,
             ]);
-            $result = ['status' => 'liked', 'message' => 'Property added successfully from whishlist.'];
+
+            $status = 'liked';
+            $message = 'Property added to wishlist.';
+
+            // $result = ['status' => 'liked', 'message' => 'Property added successfully from whishlist.'];
         }
-        return response($result);
+
+        $shortlistedCount = PropertyWishlist::where('user_id', $loginUser->id)->count();
+
+        return response()->json([
+            'status' => $status,
+            'message' => $message,
+            'shortlistedCount' => $shortlistedCount, // Return updated count
+        ]);
+        // return response($result);
 
     }
 

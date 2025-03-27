@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             if (targetElement) {
                 window.scrollTo({
-                    top: targetElement.offsetTop - 180, // Adjust for fixed header
+                    top: targetElement.offsetTop - 150, // Adjust for fixed header
                     behavior: "smooth"
                 });
             }

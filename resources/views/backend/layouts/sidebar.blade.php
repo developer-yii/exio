@@ -74,7 +74,7 @@
                 <li class="side-nav-item {{ isActiveRouteMain('download-brochure') }}">
                     <a href="{{ route('admin.download-brochure') }}" class="side-nav-link {{ isActiveRoute(['download-brochure']) }}">
                         <i class="uil-file"></i>
-                        <span> Brochure Download </span>
+                        <span> Users Activity</span>
                     </a>
                 </li>
 

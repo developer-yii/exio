@@ -85,10 +85,10 @@ async function loadMarkers(projects) {
                     location.price_to,
                     location.price_to_unit
                 );
-
+                
                 const infoWindowContent = `
                     <div class="map-info-window">
-                        <div class="propertyCard propertyCardMap isOnMap">
+                        <div class="propertyCard propertyCardMap isOnMap cursor-default">
                             <div class="owl-carousel owl-theme">
                                 ${location.project_images.map(image => `
                                 <div class="item">
@@ -156,9 +156,7 @@ async function loadMarkers(projects) {
                             nav: false,
                             dots: true,
                             responsive: {
-                                0: {
-                                    items: 1
-                                }
+                                0: { items: 1 }
                             }
                         });
                     }, 100);
@@ -186,7 +184,7 @@ async function loadMarkers(projects) {
 
         if (markers.length > 0) {
             google.maps.event.addListenerOnce(map, "idle", function () {
-                // setTimeout(() => {
+                setTimeout(() => {
                     // Find the middle index
                     const middleIndex = Math.floor(markers.length / 2);
         
@@ -197,10 +195,9 @@ async function loadMarkers(projects) {
                     if (middleMarker) {
                         google.maps.event.trigger(middleMarker, "click");
                     }
-                // }, 500); // Small delay ensures markers are fully rendered
+                }, 500); // Small delay ensures markers are fully rendered
             });
-        }
-        
+        }        
 
         // Fit bounds code...
         const bounds = new google.maps.LatLngBounds();
@@ -210,16 +207,19 @@ async function loadMarkers(projects) {
             }
         });
 
-        setTimeout(() => {
-            map.fitBounds(bounds, {
-                padding: {
-                    top: 50,
-                    right: 50,
-                    bottom: 50,
-                    left: 50,
-                },
-            });
-        }, 1000);
+        if (markers.length > 1) {
+            setTimeout(() => {
+                map.fitBounds(bounds, {
+                    padding: {
+                        top: 50,
+                        right: 50,
+                        bottom: 50,
+                        left: 50,
+                    },
+                });
+            }, 1000);
+        }
+        
     } catch (error) {
         console.error("Error loading markers:", error);
     }

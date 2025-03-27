@@ -516,25 +516,25 @@
                     </div>
                     <div class="brochureBox">
                         <p>Please share below details</p>
-                        <form id="downloadBrochureForm">
+                        <form id="downloadBrochureForm" autocomplete="on" method="POST">
                             @csrf
                             <div class="form-group">
-                                <input type="hidden" name="project_id" id="project_id" value="{{ $project->id}}">
+                                <input type="hidden" name="project_id" id="project_id" value="{{ $project->id }}">
                                 <span class="error"></span>
                             </div>
                             <div class="form-group">
-                                <label class="labelClass" for="">Full Name<span>*</span></label>
-                                <input class="inputClass name" type="text" name="name" id="name" placeholder="John Deo">
+                                <label class="labelClass" for="name">Full Name<span>*</span></label>
+                                <input class="inputClass name" type="text" name="name" id="name" placeholder="John Deo" autocomplete="name">
                                 <span class="error"></span>
                             </div>
                             <div class="form-group">
-                                <label class="labelClass" for="">Phone Number<span>*</span></label>
-                                <input class="inputClass phone_number" type="number" name="phone_number" id="phone_number" placeholder="98989 89898">
+                                <label class="labelClass" for="phone_number">Phone Number<span>*</span></label>
+                                <input class="inputClass phone_number" type="tel" name="phone_number" id="phone_number" placeholder="98989 89898" autocomplete="tel">
                                 <span class="error"></span>
                             </div>
                             <div class="form-group">
-                                <label class="labelClass" for="">Email Address<span>*</span></label>
-                                <input class="inputClass email" type="text" name="email" placeholder="johndeo@gmail.com">
+                                <label class="labelClass" for="email">Email Address<span>*</span></label>
+                                <input class="inputClass email" type="email" name="email" placeholder="johndeo@gmail.com" autocomplete="email">
                                 <span class="error"></span>
                             </div>
                             <div class="btnDown">

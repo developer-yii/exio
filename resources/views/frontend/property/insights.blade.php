@@ -19,14 +19,17 @@
                         <div class="bannerFilterBox">
                             <div class="cityFilter">
                                 <p>Choose City</p>
-                                <input type="hidden" name="city_search" id="city_search" />
-                                <a href="javascript:void(0)" class="cityClick"><span id="city_search_name"></span>
-                                    <i class="fa-solid fa-chevron-down"></i></a>
-                                <ul class="citySelect">
+                                <input type="hidden" name="city_home" id="city_home" value="1" />
+                                <a href="javascript:void(0)" class="cityClick cityClickHome">
+                                    <span id="city_name_home"></span>
+                                    <i class="fa-solid fa-chevron-down"></i>
+                                </a>
+                                <ul class="citySelect citySelectHome">
                                     @foreach ($cities as $city)
-                                        <li><a href="javascript:void(0)" data-id="{{ $city->id }}"
-                                                data-name="{{ $city->city_name }}"
-                                                class="city_click">{{ $city->city_name }}</a>
+                                        <li>
+                                            <a href="javascript:void(0)" data-id="{{ $city->id }}" data-name="{{ $city->city_name }}" class="city_click">
+                                                {{ $city->city_name }}
+                                            </a>
                                         </li>
                                     @endforeach
                                 </ul>
@@ -87,11 +90,12 @@
 
             @if (getDeviceType() == 'mobile')
                 <div class="mobileFilterHero">
-                    <div class="cityDropDown">
+                    <!-- <div class="cityDropDown">
                         <ul>
                             <li>
                                 <input type="hidden" name="city_search" id="city_search" />
-                                <a class="cityClick" href="javascript:void(0)"><span id="city_search_name">Ahmedabad</span>
+                                <a class="cityClick" href="javascript:void(0)">
+                                    <span id="city_search_name">Ahmedabad</span>
                                     <i class="fa-solid fa-chevron-down"></i></a>
                                 <ul class="citySelect">
                                     @foreach ($cities as $city)
@@ -102,7 +106,30 @@
                                 </ul>
                             </li>
                         </ul>
-                    </div>
+                    </div> -->
+
+                        <div class="cityDropDown">
+                            <ul>
+                                <li>
+                                    <input type="hidden" name="city_home" id="city_home" value="1" />
+                                    <a class="cityClick cityClickHome" href="javascript:void(0)">
+                                        <span id="city_name_home"></span>
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </a>
+                                    <ul class="citySelect citySelectHome">
+                                        @foreach ($cities as $city)
+                                            <li>
+                                                <a href="javascript:void(0)" data-id="{{ $city->id }}"
+                                                    data-name="{{ $city->city_name }}" class="city_click">
+                                                    {{ $city->city_name }}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
                     <div class="seacrhNewBox searchKeyup">
                         <input type="search" class="clickListClass" placeholder="Search Locality, Project, or Builder"
                             autocomplete="off">

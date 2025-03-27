@@ -21,7 +21,7 @@
                                 </div>
                                 <ul>
                                     <li><a href="javascript:void(0)"><i
-                                                class="fa-regular fa-heart heartIconFill"></i>Save</a></li>
+                                                class="fa-regular fa-heart heartIconFill modelLikeUnlike"></i>Save</a></li>
                                     <li><a href="javascript:void(0)" data-bs-toggle="modal"
                                             data-bs-target="#share_property" class="share_property"><i
                                                 class="fa-solid fa-arrow-up-from-bracket"></i>Share</a></li>

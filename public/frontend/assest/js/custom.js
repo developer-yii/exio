@@ -57,6 +57,7 @@ $(document).ready(function () {
         $('.filterBox a').click(function (e) {
             e.stopPropagation();
             $('.porpertyFilter').toggleClass('open');
+            $(this).find("i").toggleClass("bi-funnel bi-funnel-fill");
         });
         $(document).click(function (e) {
             if (!$(e.target).closest('.filterBox, .porpertyFilter').length) {

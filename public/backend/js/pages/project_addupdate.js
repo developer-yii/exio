@@ -1,71 +1,60 @@
-$(document).ready(function () {
-    // let quill = "";
-    // if ($("#project_about").length > 0) {
-    //     quill = new Quill("#project_about", {
-    //         theme: "snow",
-    //         modules: {
-    //             imageResize: {
-    //                 displaySize: true,
-    //             },
-    //             toolbar: [
-    //                 [{ font: [] }, { size: [] }],
-    //                 ["bold", "italic", "underline", "strike"],
-    //                 [{ color: [] }, { background: [] }],
-    //                 [{ script: "super" }, { script: "sub" }],
-    //                 [
-    //                     { header: [!1, 1, 2, 3, 4, 5, 6] },
-    //                     "blockquote",
-    //                     "code-block",
-    //                 ],
-    //                 [
-    //                     { list: "ordered" },
-    //                     { list: "bullet" },
-    //                     { indent: "-1" },
-    //                     { indent: "+1" },
-    //                 ],
-    //                 ["direction", { align: [] }],
-    //                 ["link", "image"],
-    //                 ["clean"],
-    //             ],
-    //         },
-    //     });
+$('#area_id').select2({
+    placeholder: 'Select Area',
+    allowClear: true
+});
 
-    //     quill.getModule("toolbar").addHandler("image", () => {
-    //         const input = document.createElement("input");
-    //         input.setAttribute("type", "file");
-    //         input.setAttribute("accept", "image/*");
-    //         input.click();
+$('#property_sub_types').select2({
+    placeholder: 'Select Property Sub Type',
+    allowClear: true,
+    // multiple: true,
+    // dropdownAutoWidth: true,
+    // width: '100%',
+    // closeOnSelect: false // Ensure dropdown does not close on selection
+});
 
-    //         input.onchange = () => {
-    //             const file = input.files[0];
-    //             // Validate file
-    //             if (!file.type.match(/^image\/(jpeg|png|gif)$/)) {
-    //                 alert("Invalid file type. Please select an image file.");
-    //                 return;
-    //             }
-    //             if (file.size > 2 * 1024 * 1024) {
-    //                 // 2MB limit
-    //                 alert("File is too large. Maximum size is 2MB.");
-    //                 return;
-    //             }
-    //             const reader = new FileReader();
-    //             reader.onload = () => {
-    //                 const base64Image = reader.result;
-    //                 const range = quill.getSelection();
-    //                 quill.insertEmbed(range.index, "image", base64Image);
-    //             };
-    //             reader.readAsDataURL(file);
-    //         };
-    //     });
-    // }
+$('#city_id').change(function () {
+    var cityId = $(this).val();
+    $('#area_id').empty().append('<option value="">Select Area</option>'); // Reset area dropdown
 
+    if (cityId) {
+        $.ajax({
+            url: getAreaUrl,
+            type: "GET",
+            data: { city_id: cityId },
+            success: function (response) {
+                $.each(response, function (key, value) {
+                    $('#area_id').append('<option value="' + key + '">' + value + '</option>');
+                });
+
+                // Select the existing area in edit mode
+                if (selectedArea) {
+                    $('#area_id').val(selectedArea).trigger('change');
+                }
+
+                $('#area_id').select2(); // Re-initialize Select2
+            }
+        });
+    }
+});
+
+$(document).ready(function () {  
+    
+    if (selectedCity) {
+        $('#city_id').trigger('change');
+    }    
+
+    
     initializeCKEditor("project_about", 300, "project_images");
 
     let formId = "#add-form";
     let addFormBtnId = "#addorUpdateBtn";
-    let propertyType = $("input[name='property_type']");
-    let propertyTypeValue = propertyType.val();
+    let propertyTypeValue = $("input[name='property_type']:checked").val();
     let propertySubTypes = [];
+
+    // if (propertyTypeValue) {
+    //     alert("111");
+    //     getPropertySubTypes(propertyTypeValue, selectedPropertySubTypes);
+    // }
 
     $(formId).submit(function (event) {
         event.preventDefault();
@@ -162,10 +151,10 @@ $(document).ready(function () {
     });
 
     if (propertyTypeValue && propertyTypeValue != "") {
-        getPropertySubTypes(propertyTypeValue);
+        getPropertySubTypes(propertyTypeValue, selectedPropertySubTypes);
     }
 
-    function getPropertySubTypes(property_type) {
+    function getPropertySubTypes(property_type, selectedPropertySubTypes = "") {
         $.ajax({
             url: getPropertySubTypesUrl,
             type: "GET",
@@ -173,23 +162,96 @@ $(document).ready(function () {
             success: function (result) {
                 if (result.status == true) {
                     var propertySubTypes = result.data;
-                    var html =
-                        "<option value=''>Select Property Sub Type</option>";
-                    $.each(propertySubTypes, function (index, propertySubType) {
-                        let isSelected =
-                            typeof selectedPropertySubTypes !== "undefined" &&
-                            selectedPropertySubTypes.includes(index);
-                        let selected = isSelected ? "selected" : "";
-
-                        html += `<option value="${index}" ${selected}>${propertySubType}</option>`;
+                    var html = "";
+    
+                    // Convert to array if stored as a string
+                    if (typeof selectedPropertySubTypes === "string") {
+                        selectedPropertySubTypes = selectedPropertySubTypes.split(",").map(item => item.trim());
+                    }
+    
+                    $.each(propertySubTypes, function (key, value) {
+                        let selected = selectedPropertySubTypes.includes(key) ? "selected" : "";
+                        html += `<option value="${key}" ${selected}>${value}</option>`;
                     });
+    
                     $("#property_sub_types").html(html);
+                    $("#property_sub_types").select2(); 
+    
+                    setTimeout(function () {
+                        $("#property_sub_types").html(html).trigger("change"); 
+                        // $("#property_sub_types").val(selectedPropertySubTypes).trigger('change');
+                    }, 500);
                 }
             },
-            error: function (error) {
+            error: function () {
                 alert("Something went wrong!");
-                // location.reload();
             },
         });
     }
+    
+    
+    
+    
+
+    // function getPropertySubTypes(property_type) {
+    //     $.ajax({
+    //         url: getPropertySubTypesUrl,
+    //         type: "GET",
+    //         data: { property_type: property_type },
+    //         success: function (result) {
+    //             if (result.status == true) {
+    //                 var propertySubTypes = result.data;
+    //                 var html =
+    //                     "<option value=''>Select Property Sub Type</option>";
+    //                 $.each(propertySubTypes, function (index, propertySubType) {
+    //                     let isSelected =
+    //                         typeof selectedPropertySubTypes !== "undefined" &&
+    //                         selectedPropertySubTypes.includes(index);
+    //                     let selected = isSelected ? "selected" : "";
+
+    //                     html += `<option value="${index}" ${selected}>${propertySubType}</option>`;
+    //                 });
+    //                 $("#property_sub_types").html(html);
+    //             }
+    //         },
+    //         error: function (error) {
+    //             alert("Something went wrong!");
+    //             // location.reload();
+    //         },
+    //     });
+    // }
+
+    // function getPropertySubTypes(property_type) {
+    //     $.ajax({
+    //         url: getPropertySubTypesUrl,
+    //         type: "GET",
+    //         data: { property_type: property_type },
+    //         success: function (result) {
+    //             if (result.status == true) {
+    //                 var propertySubTypes = result.data;
+    //                 var html = "<option value=''>Select Property Sub Type</option>";
+                    
+    //                 $.each(propertySubTypes, function (index, propertySubType) {
+    //                     let selected =
+    //                         typeof selectedPropertySubTypes !== "undefined" &&
+    //                         selectedPropertySubTypes.includes(index) ? "selected" : "";
+    
+    //                     html += `<option value="${index}" ${selected}>${propertySubType}</option>`;
+    //                 });
+    
+    //                 $("#property_sub_types").html(html);
+    //                 $("#property_sub_types").select2(); // Re-initialize Select2
+    
+    //                 // Select multiple values in edit mode
+    //                 if (typeof selectedPropertySubTypes !== "undefined") {
+    //                     $("#property_sub_types").val(selectedPropertySubTypes).trigger('change');
+    //                 }
+    //             }
+    //         },
+    //         error: function (error) {
+    //             alert("Something went wrong!");
+    //         },
+    //     });
+    // }
+    
 });

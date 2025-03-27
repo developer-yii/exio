@@ -15,7 +15,7 @@
         data-type="{{ $project->property_type }}"
         data-property-type="{{ getPropertyType($project->property_type) }}"
         data-description="{{ formattedProjectAbout($project->project_about) }}"
-        data-size="{{ json_encode($project->projectDetails->map(fn($detail) => ['name' => $detail->name, 'value' => $detail->value])) }}"
+        data-size="{{ json_encode($project->projectDetails->take(2)->map(fn($detail) => ['name' => $detail->name, 'value' => $detail->value])) }}"
         data-multi-image="{{ json_encode($project->projectImages->take(3)->map(fn($detail) => ['imgurl' => $detail->getProjectImageUrl()])) }}"
         data-whatsapp-number="{{ getSettingFromDb('support_mobile') }}"
         data-like-class = "{{ $project->wishlistedByUsers->contains(auth()->id()) ? 'fa-solid' : 'fa-regular' }}">

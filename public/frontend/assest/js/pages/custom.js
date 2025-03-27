@@ -138,6 +138,7 @@ $('.togglePassword').on('click', function () {
 
     $(this).toggleClass('bi-eye-slash bi-eye-fill');
 });
+
 $("input[name='password'], input[name='password_confirmation']").keypress(function (e) {
     if (e.which === 32) {
         return false;
@@ -184,37 +185,6 @@ $(".more-locality").click(function (event) {
 
 // $('.heartIconFill, .save-property').on('click', function (e) {
 // $(document).on('click', '.heartIconFill, .save-property', function (e) {
-$('body').on('click', '.heartIconFill, .save-property, .show-login-toastr', function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (!isUserLoggedIn) {
-        toastr.error('Please log in first to save this property!');
-        return;
-    }
-
-    let propertyId = $(this).data('id'); // Get property ID from data-id
-    let heartIcon = $(this).find('i').length ? $(this).find('i') : $(this);
-    $.ajax({
-        url: propertyLikeUrl,
-        type: "POST",
-        data: { property_id: propertyId },
-        success: function (response) {
-            if (response.status === "liked") {
-                heartIcon.removeClass('fa-regular').addClass('fa-solid');
-            } else {
-                heartIcon.removeClass('fa-solid').addClass('fa-regular');
-            }
-            // toastr.success(response.message);
-            // setTimeout(function () {
-            //     window.location.reload();
-            // }, 500);
-        },
-        error: function () {
-            alert("Something went wrong. Please try again.");
-        }
-    });
-});
 
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".showMoreLocality").forEach(button => {
@@ -298,125 +268,6 @@ function modelOpacityRemove(hideModalId, showModalId) {
         $('#' + showModalId).removeClass('disabled-modal');
     });
 }
-
-$('body').on('click', '.propertyCardModal', function (event) {
-    $("#coverImage").attr("src", ""); // Clear image
-    $('#property_price, #property_name, #custom_type, #location, #carpet_area, #total_floor, #total_tower, #age_of_construction, #property_type, #description').text("");
-
-    $(".overViewBox").find(".overBox").filter(function () {
-        return $(this).find("span").text().trim() === "Project Size";
-    }).remove();
-    $(".multyimg").html("");
-
-    let id = $(this).data("id");
-    let image = $(this).data("image");
-    let projectName = $(this).data("project-name");
-    let price = $(this).data("price");
-    let customType = $(this).data("custom-type");
-    let location = $(this).data("location");
-    let floors = $(this).data("floors");
-    let towers = $(this).data("towers");
-    let age = $(this).data("age");
-    let propertyType = $(this).data("property-type");
-    let description = $(this).data("description");
-    let whatsApp = $(this).data("whatsapp-number");
-    let faClass = $(this).data("like-class");
-    let url = $(this).data("url");
-
-    // // Update modal content dynamically
-    $("#coverImage").attr("src", image);
-    $('#property_price').text(price);
-    $('#property_name').text(projectName).attr('title', projectName);
-    $('#custom_type').text(customType).attr('title', customType);
-    $('#location').text(location).attr('title', location);
-    $('#total_floor').text(floors).attr('title', floors);
-    $('#total_tower').text(towers).attr('title', towers);
-    $('#age_of_construction').text(age);
-    $('#property_type').text(propertyType).attr('title', propertyType);
-    // $('#description').html(description).attr('title', description);
-    // $('#description').text(description).attr('title', description);
-    let decodedDescription = $("<textarea/>").html(description).text();
-
-    $('#description')
-        .html(decodedDescription) // Display HTML content
-        .attr('title', $("<div/>").html(decodedDescription).text()); // Set plain text for tooltip
-
-    $(".heartIconFill").addClass(faClass);
-    $(".heartIconFill").attr("data-id", id);
-
-    let sizeData = $(this).data("size");
-    if (Array.isArray(sizeData) && sizeData.length > 0) {
-        let htmlContent = '';
-
-        sizeData.forEach(item => {
-            htmlContent += `
-                <div class="overBox">
-                    <span class="one-line-text" title="${item.name}">${item.name}</span>
-                    <h6 class="one-line-text" title="${item.value}">${item.value}</h6>
-                </div>
-            `;
-        });
-        $(".overViewBox").append(htmlContent);
-    }
-
-    let multiImgs = $(this).data("multi-image");
-    if (Array.isArray(multiImgs) && multiImgs.length > 0) {
-        let htmlContent = '';
-
-        multiImgs.forEach(item => {
-            htmlContent += `
-                <div class="box comImg">
-                    <img src="${item.imgurl}">
-                </div>
-            `;
-        });
-        $(".multyimg").append(htmlContent);
-    }
-
-    let slug = $(this).data("slug");
-    if (slug) {
-        let propertyUrl = getPropertyDetailsUrl.replace("_slug_", slug);
-        $('#more-details').attr({
-            'href': propertyUrl,
-            'target': '_blank'
-        });
-
-        $("#whatsapplink").attr("href", `https://wa.me/${whatsApp}?text=${encodeURIComponent(propertyUrl)}`);
-        metaUpdate(projectName, projectName, image, url);
-        updateShareLinks(propertyUrl);
-    }
-
-    // Show the modal
-    if (!$(event.target).hasClass('checkbox') && !$(event.target).hasClass('compareBoxOpen') && !$(event.target).hasClass('heartIconFill') && !$(event.target).hasClass('more-locality')) {
-        $("#propertyModal").modal("show");
-    }
-
-});
-
-$('#propertyModal').on('hidden.bs.modal', function () {
-    $("#coverImage").attr("src", ""); // Clear image
-    $('#property_price, #property_name, #custom_type, #location, #carpet_area, #total_floor, #total_tower, #age_of_construction, #property_type, #description').text("");
-
-    // $(".overViewBox").html(""); // Clear Project Size and Overview Data
-    console.log($(".overViewBox").length); // Should be > 0
-    $(".overViewBox").html(""); // Clear content
-
-    // setTimeout(() => {
-    //     $(".overViewBox").html("");
-    // }, 100);
-
-    $(".multyimg").html(""); // Clear Multiple Images
-
-    $(".heartIconFill").removeClass().addClass("heartIconFill"); // Reset Favorite Icon
-    $(".heartIconFill").attr("data-id", ""); // Clear data-id
-
-    $('#more-details').attr('href', '#'); // Reset More Details link
-    $("#whatsapplink").attr("href", "#"); // Reset WhatsApp link
-
-    metaUpdate("", "", "", ""); // Reset Meta Tags
-    updateShareLinks(""); // Reset Social Sharing Links
-});
-
 
 $('#subscribe').submit(function (event) {
     event.preventDefault();
@@ -550,4 +401,215 @@ function getFormattedPrice(priceFrom, priceFromUnit, priceTo, priceToUnit) {
     }
 
     return priceFormatted;
+}
+
+$(document).ready(function () {
+    $('#propertyModal').on('hidden.bs.modal', function () {
+        $("#coverImage").attr("src", ""); // Clear image
+        $('#property_price, #property_name, #custom_type, #location, #carpet_area, #total_floor, #total_tower, #age_of_construction, #property_type, #description').text("");
+    
+        // $(".overViewBox").html(""); // Clear Project Size and Overview Data
+       
+        $(".overViewBox").find(".dynamicSize").remove(); 
+        // $(".overViewBox").html("");
+        $(".multyimg").html(""); // Clear Multiple Images
+    
+        // $("#propertyModal .heartIconFill").removeClass().addClass("fa-regular fa-heart heartIconFill"); // Reset heart icon class
+        $("#propertyModal .heartIconFill").removeClass().addClass("fa-regular fa-heart heartIconFill modelLikeUnlike").attr("data-id", "");
+        // $("#propertyModal .heartIconFill").attr("data-id", ""); // Clear data-id
+    
+        $('#more-details').attr('href', '#'); // Reset More Details link
+        $("#whatsapplink").attr("href", "#"); // Reset WhatsApp link
+    
+        metaUpdate("", "", "", ""); // Reset Meta Tags
+        updateShareLinks(""); // Reset Social Sharing Links
+    });
+
+    $('body').on('click', '.propertyCardModal', function (event) {
+        $("#coverImage").attr("src", ""); // Clear image
+        $('#property_price, #property_name, #custom_type, #location, #carpet_area, #total_floor, #total_tower, #age_of_construction, #property_type, #description').text("");
+    
+        $(".overViewBox").find(".overBox").filter(function () {
+            return $(this).find("span").text().trim() === "Project Size";
+        }).remove();
+        $(".multyimg").html("");
+    
+        let id = $(this).data("id");
+        let image = $(this).data("image");
+        let projectName = $(this).data("project-name");
+        let price = $(this).data("price");
+        let customType = $(this).data("custom-type");
+        let location = $(this).data("location");
+        let floors = $(this).data("floors");
+        let towers = $(this).data("towers");
+        let age = $(this).data("age");
+        let propertyType = $(this).data("property-type");
+        let description = $(this).data("description");
+        let whatsApp = $(this).data("whatsapp-number");
+        let faClass = $(this).data("like-class");
+        let url = $(this).data("url");
+    
+        // // Update modal content dynamically
+        $("#coverImage").attr("src", image);
+        $('#property_price').text(price);
+        $('#property_name').text(projectName).attr('title', projectName);
+        $('#custom_type').text(customType).attr('title', customType);
+        $('#location').text(location).attr('title', location);
+        $('#total_floor').text(floors).attr('title', floors);
+        $('#total_tower').text(towers).attr('title', towers);
+        $('#age_of_construction').text(age);
+        $('#property_type').text(propertyType).attr('title', propertyType);
+        // $('#description').html(description).attr('title', description);
+        // $('#description').text(description).attr('title', description);
+        let decodedDescription = $("<textarea/>").html(description).text();
+    
+        $('#description')
+            .html(decodedDescription) // Display HTML content
+            .attr('title', $("<div/>").html(decodedDescription).text()); // Set plain text for tooltip
+    
+        $("#propertyModal .heartIconFill").addClass(faClass); // Apply only inside modal
+        $("#propertyModal .heartIconFill").attr("data-id", id);
+    
+        let sizeData = $(this).data("size");
+        if (Array.isArray(sizeData) && sizeData.length > 0) {
+            let htmlContent = '';
+    
+            sizeData.forEach(item => {
+                htmlContent += `
+                    <div class="overBox dynamicSize">
+                        <span class="one-line-text" title="${item.name}">${item.name}</span>
+                        <h6 class="one-line-text" title="${item.value}">${item.value}</h6>
+                    </div>
+                `;
+            });
+            $(".overViewBox").append(htmlContent);
+        }
+    
+        let multiImgs = $(this).data("multi-image");
+        if (Array.isArray(multiImgs) && multiImgs.length > 0) {
+            let htmlContent = '';
+    
+            multiImgs.forEach(item => {
+                htmlContent += `
+                    <div class="box comImg">
+                        <img src="${item.imgurl}">
+                    </div>
+                `;
+            });
+            $(".multyimg").append(htmlContent);
+        }
+    
+        let slug = $(this).data("slug");
+        if (slug) {
+            let propertyUrl = getPropertyDetailsUrl.replace("_slug_", slug);
+            $('#more-details').attr({
+                'href': propertyUrl,
+                'target': '_blank'
+            });
+    
+            const whatsAppMessage = encodeURIComponent(
+                `Check out this property!\n\n*Project Name:*</b> ${projectName}\n*Price:* ${price}\n*Property Type:* ${propertyType}\n${propertyUrl}`
+            );
+
+            $("#whatsapplink").attr("href", `https://wa.me/${whatsApp}?text=${whatsAppMessage}`);
+            metaUpdate(projectName, projectName, image, url);
+            let whatsAppText = projectName + "Price : " + price;
+            updateShareLinks(propertyUrl, whatsAppText);
+        }
+    
+        // Show the modal
+        if (!$(event.target).hasClass('checkbox') && !$(event.target).hasClass('compareBoxOpen') && !$(event.target).hasClass('heartIconFill') && !$(event.target).hasClass('more-locality')) {
+            $("#propertyModal").modal("show");
+        }
+    
+    });
+
+    // function togglePropertyLike(element) {
+    //     if (!isUserLoggedIn) {
+    //         toastr.error('Please log in first to save this property!');
+    //         return;
+    //     }
+    
+    //     console.log(element);
+    //     // let propertyId = $(element).data('id'); // Get property ID from data-id
+    //     let propertyId = $(element).attr('data-id'); 
+    //     console.log(propertyId);
+    //     let heartIcon = $(element).find('i').length ? $(element).find('i') : $(element);
+    
+    //     $.ajax({
+    //         url: propertyLikeUrl,
+    //         type: "POST",
+    //         data: { property_id: propertyId },
+    //         success: function (response) {
+    //             if (response.status === "liked") {
+    //                 heartIcon.removeClass('fa-regular').addClass('fa-solid');
+    //             } else {
+    //                 heartIcon.removeClass('fa-solid').addClass('fa-regular');
+    //             }
+    
+    //             $('.heartBox span').text(response.shortlistedCount);
+    //         },
+    //         error: function () {
+    //             alert("Something went wrong. Please try again.");
+    //         }
+    //     });
+    // }
+    
+    // $('body').on('click', '.modelLikeUnlike', function (e) {
+    // // $('body').on('click', '.heartIconFill, .save-property, .show-login-toastr', function (e) {
+    
+    //     e.preventDefault();
+    //     e.stopPropagation();
+    //     alert("Clicked: " + $(this).attr('data-id'));
+    //     togglePropertyLike(this);
+    // });
+    
+    // // Event listener to trigger like/unlike function
+    // $('body').on('click', '.save-property, .show-login-toastr', function (e) {
+    //     alert("bbb");
+    //     e.preventDefault();
+    //     e.stopPropagation();
+    //     togglePropertyLike(this);
+    // });
+    
+    $('body').on('click', '.heartIconFill, .save-property, .show-login-toastr', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    
+        if (!isUserLoggedIn) {
+            toastr.error('Please log in first to save this property!');
+            return;
+        }
+
+        // let propertyId = $(this).data('id'); // Get property ID from data-id    
+        let propertyId = $(this).attr('data-id'); 
+        
+        let heartIcon = $(this).find('i').length ? $(this).find('i') : $(this);
+        $.ajax({
+            url: propertyLikeUrl,
+            type: "POST",
+            data: { property_id: propertyId },
+            success: function (response) {
+                if (response.status === "liked") {
+                    heartIcon.removeClass('fa-regular').addClass('fa-solid');
+                } else {
+                    heartIcon.removeClass('fa-solid').addClass('fa-regular');
+                }
+    
+                $('.heartBox span').text(response.shortlistedCount);
+                // toastr.success(response.message);
+                // setTimeout(function () {
+                //     window.location.reload();
+                // }, 500);
+            },
+            error: function () {
+                alert("Something went wrong. Please try again.");
+            }
+        });
+    });
+});
+
+function getUrlParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
 }
