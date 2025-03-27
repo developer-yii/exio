@@ -24,9 +24,22 @@ class PropertyFilterController extends Controller
         if ($city) {
             $projects = $projects->where('city_id', $city);
         }
+
         if ($search) {
-            $projects = $projects->where('project_name', 'like', '%' . $search . '%');
+            $projects = $projects->where(function ($query) use ($search) {
+                $query->where('project_name', 'like', '%' . $search . '%')
+                    ->orWhereHas('location', function ($q) use ($search) {
+                        $q->where('location_name', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('builder', function ($q) use ($search) {
+                        $q->where('builder_name', 'like', '%' . $search . '%');
+                    });
+            });
         }
+
+        // if ($search) {
+        //     $projects = $projects->where('project_name', 'like', '%' . $search . '%');
+        // }
 
         if (Auth::check()) {
             $projects = $projects->with('wishlistedByUsers');
@@ -41,7 +54,8 @@ class PropertyFilterController extends Controller
         $propertyTypes = collect(Project::$propertyType)
             ->only(['residential', 'commercial'])
             ->toArray();
-        $amenities = Amenity::where('status', 1)->isActive()->pluck('amenity_name', 'id');
+        $amenities = Amenity::where('status', 1)->isActive()->get();
+        $allAmenities = Amenity::where('status', 1)->isActive()->pluck('amenity_name', 'id');
 
         $property_sub_types = config('constants.property_sub_type');
 
@@ -65,11 +79,13 @@ class PropertyFilterController extends Controller
         $sProjects = Project::where('status', 1)->get();
         $sBuilders = Builder::where('status', 1)->get();
 
-        return view('frontend.property.result-filter', compact('sLocations', 'sProjects', 'sBuilders', 'projects', 'priceUnit', 'appraisal', 'bestMatch', 'propertyTypes', 'amenities', 'property_sub_types', 'bhks', 'minMaxPrice', 'shortlistedCount'));
+        return view('frontend.property.result-filter', compact('sLocations', 'sProjects', 'sBuilders', 'projects', 'priceUnit', 'appraisal', 'bestMatch', 'propertyTypes', 'amenities', 'allAmenities', 'property_sub_types', 'bhks', 'minMaxPrice', 'shortlistedCount'));
     }
 
     public function getProjectData(Request $request)
     {
+        \Log::info($request->all());
+        $filterApply = filter_var($request->filterApply, FILTER_VALIDATE_BOOLEAN);        
         $perPage = $request->input('perPage', 10);
         $city = $request->input('city');
         $search = $request->input('search');
@@ -86,43 +102,51 @@ class PropertyFilterController extends Controller
         $projects = projectQuery();
         $projects = $projects->with('projectBadge', 'floorPlans');
 
-        if ($city) {
-            $projects = $projects->where('city_id', $city);
-        }
-
         if (Auth::check()) {
             $projects = $projects->with('wishlistedByUsers');
         }
 
-        if ($property_type) {
-            $projects = $projects->where(function ($query) use ($property_type) {
-                $query->where('property_type', $property_type)
-                    ->orWhere('property_type', 'both');
-            });
+        if ($city) {
+            $projects = $projects->where('city_id', $city);
+        }  
 
-            if ($property_sub_types) {
-                $projects = $projects->whereIn('property_sub_types', $property_sub_types);
-
-                $allowed = ['flat', 'house', 'bungalow', 'villa'];
-                $exists = !empty(array_intersect($property_sub_types, $allowed));
-
-                if ($property_type == 'residential' && $exists) {
-                    // $projects = $projects->whereIn('bhks
+        if($filterApply){
+            \Log::info("000");
+            if ($property_type) {
+                $projects = $projects->where(function ($query) use ($property_type) {
+                    $query->where('property_type', $property_type)
+                        ->orWhere('property_type', 'both');
+                });
+    
+                if ($property_sub_types) {
+                    // $projects = $projects->whereIn('property_sub_types', $property_sub_types);
+                    $projects = $projects->where(function ($query) use ($property_sub_types) {
+                        foreach ($property_sub_types as $sub_type) {
+                            $query->orWhereRaw("FIND_IN_SET(?, property_sub_types)", [$sub_type]);
+                        }
+                    });
+    
+                    $allowed = ['flat', 'house', 'bungalow', 'villa'];
+                    $exists = !empty(array_intersect($property_sub_types, $allowed));
+    
+                    if ($property_type == 'residential' && $exists) {
+                        // $projects = $projects->whereIn('bhks
+                    }
+                }
+            }
+    
+            if ($amenities) {
+                foreach ($amenities as $amenity) {
+                    $projects = $projects->whereRaw('FIND_IN_SET(?, amenities)', [$amenity]);
                 }
             }
         }
-
-        if ($amenities) {
-            foreach ($amenities as $amenity) {
-                $projects = $projects->whereRaw('FIND_IN_SET(?, amenities)', [$amenity]);
-            }
-        }
-
-        if ($search) {
+        else if ($search && !$filterApply) {
+            \Log::info("111");
             $projects = $projects->where(function ($query) use ($search) {
                 $query->where('project_name', 'like', '%' . $search . '%')
-                    ->orWhereHas('locality', function ($q) use ($search) {
-                        $q->where('locality_name', 'like', '%' . $search . '%');
+                    ->orWhereHas('location', function ($q) use ($search) {
+                        $q->where('location_name', 'like', '%' . $search . '%');
                     })
                     ->orWhereHas('builder', function ($q) use ($search) {
                         $q->where('builder_name', 'like', '%' . $search . '%');
@@ -130,19 +154,36 @@ class PropertyFilterController extends Controller
             });
         }
 
+        // if ($minPrice && $maxPrice) {
+        //     $projects = $projects->whereRaw("
+        //         (CASE
+        //             WHEN price_from_unit = 'crores' THEN price_from * 100
+        //             ELSE price_from
+        //         END) >= ?
+        //         OR
+        //         (CASE
+        //             WHEN price_to_unit = 'crores' THEN price_to * 100
+        //             ELSE price_to
+        //         END) <= ?
+        //     ", [$minPrice, $maxPrice]);
+        // }
+
         if ($minPrice && $maxPrice) {
-            $projects = $projects->whereRaw("
-                (CASE
-                    WHEN price_from_unit = 'crores' THEN price_from * 100
-                    ELSE price_from
-                END) >= ?
-                AND
-                (CASE
-                    WHEN price_to_unit = 'crores' THEN price_to * 100
-                    ELSE price_to
-                END) <= ?
-            ", [$minPrice, $maxPrice]);
-        }
+            $projects = $projects->where(function ($query) use ($minPrice, $maxPrice) {
+                $query->whereRaw("
+                    (CASE
+                        WHEN price_from_unit = 'crores' THEN price_from * 100
+                        ELSE price_from
+                    END) BETWEEN ? AND ?
+                ", [$minPrice, $maxPrice])
+                ->orWhereRaw("
+                    (CASE
+                        WHEN price_to_unit = 'crores' THEN price_to * 100
+                        ELSE price_to
+                    END) BETWEEN ? AND ?
+                ", [$minPrice, $maxPrice]);
+            });
+        }        
 
         $projects = $projects->isActive()->paginate($perPage);
 

@@ -321,18 +321,20 @@
 @endsection
 @section('js')
     <script>
+        var filterPageRoute = "{{ route('property.result.filter') }}";
+        
         $(document).ready(function() {
-            @if (getDeviceType() == 'desktop')
+            if (deviceType == 'desktop'){               
                 $(".clickList").on("keyup", function() {
                     handleSearch($(this), '.searchBox');
                 });
-            @endif
-
-            @if (getDeviceType() == 'mobile')
+            }               
+            
+            if (deviceType == 'mobile'){
                 $(".clickListMobile").on("keyup", function() {
                     handleSearch($(this), '.seacrhNewBox');
                 });
-            @endif
+            }
 
             function handleSearch($input, parentClass) {
                 var value = $input.val().toLowerCase();
@@ -390,21 +392,38 @@
                 }
             });
 
-            $('#search_btn_desktop').click(function(event) {
+            function handleSearchClick(searchInputSelector) {
                 event.preventDefault();
                 const city = $('#city_home').val();
-                const searchValue = $('.clickList').val();
-                window.location.href = "{{ route('property.result.filter') }}?city=" + city + "&search=" +
-                    searchValue;
-            });
+                const searchValue = $(searchInputSelector).val();
+                const newUrl = `${filterPageRoute}?city=${city}&search=${encodeURIComponent(searchValue)}`;
+                window.location.href = newUrl;
+            }
 
-            $('#search_btn_mobile').click(function(event) {
-                event.preventDefault();
-                const city = $('#city_home').val();
-                const searchValue = $('.clickListMobile').val();
-                window.location.href = "{{ route('property.result.filter') }}?city=" + city + "&search=" +
-                    searchValue;
-            });
+            $('#search_btn_desktop').click(() => handleSearchClick('.clickList'));
+            $('#search_btn_mobile').click(() => handleSearchClick('.clickListMobile'));
+
+            // $('#search_btn_desktop').click(function(event) {
+            //     event.preventDefault();
+            //     const city = $('#city_home').val();
+            //     const searchValue = $('.clickList').val();
+            //     const newUrl =
+            //         `${filterPageRoute}?city=${city}&search=${encodeURIComponent(searchValue)}`;
+
+            //     window.location.href = newUrl;
+               
+            // });
+
+            // $('#search_btn_mobile').click(function(event) {
+            //     event.preventDefault();
+            //     const city = $('#city_home').val();
+            //     const searchValue = $('.clickListMobile').val();
+
+            //     const newUrl =
+            //         `${filterPageRoute}?city=${city}&search=${encodeURIComponent(searchValue)}`;
+
+            //     window.location.href = newUrl;
+            // });
         });
     </script>
     <script>
@@ -451,12 +470,11 @@
 <script>
     var page = 1;
     var lastPage = false;
-    var deviceType = "{{ getDeviceType() }}";
     var lastPageReached = false;
 
     var currentPage = 1;
     var isLoading = false;    
-    var getPropertyDetailsUrl = "{{ route('property.details', ["_slug_"]) }}";
+    var getPropertyDetailsUrl = "{{ route('property.details', ['_slug_']) }}";
 </script>
 <script src="{{ frontendPageJsLink('home.js') }}"></script>
 @endsection

@@ -150,5 +150,5 @@ class LocationController extends Controller
             $result = ['status' => false, 'message' => 'Something went wrong'];
         }
         return response()->json($result);
-    }
+    }    
 }

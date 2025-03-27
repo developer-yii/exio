@@ -39,11 +39,45 @@ $(document).ready(function () {
         });
     }
 
+    $('#resetFilter').click(function () {
+        
+        // Reset radio buttons (property_type)
+        document.querySelectorAll("input[name='property_type']").forEach((radio, index) => {
+            radio.checked = index === 0; // Check the first radio button by default
+        });
+    
+        // Uncheck all checkboxes (bhk, amenities)
+        document.querySelectorAll("input[type='checkbox']").forEach(checkbox => {
+            checkbox.checked = false;
+        });
+    
+        // Reset range sliders
+        const minSlider = document.getElementById("slider-min");
+        const maxSlider = document.getElementById("slider-max");
+    
+        minSlider.value = minSlider.getAttribute("min");
+        maxSlider.value = maxSlider.getAttribute("max");
+    
+        document.getElementById("slider-min-value").textContent = minSlider.getAttribute("min");
+        document.getElementById("slider-max-value").textContent = maxSlider.getAttribute("max");
+    
+        // Hide elements that were shown based on user input
+        document.getElementById("bhk-filter").classList.add("d-none");
+        document.querySelector(".show-sub-type").classList.add("d-none");
+    
+        // Hide additional amenities if they were shown
+        document.querySelectorAll(".hidden-amenity").forEach(item => item.classList.add("d-none"));
+    
+        // Reset sub-type box
+        document.getElementById("property-sub-type").innerHTML = "";
+        
+        
+    });
     $('#applyFilter').click(function () {
         page = 0;
         lastPage = false;
         $('#pills-home .row').empty();
-        loadMoreProjects();
+        loadMoreProjects(true);
     });
 
     $('.city_click_header').click(function () {
@@ -67,11 +101,12 @@ $(document).ready(function () {
     });
 });
 
-function loadMoreProjects() {
+function loadMoreProjects(filterBox = false) {
     if (isLoading || lastPage) return;
     isLoading = true;
     page++;
 
+    console.log(filterBox);
     var city = $("#city_header").val();
     var search = $("#filter_search").val();
     let propertyType = $('[name="property_type"]:checked').val();
@@ -99,7 +134,8 @@ function loadMoreProjects() {
             bhk: bhk,
             amenities: amenities_filter,
             minPrice: minPrice,
-            maxPrice: maxPrice
+            maxPrice: maxPrice,
+            filterApply: filterBox ? 1 : 0
         },
         success: function (response) {
 

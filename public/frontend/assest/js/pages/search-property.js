@@ -1,20 +1,20 @@
 $(document).ready(function () {
-    function getUrlParam(param) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(param);
-    }
+    // function getUrlParam(param) {
+    //     const urlParams = new URLSearchParams(window.location.search);
+    //     return urlParams.get(param);
+    // }
 
     const urlType = getUrlParam('type');
     const urlId = getUrlParam('id');
     let urlCity = getUrlParam('city');
-    let urlSearch = getUrlParam('search');
+    let urlSearch = getUrlParam('search');    
     const defaultCity = "All"; // Set your default city here
 
     function setCityName(selector, city) {
         $(selector).text(city ? decodeURIComponent(city) : defaultCity);
     }
 
-    setCityName('#city_search_name', urlCity);
+    setCityName('#city_name_home', urlCity);
 
     if (urlSearch) {
         $('.clickListClass').val(decodeURIComponent(urlSearch));
@@ -61,7 +61,7 @@ $(document).ready(function () {
 
     $('.searchBtn').click(function () {
         const searchValue = $('.clickListClass').val().trim();
-        const cityName = $('#city_search_name').text().trim();
+        const cityName = $('#city_name_home').text().trim();
         let selectedElement = '';
         let selectedType = '';
         let selectedId = '';
@@ -92,7 +92,7 @@ $(document).ready(function () {
         });
     }
 
-    setCityClickHandler('.city_click', '#city_search', '#city_search_name');
+    setCityClickHandler('.city_click', '#city_home', '#city_name_home');
 
     $('.clickListClass').on('input', function () {
         if ($(this).val() === '') {

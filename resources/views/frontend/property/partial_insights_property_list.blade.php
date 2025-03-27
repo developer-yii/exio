@@ -8,7 +8,11 @@
                 <div class="imgBox">
                     <img src="{{ $property->getCoverImageUrl() }}" alt="{{ $property->project_name }}" loading="lazy">
                     <div class="imgheader">
-                        <span>Best for Investment</span>
+                        @if ($property->projectBadge)
+                            <span>{{ $property->getProjectBadgeName() }}</span>
+                        @else
+                            <span style="opacity: 0 !important;"></span>
+                        @endif
                     </div>
                 </div>
                 <div class="priceBox">

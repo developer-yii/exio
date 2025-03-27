@@ -3,6 +3,7 @@
     $routeName = request()->route()->getName();
     $showCityDropdown = in_array($routeName, ['property.result.filter', 'front.home']);
     $bodyClass = $routeName == 'property.result.filter' ? 'matchProperty' : '';
+    $headerClass = $routeName == 'property.details' ? 'removeHeader headerInner' : '';
 @endphp
 <!DOCTYPE html>
 <html lang="en">
@@ -112,6 +113,7 @@
     {{-- <script src="assest/js/custom.js"></script> --}}
 
     <script>
+        var deviceType = "{{ getDeviceType() }}";
         var propertyLikeUrl = "{{ route('property.like-unlike') }}";
         var subscribeUrl = "{{ route('subscribe') }}";
         var downloadInsightsRrportUrl = "{{ route('property.download-insights-report') }}";

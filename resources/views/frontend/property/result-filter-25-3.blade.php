@@ -50,13 +50,39 @@
                        
                         <div class="topFilterBar">
 
+                            <!-- <div class="searchBox searchKeyup">
+                                <p>Search</p>
+                                <input type="search" class="clickList" placeholder="Locality, Project, or Builder" autocomplete="off">
+                                @include('frontend.include.common-html-mobile-web', ['type' => 'search-key'])
+                            </div>
+                            <div class="searchIcon">
+                                <a href="javascript:void(0)" id="search_btn_desktop" class="btn btnIcon desktop-search"><i
+                                        class="bi bi-search"></i></a>
+                            </div>
+
+                            <div class="filterBox">
+                                <a href="javascript:void(0)"><i class="bi bi-funnel"></i></a>
+                            </div> -->
+
+                            <!-- <div class="searchBox searchKeyup">
+                                <p>Search</p>
+                                <input type="search" class="clickList" placeholder="Locality, Project, or Builder" autocomplete="off">
+                                @include('frontend.include.common-html-mobile-web', ['type' => 'search-key'])
+                            </div>
+                            <div class="searchIcon">
+                                <a href="javascript:void(0)" id="search_btn_desktop" class="btn btnIcon desktop-search"><i
+                                        class="bi bi-search"></i></a>
+                            </div> -->
+
                             <div class="searchBar searchKeyup">
-                                <input type="search" class="clickList" name="filter_search" id="filter_search" value="" placeholder="Locality, Project, or Builder">
+                                <!-- <input type="search" class="clickList" placeholder="Locality, Project, or Builder" autocomplete="off"> -->
+                                <input type="search" class="clickList" name="filter_search" id="filter_search" value="{{ request('search') }}"
+                                    placeholder="Locality, Project, or Builder">
                                 @include('frontend.include.common-html-mobile-web', ['type' => 'search-key'])
                                
-                                <a href="javascript:void(0)" id="clear_search" class="iconClick">
-                                    <i class="fa-solid fa-magnifying-glass"></i>
-                                </a>                                
+                                <a href="javascript:void(0)" id="clear_search"><i
+                                        class="fa-solid fa-magnifying-glass"></i></a>
+                                <!-- <i class="fa-solid fa-magnifying-glass"></i> -->
                             </div>
                             <div class="filterBox">
                                 <a href="javascript:void(0)" id="search_btn_desktop" class="btn btnIcon desktop-search"><i class="bi bi-funnel"></i></a>                                
@@ -78,7 +104,7 @@
                                                 @foreach ($propertyTypes as $key => $type)
                                                     <div class="clickTo">
                                                         <input type="radio" name="property_type" class="keyword-checkbox"
-                                                            value="{{ $key }}" {{ $loop->first ? 'checked' : '' }}>
+                                                            value="{{ $key }}">
                                                         <label for=""
                                                             class="keyword-label">{{ $type }}</label>
                                                     </div>
@@ -86,16 +112,12 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- sub types -->
                                     <div class="comViewBox second">
                                         <p class="d-none show-sub-type">It's a...</p>
                                         <div class="feetSelectBox" id="property-sub-type">
 
                                         </div>
                                     </div>
-
-                                    <!-- BHK -->
                                     <div class="comViewBox third d-none" id="bhk-filter">
                                         <p>BHK</p>
                                         <div class="feetSelectBox">
@@ -110,31 +132,27 @@
                                             @endforeach
                                         </div>
                                     </div>
-
-                                    <!-- Amenities -->
                                     <div class="comViewBox four">
                                         <p>Amenities</p>
                                         <div class="feetSelectBox">
                                             @if ($amenities->count() > 0)
                                                 @foreach ($amenities->slice(0, 7) as $key => $amenity)
-                                                    <div class="clickTo amenity-item" 
-                                                    data-property-type="{{ $amenity->amenity_type }}">
+                                                    <div class="clickTo">
                                                         <label class="checkbox">
                                                             <input class="checkbox__input" type="checkbox"
-                                                                id="amenities_{{ $amenity->id }}" name="amenities[]"
-                                                                value="{{ $amenity->id }}" />
-                                                            <span class="checkbox__label">{{ $amenity->amenity_name }}</span>
+                                                                id="amenities_{{ $key }}" name="amenities[]"
+                                                                value="{{ $key }}" />
+                                                            <span class="checkbox__label">{{ $amenity }}</span>
                                                         </label>
                                                     </div>
                                                 @endforeach
                                                 @foreach ($amenities->slice(7) as $key => $amenity)
-                                                    <div class="clickTo hidden-amenity d-none amenity-item"
-                                                    data-property-type="{{ $amenity->amenity_type }}">
+                                                    <div class="clickTo hidden-amenity d-none">
                                                         <label class="checkbox">
                                                             <input class="checkbox__input" type="checkbox"
-                                                                id="amenities_{{ $amenity->id }}" name="amenities[]"
-                                                                value="{{ $amenity->id }}" />
-                                                            <span class="checkbox__label">{{ $amenity->amenity_name }}</span>
+                                                                id="amenities_{{ $key }}" name="amenities[]"
+                                                                value="{{ $key }}" />
+                                                            <span class="checkbox__label">{{ $amenity }}</span>
                                                         </label>
                                                     </div>
                                                 @endforeach
@@ -149,7 +167,6 @@
                                             @endif
                                         </div>
                                     </div>
-
                                     <div class="comViewBox five">
                                         <p>Budget</p>
                                         <div class="range-slider">
@@ -170,11 +187,31 @@
                                                 100
                                             </div>
                                         </div>
-                                    </div>                                   
+                                    </div>
+                                    {{-- <div class="comViewBox five">
+                                        <p>Budget</p>
+                                        <div class="range-slider">
+                                            <input type="range" min="{{ $minMaxPrice['min_price'] ?? '' }}"
+                                                max="{{ $minMaxPrice['max_price'] ?? '' }}"
+                                                value="{{ $minMaxPrice['min_price'] ?? '' }}" id="slider-min"
+                                                aria-valuemin="1" aria-valuemax="100" data-display="{{ formatBudget($minMaxPrice['min_price']) }}">
+                                            <input type="range" min="{{ $minMaxPrice['min_price'] ?? '' }}"
+                                                max="{{ $minMaxPrice['max_price'] ?? '' }}"
+                                                value="{{ $minMaxPrice['max_price'] ?? '' }}" id="slider-max"
+                                                aria-valuemin="1" aria-valuemax="100"  data-display="{{ formatBudget($minMaxPrice['max_price']) }}">
+                                        </div>
+                                        <div class="selectArea">
+                                            <div class="dropBox" id="slider-min-value">
+                                                1
+                                            </div>
+                                            <div class="dropBox text-end" id="slider-max-value">
+                                                100
+                                            </div>
+                                        </div>
+                                    </div> --}}
 
-                                    <div class="comViewBox resstBtn">
-                                        <button class="btn linkBtn" id="resetFilter">Reset</button>
-                                        <button class="btn linkBtn" id="applyFilter">Apply</button>
+                                    <div class="comViewBox">
+                                        <a class="btn linkBtn btnFull" id="applyFilter">Apply</a>
                                     </div>
                                 </div>
                             </div>
@@ -290,8 +327,7 @@
         var comparePropertytUrl = "{{ route('property.comparepage') }}";
         var baseUrl = "{{ $baseUrl }}";
         var projectImageUrl = "{{ asset('/') }}storage/project_images/";
-        // var amenities = @json($amenities);
-        var amenities = @json($allAmenities);
+        var amenities = @json($amenities);
         var deviceType = "{{ getDeviceType() }}";
         var authId = "{{ auth()->user()->id ?? '' }}";
 

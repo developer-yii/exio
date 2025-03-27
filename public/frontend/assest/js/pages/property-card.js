@@ -10,8 +10,9 @@ function renderPropertyCard(project, amenities) {
 
     // Format amenities
     const maxChars = 20;
+
     const amenityList = project.amenities.split(',')
-        .filter(id => id && amenities[id])
+        .filter(id => id && amenities)
         .map(id => amenities[id]);
 
     const amenityListString = amenityList.join(', ');
@@ -36,7 +37,7 @@ function renderPropertyCard(project, amenities) {
                 data-type="${project.property_type}"
                 data-property-type="${getPropertyType(project.property_type)}"
                 data-description="${project.formatted_description}"
-                data-size='${JSON.stringify(project.project_details.map(detail => ({ name: detail.name, value: detail.value })))}'
+                data-size='${JSON.stringify(project.project_details.slice(0, 2).map(detail => ({ name: detail.name, value: detail.value })))}'
                 data-multi-image='${JSON.stringify(project.project_images.slice(0, 3).map(img => ({ imgurl: `${projectImageUrl}${img.image}` })))}'
 
                 data-whatsapp-number="${getSettingFromDb}"

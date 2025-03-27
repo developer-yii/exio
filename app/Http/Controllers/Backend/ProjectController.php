@@ -235,7 +235,8 @@ class ProjectController extends Controller
         $model->location_id = $request->area_id;
         $model->builder_id = $request->builder_id;
         $model->property_type = $request->property_type;
-        $model->property_sub_types = $request->property_sub_types;
+        $selectedPropertySubTypes = implode(",", $request->property_sub_types); 
+        $model->property_sub_types = $selectedPropertySubTypes;
         $model->custom_property_type = $request->custom_property_type;
         $model->possession_by = date('Y-m-d', strtotime($request->possession_by));
         $model->rera_number = $request->rera_number;
@@ -666,5 +667,11 @@ class ProjectController extends Controller
     {
         $propertySubTypes = Project::getPropertySubTypes($request->property_type);
         return response()->json(['status' => true, 'message' => '', 'data' => $propertySubTypes]);
+    }
+
+    public function getAreas(Request $request)
+    {
+        $areas = Location::where('city_id', $request->city_id)->pluck('location_name', 'id');
+        return response()->json($areas);
     }
 }

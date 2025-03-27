@@ -165,7 +165,7 @@
                                     <div class="form-group mb-3">
                                         <label for="city_id" class="form-label">City*</label>
                                         <select id="city_id" class="form-control form-select city_id" name="city_id">
-                                            <option value="">Select City</option>
+                                            <option value="" class="d-none">Select City</option>
                                             @foreach ($city as $key => $value)
                                                 <option value="{{ $key }}"
                                                     @if (isset($model->city_id) && $model->city_id == $key) selected @endif>
@@ -181,14 +181,8 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <label for="area_id" class="form-label">Area*</label>
-                                        <select id="area_id" class="form-control form-select area_id" name="area_id">
+                                        <select id="area_id" class="form-control form-select" name="area_id">
                                             <option value="">Select Area</option>
-                                            @foreach ($area as $key => $value)
-                                                <option value="{{ $key }}"
-                                                    @if (isset($model->location_id) && $model->location_id == $key) selected @endif>
-                                                    {{ $value }}
-                                                </option>
-                                            @endforeach
                                         </select>
                                         <span class="error"></span>
                                     </div>
@@ -221,7 +215,11 @@
                                                 <div class="form-check form-check-inline">
                                                     <input type="radio" name="property_type" value="{{ $key }}"
                                                         class="form-check-input" id="property_type_{{ $key }}"
-                                                        @if ((isset($model->property_type) && $model->property_type == $key) || $key == 'residential') checked @endif>
+                                                        @if (isset($model->property_type) && $model->property_type == $key) 
+                                                            checked 
+                                                        @elseif (!isset($model->property_type) && $key == 'residential') 
+                                                            checked 
+                                                        @endif>
                                                     <label class="form-check-label"
                                                         for="property_type_{{ $key }}">{{ $value }}</label>
                                                 </div>
@@ -235,10 +233,16 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
                                         <label for="property_sub_types" class="form-label">Property Sub Types*</label>
-                                        <select id="property_sub_types"
+                                        <!-- <select id="property_sub_types"
                                             class="form-control form-select property_sub_types" name="property_sub_types">
                                             <option value="">Select Property Sub Type</option>
+                                        </select> -->
+
+                                        <select id="property_sub_types" class="form-control form-select property_sub_types" 
+                                            name="property_sub_types[]" multiple>
+                                            <option value="">Select Property Sub Type</option>
                                         </select>
+
                                         <span class="error"></span>
                                     </div>
                                 </div>
@@ -938,6 +942,7 @@
         var addUpdateUrl = "{{ route('admin.project.addupdate') }}";
         var getPropertySubTypesUrl = "{{ route('admin.project.get-property-sub-types') }}";
         var projectUrl = "{{ route('admin.project') }}";
+        
         @if (isset($existingProjectDetails))
             var existingProjectDetails = {!! json_encode($existingProjectDetails) !!};
         @endif
@@ -970,6 +975,11 @@
 @section('pagejs')
     <script>
         var assetUrl = "{{ asset('') }}";
+        var getAreaUrl = "{{ route('admin.project.get-areas') }}";
+        var selectedCity = '{{ $model->city_id ?? "" }}';
+        var selectedArea = '{{ $model->location_id ?? "" }}';
+        var selectedPropertySubTypes = {!! json_encode($model->property_sub_types ?? []) !!};
+
     </script>
     <script
         src="https://maps.googleapis.com/maps/api/js?key={{ config('constants.google_maps_api_key') }}&libraries=places">

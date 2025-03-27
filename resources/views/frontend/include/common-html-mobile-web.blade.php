@@ -286,7 +286,13 @@
             <div class="imgBox">
                 <img src="{{ $similarProperty->getCoverImageUrl() }}" alt="{{ $similarProperty->project_name }}" loading="lazy">
                 <div class="imgheader">
-                    <span>Best for Investment</span>
+                    @if ($similarProperty->projectBadge)
+                        <span>{{ $similarProperty->getProjectBadgeName() }}</span>
+                    @else
+                        <span style="opacity: 0 !important;"></span>
+                    @endif
+
+                    
                     @if (Auth::check())
                         <i class="{{ $similarProperty->wishlistedByUsers->contains(auth()->id()) ? 'fa-solid' : 'fa-regular' }} fa-heart heartIconFill" data-id="{{ $similarProperty->id }}"></i>
                     @else
