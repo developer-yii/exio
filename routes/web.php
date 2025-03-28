@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\NewsController;
 use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\PropertyController;
 use App\Http\Controllers\Frontend\AuthController;
@@ -53,6 +54,8 @@ Route::middleware('guest')->group(function () {
 Route::get('terms-and-condition', [PageController::class, 'termsCondition'])->name('terms-condition');
 Route::get('privacy-policy', [PageController::class, 'privacyPolicy'])->name('privacy-policy');
 Route::get('about-us', [PageController::class, 'aboutUs'])->name('about-us');
+Route::get('news', [PageController::class, 'news'])->name('news');
+Route::get('news/details/{id}', [PageController::class, 'newsDetails'])->name('news-details');
 Route::get('contact-us', [ContactController::class, 'index'])->name('contact-us');
 Route::post('contact-us/submit', [ContactController::class, 'submit'])->name('contact.submit');
 Route::post('/subscribe', [SubscriptionController::class, 'store'])->name('subscribe');

@@ -145,19 +145,19 @@
                         </div>
                         <div class="dropBox">
                             <label for="location">Select Area</label>
-                            <!-- <select name="location" id="location" class="form-control">
+                            <select name="location" id="location" class="form-control">
                                 <option value="">Select Area</option>
                                 @if (count($areas) > 0)
                                     @foreach ($areas as $key => $area)
                                         <option value="{{ $key }}" class="d-none" data-id="{{ $key }}">{{ $area }}</option>
                                     @endforeach
                                 @endif
-                            </select> -->
+                            </select>
                         </div>
 
-                        <select name="location" id="location" class="form-control">
+                        <!-- <select name="location" id="location" class="form-control">
                             <option value="">Select Area</option>
-                        </select>
+                        </select> -->
                     </div>
                     <div class="footerBtn">
                         <a class="btn btnPreview" href="javascript:void(0)" id="cityPrevButton">

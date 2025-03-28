@@ -36,8 +36,8 @@ class CheckAndMatchPropertyController extends Controller
         ];
 
         $cities = City::isActive()->pluck('city_name', 'id');
-        // $areas = Location::isActive()->pluck('location_name', 'id');
-        $areas = Location::isActive()->pluck('location_name', 'id')->groupBy('city_id');
+        $areas = Location::isActive()->pluck('location_name', 'id');
+        // $areas = Location::isActive()->pluck('location_name', 'id')->groupBy('city_id');
 
         $checkandmatch = Setting::where('setting_key', 'check_match_video')->first();
 

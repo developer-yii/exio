@@ -25,7 +25,7 @@
                   <a href="{{ route('about-us') }}">About Us</a>
                 </li>
                 <li>
-                  <a href="#">News</a>
+                  <a href="{{ route('news') }}">News</a>
                 </li>
                 <li>
                   <a href="{{route('contact-us')}}">Contact Us</a>

@@ -207,12 +207,23 @@ if (!function_exists('getAgeOfConstruction')) {
     }
 }
 
+// if (! function_exists('getFormatedDate')) {
+//     function getFormatedDate($date, $format)
+//     {
+//         return \Carbon\Carbon::createFromFormat('Y-m-d', $date)->format($format);
+//     }
+// }
+
 if (! function_exists('getFormatedDate')) {
     function getFormatedDate($date, $format)
     {
-        return \Carbon\Carbon::createFromFormat('Y-m-d', $date)->format($format);
+        if (empty($date)) {
+            return '-'; // Default fallback
+        }
+        return \Carbon\Carbon::parse($date)->format($format);
     }
 }
+
 
 if (!function_exists('getProgressBarColorClass')) {
     function getProgressBarColorClass($percentage)
