@@ -281,7 +281,7 @@
 @endif
 
 @if($type == "similar-property")
-    <a href="{{ route('property.details', [$similarProperty->slug]) }}">
+    <a href="{{ route('property.details', [$similarProperty->slug]) }}" class="w-100">
         <div class="propertyCard">
             <div class="imgBox">
                 <img src="{{ $similarProperty->getCoverImageUrl() }}" alt="{{ $similarProperty->project_name }}" loading="lazy">
@@ -291,7 +291,6 @@
                     @else
                         <span style="opacity: 0 !important;"></span>
                     @endif
-
                     
                     @if (Auth::check())
                         <i class="{{ $similarProperty->wishlistedByUsers->contains(auth()->id()) ? 'fa-solid' : 'fa-regular' }} fa-heart heartIconFill" data-id="{{ $similarProperty->id }}"></i>
@@ -303,7 +302,7 @@
             <div class="priceBox">
                 <div class="price">
                     <h5>
-                        {!! formatPriceRangeSingleSign($project->price_from, $project->price_from_unit, $project->price_to, $project->price_to_unit) !!}
+                        {!! formatPriceRangeSingleSign($similarProperty->price_from, $similarProperty->price_from_unit, $similarProperty->price_to, $similarProperty->price_to_unit) !!}
                     </h5>
                 </div>
                 <div class="boxLogo">

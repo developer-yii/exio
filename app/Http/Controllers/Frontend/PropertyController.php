@@ -58,9 +58,9 @@ class PropertyController extends Controller
         // $similarProperties = Project::with(['projectImages', 'location', 'wishlistedByUsers', 'location.city'])
         //     ->where('id', '!=', $project->id)
         //     ->where('city_id', $project->city_id)
-        //     ->where('location_id', $project->location_id)
-        //     ->where('property_type', $project->property_type)            
-        //     ->where(function ($query) use ($project) {
+        //     ->orWhere('location_id', $project->location_id)
+        //     ->orWhere('property_type', $project->property_type)            
+        //     ->orWhere(function ($query) use ($project) {
         //         $priceFrom = convertCrToL($project->price_from, $project->price_from_unit);
         //         $priceTo = convertCrToL($project->price_to, $project->price_to_unit);
         //         $tolerance = 0.1; // 10% flexibility
@@ -82,34 +82,32 @@ class PropertyController extends Controller
         //     ->take(3)
         //     ->get();
 
+
         $similarProperties = Project::with(['projectImages', 'location', 'wishlistedByUsers', 'location.city'])
-    ->where('id', '!=', $project->id)
-    ->where('city_id', $project->city_id)
-    ->where(function ($query) use ($project) {
-        $query->orWhere('location_id', $project->location_id)
-              ->orWhere('property_type', $project->property_type);
-    })
-    ->where(function ($query) use ($project) {
-        $priceFrom = convertCrToL($project->price_from, $project->price_from_unit);
-        $priceTo = convertCrToL($project->price_to, $project->price_to_unit);
-        $tolerance = 0.1; // 10% flexibility
+            ->where('id', '!=', $project->id)
+            ->where('city_id', $project->city_id) // Strict match for city_id
+            ->where(function ($query) use ($project) { // Grouped OR conditions
+                $query->where('location_id', $project->location_id)
+                    ->orWhere('property_type', $project->property_type)
+                    ->orWhere(function ($q) use ($project) {
+                        $priceFrom = convertCrToL($project->price_from, $project->price_from_unit);
+                        $priceTo = convertCrToL($project->price_to, $project->price_to_unit);
+                        $tolerance = 0.1; // 10% flexibility
 
-        $minFromPrice = $priceFrom - ($priceFrom * $tolerance);
-        $maxFromPrice = $priceFrom + ($priceFrom * $tolerance);
-        $minToPrice = $priceTo - ($priceTo * $tolerance);
-        $maxToPrice = $priceTo + ($priceTo * $tolerance);
+                        $minFromPrice = $priceFrom - ($priceFrom * $tolerance);
+                        $maxFromPrice = $priceFrom + ($priceFrom * $tolerance);
+                        $minToPrice = $priceTo - ($priceTo * $tolerance);
+                        $maxToPrice = $priceTo + ($priceTo * $tolerance);
 
-        $query->where(function ($q) use ($minFromPrice, $maxFromPrice, $minToPrice, $maxToPrice) {
-            $q->whereRaw("
-                (IF(price_from_unit = 'crores', price_from * 100, price_from) BETWEEN ? AND ?)
-                OR
-                (IF(price_to_unit = 'crores', price_to * 100, price_to) BETWEEN ? AND ?)
-            ", [$minFromPrice, $maxFromPrice, $minToPrice, $maxToPrice]);
-        });
-    })
-    ->take(3)
-    ->get();
-
+                        $q->whereRaw("
+                            (IF(price_from_unit = 'crores', price_from * 100, price_from) BETWEEN ? AND ?)
+                            OR
+                            (IF(price_to_unit = 'crores', price_to * 100, price_to) BETWEEN ? AND ?)
+                        ", [$minFromPrice, $maxFromPrice, $minToPrice, $maxToPrice]);
+                    });
+            })
+            ->take(3)
+            ->get();
 
         return view('frontend.property.details', compact('project', 'amenitiesList', 'similarProperties'));
     }
