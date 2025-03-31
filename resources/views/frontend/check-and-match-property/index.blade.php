@@ -121,23 +121,12 @@
                     <div class="selectArea">
                         <div class="dropBox">
                             <label for="city">Select City</label>
-                            <!-- <select id="city" name="city" class="form-control">
-                                <option value="">Select City</option>
+                            <select id="city" name="city" class="form-control">
+                                <option value="" class="d-none">Select City</option>
                                 @if (count($cities) > 0)
                                     @foreach ($cities as $key => $city)
                                         <option value="{{ $key }}" {{ $key == '1' ? 'selected' : '' }}>
                                             {{ $city }}</option>
-                                    @endforeach
-                                @endif
-                            </select> -->
-
-                            <select id="city" name="city" class="form-control">
-                                <option value="">Select City</option>
-                                @if (count($cities) > 0)
-                                    @foreach ($cities as $key => $city)
-                                        <option value="{{ $key }}" {{ $key == '1' ? 'selected' : '' }} data-areas="{{ json_encode($areas[$key] ?? []) }}">
-                                            {{ $city }}
-                                        </option>
                                     @endforeach
                                 @endif
                             </select>
@@ -146,18 +135,9 @@
                         <div class="dropBox">
                             <label for="location">Select Area</label>
                             <select name="location" id="location" class="form-control">
-                                <option value="">Select Area</option>
-                                @if (count($areas) > 0)
-                                    @foreach ($areas as $key => $area)
-                                        <option value="{{ $key }}" class="d-none" data-id="{{ $key }}">{{ $area }}</option>
-                                    @endforeach
-                                @endif
-                            </select>
-                        </div>
-
-                        <!-- <select name="location" id="location" class="form-control">
-                            <option value="">Select Area</option>
-                        </select> -->
+                                <option value="" class="d-none">Select Area</option>
+                            </select>                            
+                        </div>                        
                     </div>
                     <div class="footerBtn">
                         <a class="btn btnPreview" href="javascript:void(0)" id="cityPrevButton">
@@ -232,6 +212,7 @@
     <script>
         var getAmenitiesUrl = "{{ route('front.check-and-match-property.get-amenities') }}";
         var checkAndMatchPropertyResultUrl = "{{ route('front.check-and-match-property.result') }}";
+        var getLocationsUrl = "{{ route('front.get-locations') }}";
         // var areasByCity = @json($areas);        
     </script>
     <script src="{{ $baseUrl }}assest/js/pages/check-and-match-property.js"></script>

@@ -118,6 +118,7 @@
         var subscribeUrl = "{{ route('subscribe') }}";
         var downloadInsightsRrportUrl = "{{ route('property.download-insights-report') }}";
         var getPropertyByCityUrl = "{{ route('front.home.getProjects') }}";
+        var authId = "{{ auth()->user()->id ?? '' }}";
         
         $(document).ready(function() {
             $.ajaxSetup({

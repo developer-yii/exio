@@ -187,7 +187,7 @@ $(document).ready(function () {
                     //     console.log(result.data.builder_about);
                     //     quill.root.innerHTML = result.data.builder_about || ""; // Safely set Quill content
                     // }
-                    $(formId).find(".city_id").val(result.data.city_id);
+                    // $(formId).find(".city_id").val(result.data.city_id);
                     $(formId).find(".status").val(result.data.status);
                 } else {
                     if (result.message) {
@@ -340,14 +340,14 @@ $(document).ready(function () {
                     return full["builder_about"];
                 },
             },
-            {
-                name: "city_name",
-                data: "city_name",
-                sortable: true,
-                render: function (_, _, full) {
-                    return full["city_name"];
-                },
-            },
+            // {
+            //     name: "city_name",
+            //     data: "city_name",
+            //     sortable: true,
+            //     render: function (_, _, full) {
+            //         return full["city_name"];
+            //     },
+            // },
             {
                 name: "status",
                 sortable: true,

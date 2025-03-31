@@ -77,6 +77,7 @@ $(document).ready(function () {
         page = 0;
         lastPage = false;
         $('#pills-home .row').empty();
+        $('.porpertyFilter').removeClass('open');
         loadMoreProjects(true);
     });
 

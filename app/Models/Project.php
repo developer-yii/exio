@@ -216,4 +216,15 @@ class Project extends Model
     {
         return $this->hasMany(InsightsReportDownload::class, 'property_id');
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($project) {
+            // Delete related records
+            InsightsReportDownload::where('property_id', $project->id)->delete();
+            PropertyComparison::where('property_id_1', $project->id)->orWhere('property_id_2', $project->id)->delete();
+        });
+    }
 }

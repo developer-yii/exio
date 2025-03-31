@@ -326,6 +326,8 @@ $('.downloadInsightReportPdf').click(function (event) {
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+
+            toastr.success('Download completed successfully.');
         },
         error: function (xhr) {
             if (xhr.status === 404) {
@@ -394,13 +396,22 @@ function formatBudget(amount) {
 }
 
 function getFormattedPrice(priceFrom, priceFromUnit, priceTo, priceToUnit) {
+    
     let priceFormatted = '₹' + formatPriceUnit(priceFrom, priceFromUnit, false);
-
     if (priceFrom !== priceTo || priceFromUnit !== priceToUnit) {
+        console.log()
         priceFormatted += '-' + formatPriceUnit(priceTo, priceToUnit, false);
     }
 
     return priceFormatted;
+}
+
+function formatPriceUnit(price, unit, space = true) {
+    price = parseFloat(price);
+    const priceValue = parseFloat(price);
+    const priceSymbol = priceUnit[unit] || unit; // Fallback to unit if not found
+
+    return space ? `${priceValue} ${priceSymbol}` : `${priceValue}${priceSymbol}`;
 }
 
 $(document).ready(function () {
@@ -590,11 +601,19 @@ $(document).ready(function () {
             type: "POST",
             data: { property_id: propertyId },
             success: function (response) {
+                
                 if (response.status === "liked") {
-                    heartIcon.removeClass('fa-regular').addClass('fa-solid');
+                    $('*[data-id="' + propertyId + '"]').find('i').removeClass('fa-regular').addClass('fa-solid');
+                    $('*[data-id="' + propertyId + '"]').not(':has(i)').removeClass('fa-regular').addClass('fa-solid');
                 } else {
-                    heartIcon.removeClass('fa-solid').addClass('fa-regular');
+                    $('*[data-id="' + propertyId + '"]').find('i').removeClass('fa-solid').addClass('fa-regular');
+                    $('*[data-id="' + propertyId + '"]').not(':has(i)').removeClass('fa-solid').addClass('fa-regular');
                 }
+                // if (response.status === "liked") {
+                //     heartIcon.removeClass('fa-regular').addClass('fa-solid');
+                // } else {
+                //     heartIcon.removeClass('fa-solid').addClass('fa-regular');
+                // }
     
                 $('.heartBox span').text(response.shortlistedCount);
                 // toastr.success(response.message);

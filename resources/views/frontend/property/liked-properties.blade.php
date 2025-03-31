@@ -135,5 +135,5 @@
         var comparePropertytUrl = "{{ route('property.comparepage') }}";
     </script>
     <script src="{{ frontendPageJsLink('liked-properties.js') }}"></script>
-    {{-- <script src="{{ $baseUrl }}/assest/js/pages/compare.js"></script> --}}
+    
 @endsection

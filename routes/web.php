@@ -37,6 +37,7 @@ Route::name('front.')->group(function () {
         Route::get('/', [CheckAndMatchPropertyController::class, 'checkAndMatchProperty'])->name('check-and-match-property');
         Route::post('/submit', [CheckAndMatchPropertyController::class, 'checkAndMatchPropertySubmit'])->name('check-and-match-property.submit');
         Route::get('/get-amenities', [CheckAndMatchPropertyController::class, 'getAmenities'])->name('check-and-match-property.get-amenities');
+        Route::get('/get-locations', [CheckAndMatchPropertyController::class, 'getAreas'])->name('get-locations');
     });
 });
 

@@ -23,7 +23,7 @@ $(document).ready(function () {
         } catch (error) {
             console.error("Error initializing map:", error);
         }
-    }
+    }    
 
     initMap();
 });
@@ -57,6 +57,9 @@ async function loadMarkers(projects) {
                 const lat = parseFloat(location.latitude);
                 const lng = parseFloat(location.longitude);
 
+                const isWishlistedByUser = Array.isArray(location.wishlisted_by_users) &&
+                    location.wishlisted_by_users.some(user => user.id == authId);
+                                        
                 if (isNaN(lat) || isNaN(lng)) {
                     return null;
                 }
@@ -81,49 +84,94 @@ async function loadMarkers(projects) {
                     location.price_to_unit
                 );
 
-                console.log(location.project_badge);
+                // console.log(location.project_badge);
+
+                // const infoWindowContent = `
+                //     <div class="map-info-window">
+                //         <div class="propertyCard propertyCardMap isOnMap">
+                //             <div class="owl-carousel owl-theme">
+                //                 ${location.project_images.map(image => `
+                //                 <div class="item">
+                //                     <div class="imgBox">
+                //                         <img src="${assetUrl}storage/project_images/${image.image}" alt="${location.project_name}">
+                //                         <div class="imgheader">
+                //                             ${location.project_badge ? `<span>${location.project_badge.name}</span>` : ''}
+                //                             <i class="fa-regular fa-heart heartIconFill"></i>
+                //                         </div>
+                //                     </div>
+                //                 </div>`).join('')}
+                //             </div>
+                //             <div class="priceBox">
+                //                 <div class="price">
+                //                     <h5>${priceFormatted}</h5>
+                //                 </div>
+                //             </div>
+                //             <div class="propertyName">
+                //                 <h5>${location.project_name}</h5>
+                //             </div>
+                //             <div class="locationProperty">
+                //                 <p>${location.custom_property_type || ''} | ${location.floor_plans.map(plan => plan.carpet_area).join(', ') + ' Sqft' || ''} | ${location.location.location_name || ''}</p>
+                //             </div>
+                //             <div class="addressBoxMap">
+                //                 <div class="boxLogo">
+                //                     <img src="${assetUrl}frontend/assest/images/x-btn.png" alt="x-btn">
+                //                     <span>${location.exio_suggest_percentage || 0}%</span>
+                //                 </div>
+                //                 <div class="clickTo">
+                //                     <a href="javascript:void(0)" class="compareBoxOpen">
+                //                         <input type="checkbox" class="form-check-input checkbox" id="checkbox-signin" name="compare[]" autocomplete="off" value="${location.id}">
+                //                         <label for="checkbox-signin">Compare</label>
+                //                     </a>
+                //                 </div>
+                //             </div>
+                //         </div>
+                //     </div>
+                // `;
 
                 const infoWindowContent = `
-                    <div class="map-info-window">
-                        <div class="propertyCard propertyCardMap isOnMap">
-                            <div class="owl-carousel owl-theme">
-                                ${location.project_images.map(image => `
-                                <div class="item">
-                                    <div class="imgBox">
-                                        <img src="${assetUrl}storage/project_images/${image.image}" alt="${location.project_name}">
-                                        <div class="imgheader">
-                                            ${location.project_badge ? `<span>${location.project_badge.name}</span>` : ''}
-                                            <i class="fa-regular fa-heart heartIconFill"></i>
-                                        </div>
+                <div class="map-info-window">
+                    <div class="propertyCard propertyCardMap isOnMap cursor-default">
+                        <div class="owl-carousel owl-theme">
+                            ${location.project_images.map(image => `
+                            <div class="item">
+                                <div class="imgBox">
+                                    <img src="${assetUrl}storage/project_images/${image.image}" alt="${location.project_name}">
+                                    <div class="imgheader">
+                                        ${location.project_badge ? `<span>${location.project_badge.name}</span>` : '<span style="opacity: 0 !important;""></span>'}
+                                        <i class="${isWishlistedByUser ? 'fa-solid' : 'fa-regular'} fa-heart heartIconFill" data-id="${location.id}"></i>
                                     </div>
-                                </div>`).join('')}
-                            </div>
-                            <div class="priceBox">
-                                <div class="price">
-                                    <h5>${priceFormatted}</h5>
                                 </div>
+                            </div>`).join('')}
+                        </div>
+                        <div class="priceBox">
+                            <div class="price">
+                                <h5>${priceFormatted}</h5>
                             </div>
-                            <div class="propertyName">
-                                <h5>${location.project_name}</h5>
+                        </div>
+                        <div class="propertyName">
+                            <h5 class="one-line-text" title="${location.project_name}">${location.project_name}</h5>
+                        </div>
+                        <div class="locationProperty">
+                            <p class="one-line-text" title="${location.custom_property_type || ''} | ${location.floor_plans.map(plan => plan.carpet_area).join(', ') + ' Sqft' || ''} | ${location.location.location_name || ''}">
+                                ${location.custom_property_type || ''} | ${location.floor_plans.map(plan => plan.carpet_area).join(', ') + ' Sqft' || ''} | ${location.location.location_name || ''}
+                            </p>
+                        </div>
+                        <div class="addressBoxMap">
+                            <div class="boxLogo">
+                                <img src="${assetUrl}frontend/assest/images/x-btn.png" alt="x-btn">
+                                <span>${location.exio_suggest_percentage || 0}%</span>
                             </div>
-                            <div class="locationProperty">
-                                <p>${location.custom_property_type || ''} | ${location.floor_plans.map(plan => plan.carpet_area).join(', ') + ' Sqft' || ''} | ${location.location.location_name || ''}</p>
-                            </div>
-                            <div class="addressBoxMap">
-                                <div class="boxLogo">
-                                    <img src="${assetUrl}frontend/assest/images/x-btn.png" alt="x-btn">
-                                    <span>${location.exio_suggest_percentage || 0}%</span>
-                                </div>
-                                <div class="clickTo">
-                                    <a href="javascript:void(0)" class="compareBoxOpen">
-                                        <input type="checkbox" class="form-check-input checkbox" id="checkbox-signin" name="compare[]" autocomplete="off" value="${location.id}">
-                                        <label for="checkbox-signin">Compare</label>
-                                    </a>
-                                </div>
+                            <div class="clickTo">
+                                <a href="javascript:void(0)" class="compareBoxOpen">
+                                    <input type="checkbox" class="form-check-input checkbox" id="checkbox-signin" name="compare[]" autocomplete="off" value="${location.id}">
+                                    <label for="checkbox-signin">Compare</label>
+                                </a>
                             </div>
                         </div>
                     </div>
-                `;
+                </div>
+            `;
+
 
                 const infoWindow = new google.maps.InfoWindow({
                     content: infoWindowContent,
@@ -156,6 +204,8 @@ async function loadMarkers(projects) {
                                 }
                             }
                         });
+
+                        initializeComparison();
                     }, 100);
 
                     // map.panTo(marker.position);
@@ -168,6 +218,33 @@ async function loadMarkers(projects) {
 
         mc = new markerClusterer.MarkerClusterer({ markers, map });
 
+        if (markers.length > 0) {            
+            const firstMarker = markers[0];
+        
+            google.maps.event.addListenerOnce(map, "idle", function () {
+                setTimeout(() => {
+                    google.maps.event.trigger(firstMarker, "click");
+                }, 500); // Delay added to ensure markers are fully rendered
+            });
+        }
+
+        // if (markers.length > 0) {
+        //     google.maps.event.addListenerOnce(map, "idle", function () {
+        //         setTimeout(() => {
+        //             // Find the middle index
+        //             const middleIndex = Math.floor(markers.length / 2);
+        
+        //             // Get the middle marker
+        //             const middleMarker = markers[middleIndex];
+        
+        //             // If a valid marker exists, trigger a click event
+        //             if (middleMarker) {
+        //                 google.maps.event.trigger(middleMarker, "click");
+        //             }
+        //         }, 500); // Small delay ensures markers are fully rendered
+        //     });
+        // }        
+
         // Fit bounds code...
         const bounds = new google.maps.LatLngBounds();
         markers.forEach((marker) => {
@@ -176,16 +253,27 @@ async function loadMarkers(projects) {
             }
         });
 
-        setTimeout(() => {
-            map.fitBounds(bounds, {
-                padding: {
-                    top: 50,
-                    right: 50,
-                    bottom: 50,
-                    left: 50,
-                },
-            });
-        }, 1000);
+        if (markers.length > 1) {
+            setTimeout(() => {
+                const padding = 50; // Define padding in pixels
+                map.fitBounds(bounds, padding);
+            }, 1000);
+        }
+        
+
+        // if (markers.length > 1) {
+        //     setTimeout(() => {
+        //         map.fitBounds(bounds, {
+        //             padding: {
+        //                 top: 50,
+        //                 right: 50,
+        //                 bottom: 50,
+        //                 left: 50,
+        //             },
+        //         });
+        //     }, 1000);
+        // }
+
     } catch (error) {
         console.error("Error loading markers:", error);
     }
@@ -201,6 +289,6 @@ function createImagePin(imageUrl) {
     return pin;
 }
 
-function formatPriceUnit(priceUnit_query) {
-    return priceUnit[priceUnit_query] || '';
-}
+// function formatPriceUnit(priceUnit_query) {
+//     return priceUnit[priceUnit_query] || '';
+// }

@@ -111,7 +111,7 @@
     .checkProperty .main_property .left_propertyBox, .checkProperty .main_property .right_propertyBox {
         width: 100%;
     }
-
+    
     .checkProperty .checkPropertyBox .topFilterBar .filterBox {
         width: 5%;
     }
@@ -149,7 +149,7 @@
     .propertyModal {
         padding: 0 15px;
     }
-
+     
     .left_traking_stepSec .stepallBox {
         gap: 10px;
     }
@@ -214,6 +214,15 @@
     .detailmainSec .endText p {
         margin-top: 10px;
     }
+
+    .compare_reports .compare_reports_box {
+        flex-wrap: wrap;
+    }
+
+    .compare_reports .certificates_box,
+    .compare_reports .compare_reports_box .download_box {
+        width: 100%;
+    }
 }
 
 
@@ -242,7 +251,7 @@
     .overview .stickyTabpanel ul li a {
         font-size: 15px;
     }
-
+    
 }
 
 @media (max-width:991px) {
@@ -385,6 +394,28 @@
 
     .bannerSky .askQuestion a {
         font-size: 20px;
+    }
+
+    .downloaded_certificates_box .detailmainSec .detailsTextSec .siteDetails {
+        width: 100%;
+    }
+
+    .compare_reports .certificates_box {
+        flex-wrap: wrap;
+    }
+    .compare_reports .detailmainSec {
+        width: 100%;
+    }
+    .compare_reports .certificates_box .compareVs {
+        margin: 0 auto;
+    }
+
+    .compare_reports .detailmainSec .innerPriceBox .priceShare h5 {
+        font-size: 18px;
+    }
+
+    .blog_detail_box .right_sticky {
+        margin-top: 20px;
     }
 }
 
@@ -594,14 +625,14 @@
     .detailmainSec .detailsTextSec .priceShare {
         width: 100%;
     }
-
+    
     .detailmainSec .detailsTextSec .priceShare ul {
         justify-content: start;
     }
 
     .detailmainSec .endText p span.line {
         margin: 0 5px;
-    }
+    } 
 
     .detailmainSec .endText p {
         font-size: 14px;
@@ -640,7 +671,7 @@
     .detail_Sec .endText, .detail_Sec .menuBread {
         padding: 0 20px;
     }
-
+     
     .detailmainSec .imageGallery .rightImg {
         display: none;
     }
@@ -806,7 +837,8 @@
         margin-bottom: 30px;
     }
 
-    .aboutUs .countourView {
+    .aboutUs .countourView,
+    .compare_reports .detailmainSec .innerPriceBox {
         flex-wrap: wrap;
     }
 
@@ -1199,7 +1231,7 @@
         width: 100%;
         height: 100%;
     }
-
+     
     .btn-container {
         flex-wrap: wrap;
     }
@@ -1319,7 +1351,7 @@
     .bannerSky .askQuestion a {
         font-size: 18px;
         padding: 6px 15px;
-    }
+    } 
 
     .forumBoxMain .comQuebox .btnAnsAdd {
         font-size: 16px;
@@ -1329,7 +1361,7 @@
 
 
 @media (max-width:479px) {
-
+    
     h1 {
         font-size: 34px;
     }
@@ -1369,7 +1401,7 @@
 
     .question .accordion-button {
         font-size: 16px;
-    }
+    } 
 
     .about .aboutBox .aboutText .btnExplore {
         width: 100%;
@@ -1439,7 +1471,7 @@
     #documents .documentBox .boxBox {
         width: 100%;
     }
-
+    
     .aboutUs .countourView .box {
         width: calc(100%);
     }
@@ -1481,7 +1513,7 @@
         max-width: 250px;
     }
 
-    .compare_project .borderBox .owl-nav .owl-prev img,
+    .compare_project .borderBox .owl-nav .owl-prev img, 
     .compare_project .borderBox .owl-nav .owl-next img {
         max-width: 28px;
     }

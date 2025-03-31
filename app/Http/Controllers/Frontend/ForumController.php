@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ForumNotificationEmail;
 use App\Models\Forum;
 use App\Models\ForumAnswer;
 use App\Rules\ReCaptcha;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class ForumController extends Controller
@@ -80,10 +82,25 @@ class ForumController extends Controller
                 return response()->json($response);
             }
 
-            Forum::create([
+            // Forum::create([
+            //     'question' => $request->input('question'),
+            //     'user_id' => Auth::id(),
+            // ]);
+
+            $forum = Forum::create([
                 'question' => $request->input('question'),
                 'user_id' => Auth::id(),
             ]);
+    
+            // Email data
+            $data = [
+                'type' => 'New Question',
+                'content' => $forum->question,
+                'user_name' => Auth::user()->name,
+            ];
+    
+            // Send email
+            Mail::to(env('FORUM_MAIL'))->send(new ForumNotificationEmail($data));
 
             return response()->json(['status' => true, 'message' => 'Question submitted successfully!']);
         }catch(Exception $e){

@@ -19,9 +19,9 @@
     <div class="header-part">
         <div class="container">
             <div class="header-box">
-                <div class="mobileIcon">
+                <!-- <div class="mobileIcon">
                     <a href="javascript:void(0)"><i class="fa-solid fa-bars"></i></a>
-                </div>
+                </div> -->
                 <div class="logo-box">
                     <a href="{{ route('front.home') }}"><img src="{{ $baseUrl }}assest/images/logo-img.png"
                             alt="logo-img" /></a>
@@ -55,7 +55,7 @@
                         @if(request()->route()->getName() == 'front.home')
                             <li class="moblieHide">
                                 <a href="javascript:void(0)" class="first-menu">All Projects</a>
-                                <ul class="projectDropDown">
+                                <!-- <ul class="projectDropDown">
                                     <li>
                                         <a href="{{ route('property.result.filter', ['type' => 'high-demand']) }}">
                                             <div class="imgBox">
@@ -89,7 +89,44 @@
                                             </div>
                                         </a>
                                     </li>
+                                </ul> -->
+
+                                <ul class="projectDropDown">
+                                    <li>
+                                        <a href="{{ route('property.result.filter', ['type' => 'high-demand', 'tab' => 'appraisal']) }}">
+                                            <div class="imgBox">
+                                                <img src="{{ $baseUrl }}assest/images/demand.png" alt="demand">
+                                            </div>
+                                            <div class="text">
+                                                <h6>In High Demand</h6>
+                                                <p>Neque porro quisquam est qui dolorem.</p>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('property.result.filter', ['type' => 'just-launch', 'tab' => 'all']) }}">
+                                            <div class="imgBox">
+                                                <img src="{{ $baseUrl }}assest/images/launched.png" alt="launched">
+                                            </div>
+                                            <div class="text">
+                                                <h6>Just Launched</h6>
+                                                <p>Ipsum quia dolor sit amet consece adipisci velit.</p>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('property.result.filter', ['type' => 'just-launch', 'tab' => 'best-match']) }}">
+                                            <div class="imgBox">
+                                                <img src="{{ $baseUrl }}assest/images/rating.png" alt="rating">
+                                            </div>
+                                            <div class="text">
+                                                <h6>Rating</h6>
+                                                <p>Porro quisquam est qui dolorem ipsum quia.</p>
+                                            </div>
+                                        </a>
+                                    </li>
                                 </ul>
+
                             </li>
                         @endif
 
@@ -103,7 +140,9 @@
                         @endif
 
                         <li>
-                            <a href="javascript:void(0)" class="user-menu"><i class="fa-solid fa-user"></i></a>
+                            <a href="javascript:void(0)" class="user-menu">
+                                <i class="fa-solid fa-user desktop"></i></i><i class="fa-solid fa-bars mobile"></i>
+                            </a>
                             <ul class="userDropDown">
                                 @if (Auth::user())
                                     <li class="cursor-pointer">

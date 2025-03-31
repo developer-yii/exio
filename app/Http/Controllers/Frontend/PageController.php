@@ -27,10 +27,10 @@ class PageController extends Controller
 
     public function news(Request $request){
 
-        $perPageNews = 2;
+        $perPageNews = 9;
         $page = $request->input('page', 1);
 
-        $allNews = News::where('status', 1)->orderBy('created_at', 'desc'); 
+        $allNews = News::where('status', 1)->orderBy('updated_at', 'desc'); 
         $totalNews = (clone $allNews)->count();
 
         $news = $allNews->paginate($perPageNews);
@@ -42,8 +42,14 @@ class PageController extends Controller
             ]);
         }
 
-        // \Log::info("bsfhgsdf");
         return view('frontend.news.index', compact('news', 'perPageNews', 'totalNews'));
+    }
+
+    public function newsDetails(Request $request, $id){
+
+        $news = News::findOrFail($id);
+        $popularNews = News::where('id', "!=", $id)->orderBy('views', 'desc')->take(5)->get();
+        return view('frontend.news.details', compact('news', 'popularNews'));
     }
 
 }
