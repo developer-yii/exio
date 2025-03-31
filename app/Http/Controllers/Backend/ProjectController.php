@@ -175,7 +175,7 @@ class ProjectController extends Controller
             'locality.*.distance_unit' => 'required',
             'locality.*.time_to_reach' => 'required',
             'property_document' => 'nullable|mimes:pdf|max:10240',
-            'property_document_title' => 'nullable|required_with:property_document|string|max:255',
+            // 'property_document_title' => 'nullable|required_with:property_document|string|max:255',
             'address' => 'required|string|max:255',
             'rera_details' => 'required|array',
             'rera_details.*.title' => 'required|string|max:255',
@@ -274,7 +274,7 @@ class ProjectController extends Controller
             $fileName = time() . '_' . Str::random(20) . '.' . $file->getClientOriginalExtension();
             $file->storeAs('public/property_documents', $fileName);
             $model->property_document = $fileName;
-            $model->property_document_title = $request->property_document_title;
+            // $model->property_document_title = $request->property_document_title;
         }
 
         if ($request->hasFile('insights_report_file')) {
@@ -673,5 +673,18 @@ class ProjectController extends Controller
     {
         $areas = Location::where('city_id', $request->city_id)->pluck('location_name', 'id');
         return response()->json($areas);
+    }
+
+    public function getAmenities(Request $request)
+    {
+        $amenityQuery = Amenity::where('status', 1);
+
+        if ($request->property_type !== 'both') {
+            $amenityQuery->whereIn('amenity_type', [$request->property_type, 'both']);
+        }
+        
+        $amenities = $amenityQuery->pluck('amenity_name', 'id')->toArray();
+        
+        return response()->json(['status' => true, 'message' => '', 'data' => $amenities]);
     }
 }

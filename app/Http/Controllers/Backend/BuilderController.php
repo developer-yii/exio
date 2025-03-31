@@ -102,11 +102,11 @@ class BuilderController extends Controller
                 Rule::unique('builders', 'builder_name')->ignore($request->id)->whereNull('deleted_at')->where('city_id', $cityId)
             ],
             'builder_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
-            'city_id' => 'required',
+            // 'city_id' => 'required',
         ];
 
         $messages = array(
-            'city_id.required' => "The city field is required.",
+            // 'city_id.required' => "The city field is required.",
             'builder_about.regex' => "The builder about field is invalid.",
         );
 
@@ -122,7 +122,7 @@ class BuilderController extends Controller
             return response()->json(['status' => false, 'message' => 'Builder not found']);
         }
 
-        $model->city_id  = $request->city_id;
+        // $model->city_id  = $request->city_id;
         $model->builder_name = ucwords(strtolower(trim($request->builder_name)));
         $model->builder_about = $request->builder_about;
         if ($request->hasFile('builder_logo')) {

@@ -18,13 +18,14 @@ async function initMap() {
         });
 
         await loadMarkers(projects);
+       
     } catch (error) {
         console.error("Error initializing map:", error);
     }
 }
 
 // Make the function global
-window.initMap = initMap;
+// window.initMap = initMap;
 
 $(document).ready(function () {
     initMap();
@@ -62,6 +63,7 @@ async function loadMarkers(projects) {
                 const isWishlistedByUser = Array.isArray(location.wishlisted_by_users) &&
                     location.wishlisted_by_users.some(user => user.id == authId);
 
+                    
                 if (isNaN(lat) || isNaN(lng)) {
                     return null;
                 }
@@ -159,8 +161,28 @@ async function loadMarkers(projects) {
                                 0: { items: 1 }
                             }
                         });
+
+                        initializeComparison();
+                        // if ($(".checkbox").length > 0) {
+                        //     initializeComparison();
+                        // } else {
+                        //     console.warn("Checkboxes not loaded, retrying...");
+                        //     setTimeout(initializeComparison, 1000);
+                        // }
                     }, 100);
 
+                    // Adjust map to make the info window fully visible
+                    // const markerPosition = marker.position;
+                    // const mapDiv = document.getElementById("map");
+                    // const mapHeight = mapDiv.clientHeight;
+
+                    // // Move the map down to make space for the info window
+                    // const newCenter = {
+                    //     lat: markerPosition.lat() - (mapHeight / 40000), // Adjust value to push map down
+                    //     lng: markerPosition.lng(),
+                    // };
+
+                    // map.panTo(newCenter);
                     // map.panTo(marker.position);
                     // map.setZoom(4);
                 });
@@ -195,6 +217,8 @@ async function loadMarkers(projects) {
                     if (middleMarker) {
                         google.maps.event.trigger(middleMarker, "click");
                     }
+
+                    // initializeComparison();
                 }, 500); // Small delay ensures markers are fully rendered
             });
         }        
@@ -235,6 +259,6 @@ function createImagePin(imageUrl) {
     return pin;
 }
 
-function formatPriceUnit(priceUnit_query) {
-    return priceUnit[priceUnit_query] || '';
-}
+// function formatPriceUnit(priceUnit_query) {
+//     return priceUnit[priceUnit_query] || '';
+// }

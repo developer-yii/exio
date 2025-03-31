@@ -58,6 +58,7 @@
                                     <input type="text" name="description" class="form-control description"
                                         id="description" placeholder="Enter description"
                                         value="@if (isset($model->id)) {{ $model->description }} @endif">
+                                    <p style="margin-bottom: 0px !important;">Characters remaining: <span id="charCount">250/250</span></p>
                                     <span class="error"></span>
                                 </div>
                             </div>
@@ -67,8 +68,8 @@
                                             class="text-danger add_edit_required">*</span></label>
                                     <textarea name="content" class="form-control content hide" id="content">
                                     @if (isset($model->id))
-{!! $model->content !!}
-@endif
+                                        {!! $model->content !!}
+                                    @endif
                                     </textarea>
                                     <span class="error"></span>
                                 </div>

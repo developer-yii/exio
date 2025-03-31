@@ -1,4 +1,4 @@
-<a href="{{ route('property.details', [$property->slug]) }}" >
+<a href="{{ route('property.details', [$property->slug]) }}" class="w-100">
     <div class="detailmainSec">
         <div class="detailsTextSec">
             @include('frontend.property.partial_compare_section_mobile', ['project' => $property])

@@ -96,14 +96,6 @@ function renderPropertyCard(project, amenities) {
     `;
 }
 
-function formatPriceUnit(price, unit, space = true) {
-    price = parseFloat(price);
-    const priceValue = parseFloat(price);
-    const priceSymbol = priceUnit[unit] || unit; // Fallback to unit if not found
-
-    return space ? `${priceValue} ${priceSymbol}` : `${priceValue}${priceSymbol}`;
-}
-
 function getAgeOfConstruction(age) {
     return ageOfConstruction[age] || '';
 }

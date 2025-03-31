@@ -9,6 +9,7 @@ use App\Models\Location;
 use App\Models\Project;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class CheckAndMatchPropertyController extends Controller
@@ -55,7 +56,7 @@ class CheckAndMatchPropertyController extends Controller
         $amenities = Amenity::query();
 
         if ($request->has('amenity_type')) {
-            $amenities->where('amenity_type', $request->amenity_type);
+            $amenities->whereIn('amenity_type', [$request->amenity_type,'both']);
         }
 
         $amenities = $amenities->isActive()->get();
@@ -71,10 +72,14 @@ class CheckAndMatchPropertyController extends Controller
 
         $projects = Project::with('projectImages', 'projectBadge', 'floorPlans', 'city', 'location')->isActive();
 
+        if (Auth::check()) {
+            $projects = $projects->with('wishlistedByUsers');
+        }
+
         if (isset($filters['property_type'])) {
             $projects->where(function ($query) use ($filters) {
-                $query->where('property_type', $filters['property_type'])
-                    ->orWhere('property_type', 'both');
+                $query->whereIn('property_type', [$filters['property_type'], 'both']);
+                    // ->orWhere('property_type', 'both');
             });
         }
 
@@ -219,5 +224,11 @@ class CheckAndMatchPropertyController extends Controller
                         ->where('price_from', '<=', $maxInLacs / 100);
                 });
         });
+    }
+
+    public function getAreas(Request $request)
+    {
+        $areas = Location::where('city_id', $request->city_id)->pluck('location_name', 'id');
+        return response()->json($areas);
     }
 }

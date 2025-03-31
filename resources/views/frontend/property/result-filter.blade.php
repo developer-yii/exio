@@ -1,44 +1,12 @@
 @php
     use App\Models\Project;
     $baseUrl = asset('/') . 'frontend/';
+    $activeTab = request('tab', 'all'); // Default to "all"
 @endphp
 @extends('frontend.layouts.app')
 
 @section('css')
-    <!-- Google Maps -->
-    <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
-    <script>
-        (g => {
-            var h, a, k, p = "The Google Maps JavaScript API",
-                c = "google",
-                l = "importLibrary",
-                q = "__ib__",
-                m = document,
-                b = window;
-            b = b[c] || (b[c] = {});
-            var d = b.maps || (b.maps = {}),
-                r = new Set,
-                e = new URLSearchParams,
-                u = () => h || (h = new Promise(async (f, n) => {
-                    await (a = m.createElement("script"));
-                    e.set("libraries", [...r] + "");
-                    for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]);
-                    e.set("callback", c + ".maps." + q);
-                    a.src = `https://maps.${c}apis.com/maps/api/js?` + e;
-                    d[q] = f;
-                    a.onerror = () => h = n(Error(p + " could not load."));
-                    a.nonce = m.querySelector("script[nonce]")?.nonce || "";
-                    m.head.append(a)
-                }));
-            d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() =>
-                d[l](f, ...n))
-        })
-        ({
-            key: "{{ config('constants.google_maps_api_key') }}",
-            v: "weekly"
-        });
-    </script>
-    <link rel="stylesheet" href="{{ asset('frontend/assest/css/extra.css') }}">
+    @include('frontend.include.google-maps')
 @endsection
 
 @section('content')
@@ -180,7 +148,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="project-list" class="right_propertyBox">
+                    <!-- <div id="project-list" class="right_propertyBox">
                         <div class="rightListSec">
                             <div class="toptabSec">
                                 <div class="tabflex">
@@ -251,6 +219,84 @@
                                 </div>
                             </div>
                         </div>
+                    </div> -->
+                    <div id="project-list" class="right_propertyBox">
+                        <div class="rightListSec">
+                            <div class="toptabSec">
+                                <div class="tabflex">
+                                    <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link {{ $activeTab == 'all' ? 'active' : '' }}" 
+                                                id="pills-home-tab" data-bs-toggle="pill" 
+                                                data-bs-target="#pills-home" type="button" role="tab"
+                                                aria-controls="pills-home" aria-selected="{{ $activeTab == 'all' ? 'true' : 'false' }}">
+                                                <i class="fa-solid fa-layer-group"></i> All
+                                            </button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link {{ $activeTab == 'appraisal' ? 'active' : '' }}" 
+                                                id="pills-profile-tab" data-bs-toggle="pill" 
+                                                data-bs-target="#pills-profile" type="button" role="tab"
+                                                aria-controls="pills-profile" aria-selected="{{ $activeTab == 'appraisal' ? 'true' : 'false' }}">
+                                                <i class="fa-solid fa-thumbs-up"></i> Appraisal
+                                            </button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link {{ $activeTab == 'best-match' ? 'active' : '' }}" 
+                                                id="pills-match-tab" data-bs-toggle="pill" 
+                                                data-bs-target="#pills-match" type="button" role="tab"
+                                                aria-controls="pills-match" aria-selected="{{ $activeTab == 'best-match' ? 'true' : 'false' }}">
+                                                <i class="fa-solid fa-puzzle-piece"></i> Best Match
+                                            </button>
+                                        </li>
+                                    </ul>
+                                    <div class="heartBox">
+                                        <a href="{{ route('property.shortlisted') }}">
+                                            <i class="fa-solid fa-heart"></i>
+                                            <span>{{ number_format($shortlistedCount) }}</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-content" id="pills-tabContent">
+                                <div class="tab-pane fade {{ $activeTab == 'all' ? 'show active' : '' }}" id="pills-home" role="tabpanel">
+                                    <div class="row">
+                                        @if($projects->count() > 0)
+                                            @foreach ($projects as $project)
+                                                <x-property-card :project="$project" :amenities="$amenities" />
+                                            @endforeach
+                                        @else
+                                            <p class="not-found">No property found</p>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade {{ $activeTab == 'appraisal' ? 'show active' : '' }}" id="pills-profile" role="tabpanel">
+                                    <div class="row">
+                                        @if($appraisal->count() > 0)
+                                            @foreach ($appraisal as $project)
+                                                <x-property-card :project="$project" :amenities="$amenities" />
+                                            @endforeach
+                                        @else
+                                            <p class="not-found">No property found</p>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade {{ $activeTab == 'best-match' ? 'show active' : '' }}" id="pills-match" role="tabpanel">
+                                    <div class="row">
+                                        @if($bestMatch->count() > 0)
+                                            @foreach ($bestMatch as $project)
+                                                <x-property-card :project="$project" :amenities="$amenities" />
+                                            @endforeach
+                                        @else
+                                            <p class="not-found">No property found</p>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -293,8 +339,7 @@
         // var amenities = @json($amenities);
         var amenities = @json($allAmenities);
         var deviceType = "{{ getDeviceType() }}";
-        var authId = "{{ auth()->user()->id ?? '' }}";
-
+        
         var allProjectsUrl = "{{ route('property.getProjectData') }}";
         var allAppraisalUrl = "{{ route('property.getAppraisalData') }}";
         var allBestMatchUrl = "{{ route('property.getBestMatchData') }}";
@@ -317,11 +362,10 @@
         var priceUnit = @json($priceUnit);
     </script>
     <script src="{{ frontendPageJsLink('result-filter.js') }}"></script>
+    <script src="{{ frontendPageJsLink('compare.js') }}"></script>
     @if (getDeviceType() == 'desktop')
         <script src="{{ frontendPageJsLink('map_view_filter_page.js') }}"></script>
     @endif
-
-    <script src="{{ frontendPageJsLink('compare.js') }}"></script>
     <script src="{{ frontendPageJsLink('loadmore-result-filter.js') }}"></script>
     <script src="{{ frontendPageJsLink('property-card.js') }}"></script>
 @endsection

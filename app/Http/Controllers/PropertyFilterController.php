@@ -84,7 +84,6 @@ class PropertyFilterController extends Controller
 
     public function getProjectData(Request $request)
     {
-        \Log::info($request->all());
         $filterApply = filter_var($request->filterApply, FILTER_VALIDATE_BOOLEAN);        
         $perPage = $request->input('perPage', 10);
         $city = $request->input('city');
@@ -111,7 +110,6 @@ class PropertyFilterController extends Controller
         }  
 
         if($filterApply){
-            \Log::info("000");
             if ($property_type) {
                 $projects = $projects->where(function ($query) use ($property_type) {
                     $query->where('property_type', $property_type)
@@ -142,7 +140,6 @@ class PropertyFilterController extends Controller
             }
         }
         else if ($search && !$filterApply) {
-            \Log::info("111");
             $projects = $projects->where(function ($query) use ($search) {
                 $query->where('project_name', 'like', '%' . $search . '%')
                     ->orWhereHas('location', function ($q) use ($search) {

@@ -497,6 +497,8 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- master plan -->
                 <div class="card border-1">
                     <div class="card-header" id="headingMasterPlan">
                         <h5 class="m-0">
@@ -529,6 +531,8 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- floor plan -->
                 <div class="card border-1">
                     <div class="card-header" id="headingFloorPlan">
                         <h5 class="m-0">
@@ -558,6 +562,8 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- amenities -->
                 <div class="card border-1">
                     <div class="card-header" id="headingAmenities">
                         <h5 class="m-0">
@@ -574,20 +580,27 @@
                             <!-- Amenities Section -->
                             <div class="row" id="amenities-container">
                                 <!-- Amenities Section Multiple Select of Amenities -->
+
                                 <div class="col-md-12">
                                     <div class="form-group mb-3">
                                         <select id="amenities" class="form-control amenities select2"
                                             data-toggle="select2" name="amenities[]" data-placeholder="Select Amenities"
                                             multiple>
-                                            @if (isset($amenities))
+                                            <!-- @if (isset($amenities))
                                                 @foreach ($amenities as $key => $value)
                                                     <option value="{{ $key }}"
                                                         @if (isset($model->amenities) && in_array($key, $model->amenities)) selected @endif>
                                                         {{ $value }}
                                                     </option>
                                                 @endforeach
-                                            @endif
+                                            @endif -->
                                         </select>
+
+                                        <!-- <select id="property_sub_types" class="form-control form-select property_sub_types" 
+                                            name="property_sub_types[]" multiple>
+                                            <option value="">Select Property Sub Type</option>
+                                        </select> -->
+
                                         <span class="error"></span>
                                     </div>
                                 </div>
@@ -595,6 +608,7 @@
                         </div>
                     </div>
                 </div>
+
                 <!-- Property Documents -->
                 <div class="card border-1">
                     <div class="card-header" id="headingPropertyDocuments">
@@ -614,13 +628,13 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <!-- Document Title -->
-                                    <div class="form-group mb-3">
+                                    <!-- <div class="form-group mb-3">
                                         <label class="form-label">Document Title</label>
                                         <input type="text" class="form-control property_document_title"
                                             name="property_document_title" placeholder="Enter Document Title"
                                             value="{{ isset($model->property_document_title) ? $model->property_document_title : '' }}">
                                         <span class="error"></span>
-                                    </div>
+                                    </div> -->
 
                                     <!-- Document File -->
                                     <div class="form-group mb-3">
@@ -942,6 +956,7 @@
         var addUpdateUrl = "{{ route('admin.project.addupdate') }}";
         var getPropertySubTypesUrl = "{{ route('admin.project.get-property-sub-types') }}";
         var projectUrl = "{{ route('admin.project') }}";
+        var getAmenitiesUrl = "{{ route('admin.project.get-amenities') }}";
         
         @if (isset($existingProjectDetails))
             var existingProjectDetails = {!! json_encode($existingProjectDetails) !!};
@@ -979,6 +994,7 @@
         var selectedCity = '{{ $model->city_id ?? "" }}';
         var selectedArea = '{{ $model->location_id ?? "" }}';
         var selectedPropertySubTypes = {!! json_encode($model->property_sub_types ?? []) !!};
+        var selectedAmenities = {!! json_encode($model->amenities ?? []) !!};
 
     </script>
     <script

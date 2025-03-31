@@ -1,3 +1,20 @@
+document.addEventListener("DOMContentLoaded", function () {
+    const questionInput = document.getElementById("description");
+    const questionCharCount = document.getElementById("charCount");
+
+    if(questionInput){
+        questionInput.addEventListener("input", function () {
+            let remaining = 250 - this.value.length;
+            questionCharCount.textContent = `${remaining}/250`;
+
+            if (this.value.length > 250) {
+                this.value = this.value.substring(0, 250);
+                questionCharCount.textContent = "0/250";
+            }
+        });
+    }
+});
+
 $(document).ready(function () {
     // let quill = "";
     // if ($("#editor_content").length > 0) {

@@ -69,6 +69,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/edit/{id}', [ProjectController::class, 'edit'])->name('project.edit');
             Route::get('/get-property-sub-types', [ProjectController::class, 'getPropertySubTypes'])->name('project.get-property-sub-types');
             Route::get('/get-areas', [ProjectController::class, 'getAreas'])->name('project.get-areas');
+            Route::get('/get-amenities', [ProjectController::class, 'getAmenities'])->name('project.get-amenities');
             Route::get('/{id}', [ProjectController::class, 'view'])->name('project.view');
             
             

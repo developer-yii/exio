@@ -43,11 +43,13 @@
                                                 loading="lazy">
                                         </div>
                                         <div class="textBox">
-                                            <h5 class="projectTitle" data-title='{{ $property->project_name ?? '' }}'>
-                                                {{ $property->project_name ?? 'N/A' }}
-                                                <img src="{{ $baseUrl }}assest/images/x-btn.png" alt="x-btn" loading="lazy">
-                                                <span>{{ $property->exio_suggest_percentage ?? '0' }}%</span>
-                                            </h5>
+                                            <a href="{{ route('property.details', [$property->slug]) }}"> 
+                                                <h5 class="projectTitle" data-title='{{ $property->project_name }}'>
+                                                    {{ $property->project_name }} 
+                                                    <img src="{{ $baseUrl }}assest/images/x-btn.png" alt="x-btn" loading="lazy">
+                                                    <span>{{ $property->exio_suggest_percentage ?? '0' }}%</span>
+                                                </h5>
+                                            </a>
                                             <span>By {{ $builder?->builder_name ?? 'Unknown Builder' }}</span>
 
                                             <div class="locationProperty">

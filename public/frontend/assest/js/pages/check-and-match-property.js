@@ -37,7 +37,6 @@ $(document).ready(function () {
             type: "GET",
             data: { amenity_type: propertyType },
             success: function (response) {
-                console.log(response);
                 const amenitiesList = $("#amenitiesList");
                 amenitiesList.empty();
 
@@ -168,19 +167,65 @@ $(document).ready(function () {
     
 });
 
-$(document).on('change', '#city', function() {
-    var cityId = $(this).val(); // Get the selected city ID
-    var areas = $(this).find('option:selected').data('areas'); // Get areas related to the selected city
-    console.log(areas);
+// $('#city').change(function () {
+//     var selectedCity = $(this).val();
+//     var areas = $(this).find(':selected').data('areas') || []; // Get areas from data-areas attribute
     
-    // Clear the area dropdown
-    $('#location').empty().append('<option value="">Select Area</option>');
+//     var areaDropdown = $('#location');
+//     areaDropdown.empty().append('<option value="">Select Area</option>'); // Reset area dropdown
     
-    // If areas exist for the selected city, populate the location dropdown
-    if (areas && areas.length > 0) {
-        areas.forEach(function(area) {
-            $('#location').append('<option value="' + area.id + '">' + area.name + '</option>');
-        });
+//     // Populate area dropdown
+//     $.each(areas, function (index, area) {
+//         areaDropdown.append('<option value="' + index + '">' + area + '</option>');
+//     });
+// });
+
+
+// $('#city').change(function () {
+//     var selectedCity = $(this).val();
+//     var areas = $(this).find(':selected').data('areas') || []; // Get areas from data-areas attribute
+    
+//     var areaDropdown = $('#location');
+//     areaDropdown.empty().append('<option value="">Select Area</option>'); // Reset area dropdown
+    
+//     // Populate area dropdown
+//     $.each(areas, function (index, area) {
+//         areaDropdown.append('<option value="' + index + '">' + area + '</option>');
+//     });
+// });
+
+
+$(document).ready(function () {
+
+    function loadLocations(city_id) {
+        if (city_id) {
+            $.ajax({
+                url: getLocationsUrl,
+                type: "GET",
+                data: { city_id: city_id },
+                success: function (data) {
+                    $('#location').empty().append('<option value="" class="d-none">Select Area</option>');
+                    $.each(data, function (key, value) {
+                        $('#location').append('<option value="' + key + '">' + value + '</option>');
+                    });
+                }
+            });
+        } else {
+            $('#location').empty().append('<option value="" class="d-none">Select Area</option>');
+        }
     }
+
+    $('#city').change(function () {
+        var city_id = $(this).val();
+        loadLocations(city_id);
+    });
+
+    // Load locations on page load if city is preselected
+    var selectedCity = $('#city').val();
+    if (selectedCity) {
+        loadLocations(selectedCity);
+    }
+
 });
+
 

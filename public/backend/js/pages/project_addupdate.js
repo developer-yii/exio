@@ -42,7 +42,6 @@ $(document).ready(function () {
     if (selectedCity) {
         $('#city_id').trigger('change');
     }    
-
     
     initializeCKEditor("project_about", 300, "project_images");
 
@@ -50,11 +49,6 @@ $(document).ready(function () {
     let addFormBtnId = "#addorUpdateBtn";
     let propertyTypeValue = $("input[name='property_type']:checked").val();
     let propertySubTypes = [];
-
-    // if (propertyTypeValue) {
-    //     alert("111");
-    //     getPropertySubTypes(propertyTypeValue, selectedPropertySubTypes);
-    // }
 
     $(formId).submit(function (event) {
         event.preventDefault();
@@ -138,6 +132,7 @@ $(document).ready(function () {
 
     $(document).on("change", "input[name='property_type']", function () {
         getPropertySubTypes($(this).val());
+        getPropertyAmenities($(this).val());
     });
 
     $(document).on("change", "input[name='appraisal_property']", function () {
@@ -151,7 +146,9 @@ $(document).ready(function () {
     });
 
     if (propertyTypeValue && propertyTypeValue != "") {
+        console.log(selectedAmenities);
         getPropertySubTypes(propertyTypeValue, selectedPropertySubTypes);
+        getPropertyAmenities(propertyTypeValue, selectedAmenities);
     }
 
     function getPropertySubTypes(property_type, selectedPropertySubTypes = "") {
@@ -188,70 +185,46 @@ $(document).ready(function () {
             },
         });
     }
+
+
+    function getPropertyAmenities(property_type, selectedAmenities = "") {
+        $.ajax({
+            url: getAmenitiesUrl,
+            type: "GET",
+            data: { property_type: property_type },
+            success: function (result) {
+                if (result.status == true) {
+                    var propertySubTypes = result.data;
+                    var html = "";
+    
+                    // Convert to array if stored as a string
+                    if (typeof selectedAmenities === "string") {
+                        selectedAmenities = selectedAmenities.split(",").map(item => item.trim());
+                    }
+    
+                    $.each(propertySubTypes, function (key, value) {
+                        let selected = selectedAmenities.includes(key) ? "selected" : "";
+                        html += `<option value="${key}" ${selected}>${value}</option>`;
+                    });
+    
+                    $("#amenities").html(html);
+                    $("#amenities").select2(); 
+    
+                    setTimeout(function () {
+                        $("#amenities").html(html).trigger("change"); 
+                        // $("#property_sub_types").val(selectedAmenities).trigger('change');
+                    }, 500);
+                }
+            },
+            error: function () {
+                alert("Something went wrong!");
+            },
+        });
+    }
     
     
     
     
 
-    // function getPropertySubTypes(property_type) {
-    //     $.ajax({
-    //         url: getPropertySubTypesUrl,
-    //         type: "GET",
-    //         data: { property_type: property_type },
-    //         success: function (result) {
-    //             if (result.status == true) {
-    //                 var propertySubTypes = result.data;
-    //                 var html =
-    //                     "<option value=''>Select Property Sub Type</option>";
-    //                 $.each(propertySubTypes, function (index, propertySubType) {
-    //                     let isSelected =
-    //                         typeof selectedPropertySubTypes !== "undefined" &&
-    //                         selectedPropertySubTypes.includes(index);
-    //                     let selected = isSelected ? "selected" : "";
-
-    //                     html += `<option value="${index}" ${selected}>${propertySubType}</option>`;
-    //                 });
-    //                 $("#property_sub_types").html(html);
-    //             }
-    //         },
-    //         error: function (error) {
-    //             alert("Something went wrong!");
-    //             // location.reload();
-    //         },
-    //     });
-    // }
-
-    // function getPropertySubTypes(property_type) {
-    //     $.ajax({
-    //         url: getPropertySubTypesUrl,
-    //         type: "GET",
-    //         data: { property_type: property_type },
-    //         success: function (result) {
-    //             if (result.status == true) {
-    //                 var propertySubTypes = result.data;
-    //                 var html = "<option value=''>Select Property Sub Type</option>";
-                    
-    //                 $.each(propertySubTypes, function (index, propertySubType) {
-    //                     let selected =
-    //                         typeof selectedPropertySubTypes !== "undefined" &&
-    //                         selectedPropertySubTypes.includes(index) ? "selected" : "";
-    
-    //                     html += `<option value="${index}" ${selected}>${propertySubType}</option>`;
-    //                 });
-    
-    //                 $("#property_sub_types").html(html);
-    //                 $("#property_sub_types").select2(); // Re-initialize Select2
-    
-    //                 // Select multiple values in edit mode
-    //                 if (typeof selectedPropertySubTypes !== "undefined") {
-    //                     $("#property_sub_types").val(selectedPropertySubTypes).trigger('change');
-    //                 }
-    //             }
-    //         },
-    //         error: function (error) {
-    //             alert("Something went wrong!");
-    //         },
-    //     });
-    // }
-    
+   
 });

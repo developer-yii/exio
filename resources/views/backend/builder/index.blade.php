@@ -49,7 +49,7 @@
                                 <th>Builder Logo</th>
                                 <th>Builder Name</th>
                                 <th>Builder About</th>
-                                <th>City</th>
+                                <!-- <th>City</th> -->
                                 <th>Status</th>
                                 <th>Created at</th>
                                 <th>Action</th>
@@ -104,7 +104,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
+                            <!-- <div class="col-md-6">
                                 <div class="form-group mb-3">
                                     <label for="city_id" class="form-label">City <span class="text-danger add_edit_required">*</span></label>
                                     <select id="city_id" class="form-control city_id" name="city_id">
@@ -117,9 +117,9 @@
                                     </select>
                                     <span class="error"></span>
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group mb-3">
                                     <label for="status" class="form-label">Status<span
                                             class="text-danger add_edit_required">*</span></label>

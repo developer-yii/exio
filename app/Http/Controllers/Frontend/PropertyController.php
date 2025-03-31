@@ -259,7 +259,7 @@ class PropertyController extends Controller
                     ]);
                 }
             }
-            return generatePdf('pdf.compare_report', compact('properties'), 'compare_report.pdf');
+            return generatePdf('pdf.compare_report', compact('properties'), 'compare_report.pdf');            
         }
         return view('frontend.property.comparepage', compact('properties'));
     }
