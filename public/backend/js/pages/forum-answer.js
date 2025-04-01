@@ -37,6 +37,8 @@ $(document).ready(function () {
     });
 });
 
+let formId = "#edit-form";
+
 $(document).on('click', '.edit-forum', function () {
     var id = $(this).data('id');
     var answer = $(this).data('answer');

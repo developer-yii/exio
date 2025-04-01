@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class ForumController extends Controller
 {
@@ -82,11 +83,6 @@ class ForumController extends Controller
                 return response()->json($response);
             }
 
-            // Forum::create([
-            //     'question' => $request->input('question'),
-            //     'user_id' => Auth::id(),
-            // ]);
-
             $forum = Forum::create([
                 'question' => $request->input('question'),
                 'user_id' => Auth::id(),
@@ -96,8 +92,9 @@ class ForumController extends Controller
             $data = [
                 'forum_id' => $forum->id,
                 'type' => 'New Question',
-                'content' => $forum->question,
+                'content' => Str::limit($forum->question, 300),
                 'user_name' => Auth::user()->name,
+                'url' => route('admin.forum')
             ];
     
             // Send email
@@ -132,8 +129,9 @@ class ForumController extends Controller
             $data = [
                 'forum_id' => $answer->forum_id,
                 'type' => 'New Answer',
-                'content' => $answer->answer,
+                'content' => Str::limit($answer->answer, 300),
                 'user_name' => Auth::user()->name,
+                'url' => route('admin.forum.answer', ['id' => $answer->forum_id])
             ];
     
             // Send email
