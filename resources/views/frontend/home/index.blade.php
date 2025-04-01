@@ -259,6 +259,7 @@
                 <div class="latesNewsBox">
                     <div class="owl-carousel owl-theme">
                         @foreach ($news as $item)
+                        <a href="{{ route('news-details', [$item->id]) }}">
                             <div class="item">
                                 <div class="imgbox">
                                     @if ($item->image)
@@ -270,7 +271,6 @@
                                 <div class="sliderText">
                                     <span class="date">{{ $item->created_at ? $item->created_at->format('F d Y') : '' }}</span>
                                     <h5 class="two-line-text">{{ $item->title ?? '' }}</h5>
-                                    {{-- <p>{{ Str::limit($item->description ?? '', 70, '...') }}</p> --}}
                                     <p class="five-line-text">{{ $item->description }}</p>
                                     <ul>
                                         <li><i class="bi bi-person"></i> by <span>{{ $item->added_by ?? '' }}</span></li>
@@ -278,6 +278,7 @@
                                     </ul>
                                 </div>
                             </div>
+                        </a>
                         @endforeach
                     </div>
                 </div>

@@ -30,7 +30,7 @@ class PageController extends Controller
         $perPageNews = 9;
         $page = $request->input('page', 1);
 
-        $allNews = News::where('status', 1)->orderBy('updated_at', 'desc'); 
+        $allNews = News::where('status', 1)->orderBy('id', 'desc'); 
         $totalNews = (clone $allNews)->count();
 
         $news = $allNews->paginate($perPageNews);
@@ -48,6 +48,7 @@ class PageController extends Controller
     public function newsDetails(Request $request, $id){
 
         $news = News::findOrFail($id);
+        $news->increment('views');
         $popularNews = News::where('id', "!=", $id)->orderBy('views', 'desc')->take(5)->get();
         return view('frontend.news.details', compact('news', 'popularNews'));
     }
