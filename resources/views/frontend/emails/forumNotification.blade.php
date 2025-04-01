@@ -9,13 +9,9 @@
 <strong>Submitted By:</strong> {{ $validatedData['user_name'] }}<br>
 
 @if($validatedData['type'] == 'New Question')
-    @component('mail::button', ['url' => route('forum'), 'color' => 'primary'])
-        View Forum
-    @endcomponent
+@component('mail::button', ['url' => route('admin.forum'), 'color' => 'primary'])
 @else
-    @component('mail::button', ['url' => route('admin.forum.answer', $validatedData['forum_id']), 'color' => 'primary'])
-        View Answer
-    @endcomponent
+@component('mail::button', ['url' => route('admin.forum.answer', $validatedData->forum_id), 'color' => 'primary'])
 @endif
 
 Thanks,<br>
