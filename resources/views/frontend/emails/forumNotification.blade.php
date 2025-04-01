@@ -13,7 +13,7 @@
         View Forum
     @endcomponent
 @else
-    @component('mail::button', ['url' => route('forum.answer', $validatedData['forum_id']), 'color' => 'primary'])
+    @component('mail::button', ['url' => route('admin.forum.answer', $validatedData['forum_id']), 'color' => 'primary'])
         View Answer
     @endcomponent
 @endif
