@@ -1,20 +1,27 @@
+@php
+    use Illuminate\Support\Str;
+@endphp
 @component('mail::message')
 
-<h1>You have received a forum notification.</h1>
+# You have received a forum notification.
 
-## Forum Notification
+## **Forum Notification**
 
-<strong>Type:</strong> {{ $validatedData['type'] }}<br>
-<strong>Content:</strong> {{ $validatedData['content'] }}<br>
-<strong>Submitted By:</strong> {{ $validatedData['user_name'] }}<br>
+**Type:** {{ $validatedData['type'] }}  
+**Submitted By:** {{ $validatedData['user_name'] }}  
+**Content:** {{ Str::limit($validatedData['content'], 300, '...') }}  
 
 @if($validatedData['type'] == 'New Question')
-@component('mail::button', ['url' => route('admin.forum'), 'color' => 'primary'])
+    @component('mail::button', ['url' => route('forum'), 'color' => 'primary'])
+        View Forum
+    @endcomponent
 @else
-@component('mail::button', ['url' => route('admin.forum.answer', $validatedData->forum_id), 'color' => 'primary'])
+    @component('mail::button', ['url' => route('admin.forum.answer', ['id' => $validatedData['forum_id']]), 'color' => 'primary'])
+        View Answer
+    @endcomponent
 @endif
 
-Thanks,<br>
+Thanks,  
 {{ config('app.name') }}
 
 @endcomponent
