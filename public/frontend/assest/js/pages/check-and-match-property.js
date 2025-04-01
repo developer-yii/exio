@@ -132,20 +132,27 @@ $(document).ready(function () {
         const sqftString = sqft.join(",");
         const amenitiesString = amenities.join(",");
 
-        console.log(checkAndMatchPropertyResultUrl);
-        window.location.href = checkAndMatchPropertyResultUrl;
+        // window.location.href = checkAndMatchPropertyResultUrl;
 
-        // window.location.href =
-        //     checkAndMatchPropertyResultUrl +
-        //     `?property_type=${encodeURIComponent(
-        //         propertyType
-        //     )}&sqft=${sqftString}&city=${encodeURIComponent(
-        //         city
-        //     )}&location=${encodeURIComponent(
-        //         location
-        //     )}&amenities=${encodeURIComponent(
-        //         amenitiesString
-        //     )}&budget=${encodeURIComponent(budgetString)}`;
+        console.log(encodeURIComponent(propertyType));
+        console.log(encodeURIComponent(sqftString));
+        console.log(encodeURIComponent(city));
+        console.log(encodeURIComponent(location));
+        console.log(encodeURIComponent(amenitiesString));
+        console.log(encodeURIComponent(budgetString));
+
+
+        window.location.href =
+            checkAndMatchPropertyResultUrl +
+            `?property_type=${encodeURIComponent(
+                propertyType
+            )}&sqft=${sqftString}&city=${encodeURIComponent(
+                city
+            )}&location=${encodeURIComponent(
+                location
+            )}&amenities=${encodeURIComponent(
+                amenitiesString
+            )}&budget=${encodeURIComponent(budgetString)}`;
     });
 
     $squareFootagePrevBtn.click(function () {
