@@ -132,17 +132,20 @@ $(document).ready(function () {
         const sqftString = sqft.join(",");
         const amenitiesString = amenities.join(",");
 
-        window.location.href =
-            checkAndMatchPropertyResultUrl +
-            `?property_type=${encodeURIComponent(
-                propertyType
-            )}&sqft=${sqftString}&city=${encodeURIComponent(
-                city
-            )}&location=${encodeURIComponent(
-                location
-            )}&amenities=${encodeURIComponent(
-                amenitiesString
-            )}&budget=${encodeURIComponent(budgetString)}`;
+        console.log(checkAndMatchPropertyResultUrl);
+        window.location.href = checkAndMatchPropertyResultUrl;
+
+        // window.location.href =
+        //     checkAndMatchPropertyResultUrl +
+        //     `?property_type=${encodeURIComponent(
+        //         propertyType
+        //     )}&sqft=${sqftString}&city=${encodeURIComponent(
+        //         city
+        //     )}&location=${encodeURIComponent(
+        //         location
+        //     )}&amenities=${encodeURIComponent(
+        //         amenitiesString
+        //     )}&budget=${encodeURIComponent(budgetString)}`;
     });
 
     $squareFootagePrevBtn.click(function () {

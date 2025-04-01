@@ -78,8 +78,8 @@ class CheckAndMatchPropertyController extends Controller
 
         if (isset($filters['property_type'])) {
             $projects->where(function ($query) use ($filters) {
-                $query->whereIn('property_type', [$filters['property_type'], 'both']);
-                    // ->orWhere('property_type', 'both');
+                $query->where('property_type', $filters['property_type'])
+                    ->orWhere('property_type', 'both');
             });
         }
 
