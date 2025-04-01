@@ -121,11 +121,22 @@ class ForumController extends Controller
                 return response()->json($response);
             }
 
-            ForumAnswer::create([
+            $answer = ForumAnswer::create([
                 'forum_id' => $request->input('forum-id'),
                 'answer' => $request->input('answer'),
                 'user_id' => Auth::id(),
             ]);
+    
+            // Email data
+            $data = [
+                'forum_id' => $request->input('forum-id'),
+                'type' => 'New Answer',
+                'content' => $answer->answer,
+                'user_name' => Auth::user()->name,
+            ];
+    
+            // Send email
+            Mail::to(env('FORUM_MAIL'))->send(new ForumNotificationEmail($data));
 
             return response()->json(['status' => true, 'message' => 'Answer submitted successfully!']);
         }catch(Exception $e){

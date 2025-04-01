@@ -92,6 +92,13 @@
                     </a>
                 </li>
 
+                <li class="side-nav-item {{ isActiveRouteMain('forum') }}">
+                    <a href="{{ route('admin.forum') }}" class="side-nav-link {{ isActiveRoute(['forum']) }}">
+                        <i class="uil-bell"></i>
+                        <span> Forums </span>
+                    </a>
+                </li>
+
                 <li class="side-nav-item {{ isActiveRouteMain(['faqs']) }}">
                     <a data-bs-toggle="collapse" href="#faqs_menu" aria-expanded="false" aria-controls="faqs_menu"
                         class="side-nav-link collapsed">
