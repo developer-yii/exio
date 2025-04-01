@@ -4,7 +4,9 @@
     $showCityDropdown = in_array($routeName, ['property.result.filter', 'front.home']);
     $bodyClass = $routeName == 'property.result.filter' ? 'matchProperty' : '';
     $headerClass = $routeName == 'property.details' ? 'removeHeader headerInner' : '';
+    $cityDropDownClass = in_array($routeName, ['property.result.filter', 'front.home']) ? '' : 'mobileHide';
 @endphp
+
 <!DOCTYPE html>
 <html lang="en">
 

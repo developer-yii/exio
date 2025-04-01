@@ -1,5 +1,5 @@
 
-<script src="{{ $baseUrl }}assest/js/markerclusterer.js"></script>
+<script src="{{ $baseUrl }}assest/js/markerClusterer.js"></script>
 
 <script>
     (g => {

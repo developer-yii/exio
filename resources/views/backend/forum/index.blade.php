@@ -53,7 +53,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group mb-3">
-                                    <label for="question" class="form-label">Builder About </label>
+                                    <label for="question" class="form-label">Question </label>
                                     <textarea name="question" class="form-control question" id="question" rows="5"></textarea>                                   
                                     <span class="error"></span>
                                 </div>

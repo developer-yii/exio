@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Forum;
 use App\Models\ForumAnswer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 class ForumController extends Controller
@@ -55,10 +56,15 @@ class ForumController extends Controller
             return response()->json(['status' => false, 'message' => 'Invalid request'], 400);
         }
 
-        $request->validate([
-            'question' => 'required|string|max:255',
+        $validatedData = Validator::make($request->all(),[
+            'question' => 'required|string|max:250',
             'status' => 'required|integer',
         ]);
+
+        if ($validatedData->fails()){
+            $response = ['status' => false,'errors' => $validatedData->errors()];
+            return response()->json($response);
+        }
 
         $forum = Forum::findOrFail($request->id);
         $forum->question = $request->question;
@@ -124,10 +130,20 @@ class ForumController extends Controller
             return response()->json(['status' => false, 'message' => 'Invalid request'], 400);
         }
 
-        $request->validate([
-            'answer' => 'required|string|max:255',
+        $validatedData = Validator::make($request->all(),[
+            'answer' => 'required|string|max:1000',
             'status' => 'required|integer',
         ]);
+
+        if ($validatedData->fails()){
+            $response = ['status' => false,'errors' => $validatedData->errors()];
+            return response()->json($response);
+        }
+
+        // $request->validate([
+        //     'answer' => 'required|string|max:1000',
+        //     'status' => 'required|integer',
+        // ]);
 
         $forum = ForumAnswer::findOrFail($request->id);
         $forum->answer = $request->answer;

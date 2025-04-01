@@ -33,7 +33,7 @@
                     <div class="col-lg-6">
                         <div class="leftBox">
                             <div class="logoBox">
-                                <a href="index.html"><img src="{{ $baseUrl }}assest/images/logo-img.png" alt="logo-img" /></a>
+                                <a href="{{ route('front.home') }}"><img src="{{ $baseUrl }}assest/images/logo-img.png" alt="logo-img" /></a>
                             </div>
                             @if (session('status'))
                                 <div class="alert alert-success">

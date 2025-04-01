@@ -26,7 +26,7 @@
                     <a href="{{ route('front.home') }}"><img src="{{ $baseUrl }}assest/images/logo-img.png"
                             alt="logo-img" /></a>
                     @if ($showCityDropdown)
-                        <div class="cityDropDown moblieHide">
+                        <div class="cityDropDown {{ $cityDropDownClass }}">
                             <ul>
                                 <li>
                                     <input type="hidden" name="city_header" id="city_header" value="{{ $inputCity }}" />

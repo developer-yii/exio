@@ -67,6 +67,7 @@ $(document).ready(function () {
                 }
             },
             error: function (error) {
+                console.log(error);
                 $($this).find('button[type="submit"]').prop('disabled', false);
                 alert('Something went wrong!', 'error');
             }

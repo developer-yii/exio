@@ -472,7 +472,7 @@
                                 <div class="col-md-12">
                                     <div class="card">
                                         <div class="card-header text-center">
-                                            <h4 class="card-title">Project Images</h4>
+                                            <h4 class="card-title">Project Images (Size : 1920x1080)</h4>
                                         </div>
                                         <div class="card-body">
                                             <div class="row" id="project_images">
