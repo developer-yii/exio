@@ -1,12 +1,13 @@
 $(document).ready(function () {
 
     var forumId = window.location.pathname.split('/').pop(); // Get forum ID from URL
+    getAnswersUrl = getAnswersUrl.replace('_id_', forumId);
 
     $('#dataTableMain').DataTable({
         processing: true,
         serverSide: true,
         ajax: {
-            url: `admin/forum/answer/${forumId}/get`,
+            url: getAnswersUrl,
             type: "GET"
         },
         columns: [

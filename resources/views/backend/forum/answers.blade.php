@@ -92,6 +92,7 @@
     <script>
         var forumUpdateUrl = "{{ route('admin.forum.answer.update') }}";
         var forumDeleteUrl = "{{ route('admin.forum.answer.delete') }}";
+        var getAnswersUrl = "{{ route('admin.forum.answer.get', ['_id_']) }}";
     </script>    
 @endsection
 

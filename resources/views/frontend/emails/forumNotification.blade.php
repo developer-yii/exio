@@ -8,7 +8,7 @@
 <strong>Content:</strong> {{ $validatedData['content'] }}<br>
 <strong>Submitted By:</strong> {{ $validatedData['user_name'] }}<br>
 
-@if($validatedData['type'] == 'question')
+@if($validatedData['type'] == 'New Question')
     @component('mail::button', ['url' => route('forum'), 'color' => 'primary'])
         View Forum
     @endcomponent

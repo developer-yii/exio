@@ -177,6 +177,7 @@ class NewsController extends Controller
         $model->updated_by = auth()->id();
         if (!$isUpdate) {
             $model->created_by = auth()->id();
+            $model->views = 0;
         }
 
         if ($model->save()) {

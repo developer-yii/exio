@@ -235,14 +235,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/delete', [ForumController::class, 'forumDelete'])->name('forum.delete');
             
             Route::get('/answer/{id}', [ForumController::class, 'answers'])->name('forum.answer');
-            Route::get('/answer/{id}/get', [ForumController::class, 'getAnswers'])->name('forum.answers.get');
+            Route::get('/answer/{id}/get', [ForumController::class, 'getAnswers'])->name('forum.answer.get');
             // Route::get('/answer/edit/{id}', [ForumController::class, 'answerEdit'])->name('forum.edit');
             Route::post('/answer/update', [ForumController::class, 'answerUpdate'])->name('forum.answer.update');
             Route::post('/answer/delete', [ForumController::class, 'answerDelete'])->name('forum.answer.delete');
-
-            
-
-            
         });
     });
 });
