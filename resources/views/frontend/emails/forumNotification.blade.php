@@ -8,6 +8,16 @@
 <strong>Content:</strong> {{ $validatedData['content'] }}<br>
 <strong>Submitted By:</strong> {{ $validatedData['user_name'] }}<br>
 
+@if($validatedData['type'] == 'question')
+    @component('mail::button', ['url' => route('forum'), 'color' => 'primary'])
+        View Forum
+    @endcomponent
+@else
+    @component('mail::button', ['url' => route('forum.answer', $validatedData['forum_id']), 'color' => 'primary'])
+        View Answer
+    @endcomponent
+@endif
+
 Thanks,<br>
 {{ config('app.name') }}
 

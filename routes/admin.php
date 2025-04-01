@@ -18,6 +18,7 @@ use App\Http\Controllers\Backend\CommonController;
 use App\Http\Controllers\Backend\BuilderController;
 use App\Http\Controllers\Backend\CmsPagesController;
 use App\Http\Controllers\Backend\DownloadBrochureDataController;
+use App\Http\Controllers\Backend\ForumController;
 use App\Http\Controllers\Backend\InsightReportDataController;
 use App\Http\Controllers\Backend\LocalityController;
 use App\Http\Controllers\Backend\NewsController;
@@ -70,8 +71,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/get-property-sub-types', [ProjectController::class, 'getPropertySubTypes'])->name('project.get-property-sub-types');
             Route::get('/get-areas', [ProjectController::class, 'getAreas'])->name('project.get-areas');
             Route::get('/get-amenities', [ProjectController::class, 'getAmenities'])->name('project.get-amenities');
-            Route::get('/{id}', [ProjectController::class, 'view'])->name('project.view');
-            
+            Route::get('/{id}', [ProjectController::class, 'view'])->name('project.view');            
             
         });
     });
@@ -225,6 +225,24 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::group(['prefix' => 'subscriber'], function () {
             Route::get('/', [SubscriberController::class, 'index'])->name('subscriber');
             Route::get('/get', [SubscriberController::class, 'get'])->name('subscriber.list');
+        });
+
+        Route::group(['prefix' => 'forum'], function () {
+            Route::get('/', [ForumController::class, 'index'])->name('forum');
+            Route::get('/get', [ForumController::class, 'get'])->name('forum.list');
+            // Route::get('/edit/{id}', [ForumController::class, 'edit'])->name('forum.edit');
+            Route::post('/update', [ForumController::class, 'forumUpdate'])->name('forum.update');
+            Route::post('/delete', [ForumController::class, 'forumDelete'])->name('forum.delete');
+            
+            Route::get('/answer/{id}', [ForumController::class, 'answers'])->name('forum.answer');
+            Route::get('/answer/{id}/get', [ForumController::class, 'getAnswers'])->name('forum.answers.get');
+            // Route::get('/answer/edit/{id}', [ForumController::class, 'answerEdit'])->name('forum.edit');
+            Route::post('/answer/update', [ForumController::class, 'answerUpdate'])->name('forum.answer.update');
+            Route::post('/answer/delete', [ForumController::class, 'answerDelete'])->name('forum.answer.delete');
+
+            
+
+            
         });
     });
 });

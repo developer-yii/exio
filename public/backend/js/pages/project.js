@@ -86,35 +86,7 @@ $(document).ready(function () {
                 "pagination-rounded"
             );
         },
-        columns: [
-            {
-                sortable: false,
-                render: function (_, _, full) {
-                    var contactId = full["id"];
-                    if (contactId) {
-                        let editUrl = window.editUrl.replace(":id", contactId);
-                        let viewUrl = window.viewUrl.replace(":id", contactId);
-                        actions = "";
-                        actions +=
-                            ' <a href="' +
-                            viewUrl +
-                            '" class="btn-sm btn-warning view-record"><i class="uil-eye"></i></a>';
-                        actions +=
-                            ' <a href="' +
-                            editUrl +
-                            '" class="btn-sm btn-info edit-record"><i class="uil-edit-alt"></i></a>';
-                        if(isSuperAdmin){
-                            actions +=
-                                ' <a href="javascript:void(0)" data-id="' +
-                                contactId +
-                                '" class="btn-sm btn-danger delete-record"><i class="uil-trash-alt"></i></a>';
-                        }
-                        return actions;
-                    }
-
-                    return "";
-                },
-            },
+        columns: [            
             {
                 name: "project_name",
                 data: "project_name",
@@ -254,6 +226,34 @@ $(document).ready(function () {
                     return full["created_at"];
                 },
             },           
+            {
+                sortable: false,
+                render: function (_, _, full) {
+                    var contactId = full["id"];
+                    if (contactId) {
+                        let editUrl = window.editUrl.replace(":id", contactId);
+                        let viewUrl = window.viewUrl.replace(":id", contactId);
+                        actions = "";
+                        actions +=
+                            ' <a href="' +
+                            viewUrl +
+                            '" class="btn-sm btn-warning view-record"><i class="uil-eye"></i></a>';
+                        actions +=
+                            ' <a href="' +
+                            editUrl +
+                            '" class="btn-sm btn-info edit-record"><i class="uil-edit-alt"></i></a>';
+                        if(isSuperAdmin){
+                            actions +=
+                                ' <a href="javascript:void(0)" data-id="' +
+                                contactId +
+                                '" class="btn-sm btn-danger delete-record"><i class="uil-trash-alt"></i></a>';
+                        }
+                        return actions;
+                    }
+
+                    return "";
+                },
+            },
         ],
     });
 

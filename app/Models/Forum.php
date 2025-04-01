@@ -10,6 +10,14 @@ class Forum extends Model
 {
     use HasFactory, SoftDeletes;
 
+    const PENDING = 0;
+    const APPROVE = 1;
+
+    public static $status = [
+        1 => 'Approve',
+        0 => 'Pending',
+    ];
+
     protected $fillable = ['user_id', 'question', 'status'];
 
     public function user()
@@ -21,4 +29,14 @@ class Forum extends Model
     {
         return $this->hasMany(ForumAnswer::class);
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($forum) {
+            $forum->answers()->delete(); // Delete all related answers
+        });
+    }
+
 }

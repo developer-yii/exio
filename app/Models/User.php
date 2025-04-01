@@ -89,4 +89,22 @@ class User extends Authenticatable
         return $this->hasMany(InsightsReportDownload::class, 'user_id');
     }
 
+
+    public function forums()
+    {
+        return $this->hasMany(Forum::class, 'user_id');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($user) {
+            // Delete all forums associated with this user
+            foreach ($user->forums as $forum) {
+                $forum->answers()->delete(); // Delete answers related to the forum
+                $forum->delete(); // Delete the forum
+            }
+        });
+    }
 }
