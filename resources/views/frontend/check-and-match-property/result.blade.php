@@ -24,7 +24,7 @@
                                     $displayBudget_a = formatChar($displayBudget);
                                 @endphp
                                 <li class="breadcrumb-item"><a
-                                        href="{{ route('front.check-and-match-property.result') }}?{{ $allReqDataString }}"
+                                        href="{{ route('front.check-and-match-property.result', []) }}?{{ $allReqDataString }}"
                                         data-bs-toggle="tooltip" data-bs-placement="top"
                                         title="{{ $displayProperty }}">{{ $displayProperty_a }}</a>
                                 </li>
