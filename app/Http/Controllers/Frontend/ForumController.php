@@ -94,6 +94,7 @@ class ForumController extends Controller
     
             // Email data
             $data = [
+                'forum_id' => $forum->id,
                 'type' => 'New Question',
                 'content' => $forum->question,
                 'user_name' => Auth::user()->name,
@@ -129,7 +130,7 @@ class ForumController extends Controller
     
             // Email data
             $data = [
-                'forum_id' => $request->input('forum-id'),
+                'forum_id' => $answer->forum_id,
                 'type' => 'New Answer',
                 'content' => $answer->answer,
                 'user_name' => Auth::user()->name,
