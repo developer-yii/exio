@@ -524,7 +524,8 @@
                             </div>
                             <div class="form-group">
                                 <label class="labelClass" for="name">Full Name<span>*</span></label>
-                                <input class="inputClass name" type="text" name="name" id="name" placeholder="John Deo" autocomplete="name">
+                                <input class="inputClass name" type="text" name="name" id="name" placeholder="John Deo" autocomplete="name" autofocus>
+                                <div id="autocomplete-list" class="autocomplete-list"></div>
                                 <span class="error"></span>
                             </div>
                             <div class="form-group">
@@ -534,7 +535,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="labelClass" for="email">Email Address<span>*</span></label>
-                                <input class="inputClass email" type="email" name="email" placeholder="johndeo@gmail.com" autocomplete="email">
+                                <input class="inputClass email" type="email" name="email" id="brochure_email" placeholder="johndeo@gmail.com" autocomplete="email">
                                 <span class="error"></span>
                             </div>
                             <div class="btnDown">
@@ -545,7 +546,8 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>   
+
     <!-- downloadBrochure Modal -->
 
     <!-- Share_property Modal -->

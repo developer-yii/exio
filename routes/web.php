@@ -28,6 +28,20 @@ use Illuminate\Support\Facades\Auth;
 
 Auth::routes();
 
+Route::get('/download-compare-report', function () {
+    if (session()->has('compare_report_pdf')) {
+        $pdfContent = session()->get('compare_report_pdf');
+        session()->forget('compare_report_pdf'); // Remove it after download
+
+        return response()->streamDownload(function () use ($pdfContent) {
+            echo $pdfContent;
+        }, 'compare_report.pdf');
+    }
+
+    return redirect()->back()->with('error', 'No report found to download.');
+});
+
+
 Route::name('front.')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
 

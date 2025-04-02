@@ -163,10 +163,12 @@
                                 <img src="{{ $baseUrl }}assest/images/pana.png" alt="pana">
                             </div>
                             <div class="textBox">
-                                <h5>Check Rating</h5>
+                                <h5>In High Demand</h5>
                                 <p>Find your place with an immersive photo experience and the most listings, including
                                     things you won't find anywhere else.</p>
-                                <a class="btn btnExplore" href="javascript:void(0)">Explore More</a>
+                                <a class="btn btnExplore" href="{{ route('property.result.filter', ['type' => 'high-demand', 'tab' => 'appraisal']) }}">
+                                    Explore More
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -179,7 +181,7 @@
                                 <h5>Match with your Ratings</h5>
                                 <p>Find your place with an immersive photo experience and the most listings, including
                                     things you won't find anywhere else.</p>
-                                <a class="btn btnExplore" href="javascript:void(0)">More Options</a>
+                                <a class="btn btnExplore" href="{{ route('front.check-and-match-property') }}">More Options</a>
                             </div>
                         </div>
                     </div>
@@ -192,7 +194,9 @@
                                 <h5>Trending Projects</h5>
                                 <p>Find your place with an immersive photo experience and the most listings, including
                                     things you won't find anywhere else.</p>
-                                <a class="btn btnExplore" href="javascript:void(0)">Find Rentals</a>
+                                <a class="btn btnExplore" href="{{ route('property.result.filter', ['type' => 'rating', 'tab' => 'best-match']) }}">
+                                    Find Rentals
+                                </a>
                             </div>
                         </div>
                     </div>

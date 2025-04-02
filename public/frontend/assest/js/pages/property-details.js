@@ -1,5 +1,43 @@
 $(document).ready(function () {
 
+
+    let usersData = JSON.parse(localStorage.getItem('usersData')) || [];
+
+    // Show suggestions while typing in the name field
+    $('#name').on('input', function () {
+        let inputVal = $(this).val().toLowerCase();
+
+        let suggestions = usersData.filter(user => user.name.toLowerCase().includes(inputVal));
+
+        let suggestionsHtml = suggestions.map(user => 
+            `<div class="autocomplete-item" data-name="${user.name}" data-phone="${user.phone}" data-email="${user.email}">
+                ${user.name}
+            </div>`
+        ).join('');
+
+        if (suggestionsHtml) {
+            $('#autocomplete-list').html(suggestionsHtml).show();
+        } else {
+            $('#autocomplete-list').hide();
+        }
+    });
+
+    // Autofill fields when selecting a suggestion
+    $(document).on('click', '.autocomplete-item', function () {
+
+        $('#name').val($(this).data('name'));
+        $('#phone_number').val($(this).data('phone'));
+        $('#brochure_email').val($(this).data('email'));
+        $('#autocomplete-list').hide();
+    });
+
+    // Hide suggestion box when clicking outside
+    $(document).click(function (event) {
+        if (!$(event.target).closest('#name, #autocomplete-list').length) {
+            $('#autocomplete-list').hide();
+        }
+    });  
+
     const video = document.getElementById("myVideo");
     const playIcon = document.getElementById("playIcon");
 
@@ -45,6 +83,17 @@ $(document).ready(function () {
             data: formData,
             dataType: 'json',
             success: function (response) {
+                $('.error').html("");
+                let name = response.user.name;
+                            let phone = response.user.phone_number;
+                            let email = response.user.email;
+
+                            let exists = usersData.find(user => user.name === name);
+                            if (!exists) {
+                                usersData.push({ name, phone, email });
+                                localStorage.setItem('usersData', JSON.stringify(usersData));
+                            }
+
                 if (response.status == true) {
                     $('#downloadBrochureForm')[0].reset();
                     let link = document.createElement("a");
@@ -56,8 +105,7 @@ $(document).ready(function () {
                     toastr.success("Brochure download successfully");
                     $('.downloadBrochure').modal('hide');
 
-                } else {
-                    $('.error').html("");
+                } else {                    
                     if (response.errors) {
                         first_input = "";
                         $.each(response.errors, function (key) {

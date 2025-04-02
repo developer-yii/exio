@@ -195,7 +195,7 @@ $(document).ready(function () {
                                 <img src="${property.cover_image}" alt="${property.project_name}" loading="lazy">
                             </div>
                             <div class="textBox">
-                                <h5>${property.project_name}</h5>
+                                <h5 class="two-line-text" title="${property.project_name}">${property.project_name}</h5>
                                 <span>By ${property.builder.builder_name}</span>
                                 <div class="locationProperty">
                                     <div class="homeBox comBox">

@@ -138,7 +138,12 @@ class PropertyController extends Controller
 
                 return response()->json([
                     'status' => true,
-                    'file' => $publicUrl
+                    'file' => $publicUrl,
+                    'user' => [
+                        'name' => $request->name,
+                        'phone_number' => $request->phone_number,
+                        'email' => $request->email,
+                    ],
                 ]);
             }
             return response()->json(['status' => false, 'message' => 'Brochure file not found.']);
@@ -259,7 +264,11 @@ class PropertyController extends Controller
                     ]);
                 }
             }
-            return generatePdf('pdf.compare_report', compact('properties'), 'compare_report.pdf');            
+            // return generatePdf('pdf.compare_report', compact('properties'), 'compare_report.pdf');   
+            $pdf = generatePdf('pdf.compare_report', compact('properties'), 'compare_report.pdf');
+
+            session()->put('compare_report_pdf', generatePdf('pdf.compare_report', compact('properties'))->output());
+            return redirect()->back()->with('download-success', 'Comparison report generated successfully! Your download will start shortly.');
         }
         return view('frontend.property.comparepage', compact('properties'));
     }
@@ -268,7 +277,10 @@ class PropertyController extends Controller
         $report = propertyComparisonQuery()->findOrFail($reportId);
         $properties = getPropertiesWithDetails([$report->property_id_1, $report->property_id_2]);
 
-        return generatePdf('pdf.compare_report', compact('properties'), 'compare_report.pdf');
+        // return generatePdf('pdf.compare_report', compact('properties'), 'compare_report.pdf');
+
+        session()->put('compare_report_pdf', generatePdf('pdf.compare_report', compact('properties'))->output());
+        return redirect()->back()->with('download-success', 'Comparison report generated successfully! Your download will start shortly.');
     }
 
     public function compareReport(Request $request)
