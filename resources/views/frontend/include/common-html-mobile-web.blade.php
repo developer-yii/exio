@@ -218,7 +218,7 @@
         <a href="javascript:void(0)" class="btnbrowser" data-bs-toggle="modal" data-bs-target="#downloadBrochure">
             <i class="bi bi-file-earmark"></i> Download Brochure
         </a>
-    </div>
+    </div>    
 @endif
 
 @if($type == "localities")

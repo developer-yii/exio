@@ -115,7 +115,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('property.result.filter', ['type' => 'just-launch', 'tab' => 'best-match']) }}">
+                                        <a href="{{ route('property.result.filter', ['type' => 'rating', 'tab' => 'best-match']) }}">
                                             <div class="imgBox">
                                                 <img src="{{ $baseUrl }}assest/images/rating.png" alt="rating">
                                             </div>

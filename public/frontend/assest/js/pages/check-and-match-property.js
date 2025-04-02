@@ -134,14 +134,13 @@ $(document).ready(function () {
 
         // window.location.href = checkAndMatchPropertyResultUrl;
 
-        console.log(encodeURIComponent(propertyType));
-        console.log(encodeURIComponent(sqftString));
-        console.log(encodeURIComponent(city));
-        console.log(encodeURIComponent(location));
-        console.log(encodeURIComponent(amenitiesString));
-        console.log(encodeURIComponent(budgetString));
-
-
+        // console.log(encodeURIComponent(propertyType));
+        // console.log(encodeURIComponent(sqftString));
+        // console.log(encodeURIComponent(city));
+        // console.log(encodeURIComponent(location));
+        // console.log(encodeURIComponent(amenitiesString));
+        // console.log(encodeURIComponent(budgetString));
+        
         window.location.href =
             checkAndMatchPropertyResultUrl +
             `?property_type=${encodeURIComponent(

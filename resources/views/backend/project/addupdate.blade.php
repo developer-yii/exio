@@ -84,6 +84,15 @@
             top: 11px;
             z-index: 2;
         }
+        
+        /* Style for the selected option in the dropdown */
+        .select2-container--default .select2-results__option--selected {
+            background-color: rgb(128, 148, 204) !important; 
+            color: #fff !important;
+            font-weight: bold;
+            display: none !important;
+        }      
+
     </style>
 @endsection
 

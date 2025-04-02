@@ -135,6 +135,21 @@
         
     @yield('modal')
     @yield('js')
+    @if(session('download-success'))
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                toastr.success("{{ session('download-success') }}");
+
+                // Start the download automatically
+                window.location.href = "{{ url('/download-compare-report') }}";
+                // setTimeout(() => {
+                //     window.location.href = "{{ url('/download-compare-report') }}";
+                // }, 1500);
+            });
+        </script>
+        @php Session::forget('download-success') @endphp
+    @endif
+
     @if (session('success'))
         <script type="text/javascript">
             toastr.success("{{ session('success') }}");

@@ -3,14 +3,14 @@ $('#area_id').select2({
     allowClear: true
 });
 
-$('#property_sub_types').select2({
-    placeholder: 'Select Property Sub Type',
-    allowClear: true,
-    // multiple: true,
-    // dropdownAutoWidth: true,
-    // width: '100%',
-    // closeOnSelect: false // Ensure dropdown does not close on selection
-});
+// $('#property_sub_types').select2({
+//     placeholder: 'Select Property Sub Type',
+//     allowClear: true,
+//     // multiple: true,
+//     // dropdownAutoWidth: true,
+//     // width: '100%',
+//     // closeOnSelect: false // Ensure dropdown does not close on selection
+// });
 
 $('#city_id').change(function () {
     var cityId = $(this).val();
@@ -162,22 +162,15 @@ $(document).ready(function () {
                     var html = "";
     
                     // Convert to array if stored as a string
-                    if (typeof selectedPropertySubTypes === "string") {
-                        selectedPropertySubTypes = selectedPropertySubTypes.split(",").map(item => item.trim());
-                    }
-    
-                    $.each(propertySubTypes, function (key, value) {
-                        let selected = selectedPropertySubTypes.includes(key) ? "selected" : "";
-                        html += `<option value="${key}" ${selected}>${value}</option>`;
-                    });
-    
-                    $("#property_sub_types").html(html);
-                    $("#property_sub_types").select2(); 
-    
-                    setTimeout(function () {
-                        $("#property_sub_types").html(html).trigger("change"); 
-                        // $("#property_sub_types").val(selectedPropertySubTypes).trigger('change');
-                    }, 500);
+                    selectedPropertySubTypes = (typeof selectedPropertySubTypes === "string") 
+                    ? selectedPropertySubTypes.split(",").map(item => item.trim()) 
+                    : selectedPropertySubTypes;
+
+                    let options = Object.entries(propertySubTypes).map(([key, value]) => 
+                        `<option value="${key}" ${selectedPropertySubTypes.includes(key) ? "selected" : ""}>${value}</option>`
+                    ).join("");
+
+                    $("#property_sub_types").html(options).select2().trigger("change");
                 }
             },
             error: function () {
