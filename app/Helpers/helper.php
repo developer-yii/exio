@@ -444,4 +444,21 @@ if (!function_exists('formatPriceRangeSingleSign')) {
     }
 }
 
+// if (!function_exists('exioSuggestSectionData')) {
+//     function exioSuggestSectionData() {
+//         return Setting::whereIn('setting_key', ['section-a', 'section-b', 'section-c', 'section-d'])
+//                         ->pluck('setting_value', 'setting_key');
+//     }
+// }
+
+if (!function_exists('exioSuggestSectionData')) {
+    function exioSuggestSectionData() {
+        return Setting::whereIn('setting_key', ['section-a', 'section-b', 'section-c', 'section-d'])
+                        ->select('setting_key', 'setting_value', 'description')
+                        ->get()
+                        ->keyBy('setting_key');
+    }
+}
+
+
 

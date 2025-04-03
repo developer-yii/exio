@@ -137,13 +137,7 @@
     @yield('js')
     @if(session('download-success'))
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                toastr.options = {
-                    timeOut: 300000, // 5 minutes in milliseconds
-                    extendedTimeOut: 300000, // Extend timeout when hovered
-                    closeButton: true, // Optional: Show close button
-                    progressBar: true // Optional: Show progress bar
-                };
+            document.addEventListener("DOMContentLoaded", function () {               
                 toastr.success("{{ session('download-success') }}");
 
                 // Start the download automatically

@@ -57,6 +57,34 @@ class SettingsSeeder extends Seeder
                 'description' => 'Check & Match Video',
                 'is_default' => 1
             ],
+            [
+                'setting_key' => 'section-a',
+                'setting_label' => 'Section A',
+                'setting_value' => 'Amenities',
+                'description' => 'Amenities is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
+                'is_default' => 1
+            ],
+            [
+                'setting_key' => 'section-b',
+                'setting_label' => 'Section B',
+                'setting_value' => 'Project Plan',
+                'description' => 'Project Plan is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
+                'is_default' => 1
+            ],
+            [
+                'setting_key' => 'section-c',
+                'setting_label' => 'Section C',
+                'setting_value' => 'Locality',
+                'description' => 'Locality is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
+                'is_default' => 1
+            ],
+            [
+                'setting_key' => 'section-d',
+                'setting_label' => 'Section D',
+                'setting_value' => 'Return of Investment',
+                'description' => 'Return of Investment is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
+                'is_default' => 1
+            ],
         ];
 
         foreach ($settings as $setting) {

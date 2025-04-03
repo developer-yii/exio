@@ -18,6 +18,7 @@ use App\Http\Controllers\Backend\CommonController;
 use App\Http\Controllers\Backend\BuilderController;
 use App\Http\Controllers\Backend\CmsPagesController;
 use App\Http\Controllers\Backend\DownloadBrochureDataController;
+use App\Http\Controllers\Backend\ExioSuggestController;
 use App\Http\Controllers\Backend\ForumController;
 use App\Http\Controllers\Backend\InsightReportDataController;
 use App\Http\Controllers\Backend\LocalityController;
@@ -112,7 +113,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/{page_name}', [CmsPagesController::class, 'index'])->name('page');
             Route::post('/update', [CmsPagesController::class, 'update'])->name('page.update');
         });
-
 
         Route::group(['prefix' => 'settings'], function () {
             Route::get('/', [SettingController::class, 'index'])->name('setting');
@@ -240,5 +240,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/answer/update', [ForumController::class, 'answerUpdate'])->name('forum.answer.update');
             Route::post('/answer/delete', [ForumController::class, 'answerDelete'])->name('forum.answer.delete');
         });
+
+        Route::group(['prefix' => 'exio-suggest'], function () {
+            Route::get('/section/detail', [ExioSuggestController::class, 'detail'])->name('section.detail');            
+            Route::get('/section/{section}', [ExioSuggestController::class, 'index'])->name('section');
+            Route::get('/section/get/{section}', [ExioSuggestController::class, 'getSectionData'])->name('section.list');
+            Route::post('/section/add-update/{section}', [ExioSuggestController::class, 'sectionAddUpdate'])->name('section.add-update');            
+            Route::post('/section/delete/{section}', [ExioSuggestController::class, 'delete'])->name('section.delete');
+        });
+        
     });
 });

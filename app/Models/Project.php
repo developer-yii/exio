@@ -217,6 +217,13 @@ class Project extends Model
         return $this->hasMany(InsightsReportDownload::class, 'property_id');
     }
 
+    public function exioSuggests()
+    {
+        return $this->belongsToMany(ExioSuggest::class, 'project_exio_suggest_points')
+                    ->withPivot('point')
+                    ->withTimestamps();
+    }
+
     protected static function boot()
     {
         parent::boot();

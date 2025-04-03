@@ -823,7 +823,59 @@
 
                     <div id="collapseExioSuggest" class="collapse" aria-labelledby="headingExioSuggest"
                         data-bs-parent="#projectAccordion">
+                        
                         <div class="card-body">
+                            <div class="row">
+                                @php    
+                                    $sectionsData = [
+                                        'section-a' => 'Section A', 
+                                        'section-b' => 'Section B', 
+                                        'section-c' => 'Section C', 
+                                        'section-d' => 'Section D'
+                                    ];                                    
+                                @endphp
+
+                                @foreach($sectionsData as $key => $section)
+                                    <div class="col-md-3 section-box {{ !$loop->last ? 'border-end' : '' }}">
+                                        <h5>{{ $section }}({{ $sections[$key]->setting_value ?? '' }})</h5> 
+                                        <div class="weightage-container">
+                                            @foreach($exioSuggests->where('type', $key) as $exioSuggest)
+                                                @php
+                                                    $existingPoint = ($model && $model->exioSuggests instanceof \Illuminate\Support\Collection)
+                                                        ? optional($model->exioSuggests->where('id', $exioSuggest->id)->first())->pivot->point
+                                                        : null;
+                                                @endphp
+                                                <div class="form-group mb-3 row">
+                                                    <div class="col-md-6">
+                                                        <label for="point"><strong>{{ $exioSuggest->title }}</strong></label><br>
+                                                        <span> Weightage:{{ $exioSuggest->weightage}}</span>%
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <input type="hidden" name="exio_suggest_id[]" class="form-control exio_suggest_id" value="{{ $exioSuggest->id }}" />
+                                                        <input type="number" name="point[]" 
+                                                            class="form-control point" 
+                                                            data-section="{{ $key }}" 
+                                                            data-weightage="{{ $exioSuggest->weightage }}" 
+                                                            min="0" max="100" 
+                                                            value="{{ old('point.' . $loop->index, $existingPoint) }}"
+                                                            required />
+                                                        <span class="error"></span>
+                                                    </div>                                                    
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                        <div class="text-center mt-2">
+                                            <strong>Total Percentage:</strong> <span class="total-percentage" data-section="{{ $key }}">0.00</span>%
+                                        </div>
+                                    </div>                                    
+                                @endforeach
+                            </div>
+
+                            <div class="text-center mt-3">
+                                <button type="button" class="btn btn-primary" id="calculateBtn">Calculate</button>
+                            </div>
+
+                            <hr>
                             <!-- Exio Suggest Section -->
                             <div class="row">
                                 <!-- Exio Suggest Percentage -->
@@ -840,7 +892,7 @@
                                 <!-- Amenities Percentage -->
                                 <div class="col-md-4">
                                     <div class="form-group mb-3">
-                                        <label class="form-label">Amenities (%)</label>
+                                        <label class="form-label">Section A({{ $sections['section-a']->setting_value ?? '' }} (%))</label>
                                         <input type="number" class="form-control amenities_percentage"
                                             name="amenities_percentage" data-plugin="range-slider"
                                             value="{{ $model->amenities_percentage ?? '' }}" />
@@ -851,7 +903,7 @@
                                 <!-- Project Plan Percentage -->
                                 <div class="col-md-4">
                                     <div class="form-group mb-3">
-                                        <label class="form-label">Project Plan (%)</label>
+                                        <label class="form-label">Section B({{ $sections['section-b']->setting_value ?? '' }} (%))</label>
                                         <input type="number" class="form-control project_plan_percentage"
                                             name="project_plan_percentage" data-plugin="range-slider"
                                             value="{{ $model->project_plan_percentage ?? '' }}" />
@@ -862,7 +914,7 @@
                                 <!-- Locality Percentage -->
                                 <div class="col-md-4">
                                     <div class="form-group mb-3">
-                                        <label class="form-label">Locality (%)</label>
+                                        <label class="form-label">Section C({{ $sections['section-c']->setting_value ?? '' }} (%))</label>
                                         <input type="number" class="form-control locality_percentage"
                                             name="locality_percentage" data-plugin="range-slider"
                                             value="{{ $model->locality_percentage ?? '' }}" />
@@ -873,7 +925,7 @@
                                 <!-- Return Of Investment Percentage -->
                                 <div class="col-md-4">
                                     <div class="form-group mb-3">
-                                        <label class="form-label">Return Of Investment (%)</label>
+                                        <label class="form-label">Section D({{ $sections['section-d']->setting_value ?? '' }} (%))</label>
                                         <input type="number" class="form-control return_of_investment_percentage"
                                             name="return_of_investment_percentage" data-plugin="range-slider"
                                             value="{{ $model->return_of_investment_percentage ?? '' }}" />

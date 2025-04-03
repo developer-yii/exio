@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Amenity;
 use App\Models\Builder;
 use App\Models\City;
+use App\Models\ExioSuggest;
 use App\Models\Location;
 use App\Models\MasterPlanAddMore;
 use App\Models\Project;
@@ -14,8 +15,10 @@ use App\Models\FloorPlanAddMore;
 use App\Models\Locality;
 use App\Models\LocalityAddMore;
 use App\Models\ProjectBadge;
+use App\Models\ProjectExioSuggestPoint;
 use App\Models\ProjectImage;
 use App\Models\ReraDetailsAddMore;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -306,6 +309,21 @@ class ProjectController extends Controller
         }
 
         if ($model->save()) {
+
+            $exioSuggestIds = $request->input('exio_suggest_id');
+            $points = $request->input('point');
+
+            if (!empty($exioSuggestIds) && !empty($points)) {
+                $exioPintData = [];
+
+                foreach ($exioSuggestIds as $index => $exioSuggestId) {
+                    $exioPintData[$exioSuggestId] = ['point' => $points[$index] ?? 0];
+                }
+
+                // Sync the relationship (adds new or updates existing)
+                $model->exioSuggests()->sync($exioPintData);
+            }
+
             $existingIds = ProjectdetailAddMore::where('project_id', $model->id)
                 ->pluck('id')
                 ->toArray();
@@ -575,7 +593,7 @@ class ProjectController extends Controller
 
     public function edit($id)
     {
-        $model = Project::with(['projectDetails', 'masterPlans'])->find($id);
+        $model = Project::with(['projectDetails', 'masterPlans', 'exioSuggests'])->find($id);
         if (!$model) {
             return redirect()->route('admin.project')->with('error', 'Project not found.');
         }
@@ -602,6 +620,8 @@ class ProjectController extends Controller
         $existingLocalities = $model->localities;
         $existingReraDetails = $model->reraDetails;
         $existingProjectImages = $model->projectImages;
+        $exioSuggests = ExioSuggest::all();
+        $sections = exioSuggestSectionData();
 
         return view('backend.project.addupdate', compact(
             'model',
@@ -621,7 +641,9 @@ class ProjectController extends Controller
             'existingReraDetails',
             'existingProjectImages',
             'appraisalProperty',
-            'projectBadges'
+            'projectBadges',
+            'exioSuggests', 
+            'sections'
         ));
     }
 
@@ -641,8 +663,25 @@ class ProjectController extends Controller
         $locality = Locality::where('status', 1)->pluck('locality_name', 'id');
         $appraisalProperty = Project::$appraisalProperty;
         $projectBadges = ProjectBadge::where('status', ProjectBadge::ACTIVE)->pluck('name', 'id');
+        $exioSuggests = ExioSuggest::all();
+        $sections = exioSuggestSectionData();
 
-        return view('backend.project.addupdate', compact('model', 'builder', 'city', 'area', 'propertyTypes', 'priceUnit', 'projectStatus', 'ageOfConstruction', 'amenities', 'locality', 'appraisalProperty', 'projectBadges'));
+        return view('backend.project.addupdate', compact(
+            'model', 
+            'builder', 
+            'city', 
+            'area', 
+            'propertyTypes', 
+            'priceUnit', 
+            'projectStatus', 
+            'ageOfConstruction', 
+            'amenities', 
+            'locality', 
+            'appraisalProperty', 
+            'projectBadges', 
+            'exioSuggests',
+            'sections'
+        ));
     }
 
     public function view($id)

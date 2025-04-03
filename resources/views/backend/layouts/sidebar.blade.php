@@ -157,6 +157,31 @@
                         </ul>
                     </div>
                 </li>
+
+                <li class="side-nav-item {{ isActiveRouteMain(['section-a', 'section-b', 'section-c', 'section-d']) }}">
+                    <a data-bs-toggle="collapse" href="#exio_suggest_menu" aria-expanded="false" aria-controls="exio_suggest_menu"
+                        class="side-nav-link collapsed">
+                        <i class="mdi mdi-cog"></i>
+                        <span> Exio Suggest </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="exio_suggest_menu" style="">
+                        <ul class="side-nav-second-level">
+                            <li>
+                                <a class="{{ isActiveRoute(['admin.section', 'section-a']) }}" href="{{ route('admin.section', ['section' => 'section-a']) }}">Section A</a>
+                            </li>
+                            <li>
+                                <a class="{{ isActiveRoute(['admin.section', 'section-b']) }}" href="{{ route('admin.section', ['section' => 'section-b']) }}">Section B</a>
+                            </li> 
+                            <li>
+                                <a class="{{ isActiveRoute(['admin.section', 'section-c']) }}" href="{{ route('admin.section', ['section' => 'section-c']) }}">Section C</a>
+                            </li> 
+                            <li>
+                                <a class="{{ isActiveRoute(['admin.section', 'section-c']) }}" href="{{ route('admin.section', ['section' => 'section-d']) }}">Section D</a>
+                            </li>                           
+                        </ul>
+                    </div>
+                </li>
             @endif
         </ul>
 
