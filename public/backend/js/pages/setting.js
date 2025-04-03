@@ -103,7 +103,7 @@ $(document).ready(function () {
 
                     $(formId).find('#id').val(id);
                     $(formId).find('#setting_key').val(result.data.setting_key);
-                    $(formId).find('.setting_label').val(result.data.setting_label);
+                    $(formId).find('.setting_label').val(result.data.setting_label).prop('readonly', true);
                     $(formId).find('.description').val(result.data.description);
                     $(formId).find('.setting_value').val(result.data.setting_value);
                     $(formId).find('.status').val(result.data.status);

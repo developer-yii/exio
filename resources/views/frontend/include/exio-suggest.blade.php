@@ -13,19 +13,23 @@
                     <img src="{{ $baseUrl }}assest/images/x-btn.png" alt="x-btn" loading="lazy">
                     <span>{{ $project->exio_suggest_percentage }}%</span>
                 </div>
-                <div class="ourReportdetail">
-                    @foreach(['Amenities' => 'amenities_percentage', 'Project Plan' => 'project_plan_percentage', 'Locality' => 'locality_percentage', 'Return of Investment' => 'return_of_investment_percentage'] as $title => $field)
+                <div class="ourReportdetail">                    
+                    @foreach([
+                        'section-a' => 'amenities_percentage',
+                        'section-b' => 'project_plan_percentage', 
+                        'section-c' => 'locality_percentage', 
+                        'section-d' => 'return_of_investment_percentage'
+                    ] as $key => $field)
                     <div class="boxOne comBoxPersantage">
                         <div class="topBar">
-                            <h5>{{ $title }}</h5>
+                            <h5>{{ $sections[$key]->setting_value ?? '' }}</h5>
                             <span>{{ $project->$field }}%</span>
                         </div>
                         <div class="barBox">
                             <div class="progress">
                                 {!! renderProgressBar($project->$field) !!}
                             </div>
-                            <p>It is a long established fact that a reader will be distracted by the
-                                readable content of a page when looking at its layout.</p>
+                            <p>{{ $sections[$key]->description ?? 'No description available' }}</p>
                         </div>
                     </div>
                     @endforeach

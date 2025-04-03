@@ -109,7 +109,9 @@ class PropertyController extends Controller
             ->take(3)
             ->get();
 
-        return view('frontend.property.details', compact('project', 'amenitiesList', 'similarProperties'));
+        $sections = exioSuggestSectionData();
+
+        return view('frontend.property.details', compact('project', 'amenitiesList', 'similarProperties', 'sections'));
     }
 
     public function downloadBrochureForm(Request $request){
@@ -392,7 +394,10 @@ class PropertyController extends Controller
                 'work_completed' => (int) $progress->work_completed
             ];
         })->values()->toArray();
-        return view('frontend.property.insight-details', compact('project', 'progressStatus', 'actualProgressData', 'reraProgressData'));
+
+        $sections = exioSuggestSectionData();
+
+        return view('frontend.property.insight-details', compact('project', 'progressStatus', 'actualProgressData', 'reraProgressData', 'sections'));
     }
 
     public function downloadInsightsReport(Request $request)

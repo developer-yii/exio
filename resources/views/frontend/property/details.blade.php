@@ -96,7 +96,9 @@
                             <li><a href="#propert_document">Brochure</a></li>
                         @endif
                         <li><a href="#locality">Locality</a></li>
-                        <li><a href="#documents">Documents</a></li>
+                        @if($project->reraDetails->whereNotNull('document')->isNotEmpty())
+                            <li><a href="#documents">Documents</a></li>
+                        @endif
                         <li><a href="#map_view">Map</a></li>
                         <li><a href="#developers">Developer</a></li>
                     </ul>
@@ -194,14 +196,16 @@
                                     </div>
                                 </div>
 
-                                <div id="documents">
-                                    <div class="title">
-                                        <h5>RERA Details</h5>
+                                @if($project->reraDetails->whereNotNull('document')->isNotEmpty())
+                                    <div id="documents">
+                                        <div class="title">
+                                            <h5>RERA Details</h5>
+                                        </div>
+                                        <div class="documentBox">
+                                            @include('frontend.include.common-html-mobile-web', ['type' => 'rera-document'])
+                                        </div>
                                     </div>
-                                    <div class="documentBox">
-                                        @include('frontend.include.common-html-mobile-web', ['type' => 'rera-document'])
-                                    </div>
-                                </div>
+                                @endif
 
                                 <div id="map_view">
                                     <div class="title">

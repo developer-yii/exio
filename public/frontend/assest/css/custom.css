@@ -196,3 +196,10 @@
     background-color: #f1f1f1;
 }
 
+#toast-container>div {
+    opacity: 1 !important;
+}
+
+#propert_document, #locality {
+    margin: 50px 0;
+}
