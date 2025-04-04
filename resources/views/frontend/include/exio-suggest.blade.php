@@ -34,8 +34,20 @@
                     </div>
                     @endforeach
 
+                    @php
+                        use App\Models\Setting;
+                        $whatsappNo = Setting::where('setting_key','support_mobile')->value('setting_value');
+                        $projectName = $project->project_name;
+                        $priceRange = formatPriceRange($project->price_from, $project->price_from_unit, $project->price_to, $project->price_to_unit);
+                        $propertyType = getPropertyType($project->property_type);
+                        $whatsappMessage = urlencode("Check out this property!\n\n*Project Name:* $projectName\n*Price:* $priceRange\n*Property Type:* $propertyType\n" . url()->current());
+                    @endphp
                     <div class="contactBtn">
-                        <a class="linkBtn" href="{{ route('contact-us') }}">Contact Exio Agent</a>
+                        
+                        <a class="linkBtn" href="https://wa.me/{{ $whatsappNo }}?text={{ $whatsappMessage }}" target="_blank">
+    Contact Exio Agent
+</a>
+
                     </div>
                 </div>
             </div>

@@ -14,6 +14,7 @@ use App\Models\Location;
 use App\Models\Project;
 use App\Models\PropertyComparison;
 use App\Models\PropertyWishlist;
+use App\Models\Setting;
 // use Barryvdh\DomPDF\PDF;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
@@ -110,7 +111,7 @@ class PropertyController extends Controller
             ->get();
 
         $sections = exioSuggestSectionData();
-
+        
         return view('frontend.property.details', compact('project', 'amenitiesList', 'similarProperties', 'sections'));
     }
 
