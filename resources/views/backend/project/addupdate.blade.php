@@ -841,9 +841,9 @@
                                         <div class="weightage-container">
                                             @foreach($exioSuggests->where('type', $key) as $exioSuggest)
                                                 @php
-                                                    $existingPoint = ($model && $model->exioSuggests instanceof \Illuminate\Support\Collection)
-                                                        ? optional($model->exioSuggests->where('id', $exioSuggest->id)->first())->pivot->point
-                                                        : null;
+                                                $existingPoint = ($model && $model->exioSuggests instanceof \Illuminate\Support\Collection)
+                                                            ? optional(optional($model->exioSuggests->where('id', $exioSuggest->id)->first())->pivot)->point
+                                                            : null;
                                                 @endphp
                                                 <div class="form-group mb-3 row">
                                                     <div class="col-md-6">
@@ -878,19 +878,9 @@
                             <hr>
                             <!-- Exio Suggest Section -->
                             <div class="row">
-                                <!-- Exio Suggest Percentage -->
-                                <div class="col-md-4">
-                                    <div class="form-group mb-3">
-                                        <label class="form-label">Exio Suggest (%)</label>
-                                        <input type="text" class="form-control exio_suggest_percentage"
-                                            name="exio_suggest_percentage" data-plugin="range-slider"
-                                            value="{{ $model->exio_suggest_percentage ?? '' }}" />
-                                        <span class="error"></span>
-                                    </div>
-                                </div>
-
+                                
                                 <!-- Amenities Percentage -->
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group mb-3">
                                         <label class="form-label">Section A({{ $sections['section-a']->setting_value ?? '' }} (%))</label>
                                         <input type="number" class="form-control amenities_percentage"
@@ -901,7 +891,7 @@
                                 </div>
 
                                 <!-- Project Plan Percentage -->
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group mb-3">
                                         <label class="form-label">Section B({{ $sections['section-b']->setting_value ?? '' }} (%))</label>
                                         <input type="number" class="form-control project_plan_percentage"
@@ -912,7 +902,7 @@
                                 </div>
 
                                 <!-- Locality Percentage -->
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group mb-3">
                                         <label class="form-label">Section C({{ $sections['section-c']->setting_value ?? '' }} (%))</label>
                                         <input type="number" class="form-control locality_percentage"
@@ -923,12 +913,23 @@
                                 </div>
 
                                 <!-- Return Of Investment Percentage -->
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group mb-3">
                                         <label class="form-label">Section D({{ $sections['section-d']->setting_value ?? '' }} (%))</label>
                                         <input type="number" class="form-control return_of_investment_percentage"
                                             name="return_of_investment_percentage" data-plugin="range-slider"
                                             value="{{ $model->return_of_investment_percentage ?? '' }}" />
+                                        <span class="error"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Exio Suggest Percentage -->
+                                <div class="col-md-4">
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Exio Suggest (%)</label>
+                                        <input type="text" class="form-control exio_suggest_percentage"
+                                            name="exio_suggest_percentage" data-plugin="range-slider"
+                                            value="{{ $model->exio_suggest_percentage ?? '' }}" />
                                         <span class="error"></span>
                                     </div>
                                 </div>
@@ -1056,6 +1057,7 @@
         var selectedArea = '{{ $model->location_id ?? "" }}';
         var selectedPropertySubTypes = {!! json_encode($model->property_sub_types ?? []) !!};
         var selectedAmenities = {!! json_encode($model->amenities ?? []) !!};
+        const isEditMode = @json($model ? true : false);
 
     </script>
     <script

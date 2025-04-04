@@ -276,17 +276,16 @@ $(document).ready(function () {
     
 });
 
-$("#calculateBtn").click(function () {
-    let sections = {
+
+let sections = {
         "section-a": ".amenities_percentage",
         "section-b": ".project_plan_percentage",
         "section-c": ".locality_percentage",
         "section-d": ".return_of_investment_percentage"
     };
 
-    let grandTotalPercentage = 0; // ✅ Track total percentage of all sections
-
-    Object.keys(sections).forEach(function (section) {
+   
+    function calculateTotalPercentage(section) {
         let totalPercentage = 0;
 
         $(`input[data-section="${section}"]`).each(function () {
@@ -307,37 +306,124 @@ $("#calculateBtn").click(function () {
             // Calculate percentage (point * weightage / 100)
             let percentage = (point * weightage) / 100;
             totalPercentage += percentage;
-            
+
+            // Update UI
+            $(this).closest(".form-group").find(".percentage").text(percentage.toFixed(2));
         });
 
-        // Round total percentage
-        let roundedPercentage = Math.round(totalPercentage);
+        return totalPercentage.toFixed(2);
+    }
 
-        // Add to grand total
-        grandTotalPercentage += roundedPercentage;
+    function updateAllSections(updateSlider = false) {
+        let grandTotalPercentage = 0;
 
-        // Update total percentage per section
-        $(`.total-percentage[data-section="${section}"]`).text(totalPercentage.toFixed(2));
+        Object.keys(sections).forEach(function (section) {
+            let totalPercentage = calculateTotalPercentage(section);
+            $(`.total-percentage[data-section="${section}"]`).text(totalPercentage);
+            grandTotalPercentage += parseFloat(totalPercentage);
 
-        // Update related input field
-        let inputField = $(sections[section]);
-        inputField.val(roundedPercentage);
+            console.log(updateSlider);
+            if (updateSlider) {
+            let roundedPercentage = Math.round(totalPercentage);
+            let inputField = $(sections[section]);
+            inputField.val(roundedPercentage);
 
-        // Update the Ion.RangeSlider properly
-        let sliderInstance = inputField.data("ionRangeSlider");
-        if (sliderInstance) {
-            sliderInstance.update({ from: roundedPercentage });
+            // Update Ion.RangeSlider only when button is clicked
+            
+            
+                let sliderInstance = inputField.data("ionRangeSlider");
+                if (sliderInstance) {
+                    sliderInstance.update({ from: roundedPercentage });
+                }
+            }
+        });
+
+        // Update Exio Suggest Percentage
+        let exioPer = grandTotalPercentage / 4;
+        $(".exio_suggest_percentage").val(exioPer);
+
+        // Update Exio Suggest Slider only when button is clicked
+        if (updateSlider) {
+            let exioSlider = $(".exio_suggest_percentage").data("ionRangeSlider");
+            if (exioSlider) {
+                exioSlider.update({ from: exioPer });
+            }
         }
+    }
+
+    // **Auto-Calculate Only in Edit Mode (Without Updating Sliders)**
+    if (isEditMode) {
+        updateAllSections(false);
+    }
+
+    // **Manual Calculation for Add Mode & Update Sliders Only When Clicking Button**
+    $("#calculateBtn").click(function () {
+        updateAllSections(true);
     });
 
-    // Update Exio Suggest (%) with grand total
-    let exioField = $(".exio_suggest_percentage");
-    var exioPer = grandTotalPercentage/4;
-    exioField.val(exioPer);
+// $("#calculateBtn").click(function () {
+//     let sections = {
+//         "section-a": ".amenities_percentage",
+//         "section-b": ".project_plan_percentage",
+//         "section-c": ".locality_percentage",
+//         "section-d": ".return_of_investment_percentage"
+//     };
 
-    // Update Exio Suggest (%) slider
-    let exioSlider = exioField.data("ionRangeSlider");
-    if (exioSlider) {
-        exioSlider.update({ from: exioPer });
-    }    
-});
+//     let grandTotalPercentage = 0; // ✅ Track total percentage of all sections
+
+//     Object.keys(sections).forEach(function (section) {
+//         let totalPercentage = 0;
+
+//         $(`input[data-section="${section}"]`).each(function () {
+//             let point = parseFloat($(this).val());
+//             let weightage = parseFloat($(this).data("weightage")) || 0;
+//             let errorSpan = $(this).siblings(".error");
+
+//             // Reset error message
+//             errorSpan.text("");
+
+//             // Validate input (0-100)
+//             if (isNaN(point) || point < 0 || point > 100) {
+//                 errorSpan.text("Point must be between 0 and 100.");
+//                 $(this).val(""); // Clear invalid input
+//                 return;
+//             }
+
+//             // Calculate percentage (point * weightage / 100)
+//             let percentage = (point * weightage) / 100;
+//             totalPercentage += percentage;
+            
+//         });
+
+//         // Round total percentage
+//         let roundedPercentage = Math.round(totalPercentage);
+
+//         // Add to grand total
+//         grandTotalPercentage += roundedPercentage;
+
+//         // Update total percentage per section
+//         $(`.total-percentage[data-section="${section}"]`).text(totalPercentage.toFixed(2));
+
+//         // Update related input field
+//         let inputField = $(sections[section]);
+//         inputField.val(roundedPercentage);
+
+//         // Update the Ion.RangeSlider properly
+//         let sliderInstance = inputField.data("ionRangeSlider");
+//         if (sliderInstance) {
+//             sliderInstance.update({ from: roundedPercentage });
+//         }
+//     });
+
+//     // Update Exio Suggest (%) with grand total
+//     let exioField = $(".exio_suggest_percentage");
+//     var exioPer = grandTotalPercentage/4;
+//     exioField.val(exioPer);
+
+//     // Update Exio Suggest (%) slider
+//     let exioSlider = exioField.data("ionRangeSlider");
+//     if (exioSlider) {
+//         exioSlider.update({ from: exioPer });
+//     }    
+// });
+

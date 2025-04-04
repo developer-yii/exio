@@ -63,7 +63,7 @@
                                 @endif
                             </div>
                         </div>
-                        @include('frontend.include.exio-suggest')
+                        @include('frontend.include.exio-suggest', ['project' => $project])
                     </div>
                 </div>
             </div>
