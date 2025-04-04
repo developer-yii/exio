@@ -924,7 +924,7 @@
                                 </div>
 
                                 <!-- Exio Suggest Percentage -->
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group mb-3">
                                         <label class="form-label">Exio Suggest (%)</label>
                                         <input type="text" class="form-control exio_suggest_percentage"
