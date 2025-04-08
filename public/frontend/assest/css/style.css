@@ -5366,3 +5366,45 @@ textarea.inputClass {
 
 
 /* ------- Blog details sec css end -------- */
+
+/* ------- edit_profile css start -------- */
+
+.edit_profile {
+    background-color: var(--light-blue);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+}
+
+.edit_profile .mainWhiteBox {
+    max-width: 560px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 5px;
+}
+
+.edit_profile .mainWhiteBox .title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.edit_profile .mainWhiteBox .btnsignIn {
+    font-size: 18px;
+    color: var(--white-color);
+    font-weight: 400;
+    font-family: "Inter", serif;
+    width: 100%;
+    background-color: var(--blue-color);
+    border-radius: 5px;
+    min-height: 50px;
+    margin-top: 20px;
+}
+
+.edit_profile .mainWhiteBox .form-group {
+    margin-bottom: 10px;
+}
+
+/* ------- edit_profile css end -------- */

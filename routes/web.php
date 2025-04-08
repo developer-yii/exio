@@ -10,6 +10,7 @@ use App\Http\Controllers\Frontend\ForumController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\PageController;
+use App\Http\Controllers\Frontend\ProfileController;
 use App\Http\Controllers\Frontend\SocialController;
 use App\Http\Controllers\Frontend\SubscriptionController;
 use App\Http\Controllers\PropertyFilterController;
@@ -81,11 +82,18 @@ Route::middleware(['auth', 'isUser'])->group(function () {
         Route::get('/shortlisted', [PropertyController::class, 'likedProperty'])->name('property.shortlisted');
         Route::get('/liked/details', [PropertyController::class, 'likedPropertyDetails'])->name('property.liked.details');
     });
-});
 
-Route::middleware(['auth', 'isUser'])->group(function () {
+    Route::group(['prefix' => 'profile'], function () {
+        Route::get('/', [ProfileController::class, 'edit'])->name('profile');
+        Route::post('/update', [ProfileController::class, 'update'])->name('profile.update');        
+    });
+
     Route::get('/check-and-match-property/result', [CheckAndMatchPropertyController::class, 'checkAndMatchPropertyResult'])->name('front.check-and-match-property.result');
 });
+
+// Route::middleware(['auth', 'isUser'])->group(function () {
+//     Route::get('/check-and-match-property/result', [CheckAndMatchPropertyController::class, 'checkAndMatchPropertyResult'])->name('front.check-and-match-property.result');
+// });
 
 Route::group(['prefix' => 'forum'], function () {
     Route::get('/', [ForumController::class, 'forumList'])->name('forum');
