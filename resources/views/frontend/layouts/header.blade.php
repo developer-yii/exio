@@ -140,14 +140,37 @@
                         @endif
 
                         <li>
-                            <a href="javascript:void(0)" class="user-menu">
-                                <i class="fa-solid fa-user desktop"></i></i><i class="fa-solid fa-bars mobile"></i>
+                            <a href="javascript:void(0)" class="user-menu {{ Auth::check() ? 'user-menu-login' : '' }}">
+                                @if(Auth::user())
+                                    @php
+                                        $initial = strtoupper(substr(Auth::user()->name, 0, 1));
+                                    @endphp
+                                    <div style="
+                                        /* width: 25px; */
+                                        /* height: 25px; */
+                                        border-radius: 50%;
+                                        /* background-color: #3490dc; */
+                                        color: black;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        font-weight: bold;
+                                        font-size: 20px;
+                                    ">
+                                        {{ $initial }}
+                                    </div>
+                                    
+                                @else
+                                    <i class="fa-solid fa-user desktop"></i>
+                                    <i class="fa-solid fa-bars mobile"></i>
+                                @endif
+                                
                             </a>
                             <ul class="userDropDown">
                                 @if (Auth::user())
                                     <li class="cursor-pointer">
-                                        <a href="" class="full-li-cover">
-                                            <img src="{{ $baseUrl }}assest/images/login.png" alt="login">Profile({{ Auth::user()->name }})
+                                        <a href="{{ route('profile') }}" class="full-li-cover">
+                                            <img src="{{ $baseUrl }}assest/images/login.png" alt="login">{{ Auth::user()->name }}
                                         </a>
                                     </li>
                                 @else

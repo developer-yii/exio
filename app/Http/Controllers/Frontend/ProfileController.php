@@ -4,20 +4,20 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Http\RedirectResponse;
+use App\Models\User;
+// use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
-    public function edit(Request $request): View
+    public function edit(Request $request)
     {
-        return view('profile.edit', [
+        return view('frontend.profile.edit', [
             'user' => $request->user(),
         ]);
     }
@@ -25,37 +25,38 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(Request $request)
     {
-        $request->user()->fill($request->validated());
+        $rules = [
+            'user_name' => 'required|string|max:100',   
+            'user_password' => 'nullable|min:8|max:16',                       
+        ];
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => false, 'errors' => $validator->errors()]);
+        }
+        
+        $userId = auth()->id();
+        $model = User::find($userId);
+
+        if (!$model) {
+            return response()->json(['status' => false, 'message' => 'User not found']);
         }
 
-        $request->user()->save();
+        $model->name = $request->user_name;
+        $model->mobile =  $request->filled('user_mobile') ? str_replace(' ', '', trim($request->user_mobile)) : null;
+        if($request->filled('user_password')){
+            $model->password = Hash::make($request->user_password);
+        }
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
-    }
+        if ($model->save()) {
+            return response()->json(['status' => true, 'message' => 'Profile successfully updated']);
+        }
 
-    /**
-     * Delete the user's account.
-     */
-    public function destroy(Request $request): RedirectResponse
-    {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
-        ]);
+        return response()->json(['status' => false, 'message' => 'Error saving profile data']);
 
-        $user = $request->user();
-
-        Auth::logout();
-
-        $user->delete();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
-    }
+       
+    }    
 }
