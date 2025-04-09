@@ -91,17 +91,23 @@ $(document).ready(function () {
                 name: "project_name",
                 data: "project_name",
                 sortable: true,
-                render: function (_, _, full) {
-                    return full["project_name"];
-                },
+                // render: function (_, _, full) {
+                //     return full["project_name"];
+                // },
+                render: function (data, type, row) {
+                    return `<div style="white-space: pre-wrap;">${data}</div>`;
+                }
             },
             {
                 name: "slug",
                 data: "slug",
                 sortable: true,
-                render: function (_, _, full) {
-                    return full["slug"];
-                },
+                // render: function (_, _, full) {
+                //     return full["slug"];
+                // },
+                render: function (data, type, row) {
+                    return `<div style="white-space: pre-wrap;">${data}</div>`;
+                }
             },
             {
                 name: "project_about",

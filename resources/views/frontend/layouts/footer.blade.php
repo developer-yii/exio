@@ -71,7 +71,7 @@
       </div>
       <div class="copyRight">
         <div class="reservText">
-          <p>© 2024 www.exio.com. All Rights Reserved.</p>
+          <p>© {{ date('Y') }} {{ config('app.name', 'App') }}. All Rights Reserved.</p>
         </div>
         <div class="privacy">
           <ul>

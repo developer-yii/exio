@@ -77,9 +77,9 @@ $(document).ready(function () {
                 name: "title",
                 data: "title",
                 sortable: true,
-                render: function (_, _, full) {
-                    return full["title"];
-                },
+                render: function (data, type, row) {
+                    return `<div style="white-space: pre-wrap;">${data}</div>`;
+                }
             },
             {
                 name: "slug",
