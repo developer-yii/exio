@@ -11,7 +11,7 @@ $(document).ready(function () {
             data ? data.id : ""
         }">
                             <div class="form-group mb-3">
-                                <label class="form-label" for="rera_details_${reraDetailIndex}_title">Title</label>
+                                <label class="form-label" for="rera_details_${reraDetailIndex}_title">Title*</label>
                                 <input type="text" id="rera_details_${reraDetailIndex}_title" name="rera_details[${reraDetailIndex}][title]" class="form-control rera_details_${reraDetailIndex}_title" placeholder="Enter Title" value="${
             data ? data.title : ""
         }" aria-required="true">

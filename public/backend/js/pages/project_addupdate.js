@@ -63,10 +63,6 @@ $(document).ready(function () {
         $(formId).find(".error").html("");
         $(formId).find(".is-invalid").removeClass("is-invalid");
 
-        // if (quill) {
-        //     formData.append("project_about", quill.root.innerHTML);
-        // }
-
         $.ajax({
             url: addUpdateUrl,
             type: "POST",
@@ -90,41 +86,83 @@ $(document).ready(function () {
                 } else if (result.status == false && result.message) {
                     showToastMessage("error", result.message);
                 } else {
+                    // if (result.errors) {
+                    //     first_input = "";
+                    //     $.each(result.errors, function (key, value) {
+                    //         // Handle nested validation keys (for arrays)
+                    //         if (key.includes(".")) {
+                    //             let parts = key.split(".");
+                    //             key = `${parts[0]}_${parts[1]}_${parts[2]}`;
+                    //         }
+
+                    //         if (first_input == "") first_input = key;
+
+                    //         // Add invalid class
+                    //         $(formId)
+                    //             .find("." + key)
+                    //             .addClass("is-invalid");
+
+                    //         // Show error message
+                    //         let errorContainer = $(formId)
+                    //             .find("." + key)
+                    //             .closest(".form-group")
+                    //             .find(".error");
+                    //         errorContainer.html(value[0]); // Display first error message
+                    //     });
+
+                    //     // Focus first error field
+                    //     if (first_input) {
+                    //         $(formId)
+                    //             .find("." + first_input)
+                    //             .focus();
+                    //     }
+                    // }
+                    
                     if (result.errors) {
-                        first_input = "";
+                        let first_input = "";
+                    
                         $.each(result.errors, function (key, value) {
-                            // Handle nested validation keys (for arrays)
+                            // Handle nested input names
                             if (key.includes(".")) {
                                 let parts = key.split(".");
                                 key = `${parts[0]}_${parts[1]}_${parts[2]}`;
                             }
 
+                            let $errorField;
+
+                            // Special case for radio group
+                            if (key === 'appraisal_property') {
+                                $errorField = $(formId).find("input[name='appraisal_property']").first();
+                            } else {
+                                $errorField = $(formId).find("." + key);
+                            }
+                    
                             if (first_input == "") first_input = key;
-
-                            // Add invalid class
-                            $(formId)
-                                .find("." + key)
-                                .addClass("is-invalid");
-
-                            // Show error message
-                            let errorContainer = $(formId)
-                                .find("." + key)
-                                .closest(".form-group")
-                                .find(".error");
-                            errorContainer.html(value[0]); // Display first error message
+                    
+                            // let $errorField = $(formId).find("." + key);
+                            $errorField.addClass("is-invalid");
+                    
+                            let errorContainer = $errorField.closest(".form-group").find(".error");
+                            errorContainer.html(value[0]);
+                    
+                            // Open the accordion section that contains this error field
+                            let $accordionBody = $errorField.closest(".collapse");
+                            if ($accordionBody.length && !$accordionBody.hasClass("show")) {
+                                $accordionBody.collapse("show");
+                            }
                         });
-
-                        // Focus first error field
+                    
                         if (first_input) {
-                            $(formId)
-                                .find("." + first_input)
-                                .focus();
+                            $(formId).find("." + first_input).focus();
                         }
                     }
+                    
                 }
             },
             error: function (error) {
                 alert("Something went wrong!");
+                $($this).find('button[type="submit"]').prop("disabled", false);
+                $($this).find('button[type="submit"]').html("Save");
                 // location.reload();
             },
         });

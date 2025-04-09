@@ -125,7 +125,7 @@
                     </div>
 
                     <div id="collapseGeneralDetails" class="collapse show" aria-labelledby="headingGeneralDetails"
-                        data-bs-parent="#projectAccordion">
+                        >
                         <div class="card-body">
                             <div class="row">
                                 <!-- Project Name -->
@@ -291,12 +291,13 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-3 row">
                                         <label for="price_from" class="form-label">Price From*</label>
-                                        <div class="col-md-10">
+                                        <div class="col-md-6 form-group">
                                             <input type="text" name="price_from" class="form-control price_from"
                                                 min="0"
                                                 value="{{ isset($model->price_from) ? $model->price_from : '' }}">
+                                                <span class="error"></span>
                                         </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-6 form-group">
                                             <select id="price_from_unit" class="form-control form-select price_from_unit"
                                                 name="price_from_unit">
                                                 <option value="">Select Price From Unit</option>
@@ -307,8 +308,8 @@
                                                     </option>
                                                 @endforeach
                                             </select>
-                                        </div>
-                                        <span class="error"></span>
+                                            <span class="error"></span>
+                                        </div>                                        
                                     </div>
                                 </div>
 
@@ -316,12 +317,13 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-3 row">
                                         <label for="price_to" class="form-label">Price To*</label>
-                                        <div class="col-md-10">
+                                        <div class="col-md-6 form-group">
                                             <input type="text" name="price_to" class="form-control price_to"
                                                 min="0"
                                                 value="{{ isset($model->price_to) ? $model->price_to : '' }}">
+                                                <span class="error"></span>
                                         </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-6 form-group">
                                             <select id="price_to_unit" class="form-control form-select price_to_unit"
                                                 name="price_to_unit">
                                                 <option value="">Select Price To Unit</option>
@@ -332,8 +334,8 @@
                                                     </option>
                                                 @endforeach
                                             </select>
-                                        </div>
-                                        <span class="error"></span>
+                                            <span class="error"></span>
+                                        </div>                                        
                                     </div>
                                 </div>
 
@@ -513,13 +515,13 @@
                         <h5 class="m-0">
                             <a class="custom-accordion-title collapsed d-block pt-2 pb-2" data-bs-toggle="collapse"
                                 href="#collapseMasterPlan" aria-expanded="false" aria-controls="collapseMasterPlan">
-                                Master Plan
+                                Master Plan*
                             </a>
                         </h5>
                     </div>
 
                     <div id="collapseMasterPlan" class="collapse" aria-labelledby="headingMasterPlan"
-                        data-bs-parent="#projectAccordion">
+                        >
                         <div class="card-body">
                             <!-- Master Plans Section -->
                             <div class="row" id="master_plan_container">
@@ -547,13 +549,13 @@
                         <h5 class="m-0">
                             <a class="custom-accordion-title collapsed d-block pt-2 pb-2" data-bs-toggle="collapse"
                                 href="#collapseFloorPlan" aria-expanded="false" aria-controls="collapseFloorPlan">
-                                Floor Plan
+                                Floor Plan*
                             </a>
                         </h5>
                     </div>
 
                     <div id="collapseFloorPlan" class="collapse" aria-labelledby="headingFloorPlan"
-                        data-bs-parent="#projectAccordion">
+                        >
                         <div class="card-body">
                             <!-- Floor Plans Section -->
                             <div class="row" id="floor-plans-container">
@@ -584,7 +586,7 @@
                     </div>
 
                     <div id="collapseAmenities" class="collapse" aria-labelledby="headingAmenities"
-                        data-bs-parent="#projectAccordion">
+                        >
                         <div class="card-body">
                             <!-- Amenities Section -->
                             <div class="row" id="amenities-container">
@@ -631,7 +633,7 @@
                     </div>
 
                     <div id="collapsePropertyDocuments" class="collapse" aria-labelledby="headingPropertyDocuments"
-                        data-bs-parent="#projectAccordion">
+                        >
                         <div class="card-body">
                             <!-- Property Documents Section -->
                             <div class="row">
@@ -695,13 +697,13 @@
                         <h5 class="m-0">
                             <a class="custom-accordion-title collapsed d-block pt-2 pb-2" data-bs-toggle="collapse"
                                 href="#collapseLocality" aria-expanded="false" aria-controls="collapseLocality">
-                                Locality
+                                Locality*
                             </a>
                         </h5>
                     </div>
 
                     <div id="collapseLocality" class="collapse" aria-labelledby="headingLocality"
-                        data-bs-parent="#projectAccordion">
+                        >
                         <div class="card-body">
                             <!-- Locality Section -->
                             <div class="row" id="locality_container">
@@ -726,13 +728,13 @@
                         <h5 class="m-0">
                             <a class="custom-accordion-title collapsed d-block pt-2 pb-2" data-bs-toggle="collapse"
                                 href="#collapseReraDetails" aria-expanded="false" aria-controls="collapseReraDetails">
-                                RERA Details
+                                RERA Details*
                             </a>
                         </h5>
                     </div>
 
                     <div id="collapseReraDetails" class="collapse" aria-labelledby="headingReraDetails"
-                        data-bs-parent="#projectAccordion">
+                        >
                         <div class="card-body">
                             <div class="row" id="rera_details_container">
                                 <div class="col-md-4 mb-3">
@@ -756,20 +758,20 @@
                         <h5 class="m-0">
                             <a class="custom-accordion-title collapsed d-block pt-2 pb-2" data-bs-toggle="collapse"
                                 href="#collapseMapView" aria-expanded="false" aria-controls="collapseMapView">
-                                Map View
+                                Map View*
                             </a>
                         </h5>
                     </div>
 
                     <div id="collapseMapView" class="collapse" aria-labelledby="headingMapView"
-                        data-bs-parent="#projectAccordion">
+                        >
                         <div class="card-body">
                             <!-- Map View Section -->
                             <div class="row">
                                 <!-- Address TextArea -->
                                 <div class="col-md-12">
                                     <div class="form-group mb-3">
-                                        <label class="form-label">Address</label>
+                                        <label class="form-label">Address*</label>
                                         <textarea class="form-control address" name="address" placeholder="Enter Address" rows="3">{{ isset($model->address) ? $model->address : '' }}</textarea>
                                         <span class="error"></span>
                                     </div>
@@ -822,7 +824,7 @@
                     </div>
 
                     <div id="collapseExioSuggest" class="collapse" aria-labelledby="headingExioSuggest"
-                        data-bs-parent="#projectAccordion">
+                        >
                         
                         <div class="card-body">
                             <div class="row">
@@ -857,8 +859,7 @@
                                                             data-section="{{ $key }}" 
                                                             data-weightage="{{ $exioSuggest->weightage }}" 
                                                             min="0" max="100" 
-                                                            value="{{ old('point.' . $loop->index, $existingPoint) }}"
-                                                            required />
+                                                            value="{{ old('point.' . $loop->index, $existingPoint) }}" />
                                                         <span class="error"></span>
                                                     </div>                                                    
                                                 </div>
@@ -951,7 +952,7 @@
                     </div>
 
                     <div id="collapseInsightsReport" class="collapse" aria-labelledby="headingInsightsReport"
-                        data-bs-parent="#projectAccordion">
+                        >
                         <div class="card-body">
                             <!-- Insights Report Pdf Section -->
                             <div class="row">

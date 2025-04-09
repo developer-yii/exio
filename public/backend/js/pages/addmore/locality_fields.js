@@ -13,7 +13,7 @@ $(document).ready(function () {
 
                             <!-- Locality -->
                             <div class="form-group mb-3">
-                                <label class="form-label">Select Locality</label>
+                                <label class="form-label">Select Locality*</label>
                                 <select name="locality[${localityIndex}][locality_id]"
                                     class="form-control locality_${localityIndex}_locality_id select2"
                                     data-toggle="select2">
@@ -24,7 +24,7 @@ $(document).ready(function () {
 
                             <!-- Distance -->
                             <div class="form-group mb-3">
-                                <label class="form-label">Distance</label>
+                                <label class="form-label">Distance*</label>
                                 <div class="row">
                                     <div class="col-md-8">
                                         <input type="number"
@@ -60,7 +60,7 @@ $(document).ready(function () {
 
                             <!-- Time to Reach -->
                             <div class="form-group mb-3">
-                                <label class="form-label">Time to Reach</label>
+                                <label class="form-label">Time to Reach*</label>
                                 <div class="input-group">
                                     <input type="number"
                                         name="locality[${localityIndex}][time_to_reach]"
