@@ -13,7 +13,7 @@ $(document).ready(function () {
 
                             <!-- Name -->
                             <div class="form-group mb-3">
-                                <label class="form-label">Name</label>
+                                <label class="form-label">Name*</label>
                                 <input type="text" name="project_detail[${projectDetailIndex}][name]"
                                     class="form-control project_detail_${projectDetailIndex}_name"
                                     placeholder="Enter Name"
@@ -23,7 +23,7 @@ $(document).ready(function () {
 
                             <!-- Value -->
                             <div class="form-group mb-3">
-                                <label class="form-label">Value</label>
+                                <label class="form-label">Value*</label>
                                 <input type="text" name="project_detail[${projectDetailIndex}][value]"
                                     class="form-control project_detail_${projectDetailIndex}_value"
                                     placeholder="Enter Value"

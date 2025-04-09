@@ -24,7 +24,7 @@ $(document).ready(function () {
 
                             <!-- Name -->
                             <div class="form-group mb-3">
-                                <label class="form-label">Title</label>
+                                <label class="form-label">Title*</label>
                                 <input type="text" name="master_plan[${masterPlanIndex}][name]"
                                     class="form-control master_plan_${masterPlanIndex}_name"
                                     placeholder="Enter Title"

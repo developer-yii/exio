@@ -24,7 +24,7 @@ $(document).ready(function () {
 
                             <!-- Carpet Area -->
                             <div class="form-group mb-3">
-                                <label class="form-label">Carpet Area (sqft)</label>
+                                <label class="form-label">Carpet Area (sqft)*</label>
                                 <input type="text" name="floor_plan[${floorPlanIndex}][carpet_area]"
                                     class="form-control floor_plan_${floorPlanIndex}_carpet_area"
                                     placeholder="Enter Carpet Area"
@@ -34,7 +34,7 @@ $(document).ready(function () {
 
                             <!-- Type -->
                             <div class="form-group mb-3">
-                                <label class="form-label">Type</label>
+                                <label class="form-label">Type*</label>
                                 <input type="text" name="floor_plan[${floorPlanIndex}][type]"
                                     class="form-control floor_plan_${floorPlanIndex}_type"
                                     placeholder="i.e. 1BHK, 2BHK, etc."
