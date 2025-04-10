@@ -97,15 +97,17 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (response) {
                 $('.error').html("");
-                let name = response.user.name;
-                            let phone = response.user.phone_number;
-                            let email = response.user.email;
-
-                            let exists = usersData.find(user => user.name === name);
-                            if (!exists) {
-                                usersData.push({ name, phone, email });
-                                localStorage.setItem('usersData', JSON.stringify(usersData));
-                            }
+                if (response.user) {
+                    let name = response.user.name;
+                    let phone = response.user.phone_number;
+                    let email = response.user.email;
+            
+                    let exists = usersData.find(user => user.name === name);
+                    if (!exists) {
+                        usersData.push({ name, phone, email });
+                        localStorage.setItem('usersData', JSON.stringify(usersData));
+                    }
+                }
 
                 if (response.status == true) {
                     $('#downloadBrochureForm')[0].reset();
