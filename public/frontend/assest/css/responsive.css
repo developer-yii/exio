@@ -405,6 +405,7 @@
     }
     .compare_reports .detailmainSec {
         width: 100%;
+        max-width:100%;
     }
     .compare_reports .certificates_box .compareVs {
         margin: 0 auto;
