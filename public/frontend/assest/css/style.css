@@ -1652,6 +1652,7 @@ body.matchProperty {
     align-items: center;
     justify-content: center;
     line-height: 1;
+    box-shadow: none;
 }
 
 .checkProperty .checkPropertyBox .topFilterBar .filterBox a i {
