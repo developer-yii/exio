@@ -261,7 +261,7 @@
 
                             <div class="tab-content" id="pills-tabContent">
                                 <div class="tab-pane fade {{ $activeTab == 'all' ? 'show active' : '' }}" id="pills-home" role="tabpanel">
-                                    <div class="row">
+                                    <div class="row rg-20">
                                         @if($projects->count() > 0)
                                             @foreach ($projects as $project)
                                                 <x-property-card :project="$project" :amenities="$amenities" />
@@ -273,7 +273,7 @@
                                 </div>
 
                                 <div class="tab-pane fade {{ $activeTab == 'appraisal' ? 'show active' : '' }}" id="pills-profile" role="tabpanel">
-                                    <div class="row">
+                                    <div class="row rg-20">
                                         @if($appraisal->count() > 0)
                                             @foreach ($appraisal as $project)
                                                 <x-property-card :project="$project" :amenities="$amenities" />
@@ -285,7 +285,7 @@
                                 </div>
 
                                 <div class="tab-pane fade {{ $activeTab == 'best-match' ? 'show active' : '' }}" id="pills-match" role="tabpanel">
-                                    <div class="row">
+                                    <div class="row rg-20">
                                         @if($bestMatch->count() > 0)
                                             @foreach ($bestMatch as $project)
                                                 <x-property-card :project="$project" :amenities="$amenities" />

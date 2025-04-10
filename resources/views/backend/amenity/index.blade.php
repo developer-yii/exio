@@ -85,8 +85,9 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label for="amenity_name" class="form-label">Amenity Name<span
-                                            class="text-danger add_edit_required">*</span></label>
+                                    <label for="amenity_name" class="form-label">Amenity Name
+                                        <span class="text-danger add_edit_required">*</span>
+                                    </label>
                                     <input type="text" id="amenity_name" name="amenity_name"
                                         class="form-control amenity_name" value="" />
                                     <span class="error"></span>
@@ -104,7 +105,9 @@
 
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label for="amenity_type" class="form-label">Amenity Type </label>
+                                    <label for="amenity_type" class="form-label">Amenity Type
+                                        <span class="text-danger add_edit_required">*</span>
+                                    </label>
                                     <select id="amenity_type" class="form-control amenity_type" name="amenity_type">
                                         <option value="">Select Amenity Type</option>
                                         @if (isset($amenityType) && count($amenityType) > 0)

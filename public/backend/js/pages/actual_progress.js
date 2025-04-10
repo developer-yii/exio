@@ -260,9 +260,10 @@ $(document).ready(function () {
                 name: "description",
                 data: "description",
                 sortable: true,
-                render: function (_, _, full) {
-                    return full["description"];
-                },
+                render: function (data, type, row) {
+                    return `<div style="white-space: pre-wrap;">${data}</div>`;
+                }
+
             },
             {
                 name: "date",

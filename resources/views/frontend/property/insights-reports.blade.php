@@ -49,7 +49,7 @@
                                                     <img src="{{ $baseUrl }}assest/images/x-btn.png" alt="x-btn" loading="lazy">
                                                     <span>{{ $property->exio_suggest_percentage ?? '0' }}%</span>
                                                 </h5>
-                                            </a>
+                                            </a><br>
                                             <span>By {{ $builder?->builder_name ?? 'Unknown Builder' }}</span>
 
                                             <div class="locationProperty">
