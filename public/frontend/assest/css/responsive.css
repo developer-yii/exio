@@ -405,6 +405,7 @@
     }
     .compare_reports .detailmainSec {
         width: 100%;
+        max-width:100%;
     }
     .compare_reports .certificates_box .compareVs {
         margin: 0 auto;
@@ -1011,6 +1012,10 @@
         width: 100%;
     }
 
+    .startProperty {
+        height: calc(100%);
+        padding: 30px 0;
+    }
 }
 
 @media (max-width:575px) {
