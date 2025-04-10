@@ -38,6 +38,9 @@
                                 <div class="playIcon" id="playIcon">
                                     <a href="javascript:void(0)"><img src="{{ $baseUrl }}assest/images/playBtn.png" alt="playBtn" loading="lazy"></a>
                                 </div>
+                                <div class="playIcon" id="pauseIcon" style="display:none;">
+                                    <a href="javascript:void(0)"><img src="{{ $baseUrl }}assest/images/pauseBtn.png" alt="Pause" loading="lazy"></a>
+                                </div>
                             </div>
 
                             @if ($project->projectImages->count() > 4)

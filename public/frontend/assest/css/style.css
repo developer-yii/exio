@@ -2752,6 +2752,7 @@ header.removeHeader.show {
     align-items: center;
     justify-content: center;
     text-align: center;
+    padding: 20px;
 }
 
 .startProperty .rightvideoText .centerBox .img img {
@@ -2828,9 +2829,8 @@ header.removeHeader.show {
 }
 
 .check_propertMap .mapProView #map {
-    width: 100%;
-    min-height: 740px;
-    height: 100%;
+    width: 100%;    
+    height: calc(100vh - 200px);
     border: 1px solid var(--gray-color);
 }
 
@@ -3571,7 +3571,7 @@ header.removeHeader.show {
     border-radius: 5px;
     padding: 20px;
     width: 100%;
-    max-width: 520px;
+    max-width: 540px;
 }
 
 .compare_reports .detailmainSec .innerPriceBox {

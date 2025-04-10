@@ -40,6 +40,7 @@ $(document).ready(function () {
 
     const video = document.getElementById("myVideo");
     const playIcon = document.getElementById("playIcon");
+    const pauseIcon = document.getElementById("pauseIcon");
 
     // Play video on clicking playIcon
     playIcon.addEventListener("click", function () {
@@ -47,14 +48,26 @@ $(document).ready(function () {
         playIcon.style.display = "none"; // Hide play icon
     });
 
-    // Show playIcon when the video is paused
-    video.addEventListener("pause", function () {
-        playIcon.style.display = "block"; // Show play icon
+    // Pause video
+    pauseIcon.addEventListener("click", function () {
+        video.pause();
     });
 
-    // Hide playIcon when the video is playing
+    // Show/hide icons based on play/pause state
     video.addEventListener("play", function () {
-        playIcon.style.display = "none"; // Hide play icon
+        playIcon.style.display = "none";
+        pauseIcon.style.display = "block";
+    });
+
+    video.addEventListener("pause", function () {
+        playIcon.style.display = "block";
+        pauseIcon.style.display = "none";
+    });
+
+    // Optional: show play icon again when video ends
+    video.addEventListener("ended", function () {
+        playIcon.style.display = "block";
+        pauseIcon.style.display = "none";
     });
 
     // 2D Image Click

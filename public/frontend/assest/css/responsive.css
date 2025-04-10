@@ -1011,6 +1011,10 @@
         width: 100%;
     }
 
+    .startProperty {
+        height: calc(100%);
+        padding: 30px 0;
+    }
 }
 
 @media (max-width:575px) {
