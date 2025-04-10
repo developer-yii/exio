@@ -72,7 +72,7 @@ function renderProperty(property) {
 
     return `
     <div class="col-xl-4 col-md-6">
-        <a href="${propertyUrl}">
+        <a href="${propertyUrl}" class="w-100">
             <div class="propertySec">
                 <div class="imgBox">
                     <img src="${imageUrl}" alt="property-img" loading="lazy">
