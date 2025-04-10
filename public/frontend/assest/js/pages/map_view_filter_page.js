@@ -95,7 +95,7 @@ async function loadMarkers(projects) {
                                 ${location.project_images.map(image => `
                                 <div class="item">
                                     <div class="imgBox">
-                                        <img src="${assetUrl}storage/project_images/${image.image}" alt="${location.project_name}">
+                                        <img class="h-150" src="${assetUrl}storage/project_images/${image.image}" alt="${location.project_name}">
                                         <div class="imgheader">
                                             ${location.project_badge ? `<span>${location.project_badge.name}</span>` : '<span style="opacity: 0 !important;""></span>'}
                                             <i class="${isWishlistedByUser ? 'fa-solid' : 'fa-regular'} fa-heart heartIconFill" data-id="${location.id}"></i>

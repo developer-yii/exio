@@ -1760,7 +1760,7 @@ body.matchProperty {
 
 .propertyCard .imgBox img {
     width: 100%;
-    height: 150px;
+    height: 200px;
     border-radius: 5px;
     object-fit: cover;
 }
