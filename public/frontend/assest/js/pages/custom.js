@@ -17,8 +17,8 @@ $('.cityClickHeader').click(function (e) {
 loadProperty();
 
 function loadProperty(currentPage = null) {
-
-    city = $("#city_header").val();
+    let city = $("#city_header").val();
+    let container = $('.propertyList');
 
     $.ajax({
         url: getPropertyByCityUrl,
@@ -28,29 +28,39 @@ function loadProperty(currentPage = null) {
             page: currentPage
         },
         success: function(response) {
-            // Check that the request was successful and that projects exist.
-            let container = $('.propertyList');
             if (response.status && response.data && response.data.data.length > 0) {
                 let projects = response.data.data;
 
                 if (deviceType === "desktop") {
+                    if (currentPage == null) {
+                        container.html(''); // Clear previous results only on first load
+                    }
                     projects.forEach(function(project) {
                         container.append(renderProperty(project));
                     });
 
                 } else {
+                    if (currentPage == null) {
+                        // Properly destroy and reinit owlCarousel
+                        container.trigger('destroy.owl.carousel');
+                        container.html('');
+                        container.owlCarousel({ // re-initialize with your settings
+                            loop: false,
+                            margin: 10,
+                            nav: true,
+                            items: 1,
+                        });
+                    }
 
                     projects.forEach(function(project) {
-                        container.trigger('add.owl.carousel', [$(
-                            renderProperty(project))]).trigger(
-                            'refresh.owl.carousel');
+                        container.trigger('add.owl.carousel', [$(renderProperty(project))]).trigger('refresh.owl.carousel');
                     });
                 }
 
                 if (response.data.current_page >= response.data.last_page) {
                     lastPageReached = true;
                     $('.exploreMore').hide();
-                }else{
+                } else {
                     $('.exploreMore').show();
                 }
             } else {
@@ -63,8 +73,57 @@ function loadProperty(currentPage = null) {
             console.error("Error loading more properties.");
         }
     });
-
 }
+
+// function loadProperty(currentPage = null) {
+
+//     city = $("#city_header").val();
+
+//     $.ajax({
+//         url: getPropertyByCityUrl,
+//         type: "GET",
+//         data: {
+//             city: city,
+//             page: currentPage
+//         },
+//         success: function(response) {
+//             // Check that the request was successful and that projects exist.
+//             let container = $('.propertyList');
+//             if (response.status && response.data && response.data.data.length > 0) {
+//                 let projects = response.data.data;
+
+//                 if (deviceType === "desktop") {
+//                     projects.forEach(function(project) {
+//                         container.append(renderProperty(project));
+//                     });
+
+//                 } else {
+
+//                     projects.forEach(function(project) {                        
+//                         container.trigger('add.owl.carousel', [$(
+//                             renderProperty(project))]).trigger(
+//                             'refresh.owl.carousel');
+//                     });                    
+//                 }
+
+//                 if (response.data.current_page >= response.data.last_page) {
+//                     lastPageReached = true;
+//                     $('.exploreMore').hide();
+//                 }else{
+//                     $('.exploreMore').show();
+//                 }
+//             } else {
+//                 lastPageReached = true;
+//                 $('.exploreMore').hide();
+//                 container.html('<p class="not-found">No Property Found</p>');
+//             }
+//         },
+//         error: function() {
+//             console.error("Error loading more properties.");
+//         }
+//     });
+
+// }
 
 function renderProperty(property) {
     let propertyUrl = getPropertyDetailsUrl.replace("_slug_", property.slug);

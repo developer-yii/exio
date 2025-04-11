@@ -294,11 +294,11 @@ if (!function_exists('propertyComparisonQuery')) {
 if (!function_exists('generatePdf')) {
     function generatePdf($view, $data = [], $fileName = 'document.pdf')
     {
-        return PDF::loadView($view, $data)
+        $pdf = PDF::loadView($view, $data)
             ->setPaper('a4', 'portrait')
             ->setOption('isPhpEnabled', true);
 
-        // return $pdf->download($fileName);
+        return $pdf->download($fileName);
         // return $pdf->stream('compare_report.pdf');
     }
 }
