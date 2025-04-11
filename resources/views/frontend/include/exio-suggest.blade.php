@@ -3,7 +3,10 @@
         <div class="StickyBox">
             @if($project->insights_report_file)
                 <div class="topReportBtn">
-                    <a href="javascript:void(0)" class="downloadInsightReportPdf" data-id="{{ $project->id }}">
+                    <a href="javascript:void(0)" class="downloadInsightReportPdf" 
+                        data-id="{{ $project->id }}"
+                        data-property-name="{{ $project->project_name }}"
+                    >
                         <i class="bi bi-file-earmark"></i> Download Insight Report
                     </a>
                 </div>

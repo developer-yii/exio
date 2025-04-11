@@ -310,6 +310,8 @@ $('#subscribe').submit(function (event) {
 $('.downloadInsightReportPdf').click(function (event) {
     event.preventDefault();
     let id = $(this).data("id");
+    let pName = $(this).data('property-name');
+    
     $.ajax({
 
         type: "POST",
@@ -322,7 +324,7 @@ $('.downloadInsightReportPdf').click(function (event) {
             let blob = new Blob([data], { type: xhr.getResponseHeader('Content-Type') });
             let link = document.createElement('a');
             link.href = window.URL.createObjectURL(blob);
-            link.download = $.trim($('.projectTitle').data('title')) + " Insight Report.pdf";
+            link.download = pName + " Insight Report.pdf";
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);

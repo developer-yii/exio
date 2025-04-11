@@ -86,7 +86,9 @@
 
                         <div class="download_box">
                             <a href="javascript:void(0)">
-                                <img src="{{ $baseUrl }}assest/images/folder-download.png" alt="folder-download" class="downloadInsightReportPdf" data-id="{{ $property->id }}"><br>
+                                <img src="{{ $baseUrl }}assest/images/folder-download.png" alt="folder-download" class="downloadInsightReportPdf" 
+                                    data-id="{{ $property->id }}"
+                                    data-property-name="{{ $property->project_name }}"><br>
                                 Download Again
                             </a>
                         </div>
