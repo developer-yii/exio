@@ -418,6 +418,22 @@
     .blog_detail_box .right_sticky {
         margin-top: 20px;
     }
+
+    .propertyModal .modalTextBox .priceAndshare ul .btn-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+    .propertyModal .modalTextBox .priceAndshare ul .btn-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+    .modalTextBox .locationProperty .comBox {
+        width: calc(100%) !important;
+    }
 }
 
 @media (max-width: 767px) {
@@ -1537,6 +1553,10 @@
 
     .share_property .modal-body {
         padding: 15px 15px 40px 15px;
+    }
+
+    .modalTextBox .locationProperty .comBox {
+        width: calc(100%) !important;
     }
 }
 
