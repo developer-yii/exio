@@ -75,6 +75,7 @@ function loadProperty(currentPage = null) {
     });
 }
 
+
 // function loadProperty(currentPage = null) {
 
 //     city = $("#city_header").val();

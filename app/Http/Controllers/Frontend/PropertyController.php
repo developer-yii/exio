@@ -276,15 +276,26 @@ class PropertyController extends Controller
         return view('frontend.property.comparepage', compact('properties'));
     }
 
+    // public function compareDownload(Request $request, $reportId){
+    //     $report = propertyComparisonQuery()->findOrFail($reportId);
+    //     $properties = getPropertiesWithDetails([$report->property_id_1, $report->property_id_2]);
+
+    //     return generatePdf('pdf.compare_report', compact('properties'), 'compare_report.pdf');
+
+    //     // session()->put('compare_report_pdf', generatePdf('pdf.compare_report', compact('properties'))->output());
+    //     // return redirect()->back()->with('download-success', 'Comparison report generated successfully! Your download will start shortly.');
+    // }
+
     public function compareDownload(Request $request, $reportId){
         $report = propertyComparisonQuery()->findOrFail($reportId);
         $properties = getPropertiesWithDetails([$report->property_id_1, $report->property_id_2]);
-
-        return generatePdf('pdf.compare_report', compact('properties'), 'compare_report.pdf');
-
-        // session()->put('compare_report_pdf', generatePdf('pdf.compare_report', compact('properties'))->output());
-        // return redirect()->back()->with('download-success', 'Comparison report generated successfully! Your download will start shortly.');
+    
+        session()->put('compare_report_pdf', generatePdf('pdf.compare_report', compact('properties'))->output());
+    
+        return redirect()->back()->with('download-success', 'Comparison report generated successfully! Your download will start shortly.');
     }
+    
+   
 
     public function compareReport(Request $request)
     {
