@@ -969,7 +969,7 @@
     }
 
     .compare_projectBox .locationProperty {
-        display: flex;
+        /* display: flex; */
         gap: 20px;
         margin-top: 5px;
     }
