@@ -136,6 +136,21 @@
     @yield('modal')
     @yield('js')
     @if(session('download-success'))
+    <script>
+        // Wait for page load
+        window.addEventListener('DOMContentLoaded', function () {
+            toastr.success("{{ session('download-success') }}");
+
+            // Trigger download using a hidden iframe
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = "{{ route('download.compare.report') }}";
+            document.body.appendChild(iframe);
+        });
+    </script>
+@endif
+
+    <!-- @if(session('download-success'))
         <script>
             document.addEventListener("DOMContentLoaded", function () {               
                 toastr.success("{{ session('download-success') }}");
@@ -148,7 +163,7 @@
             });
         </script>
         @php Session::forget('download-success') @endphp
-    @endif
+    @endif -->
 
     @if (session('success'))
         <script type="text/javascript">

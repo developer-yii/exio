@@ -15,6 +15,7 @@ use App\Http\Controllers\Frontend\SocialController;
 use App\Http\Controllers\Frontend\SubscriptionController;
 use App\Http\Controllers\PropertyFilterController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,15 +33,31 @@ Auth::routes();
 Route::get('/download-compare-report', function () {
     if (session()->has('compare_report_pdf')) {
         $pdfContent = session()->get('compare_report_pdf');
-        session()->forget('compare_report_pdf'); // Remove it after download
+        session()->forget('compare_report_pdf');
 
-        return response()->streamDownload(function () use ($pdfContent) {
-            echo $pdfContent;
-        }, 'compare_report.pdf');
+        return response($pdfContent, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="compare_report.pdf"',
+            'Content-Length' => strlen($pdfContent),
+        ]);
     }
 
     return redirect()->back()->with('error', 'No report found to download.');
-});
+})->name('download.compare.report');
+
+
+// Route::get('/download-compare-report', function () {
+//     if (session()->has('compare_report_pdf')) {
+//         $pdfContent = session()->get('compare_report_pdf');
+//         session()->forget('compare_report_pdf'); // Remove it after download
+
+//         return response()->streamDownload(function () use ($pdfContent) {
+//             echo $pdfContent;
+//         }, 'compare_report.pdf');
+//     }
+
+//     return redirect()->back()->with('error', 'No report found to download.');
+// });
 
 
 Route::name('front.')->group(function () {
