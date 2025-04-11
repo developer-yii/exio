@@ -46,8 +46,7 @@ function loadProperty(currentPage = null) {
                         container.html('');
                         container.owlCarousel({ // re-initialize with your settings
                             loop: false,
-                            margin: 10,
-                            nav: true,
+                            margin: 10,                            
                             items: 1,
                         });
                     }
